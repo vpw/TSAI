@@ -1,0 +1,4 @@
+tokenizers>=0.19
+requests>=2.31
+sentencepiece>=0.2
+regex>=2024.4.16
