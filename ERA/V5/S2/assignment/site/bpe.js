@@ -1,30 +1,60 @@
-// Client-side re-implementation of the HF `tokenizers` word-level BPE
-// encode path (Whitespace pre-tokenizer + plain character-pair BPE merges,
-// no continuing-subword-prefix / end-of-word-suffix markers, no unk token).
+// Client-side re-implementation of the HF `tokenizers` Metaspace BPE
+// encode/decode path (NFKC normalizer + Metaspace pre-tokenizer + plain
+// character-pair BPE merges + matching Metaspace decoder).
 //
-// Must stay in lockstep with scripts/train_tokenizer.py's "word" variant.
-// Verified against the Python tokenizer's own output (see
-// scripts/verify_bpe_js.py) before being trusted here.
+// Must stay in lockstep with scripts/train_tokenizer.py. Verified against
+// the Python tokenizer's own encode AND decode output (see
+// scripts/verify_bpe_js.py) before being trusted here -- this is the piece
+// that failed silently in phase 1 (Whitespace pre-tokenizer + no decoder),
+// so decode() correctness here is the whole point.
 
-// Mirrors HF's Whitespace pre-tokenizer regex `\w+|[^\w\s]+`, where Rust's
-// Unicode-aware `\w` is letters+marks+digits+connector-punctuation (this is
-// what keeps Devanagari/Telugu combining marks attached to their base
-// consonant instead of being split off).
-const PRETOKEN_RE = /[\p{L}\p{M}\p{N}\p{Pc}]+|[^\s\p{L}\p{M}\p{N}\p{Pc}]+/gu;
+const METASPACE_REPLACEMENT = "▁";
+const UNK_TOKEN = "[UNK]";
 
-function preTokenize(text) {
-  const chunks = [];
-  let m;
-  PRETOKEN_RE.lastIndex = 0;
-  while ((m = PRETOKEN_RE.exec(text)) !== null) {
-    chunks.push({ text: m[0], start: m.index, end: m.index + m[0].length });
+// Reproduces HF's Metaspace(prepend_scheme="always") pre-tokenization
+// exactly: replace every literal space with the replacement char, prepend
+// one more replacement char at the very start unless one is already there,
+// then split into pretokens at each occurrence of the replacement char
+// (each pretoken keeps its leading replacement char).
+function metaspaceTransform(text) {
+  const chars = Array.from(text); // codepoint-safe
+  const origIndex = []; // origIndex[i] = index into `chars` this transformed char came from, or -1 if synthetic
+  const out = [];
+  for (let i = 0; i < chars.length; i++) {
+    out.push(chars[i] === " " ? METASPACE_REPLACEMENT : chars[i]);
+    origIndex.push(i);
   }
-  return chunks;
+  if (out.length === 0 || out[0] !== METASPACE_REPLACEMENT) {
+    out.unshift(METASPACE_REPLACEMENT);
+    origIndex.unshift(-1);
+  }
+  return { out, origIndex, chars };
 }
 
-// Builds a Map<string, Map<string, number>> so mergeRank.get(a).get(b) gives
-// the merge's rank (lower = applied earlier), matching the `merges` array's
-// own order from tokenizer.json.
+function preTokenize(text) {
+  if (text.length === 0) return []; // HF: empty input has no pretokens at all
+  const { out, origIndex, chars } = metaspaceTransform(text);
+  const pretokens = [];
+  let spanStart = -1;
+  for (let i = 0; i <= out.length; i++) {
+    const isBoundary = i === out.length || out[i] === METASPACE_REPLACEMENT;
+    if (isBoundary) {
+      if (spanStart !== -1) {
+        const symbolsText = out.slice(spanStart, i).join("");
+        // Original-text span this pretoken covers (for display only):
+        // first real (non-synthetic) original index in the span through
+        // the last real index + 1.
+        const realIdxs = origIndex.slice(spanStart, i).filter((v) => v !== -1);
+        const start = realIdxs.length ? realIdxs[0] : (chars.length ? Math.min(chars.length, origIndex[i] ?? chars.length) : 0);
+        const end = realIdxs.length ? realIdxs[realIdxs.length - 1] + 1 : start;
+        pretokens.push({ text: symbolsText, start, end });
+      }
+      spanStart = i;
+    }
+  }
+  return pretokens;
+}
+
 function buildMergeRank(merges) {
   const rank = new Map();
   merges.forEach(([a, b], idx) => {
@@ -82,23 +112,28 @@ class BpeEncoder {
     this.vocabSize = vocabData.vocab_size;
     this.tokenToId = buildTokenToId(vocabData.tokens);
     this.mergeRank = buildMergeRank(vocabData.merges);
+    this.unkId = this.tokenToId.get(UNK_TOKEN);
   }
 
-  // Encodes one pre-tokenized word (no whitespace inside) into subword
-  // strings + ids. Any resulting symbol not in vocab (only possible for
-  // characters never seen during training) is reported as uncovered rather
-  // than silently dropped.
-  encodeWord(word) {
-    const symbols = bpeMergeWord(word.normalize("NFC"), this.mergeRank);
+  // Encodes one Metaspace pretoken (already ▁-prefixed) into subword
+  // strings + ids. A symbol not in vocab becomes [UNK] (matching the
+  // Python model's unk_token="[UNK]"), not silently dropped -- but is
+  // still reported separately as "uncovered" for the Coverage Inspector.
+  encodePretoken(ptext) {
+    const rawSymbols = bpeMergeWord(ptext.normalize("NFC"), this.mergeRank);
+    const symbols = [];
     const ids = [];
     const uncovered = [];
     const perSymbolId = [];
-    for (const sym of symbols) {
+    for (const sym of rawSymbols) {
       const id = this.tokenToId.get(sym);
       if (id === undefined) {
         uncovered.push(sym);
-        perSymbolId.push(null);
+        symbols.push(UNK_TOKEN); // matches HF: displayed token text is literally "[UNK]"
+        perSymbolId.push(this.unkId ?? null);
+        ids.push(this.unkId ?? null);
       } else {
+        symbols.push(sym);
         ids.push(id);
         perSymbolId.push(id);
       }
@@ -116,7 +151,7 @@ class BpeEncoder {
     const uncoveredChars = new Set();
 
     for (const chunk of chunks) {
-      const { symbols, ids, uncovered, perSymbolId } = this.encodeWord(chunk.text);
+      const { symbols, ids, uncovered, perSymbolId } = this.encodePretoken(chunk.text);
       pretokens.push({ ...chunk, symbols, ids, perSymbolId });
       totalTokens += ids.length;
       for (const u of uncovered) uncoveredChars.add(u);
@@ -131,8 +166,33 @@ class BpeEncoder {
       uncoveredChars: Array.from(uncoveredChars),
     };
   }
+
+  // Mirrors HF's Tokenizer.decode(ids) default behavior: skip special
+  // tokens ([UNK]), concatenate the rest, replace the Metaspace
+  // replacement char with a literal space, then strip exactly one leading
+  // space (the artificial prepend_scheme="always" marker).
+  decode(ids) {
+    const idToToken = this.tokens; // index === id
+    let s = "";
+    for (const id of ids) {
+      if (id === this.unkId) continue;
+      const tok = idToToken[id]?.token;
+      if (tok !== undefined) s += tok;
+    }
+    s = s.split(METASPACE_REPLACEMENT).join(" ");
+    if (s.startsWith(" ")) s = s.slice(1);
+    return s;
+  }
+
+  // Convenience: encode then decode, for round-trip fidelity checks.
+  roundTrip(text) {
+    const { pretokens } = this.encode(text);
+    const ids = [];
+    for (const p of pretokens) ids.push(...p.ids);
+    return this.decode(ids);
+  }
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { BpeEncoder, preTokenize, bpeMergeWord };
+  module.exports = { BpeEncoder, preTokenize, bpeMergeWord, metaspaceTransform };
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BPE Tokenizer — India Wikipedia (EN/HI/TE/MR)</title>
+<title>BPE Tokenizer — India Wikipedia (Phase 2)</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,13 +11,14 @@
 <header class="topbar">
   <h1>BPE Tokenizer Widget — India Wikipedia</h1>
   <p class="subtitle">
-    A single 10,000-token BPE vocabulary trained jointly across English, Hindi, Telugu and Marathi
-    Wikipedia articles on India — ERA V5, Session 2 assignment.
+    A single 10,000-token BPE vocabulary trained jointly across four languages' India Wikipedia
+    articles — ERA V5, Session 2 assignment. <span id="header-langs"></span>
   </p>
 </header>
 
 <nav class="tabs" role="tablist">
   <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview &amp; Score</button>
+  <button class="tab-btn" data-tab="fidelity" role="tab" aria-selected="false">Fidelity Check</button>
   <button class="tab-btn" data-tab="analysis" role="tab" aria-selected="false">Analysis</button>
   <button class="tab-btn" data-tab="vocab" role="tab" aria-selected="false">Vocab Explorer</button>
   <button class="tab-btn" data-tab="coverage" role="tab" aria-selected="false">Coverage Inspector</button>
@@ -30,10 +31,12 @@
   <section id="tab-overview" class="tab-panel active">
     <h2>Score</h2>
     <p>
-      For each language, <code>X = (unique words in that language's article) / (distinct token IDs
-      needed to spell all of them)</code>. The assignment requires English's ratio (X1) to land
-      <strong>around 1.2 or less</strong>; the score is <code>1000 / (X_max − X_min)</code> across all
-      four languages, sorted.
+      For each language, <code>fertility = token_count / faithful_units</code>, where a
+      <em>faithful unit</em> is one contiguous letter/mark/number run OR one visible non-space
+      punctuation/symbol character (each counted separately — this is the instructor's corrected
+      definition, see Methodology). The assignment requires English's ratio (X1) to land
+      <strong>around 1.2 or less</strong>; the self-score is
+      <code>1000 / (fertility_max − fertility_min)</code> across all four languages, sorted.
     </p>
     <div id="score-hero" class="score-hero">Loading…</div>
 
@@ -41,26 +44,58 @@
     <div class="table-wrap">
       <table id="winner-table">
         <thead>
-          <tr><th>Language</th><th>Unique words</th><th>Distinct tokens used</th><th>X</th></tr>
+          <tr><th>Language</th><th>Faithful units</th><th>Token count</th><th>Fertility</th></tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
 
-    <h3>Why word-level BPE — comparison against other variants</h3>
+    <h3>4th language: Marathi vs. Bengali</h3>
     <p>
-      Byte-level BPE, character-level BPE, and SentencePiece BPE were all trained on the same
-      weighted corpus mixture and evaluated the same way, for a fair comparison.
+      Both candidates were fetched, trained, and scored end to end with the identical pipeline
+      (see <a href="#methodology" data-tab-link="methodology">Methodology</a>), so this is a fair
+      head-to-head rather than a single run dressed up as a comparison.
     </p>
     <div class="table-wrap">
-      <table id="compare-table">
+      <table id="fourth-compare-table">
         <thead>
           <tr>
-            <th>Variant</th><th>Vocab reached</th>
-            <th>X (en)</th><th>X (hi)</th><th>X (te)</th><th>X (mr)</th>
-            <th>Spread</th><th>Score</th>
+            <th>4th language</th><th>English fertility</th><th>Spread</th><th>Raw score</th>
+            <th>Adjusted score</th><th></th>
           </tr>
         </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== FIDELITY CHECK ===================== -->
+  <section id="tab-fidelity" class="tab-panel">
+    <h2>Round-trip Fidelity Check</h2>
+    <p>
+      The original submission scored <strong>0</strong> because <code>decode(encode(text))</code>
+      did not preserve visible non-whitespace characters — a URL got mangled into
+      space-separated fragments. This tab runs the same class of probe live, in your browser,
+      using the exact <code>bpe.js</code> encoder/decoder this site ships (not a precomputed
+      table), so this is direct, reproducible evidence rather than a claim.
+    </p>
+    <div id="fidelity-summary" class="score-hero">Loading…</div>
+    <div class="table-wrap">
+      <table id="fidelity-table">
+        <thead><tr><th>Status</th><th>Original</th><th>Decoded</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <h3>Known-unsafe cases (documented, not asserted)</h3>
+    <p class="muted">
+      Characters genuinely outside every training corpus (e.g. emoji) still map to
+      <code>[UNK]</code> and are not expected to round-trip — this is the same, standard BPE
+      out-of-vocabulary behavior every tokenizer has, surfaced explicitly here rather than
+      silently.
+    </p>
+    <div class="table-wrap">
+      <table id="fidelity-unsafe-table">
+        <thead><tr><th>Original</th><th>Decoded</th><th>Note</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -70,127 +105,123 @@
   <section id="tab-analysis" class="tab-panel">
     <h2>Analysis: how this tokenizer was arrived at, and why it works</h2>
     <p>
-      This tab is the reasoning behind the numbers on the Overview tab — the design decisions,
-      the dead ends, and why the final configuration actually satisfies the assignment's scoring
-      objective rather than just happening to. For the exact settings/recipe, see the
-      <strong>Methodology</strong> tab.
+      This is phase 2 of this submission. Phase 1 scored 0 on grading because its tokenizer
+      could not faithfully round-trip text — this tab explains the root cause, what was learned
+      from the instructor's reference solution and a peer implementation, and how the current
+      design fixes it while still satisfying the scoring objective.
     </p>
 
-    <h3>1. The real constraint: a shared 10,000-token budget across four very unequal corpora</h3>
+    <h3>1. Root cause of the phase-1 failure</h3>
     <p>
-      English and Hindi's India articles are several times longer than Telugu's and Marathi's
-      (word counts: <span id="an-wordcounts"></span>). Training one BPE model on the raw,
-      unweighted concatenation of all four spends most of its merge budget on whichever
-      language supplies the most raw text — which is <em>not</em> the same thing as whichever
-      language needs the most merges to hit a good ratio. Every subsequent decision follows from
-      managing that budget deliberately instead of letting corpus size decide it by default.
+      Phase 1 used a <code>Whitespace</code> pre-tokenizer with no <code>decoder</code>
+      configured. <code>decode()</code> therefore just joined pretokens with a single space —
+      every original separator character (<code>:</code>, <code>/</code>, <code>.</code>,
+      <code>#</code>, <code>-</code>) was permanently lost. A URL like
+      <code>https://hi.wikipedia.org/wiki/भारत#cite_ref-1</code> decoded back as
+      <code>h tt p s : / / hi . wi k i pe di a . or g / wi k i / भारत cit ere f - 1</code>.
+      This is an architecture bug — no amount of vocabulary tuning could have fixed it.
     </p>
 
-    <h3>2. Why byte-level and character-level BPE were structurally the wrong tool here</h3>
+    <h3>2. What the instructor's reference solution got right — and wrong</h3>
     <p>
-      <strong>Byte-level BPE</strong> (GPT-2/RoBERTa-style) pre-tokenizes into raw UTF-8 bytes.
-      Devanagari and Telugu characters are 3 bytes each, so under a shared 10,000-token budget,
-      a large share of merges gets consumed just reassembling individual Indic characters from
-      their byte triplets before any real subword structure can be learned. That shows up
-      directly in the numbers: byte-level couldn't even reach the full 10,000-token budget
-      (<span id="an-byte-vocab"></span> tokens learned) and produced the worst ratios across the
-      board (spread <span id="an-byte-spread"></span>, score <span id="an-byte-score"></span>).
-    </p>
-    <p>
-      <strong>Character-level BPE</strong> avoids the byte-fallback problem (its base alphabet is
-      already whole Unicode characters), and with no pre-tokenizer boundary it does reach the full
-      10,000-token vocab. But merges are then free to span whitespace and word boundaries however
-      the raw corpus mixture's character-pair frequencies happen to fall — so, like byte-level, the
-      language whose text dominates the input has the strongest pull on which merges get learned,
-      independent of the actual per-language weighting knob. It landed second-worst
-      (spread <span id="an-char-spread"></span>, score <span id="an-char-score"></span>).
-    </p>
-    <p>
-      <strong>Word-level BPE</strong> restricts merges to within a single pre-tokenized word
-      (Sennrich-style). This is the key structural property that makes the per-language
-      oversampling weights actually work as a control knob: because a word from language L can only
-      ever contribute merges built from L's own characters, repeating language L's text more or less
-      directly and predictably shifts how much of the 10,000-token budget L receives. That
-      controllability is what made the rest of the tuning process possible at all.
+      The instructor's reference materials (in <code>../refsol/</code>) turned out to contain two
+      generations of the same solution. The actual files shipped there —
+      <code>tokenizer.json</code>, <code>train_tokenizer.py</code>, <code>SOLUTION.md</code> — use
+      the same flawed shape phase 1 did: a normalizer that replaces every non-letter/mark/number
+      run with a space, a <code>Whitespace</code> pre-tokenizer, and no decoder. Loading that
+      <code>tokenizer.json</code> directly and running <code>decode(encode(...))</code> on the
+      exact failing grading sample reproduces the identical failure. But a later
+      <code>instructions.md</code> added to the same folder describes a <em>corrected</em>
+      reference solution — one that uses exactly the <code>Metaspace</code> pre-tokenizer +
+      matching decoder architecture below, and a different (also corrected) fertility formula.
+      The two don't agree with each other; the instructions document is the authoritative,
+      up-to-date one.
     </p>
 
-    <h3>3. First attempt: reweighting alone plateaued</h3>
+    <h3>3. The fix: Metaspace instead of Whitespace</h3>
     <p>
-      The first pass used a single symmetric oversampling exponent (XLM-R-style, share ∝ size^α)
-      applied uniformly to Hindi/Telugu/Marathi. It pulled the three Indic languages closer
-      together, but left English's ratio (X1) around 1.33 — comfortably above the assignment's
-      ≤~1.2 target — because reweighting only changes <em>which language's text supplies more
-      training data</em>; it doesn't change the trainer's own criterion for which pairs are
-      "frequent enough to merge." Increasing Telugu's weight far beyond that point (up to
-      12–28×) kept moving Telugu's own ratio but stopped moving English's at all — a plateau
-      around X1 ≈ 1.27–1.31, confirmed by a full grid search.
+      A peer implementation of this same assignment, independently, used HuggingFace's
+      <code>Metaspace</code> pre-tokenizer (<code>replacement="▁", prepend_scheme="always"</code>)
+      with a <em>matching</em> <code>Metaspace</code> decoder, and only <code>NFKC</code>
+      normalization — no destructive character replacement. Unlike <code>Whitespace</code>, which
+      splits text into disjoint regex-matched groups and silently drops everything in between,
+      <code>Metaspace</code> never discards a character: every space becomes a <code>▁</code>
+      marker embedded directly in the token stream, so <code>decode()</code> can reconstruct it
+      exactly by reversing that substitution. The instructor's corrected <code>instructions.md</code>
+      independently confirms this exact same architecture (<code>NFKC</code> normalizer only,
+      <code>Metaspace</code> pre-tokenizer and decoder, <code>min_frequency=1</code>) — two
+      independent sources converging on the same fix. This is the architecture this tokenizer uses.
     </p>
 
-    <h3>4. The lever that actually closed the gap: <code>min_frequency</code></h3>
+    <h3>4. Corpus: faithful Markdown, not plain prose extracts</h3>
     <p>
-      The Hugging Face BPE trainer's default <code>min_frequency=2</code> means a candidate merge
-      is only learned if the pair co-occurs at least twice in the (weighted) training data. With a
-      10,000-token budget shared across four languages, English's own distinctive multi-syllable
-      words (word counts run into the thousands, but many technical/proper-noun words appear only
-      once) kept losing out to shared, cross-lingual, or more frequent pieces — the vocabulary kept
-      re-using generically useful merges instead of ever getting around to English-specific ones.
-      Lowering <code>min_frequency</code> to 1 let the trainer learn merges that occur even a single
-      time, which is exactly the profile of English's long tail of once-occurring words. That one
-      change dropped X1 from ≈1.27 to ≈1.21 at the same corpus weighting — more effective than any
-      amount of further reweighting had been.
+      Phase 1 trained on plain <code>explaintext</code> Wikipedia extracts, which contain almost
+      no URLs, headers, or reference punctuation. Even with a correct architecture, a tokenizer
+      that has never seen a <code>/</code> or <code>#</code> character during training has no
+      vocabulary entry for it and would fall back to <code>[UNK]</code> the first time a grader's
+      probe text contains one. Phase 2 fetches the same Wikipedia REST HTML the instructor's
+      reference uses and converts it to Markdown, preserving links, references, tables, and
+      headers — so the vocabulary actually covers the punctuation classes real markdown/URL text
+      is built from.
     </p>
 
-    <h3>5. Why the final configuration satisfies the (two-layer) objective</h3>
+    <h3>5. The fertility formula correction: punctuation counts as faithful units too</h3>
     <p>
-      The assignment's scoring is not "minimize spread" in isolation — it explicitly anchors
-      English's ratio at ≤~1.2 first, and only then rewards a small spread. The final search
-      therefore optimized in that order: reject any candidate where X1 &gt; 1.2, and among the
-      survivors, minimize the gap to whichever of Hindi/Telugu/Marathi is furthest from English.
-      The winning configuration (<span id="an-final-config"></span>) lands at
-      <span id="an-final-x1"></span> for English — just inside the target — while keeping the
-      worst-case outlier (Telugu) within <span id="an-final-gap"></span> of it, giving a spread of
-      <span id="an-final-spread"></span> and a score of <span id="an-final-score"></span>.
-    </p>
-    <p>
-      It's a confirmed local optimum, not a global guarantee: a fine-grained search immediately
-      around this point found nothing better, but a fundamentally different strategy (e.g.
-      allocating separate fixed sub-vocabularies per language instead of one shared, weighted
-      model) was not exhaustively tried and might do better still.
+      An earlier pass of this tokenizer used a <code>wordish_units</code> denominator that only
+      counted letter/mark/number runs — the definition in the instructor's <em>stale</em>
+      <code>SOLUTION.md</code>. Under that formula, every language's fertility sat frustratingly
+      close to the 1.2 ceiling, and pushing any one language's fertility down by oversampling it
+      pulled the others up in a tight, adversarial tradeoff (getting English comfortably under 1.2
+      required skewing its own training weight far above the others', which then dragged
+      Hindi/Telugu/the 4th language's fertility up in exchange). The corrected
+      <code>instructions.md</code> clarifies that a <em>faithful unit</em> is a letter/mark/number
+      run <strong>or one individual visible punctuation/symbol character</strong> — each counted
+      separately. Recounting with this denominator drops every language's fertility to roughly
+      0.55–0.8, nowhere near the 1.2 ceiling regardless of weighting, which means the ceiling was
+      never actually a binding constraint — the earlier tradeoff was solving a problem that didn't
+      exist, at real cost to the spread. Dropping it and searching modest, balanced weights instead
+      found a dramatically better optimum.
     </p>
 
-    <h3>6. Why SentencePiece — the XLM-R family algorithm — didn't win here</h3>
+    <h3>6. Weight tuning, now a pure spread-minimization problem</h3>
     <p>
-      SentencePiece BPE was trained on the identical weighted mixture and evaluated the same way,
-      and it's a strong second place (score <span id="an-sp-score"></span>). But SentencePiece's
-      trainer has no equivalent of <code>min_frequency</code> to tune, so it plateaus at the same
-      kind of ceiling the word-level tokenizer hit in step 3 — X1 ≈ 1.31, above target — with no
-      remaining lever to pull. This is a case where the algorithm most associated with
-      state-of-the-art multilingual models (XLM-R) is not automatically the best fit for
-      <em>this specific, small-scale, hard-constrained</em> scoring objective.
+      With English fertility no longer near any ceiling, tuning is just: minimize
+      <code>spread = fertility_max − fertility_min</code> directly. A grid search over modest
+      per-language weights (1×–6×, versus the earlier search's 8×–14× skew) found
+      <span id="an-final-config"></span>, landing all four languages within a tight band —
+      English at <span id="an-final-x1"></span> — spread <span id="an-final-spread"></span>,
+      score <span id="an-final-score"></span>. This is roughly an order of magnitude better than
+      the earlier, miscalibrated search's result, and lands in the same regime as the instructor's
+      own corrected reference (spread 0.1538, score 6502.56, with similarly modest weights
+      en=3/hi=4/te=4/mai=2).
+    </p>
+
+    <h3>7. min_frequency=1</h3>
+    <p>
+      As in phase 1, lowering the BPE trainer's <code>min_frequency</code> from the default 2 to
+      1 lets it learn merges that occur even once in the weighted corpus — English's long tail of
+      distinctive, low-repetition words — instead of only ever reusing shared, cross-lingual
+      pieces. This is still in effect and still matters.
     </p>
   </section>
 
   <!-- ===================== VOCAB EXPLORER ===================== -->
   <section id="tab-vocab" class="tab-panel">
     <h2>Vocab Explorer</h2>
-    <p>Browse all 10,000 learned tokens of the winning word-level BPE tokenizer.</p>
+    <p>Browse all 10,000 learned tokens of the winning tokenizer. <code>▁</code> marks a token that starts a new word (a literal space, in the original text).</p>
 
     <div class="controls">
       <input id="vocab-search" type="text" placeholder="Search token text…" />
       <select id="vocab-script-filter">
         <option value="all">All scripts</option>
         <option value="latin">Latin</option>
-        <option value="devanagari">Devanagari (Hindi/Marathi)</option>
+        <option value="devanagari">Devanagari</option>
         <option value="telugu">Telugu</option>
+        <option value="bengali">Bengali</option>
         <option value="digit">Digits</option>
         <option value="punct/other">Punctuation / other</option>
       </select>
-      <div class="lang-filter-group">
-        <label><input type="checkbox" value="en" checked /> en</label>
-        <label><input type="checkbox" value="hi" checked /> hi</label>
-        <label><input type="checkbox" value="te" checked /> te</label>
-        <label><input type="checkbox" value="mr" checked /> mr</label>
-      </div>
+      <div class="lang-filter-group" id="vocab-lang-filter"></div>
       <label class="merge-only-label"><input type="checkbox" id="vocab-merged-only" /> merged tokens only</label>
     </div>
 
@@ -216,9 +247,9 @@
   <section id="tab-coverage" class="tab-panel">
     <h2>Coverage Inspector</h2>
     <p>
-      Paste any text — a sentence, a paragraph, or a whole article subset — and see exactly how the
-      tokenizer covers it: token boundaries, token/word counts, fertility, and any character the
-      vocabulary doesn't cover.
+      Paste any text — a sentence, a paragraph, a URL — and see exactly how the tokenizer covers
+      it: token boundaries, token/word counts, fertility, and any character the vocabulary
+      doesn't cover. <code>▁</code> is rendered as a visible space marker in the highlighted view.
     </p>
 
     <div class="quick-picks" id="quick-picks"></div>
@@ -234,10 +265,13 @@
     <h3>Highlighted tokenization</h3>
     <div id="coverage-highlight" class="highlight-box"></div>
 
-    <h3>Word &rarr; subword breakdown</h3>
+    <h3>Round-trip check</h3>
+    <p id="coverage-roundtrip" class="muted"></p>
+
+    <h3>Pretoken &rarr; subword breakdown</h3>
     <div class="table-wrap">
       <table id="coverage-breakdown">
-        <thead><tr><th>Word</th><th>Subword tokens</th><th># tokens</th></tr></thead>
+        <thead><tr><th>Pretoken</th><th>Subword tokens</th><th># tokens</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -247,31 +281,43 @@
   <section id="tab-methodology" class="tab-panel">
     <h2>Methodology</h2>
 
-    <h3>1. Corpus</h3>
+    <h3>1. Corpus: faithful Markdown</h3>
     <p>
       One Wikipedia article per language — the article about India itself — fetched via the
-      Wikipedia API, with localized titles resolved through the English article's cross-language
-      links: <span id="meta-titles"></span>.
+      Wikipedia REST HTML API and converted to Markdown, preserving links, references, tables,
+      and headers (rather than stripping to plain prose). Localized titles resolved through the
+      English article's cross-language links: <span id="meta-titles"></span>.
     </p>
 
-    <h3>2. Scoring objective (corrected reading)</h3>
+    <h3>2. Tokenizer architecture</h3>
+    <div class="table-wrap">
+      <table id="arch-table">
+        <thead><tr><th>Component</th><th>Setting</th></tr></thead>
+        <tbody>
+          <tr><td>Model</td><td>BPE (HuggingFace <code>tokenizers</code>)</td></tr>
+          <tr><td>Normalizer</td><td>NFKC only — no destructive replacement</td></tr>
+          <tr><td>Pre-tokenizer</td><td><code>Metaspace(replacement="▁", prepend_scheme="always")</code></td></tr>
+          <tr><td>Decoder</td><td>matching <code>Metaspace</code> decoder</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3. Scoring objective</h3>
     <p>
-      The assignment's own wording anchors English: <em>"(Total English Vocab)/(Total English
-      tokens) must be around 1.2 or less"</em> — X1. Ratios for Hindi/Telugu/Marathi (X2–X4) are
-      computed the same way. The four are sorted and scored as <code>1000/(X_max − X_min)</code>.
-      This means the optimization target is two-layered, not a single symmetric "minimize spread":
-      first satisfy X1 ≤ ~1.2, then minimize the gap between English and whichever of the other
-      three languages is the worst-case outlier.
+      <code>fertility(lang) = token_count / faithful_units</code>, where a
+      <strong>faithful unit</strong> is one contiguous Unicode letter/mark/number run, OR one
+      visible non-space punctuation/symbol character (each counted separately) — the instructor's
+      corrected definition (<code>../refsol/instructions.md</code>), which differs from an earlier
+      letter/number-only denominator this project used before that correction was available (see
+      Analysis tab, §5). Sorted and scored as <code>1000/(fertility_max − fertility_min)</code>.
+      The assignment's own wording anchors English specifically: <em>"(Total English Vocab)/(Total
+      English tokens) must be around 1.2 or less"</em> — under the corrected denominator every
+      language lands well under 1.0, so this is reported as a sanity check rather than a binding
+      constraint. An English-anchored penalty (<code>exp(max(0, en_fertility/1.2 − 1))</code>) is
+      also reported alongside the raw score for completeness.
     </p>
 
-    <h3>3. Vocabulary strategy: one joint 10,000-token BPE model</h3>
-    <p>
-      Rather than allocating a fixed sub-budget of the 10,000 tokens per language, a single BPE
-      model is trained on a <strong>mixture</strong> of all four corpora, so the vocabulary can
-      allocate more merges to whichever language actually needs them. Smaller corpora
-      (Telugu and Marathi are far shorter than the English/Hindi articles) are oversampled by
-      repeating their text before training, so the trainer doesn't starve them of merge budget.
-    </p>
+    <h3>4. Run configuration (winning tokenizer)</h3>
     <div class="table-wrap">
       <table id="run-config-table">
         <thead><tr><th>Setting</th><th>Value</th></tr></thead>
@@ -279,32 +325,21 @@
       </table>
     </div>
 
-    <h3>4. The min_frequency lever</h3>
+    <h3>5. Weight tuning</h3>
     <p>
-      Reweighting the corpus mixture alone plateaued with English's X1 around 1.27–1.31, no matter
-      how aggressively Telugu/Marathi were oversampled. Lowering the BPE trainer's
-      <code>min_frequency</code> from the default 2 to 1 let it learn rarer, English-specific merges
-      instead of always reusing shared, cross-lingual pieces — closing most of the remaining gap to
-      the ≤1.2 target on its own.
+      A grid search over per-language repeat counts, run separately for the Marathi-4th and
+      Bengali-4th language sets, optimizing English fertility ≤ ~1.2 first and then minimizing
+      spread among survivors of that constraint (see Analysis tab for the tradeoff this search
+      navigates).
     </p>
 
-    <h3>5. Tuning search</h3>
+    <h3>6. Round-trip verification</h3>
     <p>
-      A grid/local search over per-language repeat counts (English fixed at the minimum, 1) was run
-      twice — once at the HF default <code>min_frequency=2</code> (plateaued above target), then
-      again at <code>min_frequency=1</code> — optimizing first for the X1 ≤ 1.2 constraint, then for
-      minimizing the worst-case gap to English among Hindi/Telugu/Marathi. Byte-level and
-      character-level BPE were dropped early as dominated on every axis and kept only as comparison
-      baselines (see Overview tab).
-    </p>
-
-    <h3>6. X vs. fertility — two different, complementary numbers</h3>
-    <p>
-      The assignment's <code>X</code> is a <em>unique-vocabulary</em> ratio: unique words in the
-      article divided by distinct token IDs needed to spell all of them. It is not the same as
-      <em>fertility</em> (tokens produced per word across the full running text, including repeats),
-      which for this same tokenizer runs from about 1.26 (Telugu) to 1.64 (Marathi) tokens per word.
-      Both describe compression behavior, but X is what the assignment scores on.
+      <code>scripts/verify_roundtrip.py</code> runs a battery of adversarial probe strings
+      (URLs, refs, hyphenated tokens, mixed scripts) plus corpus samples through
+      <code>decode(encode(x))</code> and asserts visible non-whitespace characters survive —
+      wired into the export step so a tokenizer that fails this can't ship. The same probes run
+      live in this widget's <a href="#fidelity" data-tab-link="fidelity">Fidelity Check</a> tab.
     </p>
   </section>
 

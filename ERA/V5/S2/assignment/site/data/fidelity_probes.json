@@ -1,0 +1,16 @@
+{
+  "probes": [
+    "https://hi.wikipedia.org/wiki/भारत#cite_ref-1",
+    "https://en.wikipedia.org/wiki/India_(disambiguation)",
+    "See [India (disambiguation)](https://en.wikipedia.org/wiki/India_(disambiguation) \"India (disambiguation)\")",
+    "Category: ./Category:Articles_with_short_description",
+    "co-operative_societies-2024",
+    "GDP: $3.7 trillion (2023) [1][2]",
+    "भारत (आधिकारिक नाम: भारत गणराज्य) — Republic of India",
+    "1,428,627,663 people (2023 est.)",
+    "పేజీ ID: 12345#section-3"
+  ],
+  "known_unsafe": [
+    "🇮🇳 India"
+  ]
+}

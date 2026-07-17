@@ -1,10 +1,16 @@
 {
-  "variant": "word",
+  "fourth": "bn",
+  "langs": [
+    "en",
+    "hi",
+    "te",
+    "bn"
+  ],
   "repeat_counts": {
-    "en": 1,
-    "hi": 1,
-    "te": 12,
-    "mr": 1
+    "en": 2,
+    "hi": 3,
+    "te": 5,
+    "bn": 3
   },
   "min_frequency": 1,
   "vocab_size": 10000

@@ -1,12 +1,17 @@
-"""Shared corpus loading + per-language weighting used by all tokenizer
-training scripts, so every variant is trained on the same weighted mixture
-and is directly comparable.
+"""Shared corpus loading + per-language weighting used by the tokenizer
+training/tuning scripts, so every run is trained on a comparably-weighted
+mixture and results are directly comparable.
+
+Generic over the language set (`langs`) so the same helpers serve both the
+Marathi-as-4th-language run and the Bengali-as-4th-language run.
 """
 
 import pathlib
 import unicodedata
 
-LANGS = ["en", "hi", "te", "mr"]
+BASE_LANGS = ["en", "hi", "te"]
+FOURTH_LANG_CANDIDATES = ["mr", "bn"]
+
 CORPUS_DIR = pathlib.Path(__file__).resolve().parent.parent / "data" / "corpus"
 TOKENIZER_DIR = pathlib.Path(__file__).resolve().parent.parent / "data" / "tokenizer"
 
@@ -14,9 +19,13 @@ DEFAULT_ALPHA = 0.3
 DEFAULT_VOCAB_SIZE = 10000
 
 
-def load_corpora() -> dict[str, str]:
+def langset(fourth: str) -> list[str]:
+    return BASE_LANGS + [fourth]
+
+
+def load_corpora(langs: list[str]) -> dict[str, str]:
     texts = {}
-    for lang in LANGS:
+    for lang in langs:
         path = CORPUS_DIR / f"{lang}.txt"
         texts[lang] = unicodedata.normalize("NFC", path.read_text(encoding="utf-8"))
     return texts
@@ -41,8 +50,7 @@ def compute_repeat_counts(texts: dict[str, str], alpha: float = DEFAULT_ALPHA) -
 
 def weighted_lines(texts: dict[str, str], repeat_counts: dict[str, int]):
     """Yield each language's text, repeated per its weight, as separate
-    items (used as training 'documents' by both HF tokenizers and to build
-    a SentencePiece input file)."""
-    for lang in LANGS:
+    training 'documents'."""
+    for lang, text in texts.items():
         for _ in range(repeat_counts[lang]):
-            yield texts[lang]
+            yield text

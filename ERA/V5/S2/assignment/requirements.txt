@@ -1,4 +1,6 @@
 tokenizers>=0.19
 requests>=2.31
-sentencepiece>=0.2
 regex>=2024.4.16
+beautifulsoup4>=4.12
+lxml>=5.0
+markdownify>=0.13

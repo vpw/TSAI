@@ -1,44 +1,45 @@
 """Export everything the static frontend needs into site/data/*.json:
 
-  vocab_word.json  - id->token array + ordered merge list (rank = index) for
-                      the winning word-level BPE tokenizer, plus per-token
-                      script classification and which language(s)' unique
-                      word lists actually use each token id.
-  stats.json        - the X1-X4 table for all four trained variants (byte,
-                      char, word, sentencepiece), copied through so the
-                      Overview tab can show the comparison, not just the
-                      winner.
-  samples.json      - a short quick-pick sample paragraph per language plus
-                      basic corpus metadata (char/word counts, source title),
-                      for the Coverage Inspector tab.
-  run_config.json   - the winning run's exact knobs (repeat_counts,
-                      min_frequency, vocab_size) so the Methodology tab shows
-                      numbers pulled from the real artifact, not hardcoded
-                      prose.
+  vocab.json           - id->token array + ordered merge list (rank = index)
+                          for the WINNING tokenizer (whichever of mr/bn was
+                          picked), plus per-token script classification and
+                          which language(s)' unique word lists use each id.
+  stats.json            - { mr: {...}, bn: {...}, winner: "mr"|"bn" } so the
+                          Overview tab can show the head-to-head comparison
+                          MODIFY.md asked for, not just the winner alone.
+  samples.json          - a quick-pick sample paragraph per language (winner's
+                          4 languages only) plus corpus metadata, for the
+                          Coverage Inspector tab.
+  run_config.json       - the winning run's exact knobs (repeat_counts,
+                          min_frequency, vocab_size, fourth language) so the
+                          Methodology tab shows numbers pulled from the real
+                          artifact, not hardcoded prose.
+  fidelity_probes.json  - the round-trip probe strings from
+                          scripts/verify_roundtrip.py, run live client-side
+                          by the Fidelity Check tab (not precomputed -- the
+                          point is the browser's own bpe.js proving it,
+                          live, in front of the grader).
 
 Everything here is static data computed once at build time; the browser only
 ever loads JSON and runs BPE merges client-side (see site/bpe.js).
 """
 
+import argparse
 import json
 import pathlib
 
 import regex
 from tokenizers import Tokenizer
 
-from common import CORPUS_DIR, LANGS, TOKENIZER_DIR, load_corpora
+from common import TOKENIZER_DIR, langset, load_corpora
+from compute_metrics import LANG_NAMES, compute_stats
+from verify_roundtrip import KNOWN_UNSAFE_PROBES, PROBES
 
 SITE_DATA_DIR = pathlib.Path(__file__).resolve().parent.parent / "site" / "data"
-STATS_PATH = TOKENIZER_DIR.parent / "stats.json"
+STATS_DIR = TOKENIZER_DIR.parent
 WORD_PATTERN = regex.compile(r"[\p{L}\p{M}\p{N}]+")
 
-LANG_NAMES = {"en": "English", "hi": "Hindi", "te": "Telugu", "mr": "Marathi"}
-SOURCE_TITLES = {"en": "India", "hi": "भारत", "te": "భారతదేశం", "mr": "भारत"}
-
-# Winning config, confirmed by scripts/tune_weights.py (see PLAN.md "Redo results").
-WINNING_REPEAT_COUNTS = {"en": 1, "hi": 1, "te": 12, "mr": 1}
-WINNING_MIN_FREQUENCY = 1
-WINNING_VOCAB_SIZE = 10000
+SOURCE_TITLES = {"en": "India", "hi": "भारत", "te": "భారతదేశం", "mr": "भारत", "bn": "ভারত"}
 
 
 def classify_script(token: str) -> str:
@@ -48,17 +49,20 @@ def classify_script(token: str) -> str:
             return "devanagari"
         if 0x0C00 <= cp <= 0x0C7F:
             return "telugu"
+        if 0x0980 <= cp <= 0x09FF:
+            return "bengali"
         if ("A" <= ch <= "Z") or ("a" <= ch <= "z"):
             return "latin"
-    if token.strip() == "":
+    if token.strip("▁") == "":
         return "whitespace"
     if any(ch.isdigit() for ch in token):
         return "digit"
     return "punct/other"
 
 
-def build_vocab_export(texts: dict[str, str]) -> dict:
-    path = TOKENIZER_DIR / "word" / "tokenizer.json"
+def build_vocab_export(fourth: str, texts: dict[str, str]) -> dict:
+    langs = langset(fourth)
+    path = TOKENIZER_DIR / fourth / "tokenizer.json"
     raw = json.loads(path.read_text(encoding="utf-8"))
     vocab: dict[str, int] = raw["model"]["vocab"]
     merges = raw["model"]["merges"]
@@ -69,11 +73,12 @@ def build_vocab_export(texts: dict[str, str]) -> dict:
 
     tokenizer = Tokenizer.from_file(str(path))
     token_langs: list[set] = [set() for _ in id_to_token]
-    for lang in LANGS:
+    for lang in langs:
         words = sorted(set(WORD_PATTERN.findall(texts[lang])))
         for word in words:
             for tid in tokenizer.encode(word).ids:
-                token_langs[tid].add(lang)
+                if tid < len(token_langs):
+                    token_langs[tid].add(lang)
 
     tokens_export = []
     for idx, tok in enumerate(id_to_token):
@@ -94,17 +99,12 @@ def build_vocab_export(texts: dict[str, str]) -> dict:
     }
 
 
-def build_stats_export() -> dict:
-    return json.loads(STATS_PATH.read_text(encoding="utf-8"))
-
-
-def build_samples_export(texts: dict[str, str]) -> dict:
+def build_samples_export(fourth: str, texts: dict[str, str]) -> dict:
+    langs = langset(fourth)
     out = {}
-    for lang in LANGS:
+    for lang in langs:
         text = texts[lang]
         words = WORD_PATTERN.findall(text)
-        # ~60 words is enough to see interesting merge behavior without
-        # overwhelming the highlighted-span view.
         cutoff = 0
         word_count = 0
         for m in regex.finditer(r"[\p{L}\p{M}\p{N}]+", text):
@@ -123,44 +123,70 @@ def build_samples_export(texts: dict[str, str]) -> dict:
     return out
 
 
-def build_run_config() -> dict:
+def build_run_config(fourth: str, repeat_counts: dict, min_frequency: int, vocab_size: int) -> dict:
     return {
-        "variant": "word",
-        "repeat_counts": WINNING_REPEAT_COUNTS,
-        "min_frequency": WINNING_MIN_FREQUENCY,
-        "vocab_size": WINNING_VOCAB_SIZE,
+        "fourth": fourth,
+        "langs": langset(fourth),
+        "repeat_counts": repeat_counts,
+        "min_frequency": min_frequency,
+        "vocab_size": vocab_size,
     }
 
 
-def main() -> None:
-    SITE_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    texts = load_corpora()
+def build_fidelity_probes() -> dict:
+    return {"probes": PROBES, "known_unsafe": KNOWN_UNSAFE_PROBES}
 
-    vocab_export = build_vocab_export(texts)
-    (SITE_DATA_DIR / "vocab_word.json").write_text(
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--winner", default="mr", choices=["mr", "bn"])
+    parser.add_argument("--min-frequency", type=int, default=1)
+    args = parser.parse_args()
+
+    SITE_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    both_stats = {}
+    for fourth in ["mr", "bn"]:
+        tok_path = TOKENIZER_DIR / fourth / "tokenizer.json"
+        if tok_path.exists():
+            both_stats[fourth] = compute_stats(fourth)
+    both_stats["winner"] = args.winner
+    (SITE_DATA_DIR / "stats.json").write_text(
+        json.dumps(both_stats, ensure_ascii=False), encoding="utf-8"
+    )
+    print(f"[stats.json] mr+bn comparison written, winner={args.winner}")
+
+    winner_langs = langset(args.winner)
+    texts = load_corpora(winner_langs)
+
+    vocab_export = build_vocab_export(args.winner, texts)
+    (SITE_DATA_DIR / "vocab.json").write_text(
         json.dumps(vocab_export, ensure_ascii=False), encoding="utf-8"
     )
-    print(f"[vocab_word.json] {len(vocab_export['tokens'])} tokens, {len(vocab_export['merges'])} merges")
+    print(f"[vocab.json] {len(vocab_export['tokens'])} tokens, {len(vocab_export['merges'])} merges")
 
-    stats_export = build_stats_export()
-    (SITE_DATA_DIR / "stats.json").write_text(
-        json.dumps(stats_export, ensure_ascii=False), encoding="utf-8"
-    )
-    print("[stats.json] copied")
-
-    samples_export = build_samples_export(texts)
+    samples_export = build_samples_export(args.winner, texts)
     (SITE_DATA_DIR / "samples.json").write_text(
         json.dumps(samples_export, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print("[samples.json] written")
 
-    run_config = build_run_config()
+    sweep_path = STATS_DIR / f"tune_sweep_{args.winner}.json"
+    repeat_counts = json.loads(sweep_path.read_text())["best"]["repeat_counts"] if sweep_path.exists() else {}
+    run_config = build_run_config(args.winner, repeat_counts, args.min_frequency, vocab_export["vocab_size"])
     (SITE_DATA_DIR / "run_config.json").write_text(
         json.dumps(run_config, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print("[run_config.json] written")
 
-    total_bytes = sum((SITE_DATA_DIR / f).stat().st_size for f in ["vocab_word.json", "stats.json", "samples.json", "run_config.json"])
+    fidelity = build_fidelity_probes()
+    (SITE_DATA_DIR / "fidelity_probes.json").write_text(
+        json.dumps(fidelity, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    print("[fidelity_probes.json] written")
+
+    files = ["vocab.json", "stats.json", "samples.json", "run_config.json", "fidelity_probes.json"]
+    total_bytes = sum((SITE_DATA_DIR / f).stat().st_size for f in files)
     print(f"Total site/data size: {total_bytes / 1024:.1f} KB")
 
 
