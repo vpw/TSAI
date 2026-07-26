@@ -1,0 +1,384 @@
+{
+  "stage": "03-langid",
+  "detector": "fastText lid.176.ftz (176 languages)",
+  "confidence_floor": 0.5,
+  "docs_in": 64712,
+  "docs_out": 64268,
+  "docs_dropped": 444,
+  "verdicts": {
+    "MATCH": 61206,
+    "CODE_SWITCHED": 3062,
+    "ROMANIZED": 6,
+    "LOW_CONFIDENCE": 277,
+    "MISMATCH": 161
+  },
+  "mean_confidence": 0.9779,
+  "quarantined": 444,
+  "code_switched": 3062,
+  "romanized_indic": 6,
+  "low_confidence": 277,
+  "mislabelled_caught_by_detection": 161,
+  "mislabelled_caught_by_folder_trust": 0,
+  "naive_iso1_vs_iso3_false_mismatches": 64308,
+  "iso_code_map_used": {
+    "as": "asm",
+    "bn": "ben",
+    "gu": "guj",
+    "hi": "hin",
+    "kn": "kan",
+    "ks": "kas",
+    "ml": "mal",
+    "mr": "mar",
+    "ne": "nep",
+    "or": "ory",
+    "pa": "pan",
+    "sa": "san",
+    "sd": "snd",
+    "ta": "tam",
+    "te": "tel",
+    "ur": "urd",
+    "en": "eng"
+  },
+  "claimed_to_detected_pairs": {
+    "hin->hin": 36243,
+    "tel->tel": 15054,
+    "eng->eng": 10465,
+    "asm->asm": 2546,
+    "asm->eng": 46,
+    "eng->tam": 27,
+    "asm->ben": 27,
+    "eng->id": 26,
+    "eng->hin": 26,
+    "eng->tl": 19,
+    "eng->tel": 15,
+    "eng->es": 14,
+    "asm->uz": 9,
+    "asm->es": 8,
+    "eng->cy": 7,
+    "asm->tl": 7,
+    "hin->eng": 6,
+    "eng->hr": 6,
+    "asm->et": 6,
+    "tel->tam": 5,
+    "eng->fi": 5,
+    "eng->it": 5,
+    "eng->eo": 5,
+    "asm->pl": 5,
+    "asm->id": 5,
+    "asm->it": 5,
+    "tel->id": 4,
+    "eng->ku": 4,
+    "eng->fr": 4,
+    "eng->sr": 4,
+    "eng->no": 4,
+    "asm->fi": 4,
+    "asm->cy": 4,
+    "hin->mar": 3,
+    "hin->san": 3,
+    "tel->tl": 3,
+    "eng->ory": 3,
+    "eng->tr": 3,
+    "eng->sq": 3,
+    "asm->ms": 3
+  },
+  "token_denominator": {
+    "asm": {
+      "tokens_if_folder_trusted": 5006212,
+      "tokens_after_detection": 4953536,
+      "delta": -52676
+    },
+    "az": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 7631,
+      "delta": 7631
+    },
+    "ben": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 41973,
+      "delta": 41973
+    },
+    "cy": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2886,
+      "delta": 2886
+    },
+    "eng": {
+      "tokens_if_folder_trusted": 7907145,
+      "tokens_after_detection": 7800181,
+      "delta": -106964
+    },
+    "fi": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 820,
+      "delta": 820
+    },
+    "fr": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 149,
+      "delta": 149
+    },
+    "fy": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 3390,
+      "delta": 3390
+    },
+    "guj": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2597,
+      "delta": 2597
+    },
+    "hin": {
+      "tokens_if_folder_trusted": 25093832,
+      "tokens_after_detection": 25086607,
+      "delta": -7225
+    },
+    "hr": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 884,
+      "delta": 884
+    },
+    "id": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 29219,
+      "delta": 29219
+    },
+    "it": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 516,
+      "delta": 516
+    },
+    "ku": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2304,
+      "delta": 2304
+    },
+    "mal": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 621,
+      "delta": 621
+    },
+    "mar": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 4146,
+      "delta": 4146
+    },
+    "mg": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2633,
+      "delta": 2633
+    },
+    "nl": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 214,
+      "delta": 214
+    },
+    "no": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 7321,
+      "delta": 7321
+    },
+    "ory": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 1305,
+      "delta": 1305
+    },
+    "pan": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 1015,
+      "delta": 1015
+    },
+    "ro": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 3021,
+      "delta": 3021
+    },
+    "san": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 11497,
+      "delta": 11497
+    },
+    "sq": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2941,
+      "delta": 2941
+    },
+    "sr": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 984,
+      "delta": 984
+    },
+    "tam": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 6583,
+      "delta": 6583
+    },
+    "tel": {
+      "tokens_if_folder_trusted": 10001774,
+      "tokens_after_detection": 10012138,
+      "delta": 10364
+    },
+    "tk": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 1660,
+      "delta": 1660
+    },
+    "tl": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 9712,
+      "delta": 9712
+    },
+    "tr": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 1893,
+      "delta": 1893
+    },
+    "urd": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 8360,
+      "delta": 8360
+    },
+    "uz": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 226,
+      "delta": 226
+    }
+  },
+  "mismatch_examples": [
+    {
+      "id": "ver-hin:dfc15c26d2340d36d297624b09b7b0e2e459dbf8aa159698d2832a5104e3ef56",
+      "src": "ver-hin",
+      "claimed": "hin",
+      "detected": "san",
+      "confidence": 0.569,
+      "script_profile": {
+        "Deva": 1.0
+      },
+      "excerpt": "ग्रहणी कामला सूची छर्दिर्मूर्च्छाश्मरी तृषाः । डाकिनी शाकिनी घोरा इत्यैता बाह्यहेतुकाः ॥ एवं परिवृतं दृष्ट्वा स्वसैन्यमविचारयत् । मत्तः कस्त्वधिको लोके न जाने भवितव्यताम् ॥ ब्रह्मविष्णुमहेशाव्याः हननीया भयार्दतः । एवं वि"
+    },
+    {
+      "id": "ver-hin:9951ed19a17f07076709a9fa53a23c36c4f373cd1dedf440c95f9f7cc7fa8c92",
+      "src": "ver-hin",
+      "claimed": "hin",
+      "detected": "san",
+      "confidence": 0.537,
+      "script_profile": {
+        "Deva": 1.0
+      },
+      "excerpt": "480 : ललितविस्तर पुरे`चरति पिण्डम् ।।753 ।। केचिद् अवोचल्छको देवराजः, अपरे भणन्ति सुयामो देवपुत्रः । तथापि संतुपितं वा निमितरच, अपरे भणन्ति सुनिमित एष देवः ॥ 754।। केचित् पुनर्भणन्ति चन्द्रसूर्यो, तथापि च राहुर्बलिश्च वे"
+    },
+    {
+      "id": "ver-hin:833c643200d64b8fe5493b93874052d96bb27a1bf10b940c1594a7524312418e",
+      "src": "ver-hin",
+      "claimed": "hin",
+      "detected": "san",
+      "confidence": 0.536,
+      "script_profile": {
+        "Deva": 1.0
+      },
+      "excerpt": "अग्निहोत्रे च चिरम् अङ्गिरसो भयात् । अथ शतश् च भगवान् गौतमेन पुरन्दरः । अहल्यां कामयानो वै धर्मार्थं च न हिंसितः । यथा समुद्रो नृपते पूर्णो सृष्टश् च वारिणा । ब्राह्मणैर् अभिशनः सन् बभूव लवणोदकः । • . ११. दण्डकानाम् महद्"
+    },
+    {
+      "id": "ver-hin:812088fc430a3cde572ddcd86db57bdb94dd99430c08c743fecc59d83465dd3d",
+      "src": "ver-hin",
+      "claimed": "hin",
+      "detected": "mar",
+      "confidence": 0.526,
+      "script_profile": {
+        "Deva": 1.0
+      },
+      "excerpt": "कवि अब्दुल रहमानकृत सन्देशरासक [ १७१ वातनी खात्री होय के कर्ता हयात नथी किंतु कीर्तिशेष धयेलो छे, तो ए तेना मुखशी सांभळवानी संभावना न करी शके. एथी कदाच टिप्पनकार अने रासकार समसमथी होय एम बनवा जोग छे. अथवा टिप्पनकार पहेला"
+    },
+    {
+      "id": "ver-tel:c99f5484bd4c490daf2f9f3cc8392c08e4856b94d4f7671f1505101b98e61940",
+      "src": "ver-tel",
+      "claimed": "tel",
+      "detected": "hin",
+      "confidence": 0.987,
+      "script_profile": {
+        "Latn": 0.074,
+        "Deva": 0.926
+      },
+      "excerpt": "What does it mean ? For & elecburi field JXE = 7. = Ple इस मामले का होना जरूरी नहीं है; उदाहरण के लिए कहिए यदि मैं एक भू-संपर्कित गोले के अंदर आवेश लेता हूं। फिर, यह आवेश, चूंकि यह एक धात्विक भू-संपर्कित गोले द्वारा परिर"
+    },
+    {
+      "id": "ver-eng:6e1d714e7e657f5999924c8e7fcb43de2e8d2221",
+      "src": "ver-eng",
+      "claimed": "eng",
+      "detected": "ku",
+      "confidence": 0.798,
+      "script_profile": {
+        "Latn": 0.954,
+        "Arab": 0.046
+      },
+      "excerpt": "Tianhui- yek ji hilberîner û dabînkerên pêşeng ên çîpên UV LED karûbarê çîpê ODM / OEM UV peyda dike. Pêkhateyên sereke yên dezenfektekirina avê ya Uv-ê hilberên îthalkirî ne. Hilber bi fonksiyonên mezin ewle û pêbawer e"
+    },
+    {
+      "id": "ver-eng:fa1e28290a2e8ab80d04cb7ddf02fa5e70ff85f5",
+      "src": "ver-eng",
+      "claimed": "eng",
+      "detected": "ory",
+      "confidence": 0.864,
+      "script_profile": {
+        "Orya": 0.34,
+        "Latn": 0.66
+      },
+      "excerpt": "112 ସଦାପ୍ରଭୁଙ୍କର ପ୍ରଶଂସା କର। ଯେଉଁ ଲୋକ ସଦାପ୍ରଭୁଙ୍କୁ ଭୟ ଓ ସମ୍ମାନ କରେ, ସେମାନେ ସମ୍ମାନରେ ଭାଗ୍ୟବାନ୍ ହୁଅନ୍ତି, ଯିଏକି ତାଙ୍କର ଆଦେଶ ପାଳନ କରିବାରେ ବହୁତ ବିଶ୍ୱସ୍ତ ହୋଇଥାଏ, 2 ତା’ର ବଂଶଧର ଭୂପୃଷ୍ଠରେ ବିକ୍ରମଶାଳୀ ହେବେ। ସରଳ ଲୋକର ବଂଶଧର ଆଶୀର୍ବାଦ "
+    },
+    {
+      "id": "ver-eng:b05ef34f20aab1e23196718e1a54fb2aa8d12cae",
+      "src": "ver-eng",
+      "claimed": "eng",
+      "detected": "tam",
+      "confidence": 0.963,
+      "script_profile": {
+        "Latn": 0.765,
+        "Taml": 0.235
+      },
+      "excerpt": "Golden Star Ganesh’s Romeo is all set for release on July 6. The movie, directed by P. C. Shekar of Nayaka fame, revolves around a married couple whose life turns bitter post marriage. Ganesh pairs opposite Bhavana in th"
+    }
+  ],
+  "codeswitch_examples": [
+    {
+      "id": "unv-hin:7db41d2e8bba7c440fec92d24bf4a8c77dca614c13605a461a900eeea9c4e6e8",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.31,
+      "excerpt": "बुजुर्गों में रोग प्रतिरोधक क्षमता कैसे बढ़ाये [How To Increase Immunity In The Elderly In Hindi]\\nHome हेल्थ बुजुर्गों में रोग प्रतिरोधक क्षमता कैसे बढ़ाये\\nबुजुर्गों में रोग प्रतिरोधक क्षमता कैसे बढ़ाये? :\\nबुजुर्गों म"
+    },
+    {
+      "id": "unv-hin:7de6b8e515c921a1527c460c3d22c33c2abbb7ec932e94070cce469f5b79128d",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.226,
+      "excerpt": "पिछले दो दिनों से एक अंकल के डांस का वीडियो इन दिनों सोशल मीडिया पर तेजी से वायरल हो रहा है। वायरल विडियो में अंकल किसी पार्टी परफॉर्मेंस में स्टेज पर 1987 में आई बॉलीवुड एक्टर गोविंदा की फिल्म 'खुदगर्ज' का गाना 'आप के आ"
+    },
+    {
+      "id": "unv-hin:7e3ec79456b86635b2113b8de964862356fe7a9e0880ecb332b57ce5e1b6ee60",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.265,
+      "excerpt": "हेलो दोस्तों ! अगर आपका फ़ोन या आपके दोस्त या परिवार के किसी मेंबर का फ़ोन कहीं चोरी या गुम हो गया है तो आपको परेशान होने की ज़रूरत नहीं हैं आप इसे आसानी से Track कर सकते हैं। केंद्र सरकार के दूरसंचार मंत्री श्री रविशंकर"
+    },
+    {
+      "id": "unv-hin:7f26f960d6294cdfe8899e14524a0d8aa33a8079441970bf5d79c5aeb0cd23ce",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.181,
+      "excerpt": "This website uses cookie or similar technologies, to enhance your browsing experience and provide personalised recommendations. By continuing to use our website, you agree to our Privacy Policy and Cookie Policy. बेनीपुर"
+    },
+    {
+      "id": "unv-hin:7f470ab33ad6bc1f9a6b132dfe427d4a3e76f53489e67c73c59af25960a9d237",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.212,
+      "excerpt": "भिंड/ए.। एक पिता (father) अपनी तीन बेटियों के साथ (with three daughter) कुएं में छलांग (jumps in well) लगा दी। चारों की मौत हो गई। मध्यप्रदेश के भिंड (bhind) जिले की यह घटना शुक्रवार रात की है। बताया जा रहा है कि पति-पत्"
+    },
+    {
+      "id": "unv-hin:8071d6b21e3d37a6266ff61dfcf2f36dfa231f64c5ded5fa755a480f3595fce7",
+      "claimed": "hin",
+      "detected": "hin",
+      "latin_fraction": 0.22,
+      "excerpt": "आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur) में महामहिम राष्ट्रपति रामनाथ कोविंद (president ramnath kovind) का आगमन होने वाला है। दमोह, आशीष कुमार जैन। आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur"
+    }
+  ]
+}

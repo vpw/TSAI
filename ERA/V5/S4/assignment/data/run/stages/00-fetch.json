@@ -1,0 +1,119 @@
+{
+  "stage": "00-fetch",
+  "dataset": "ai4bharat/sangraha",
+  "revision": "8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8",
+  "license": "CC-BY-4.0",
+  "smoke": false,
+  "docs_in": 0,
+  "docs_out": 64712,
+  "tokens_out": 48008963,
+  "chars_out": 156655364,
+  "sources": {
+    "unv-hin": {
+      "key": "unv-hin",
+      "pool": "unverified",
+      "claimed_lang": "hin",
+      "repo_path": "unverified/hin/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/unverified/hin/data-0.parquet",
+      "bytes": 378660568,
+      "sha256": "3d2d2100eb8ac4e94905fbb8d7e30539d63ab39c0760c59cbdcca429fb56443c",
+      "rows_in_file": 149796,
+      "row_groups": 1,
+      "docs_taken": 17951,
+      "raw_tokens": 13093717,
+      "raw_chars": 47107587,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 7,
+        "block_len_docs": 2564,
+        "block_gap_rows": 21399
+      },
+      "token_budget": 15000000
+    },
+    "ver-hin": {
+      "key": "ver-hin",
+      "pool": "verified",
+      "claimed_lang": "hin",
+      "repo_path": "verified/hin/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/hin/data-0.parquet",
+      "bytes": 378091240,
+      "sha256": "001c615cca156edb0f99e7bdeabfa33fa6135f85d379b85999d8e071e3475d85",
+      "rows_in_file": 174763,
+      "row_groups": 1,
+      "docs_taken": 18306,
+      "raw_tokens": 12000115,
+      "raw_chars": 41808655,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 7,
+        "block_len_docs": 2841,
+        "block_gap_rows": 24966
+      },
+      "token_budget": 12000000
+    },
+    "ver-tel": {
+      "key": "ver-tel",
+      "pool": "verified",
+      "claimed_lang": "tel",
+      "repo_path": "verified/tel/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/tel/data-0.parquet",
+      "bytes": 373244554,
+      "sha256": "76d2a831ba03f3c2c4b29a19b63a45ed03f308614863cf229649a94c82367b6b",
+      "rows_in_file": 174762,
+      "row_groups": 1,
+      "docs_taken": 15077,
+      "raw_tokens": 10001774,
+      "raw_chars": 30656472,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 6,
+        "block_len_docs": 2626,
+        "block_gap_rows": 29127
+      },
+      "token_budget": 10000000
+    },
+    "ver-eng": {
+      "key": "ver-eng",
+      "pool": "verified",
+      "claimed_lang": "eng",
+      "repo_path": "verified/eng/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/eng/data-0.parquet",
+      "bytes": 595992578,
+      "sha256": "3c080ef54239f17351162353e9ee957f9fdd6d158570e27186480805231bdade",
+      "rows_in_file": 349525,
+      "row_groups": 1,
+      "docs_taken": 10685,
+      "raw_tokens": 7907145,
+      "raw_chars": 29356067,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 4,
+        "block_len_docs": 2671,
+        "block_gap_rows": 87381
+      },
+      "token_budget": 8000000
+    },
+    "ver-asm": {
+      "key": "ver-asm",
+      "pool": "verified",
+      "claimed_lang": "asm",
+      "repo_path": "verified/asm/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/asm/data-0.parquet",
+      "bytes": 328035291,
+      "sha256": "f2edb84689abeec21c44436342f9805c6a83baabeb0093ef797f9c9ea249be25",
+      "rows_in_file": 110238,
+      "row_groups": 1,
+      "docs_taken": 2693,
+      "raw_tokens": 5006212,
+      "raw_chars": 7726583,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 1,
+        "block_len_docs": 2870,
+        "block_gap_rows": 110238
+      },
+      "token_budget": 5000000
+    }
+  },
+  "output": "data/stage/00-raw.jsonl.gz"
+}

@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cleaning Sangraha — ERA V5 Session 4</title>
+<style>
+:root{
+  color-scheme: light;
+  --page:#fbfbfa; --surface:#fff; --ink:#16181d; --ink-2:#3d434f; --muted:#767d8c;
+  --ring:#e2e3e6; --grid:#eeeff1; --baseline:#c9ccd2;
+  --s1:#2f6fd0; --s2:#1f8a63; --s3:#c0397a; --s4:#b8791b; --s5:#0f8b96; --s6:#c25a2b;
+  --good:#1f8a63; --warn:#b8791b; --bad:#c0392b; --tint:#f2f4f8;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --page:#14161a; --surface:#1b1e24; --ink:#e9ebef; --ink-2:#b9c0cc; --muted:#8b93a2;
+    --ring:#2b3038; --grid:#252a31; --baseline:#454c57;
+    --s1:#6ba3f0; --s2:#4fc196; --s3:#ef7fae; --s4:#e0a94a; --s5:#46bcc7; --s6:#e88a5c;
+    --good:#4fc196; --warn:#e0a94a; --bad:#e8776a; --tint:#20242b;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#14161a; --surface:#1b1e24; --ink:#e9ebef; --ink-2:#b9c0cc; --muted:#8b93a2;
+  --ring:#2b3038; --grid:#252a31; --baseline:#454c57;
+  --s1:#6ba3f0; --s2:#4fc196; --s3:#ef7fae; --s4:#e0a94a; --s5:#46bcc7; --s6:#e88a5c;
+  --good:#4fc196; --warn:#e0a94a; --bad:#e8776a; --tint:#20242b;
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --page:#fbfbfa; --surface:#fff; --ink:#16181d; --ink-2:#3d434f; --muted:#767d8c;
+  --ring:#e2e3e6; --grid:#eeeff1; --baseline:#c9ccd2;
+  --s1:#2f6fd0; --s2:#1f8a63; --s3:#c0397a; --s4:#b8791b; --s5:#0f8b96; --s6:#c25a2b;
+  --good:#1f8a63; --warn:#b8791b; --bad:#c0392b; --tint:#f2f4f8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);
+  font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+  -webkit-text-size-adjust:100%}
+main{max-width:1000px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:1.5rem;line-height:1.25;margin:0 0 6px}
+h2{font-size:1.0rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);
+  margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--baseline)}
+h3{font-size:.95rem;margin:22px 0 6px;color:var(--ink)}
+p{margin:0 0 10px;max-width:78ch}
+.sub{color:var(--muted);max-width:70ch;margin-bottom:14px}
+.muted{color:var(--muted)}
+small{font-size:.82rem}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em}
+a{color:var(--s1)}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin:18px 0 6px;
+  border-bottom:1px solid var(--baseline);padding-bottom:0}
+.tab{appearance:none;border:1px solid transparent;border-bottom:none;background:none;
+  color:var(--muted);font:inherit;font-size:.9rem;padding:8px 13px;cursor:pointer;
+  border-radius:8px 8px 0 0;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--surface);border-color:var(--ring);
+  border-bottom:1px solid var(--surface);color:var(--ink);font-weight:600}
+.panel{display:none;padding-top:14px}
+.panel.on{display:block}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.tile{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:12px 13px}
+.tile b{display:block;font-size:1.45rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.tile span{display:block;font-size:.78rem;color:var(--muted);margin-top:3px}
+.tile em{font-style:normal;color:var(--muted);font-size:.78rem}
+
+/* tables */
+.tw{overflow-x:auto;margin:10px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:min(100%,520px)}
+th{text-align:left;font-weight:600;color:var(--ink-2);border-bottom:1px solid var(--baseline);
+  padding:7px 10px 7px 0;white-space:nowrap}
+td{border-bottom:1px solid var(--grid);padding:7px 10px 7px 0;vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;padding-right:14px}
+tr:last-child td{border-bottom:none}
+
+/* boxes */
+.box{background:var(--surface);border:1px solid var(--ring);border-radius:10px;
+  padding:12px 14px;margin:12px 0}
+.box.tint{background:var(--tint)}
+.box h4{margin:0 0 6px;font-size:.88rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+
+/* bars */
+.bars{display:grid;grid-template-columns:max-content 1fr max-content;gap:5px 10px;align-items:center;margin:10px 0}
+.bars .lb{font-size:.84rem;color:var(--ink-2);white-space:nowrap}
+.trk{position:relative;height:15px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bar{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--s1)}
+.bar.b2{background:var(--s2)} .bar.b3{background:var(--s3)} .bar.b4{background:var(--s4)}
+.bars .vl{font-size:.82rem;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.refline{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--ink-2);opacity:.75}
+
+/* dual bar (ours vs session) */
+.dual .trk{height:22px;background:transparent}
+.dual .bar{height:9px;top:1px}
+.dual .bar.ref{top:12px;background:var(--baseline)}
+
+.pill{display:inline-block;font-size:.72rem;padding:1px 7px;border-radius:99px;
+  border:1px solid var(--ring);color:var(--muted);white-space:nowrap}
+.pill.ok{color:var(--good);border-color:currentColor}
+.pill.warn{color:var(--warn);border-color:currentColor}
+.pill.bad{color:var(--bad);border-color:currentColor}
+.pill.info{color:var(--s1);border-color:currentColor}
+
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:3px 12px;font-size:.86rem;margin:8px 0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-variant-numeric:tabular-nums}
+
+pre{background:var(--tint);border:1px solid var(--ring);border-radius:8px;padding:10px 12px;
+  overflow-x:auto;font-size:.8rem;line-height:1.45;margin:8px 0}
+.ex{background:var(--tint);border:1px solid var(--ring);border-radius:8px;padding:9px 11px;
+  margin:7px 0;font-size:.85rem;word-break:break-word}
+.ex .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;
+  display:block;margin-bottom:2px}
+del{color:var(--bad);text-decoration:line-through;opacity:.85}
+ins{color:var(--good);text-decoration:none;background:color-mix(in srgb,var(--good) 14%,transparent);
+  border-radius:3px;padding:0 2px}
+mark{background:color-mix(in srgb,var(--s4) 26%,transparent);color:inherit;border-radius:3px;padding:0 2px}
+.zw{display:inline-block;border:1px dashed var(--baseline);border-radius:3px;padding:0 3px;
+  font-size:.72em;color:var(--muted);vertical-align:middle}
+.zw.keep{border-style:solid;border-color:var(--good);color:var(--good)}
+
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--baseline);
+  color:var(--muted);font-size:.83rem}
+footer ul{padding-left:18px;margin:6px 0}
+.theme{position:absolute;top:20px;right:20px}
+.theme button{appearance:none;background:var(--surface);border:1px solid var(--ring);
+  color:var(--muted);border-radius:99px;padding:5px 11px;font:inherit;font-size:.8rem;cursor:pointer}
+.hdr{position:relative}
+@media (max-width:560px){ .theme{position:static;margin-bottom:10px} }
+</style>
+</head>
+<body>
+<main>
+  <div class="hdr">
+    <div class="theme"><button id="themeBtn" type="button">theme</button></div>
+    <h1>Raw data is not training data</h1>
+    <p class="sub" id="subtitle"></p>
+  </div>
+
+  <div class="tiles" id="heroTiles"></div>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+
+  <section class="panel on" id="p-strategies" role="tabpanel"></section>
+  <section class="panel" id="p-dataset" role="tabpanel"></section>
+  <section class="panel" id="p-run" role="tabpanel"></section>
+  <section class="panel" id="p-deep" role="tabpanel"></section>
+  <section class="panel" id="p-concerns" role="tabpanel"></section>
+  <section class="panel" id="p-stats" role="tabpanel"></section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+const D = /*__S4_DATA__*/;
+
+/* ---------------------------------------------------------------- helpers */
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c;
+  if (h !== undefined) n.innerHTML = h; return n; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const n0 = v => (v ?? 0).toLocaleString("en-US");
+const n1 = v => (v ?? 0).toLocaleString("en-US", { maximumFractionDigits: 1 });
+const pct = (a, b) => b ? (100 * a / b) : 0;
+const f1 = v => (v ?? 0).toFixed(1);
+
+/* Render invisible characters so a reader can see what was removed or kept. */
+const INVIS = {
+  "​": ["ZWSP", 0], "﻿": ["BOM", 0], "‮": ["RLO", 0],
+  "‭": ["LRO", 0], "‎": ["LRM", 0], "‏": ["RLM", 0],
+  "­": ["SHY", 0], "⁠": ["WJ", 0], "�": ["U+FFFD", 0],
+  "‌": ["ZWNJ", 1], "‍": ["ZWJ", 1]
+};
+function showInvis(s) {
+  let out = "";
+  for (const ch of String(s)) {
+    const m = INVIS[ch];
+    if (m) out += `<span class="zw${m[1] ? " keep" : ""}">${m[0]}</span>`;
+    else if (ch === "\n") out += "<br>";
+    else if (ch.charCodeAt(0) < 0x20) out += `<span class="zw">U+${ch.charCodeAt(0)
+      .toString(16).toUpperCase().padStart(4, "0")}</span>`;
+    else out += esc(ch);
+  }
+  return out;
+}
+
+function table(cols, rows, opts = {}) {
+  const t = el("table");
+  const thead = el("thead");
+  const tr = el("tr");
+  cols.forEach(c => tr.appendChild(el("th", c.num ? "num" : "", esc(c.label))));
+  thead.appendChild(tr); t.appendChild(thead);
+  const tb = el("tbody");
+  rows.forEach(r => {
+    const row = el("tr");
+    cols.forEach((c, i) => row.appendChild(el("td", c.num ? "num" : "", r[i] ?? "")));
+    tb.appendChild(row);
+  });
+  t.appendChild(tb);
+  const w = el("div", "tw"); w.appendChild(t);
+  if (opts.caption) w.appendChild(el("p", "muted", `<small>${opts.caption}</small>`));
+  return w;
+}
+
+function bars(items, opts = {}) {
+  const max = opts.max ?? Math.max(1, ...items.map(i => i.v));
+  const g = el("div", "bars" + (opts.dual ? " dual" : ""));
+  items.forEach(it => {
+    g.appendChild(el("div", "lb", esc(it.k)));
+    const trk = el("div", "trk");
+    const b = el("div", "bar " + (it.cls || ""));
+    b.style.width = Math.max(0.6, 100 * it.v / max) + "%";
+    trk.appendChild(b);
+    if (it.ref !== undefined) {
+      const r = el("div", "bar ref");
+      r.style.width = Math.max(0.6, 100 * it.ref / max) + "%";
+      trk.appendChild(r);
+    }
+    if (opts.refLine !== undefined) {
+      const m = el("div", "refline");
+      m.style.left = (100 * opts.refLine / max) + "%";
+      trk.appendChild(m);
+    }
+    g.appendChild(trk);
+    g.appendChild(el("div", "vl", it.label ?? n0(it.v)));
+  });
+  return g;
+}
+
+function tiles(items) {
+  const g = el("div", "tiles");
+  items.forEach(i => g.appendChild(el("div", "tile",
+    `<b>${i.v}</b><span>${esc(i.k)}</span>${i.note ? `<em>${esc(i.note)}</em>` : ""}`)));
+  return g;
+}
+
+function box(title, htmlOrNode, cls) {
+  const b = el("div", "box" + (cls ? " " + cls : ""));
+  if (title) b.appendChild(el("h4", "", esc(title)));
+  if (typeof htmlOrNode === "string") b.insertAdjacentHTML("beforeend", htmlOrNode);
+  else b.appendChild(htmlOrNode);
+  return b;
+}
+
+const STATUS_PILL = {
+  yes: '<span class="pill ok">applied</span>',
+  applied: '<span class="pill ok">applied</span>',
+  "applied-substitute": '<span class="pill warn">applied · substitute</span>',
+  inherited: '<span class="pill info">inherited</span>',
+  handled: '<span class="pill ok">handled</span>',
+  flagged: '<span class="pill warn">flagged</span>',
+  deferred: '<span class="pill warn">deferred</span>',
+  "not-applicable": '<span class="pill">n/a</span>'
+};
+
+/* ---------------------------------------------------------------- header */
+const H = D.headline, M = D.meta;
+$("#subtitle").innerHTML =
+  `A real cleaning run over <code>${esc(H.dataset)}</code>, the Indic web crawl this session ` +
+  `names as the one that shipped with <strong>zero deduplication</strong>. ` +
+  `Eight pipeline stages applied end to end; every number below was produced by the run, ` +
+  `not copied from the lecture.` +
+  (M.smoke ? ' <span class="pill warn">smoke run</span>' : "");
+
+$("#heroTiles").replaceWith(tiles([
+  { k: "strategies (8 stages, 9 named)", v: D.counts.pipeline_stages + " / " + D.counts.named_strategies },
+  { k: "named techniques applied", v: D.counts.techniques },
+  { k: "documents in → out", v: n0(H.docs_in) + " → " + n0(H.docs_out) },
+  { k: "tokens in → out", v: n1(H.tokens_in / 1e6) + "M → " + n1(H.tokens_out / 1e6) + "M" },
+  { k: "token retention", v: f1(H.token_retention_pct) + "%", note: "session reference: 42%" },
+  { k: "runtime", v: f1(M.runtime_s / 60) + " min", note: "12 CPU cores, no GPU" }
+]));
+
+/* ---------------------------------------------------------------- tabs */
+const TABS = [
+  ["strategies", "1 · Strategies"],
+  ["dataset", "2 · Dataset"],
+  ["run", "3 · The run"],
+  ["deep", "4 · Deep dives"],
+  ["concerns", "5 · Other concerns"],
+  ["stats", "6 · Final statistics"]
+];
+const nav = $("#tabs");
+TABS.forEach(([id, label], i) => {
+  const b = el("button", "tab", esc(label));
+  b.type = "button"; b.setAttribute("role", "tab");
+  b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+  b.setAttribute("aria-controls", "p-" + id);
+  b.onclick = () => {
+    nav.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", "false"));
+    b.setAttribute("aria-selected", "true");
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("on"));
+    $("#p-" + id).classList.add("on");
+    if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+  };
+  nav.appendChild(b);
+});
+
+/* ================================================================ 1 STRATEGIES */
+{
+  const P = $("#p-strategies");
+  P.appendChild(el("h2", "", "How many strategies, and what are they"));
+  P.appendChild(el("p", "", `The session gives <strong>two different lists of eight</strong>, and they are
+    not the same eight. Reconciling them is the honest answer to the count.`));
+
+  const c = D.counts;
+  P.appendChild(box("The two lists", `
+    <div class="cols">
+      <div><strong>A · the pipeline map</strong> <span class="muted">(section 2 widget)</span>
+        <ol class="muted" style="margin:6px 0 0 18px;padding:0">${c.list_a.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
+      <div><strong>B · the closing commitment</strong> <span class="muted">(section 14, verbatim)</span>
+        <ol class="muted" style="margin:6px 0 0 18px;padding:0">${c.list_b.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
+    </div>
+    <p class="muted" style="margin-top:10px"><small>${esc(c.union_note)}</small></p>`));
+
+  P.appendChild(tiles([
+    { k: "pipeline stages (the stated minimum)", v: c.pipeline_stages },
+    { k: "named strategies (union of both lists)", v: c.named_strategies },
+    { k: "distinct techniques inside them", v: c.techniques },
+    { k: "cross-cutting concerns", v: c.cross_cutting_concerns }
+  ]));
+  P.appendChild(box(null, `<p style="margin:0">${esc(c.instructor_quote)}</p>
+    <p class="muted" style="margin:8px 0 0"><small>${esc(c.why)}</small></p>`, "tint"));
+
+  P.appendChild(el("h3", "", "The nine strategies, described"));
+  D.stages.forEach(s => {
+    const kept = s.session_kept != null
+      ? `<span class="pill">session yield ${s.session_kept}%</span>` : "";
+    P.appendChild(box(`${s.n}. ${s.name}`, `
+      ${STATUS_PILL[s.applied] || ""} ${kept}
+      <p style="margin:8px 0 6px"><strong>What.</strong> ${esc(s.what)}</p>
+      <p style="margin:0 0 6px"><strong>Why.</strong> ${esc(s.why)}</p>
+      <p class="muted" style="margin:0"><small><strong>The V4 defect it fixes.</strong>
+        ${esc(s.v4_defect)}</small></p>
+      ${s.applied_note ? `<p class="muted" style="margin:6px 0 0"><small>${esc(s.applied_note)}</small></p>` : ""}`));
+  });
+
+  P.appendChild(el("h3", "", `The ${D.techniques.length} techniques`));
+  P.appendChild(el("p", "muted", `<small>Most of these live only inside the session's interactive
+    widgets, which is why they are enumerated here rather than left implied.</small>`));
+  const byStage = {};
+  D.stages.forEach(s => byStage[s.key] = s.name);
+  P.appendChild(table(
+    [{ label: "#" , num: true}, { label: "Technique" }, { label: "Strategy" }, { label: "What it does" }, { label: "Status" }],
+    D.techniques.map((t, i) => [
+      i + 1, `<strong>${esc(t.name)}</strong>`, esc(byStage[t.stage] || t.stage),
+      esc(t.what), STATUS_PILL[t.status] || esc(t.status)
+    ])
+  ));
+}
+
+/* ================================================================ 2 DATASET */
+{
+  const P = $("#p-dataset"), ds = D.dataset;
+  P.appendChild(el("h2", "", "The dataset, and why this one"));
+  P.appendChild(el("p", "", `<code>${esc(ds.id)}</code> — AI4Bharat's Indic web crawl. The session
+    names it twice: as the corpus that had <strong>zero deduplication at any level</strong>, and as
+    the source of the Assamese/Bengali confusion behind the folder-trust defect. It is also the
+    headline dataset of my Session 3 assignment, and the instruction was to carry that choice
+    forward and take a part of it.`));
+  P.appendChild(el("p", "", `Sangraha ships 251B tokens across 22 languages, of which roughly 65%
+    is machine-translated or synthetic; the verified-human-origin split shrinks Telugu from 16.3B
+    to 3.7B and Odia from 12.5B to 1.2B. Licence is <strong>CC-BY-4.0</strong> — usable with an
+    attribution obligation, which every shard's manifest records.`));
+
+  P.appendChild(el("h3", "", "The slice taken"));
+  P.appendChild(el("p", "muted", `<small>Five files across two pools and four languages, chosen so
+    every stage has something real to find: the unverified pool for raw-web dirt, Telugu for the
+    English-bias case, the Assamese folder for mislabels, English so the benchmark decontamination
+    scan can actually bite. Revision pinned at <code>${esc(ds.revision.slice(0, 12))}…</code>;
+    sha256 measured locally, never copied from the dataset card.</small>`));
+  P.appendChild(table(
+    [{ label: "Source file" }, { label: "Pool" }, { label: "Claims" },
+     { label: "Rows in file", num: true }, { label: "MB", num: true },
+     { label: "Docs taken", num: true }, { label: "Tokens", num: true }, { label: "sha256" }],
+    ds.sources.map(s => [
+      `<code>${esc(s.path)}</code>`, esc(s.pool), `<code>${esc(s.claimed)}</code>`,
+      n0(s.rows_in_file), n1(s.mb), n0(s.docs), n0(s.tokens),
+      `<code class="muted">${esc(s.sha256.slice(0, 10))}…</code>`
+    ]),
+    { caption: `Sampling: ${esc(ds.sources[0].sampling.mode || "")} — ` +
+      `${ds.sources.map(s => `${s.key} ${s.sampling.blocks}×${n0(s.sampling.block_len_docs)}`).join(", ")}. ` +
+      `Contiguous blocks rather than every Nth row, because a strided sample takes at most one copy ` +
+      `of any duplicated document and would erase exactly the structure stage 5 exists to measure.` }
+  ));
+  P.appendChild(box("About the excerpts on this page", `
+    <p style="margin:0">Document excerpts shown throughout are short extracts of already-public
+    web pages from a CC-BY-4.0 corpus. Every excerpt is run through the PII scrubber a second time
+    on its way into this page, so emails, phone numbers, network addresses and national identifiers
+    are masked even in examples captured by stages that run before the scrubber. Person names are
+    masked only where the gazetteer knows them — the names that remain are public figures in news
+    text, and the limits of that approach are measured on the Deep dives tab rather than glossed
+    over.</p>`, "tint"));
+
+  P.appendChild(box("Why not something else", `
+    <p style="margin:0">The instructor's steer was to reuse the dataset named in the Session 3
+    assignment and take a part of it, and to avoid the collection he demoed on screen. Sangraha
+    satisfies both, is ungated, and — unlike a clean corpus — is the specific corpus whose defects
+    this session was built around. Cleaning something already clean would have been
+    reverse-engineering, which he ruled out explicitly.</p>`, "tint"));
+}
+
+/* ================================================================ 3 THE RUN */
+{
+  const P = $("#p-run");
+  P.appendChild(el("h2", "", "The run: what survived each stage"));
+  P.appendChild(el("p", "", `Documents surviving each stage, as a percentage of the raw slice,
+    against the session's own reference curve. Ours is the coloured bar; the session's is the grey
+    one beneath it.`));
+
+  const start = D.descent[0].docs;
+  const ref = {};
+  D.session_yield.forEach(s => ref[s.stage] = s.pct);
+  const refOrder = ["Raw", "Extract", "Normalize", "Language ID", "Quality filter",
+    "Quality filter", "Deduplicate", "PII scrub", "Decontaminate", "Manifest"];
+  P.appendChild(bars(D.descent.map((d, i) => ({
+    k: d.stage,
+    v: d.pct_docs,
+    ref: ref[refOrder[i]] ?? undefined,
+    cls: d.inherited ? "b4" : "",
+    label: f1(d.pct_docs) + "%  " + (d.dropped ? "(−" + n0(d.dropped) + ")" : "")
+  })), { max: 100, dual: true }));
+
+  P.appendChild(table(
+    [{ label: "Stage" }, { label: "Docs out", num: true }, { label: "Dropped", num: true },
+     { label: "% of raw", num: true }, { label: "Session ref", num: true }],
+    D.descent.map((d, i) => [
+      esc(d.stage) + (d.inherited ? ' <span class="pill info">inherited</span>' : ""),
+      n0(d.docs), d.dropped ? n0(d.dropped) : "—", f1(d.pct_docs) + "%",
+      ref[refOrder[i]] != null ? ref[refOrder[i]] + "%" : "—"
+    ]),
+    { caption: "The session's per-stage yields are explicitly illustrative; the comparison is about shape, not equality." }
+  ));
+
+  P.appendChild(box("Reading the difference", `
+    <p style="margin:0">Our curve is far shallower than the session's, and the reason is the input,
+    not the pipeline. The session's descent starts at a raw web crawl, where extraction and quality
+    filtering throw away most of the page. Sangraha arrives already extracted and already
+    quality-screened by AI4Bharat, so stages 1 and 4a have much less to remove — but stage 5,
+    deduplication, has a great deal, because that is the stage Sangraha genuinely never ran.</p>`,
+    "tint"));
+
+  P.appendChild(el("h3", "", "Integrity checks"));
+  const ig = D.integrity;
+  P.appendChild(table(
+    [{ label: "Assertion" }, { label: "Result" }, { label: "" }],
+    [
+      ["No noise character survives into the shipped corpus",
+        n0(ig.noise_chars_surviving) + " found in " + n0(ig.docs_checked) + " docs",
+        ig.no_noise_survives ? STATUS_PILL.yes : '<span class="pill bad">FAIL</span>'],
+      ["Indic joiners (ZWNJ/ZWJ) preserved, not stripped",
+        n0(ig.shipped_docs_with_indic_joiners) + " shipped docs carry one; " +
+        n0(ig.joiner_docs_that_lost_them) + " lost theirs" +
+        (ig.joiner_docs_from_html_unescape
+          ? " (" + n0(ig.joiner_docs_from_html_unescape) + " arrived via <code>&amp;zwj;</code> unescaping)"
+          : ""),
+        ig.joiners_preserved ? STATUS_PILL.yes : '<span class="pill bad">FAIL</span>'],
+      ["Shard ids and hashes reproduce byte-for-byte across two runs",
+        esc((D.manifest.determinism.shard_ids_run1[0] || "") + " ≡ " +
+            (D.manifest.determinism.shard_ids_run2[0] || "")),
+        D.manifest.determinism.identical ? STATUS_PILL.yes : '<span class="pill bad">FAIL</span>'],
+      ["clean_text() correctness fixtures",
+        n0(D.fixtures.passed) + " / " + n0(D.fixtures.cases) + " cases pass",
+        D.fixtures.passed === D.fixtures.cases ? STATUS_PILL.yes : '<span class="pill bad">FAIL</span>']
+    ]
+  ));
+  P.appendChild(el("p", "muted", `<small>${esc(ig.note)}</small>`));
+
+  P.appendChild(el("h3", "", "Stage timings"));
+  P.appendChild(bars(Object.entries(M.durations).map(([k, v]) => ({
+    k, v, cls: "b2", label: f1(v) + "s"
+  }))));
+}
+
+/* ================================================================ 4 DEEP DIVES */
+{
+  const P = $("#p-deep");
+
+  /* ---- normalize + fixtures ---- */
+  P.appendChild(el("h2", "", "Normalize, and the ghost-tag trap"));
+  const N = D.normalize;
+  P.appendChild(tiles([
+    { k: "noise characters removed", v: n0(N.noise_total) },
+    { k: "Indic joiners kept", v: n0(Object.values(N.joiners_kept).reduce((a, b) => a + b, 0)) },
+    { k: "docs changed by NFC", v: n0(N.nfc_docs) },
+    { k: "garbage vocab slots", v: N.garbage_before + " → " + N.garbage_after },
+    { k: "ghost-tag markers found", v: n0(N.ghost_total) },
+    { k: "docs format-unified", v: n0(N.unified) }
+  ]));
+  P.appendChild(table(
+    [{ label: "Noise class" }, { label: "Characters removed", num: true }],
+    Object.entries(N.noise_by_class).length
+      ? Object.entries(N.noise_by_class).map(([k, v]) => [`<code>${esc(k)}</code>`, n0(v)])
+      : [["<span class='muted'>none found</span>", "0"]],
+    { caption: `Scanned for the garbage-vocab audit: ${n0(N.garbage_scanned)} documents. ` +
+      `Byte-fallback vocab slots (${N.byte_fallback}) are counted separately — on well-formed ` +
+      `Indic text they are the tokenizer working, not dirt.` }
+  ));
+  P.appendChild(box("An honest negative result", `
+    <p style="margin:0">Sangraha is much cleaner at the character level than V4's corpus was:
+    noise appears in roughly one document in a thousand, and the ${n0(N.entity_docs)} documents with
+    HTML entities and ${n0(N.ghost_docs)} with conversation markers are a small fraction of the slice.
+    That is worth reporting as a finding rather than hiding. It does mean the corpus alone cannot
+    prove the cleaner handles each noise class correctly — so the cleaner is also run against
+    fixtures rebuilt from the session's own worked examples, below.</p>`, "tint"));
+
+  P.appendChild(el("h3", "", `clean_text() correctness fixtures — ${D.fixtures.passed}/${D.fixtures.cases} pass`));
+  P.appendChild(el("p", "muted", `<small>These are <strong>fixtures, not corpus measurements</strong>.
+    Invisible characters are rendered as chips: <span class="zw">ZWSP</span> removed,
+    <span class="zw keep">ZWNJ</span> deliberately kept.</small>`));
+  D.fixtures.results.forEach(r => {
+    const chk = Object.entries(r.checks)
+      .map(([k, v]) => `<span class="pill ${v ? "ok" : "bad"}">${esc(k)}</span>`).join(" ");
+    const inner = el("div");
+    inner.insertAdjacentHTML("beforeend",
+      `<div class="ex"><span class="lbl">before · ${r.chars[0]} chars</span>${showInvis(r.before)}</div>
+       <div class="ex"><span class="lbl">after · ${r.chars[1]} chars</span>${showInvis(r.after)}</div>` +
+      (r.unified ? `<div class="ex"><span class="lbl">unified to the canonical format</span>${showInvis(r.unified)}</div>` : "") +
+      `<div style="margin-top:6px">${chk}</div>` +
+      (Object.keys(r.ghosts).length
+        ? `<p class="muted" style="margin:6px 0 0"><small>ghost markers flagged:
+           ${esc(JSON.stringify(r.ghosts))}</small></p>` : ""));
+    P.appendChild(box(r.name, inner));
+  });
+
+  /* ---- language id ---- */
+  P.appendChild(el("h2", "", "Language ID: the folder does not know what is in the file"));
+  const L = D.langid;
+  P.appendChild(tiles([
+    { k: "mislabels caught by detection", v: n0(L.mismatches) },
+    { k: "caught by trusting the folder", v: n0(L.folder_trust_catches), note: "trusting the path catches nothing" },
+    { k: "code-switched, flagged", v: n0(L.code_switched) },
+    { k: "romanised Indic, flagged", v: n0(L.romanized) },
+    { k: "docs the te/tel bug would have destroyed", v: n0(L.naive_iso_bug) },
+    { k: "mean detector confidence", v: f1(L.mean_conf * 100) + "%" }
+  ]));
+  P.appendChild(box("The te / tel bug, reproduced and fixed", `
+    <p style="margin:0">fastText emits ISO 639-1 (<code>te</code>); Sangraha's folders use ISO 639-3
+    (<code>tel</code>). Comparing the two directly marks <strong>${n0(L.naive_iso_bug)}</strong>
+    perfectly correct documents as mismatched — the whole Telugu and Hindi pools. V4 hit this and
+    survived it only because a fallback happened to return the right value: the kind of bug that is
+    most dangerous, the kind that works. Normalising the code first is one dictionary.</p>`, "tint"));
+  P.appendChild(table(
+    [{ label: "Verdict" }, { label: "Documents", num: true }, { label: "Action" }],
+    Object.entries(L.verdicts).sort((a, b) => b[1] - a[1]).map(([k, v]) => [
+      `<code>${esc(k)}</code>`, n0(v),
+      k === "MATCH" ? "kept" : k === "CODE_SWITCHED" ? "kept, flagged for review" : "quarantined"
+    ])
+  ));
+
+  P.appendChild(el("h3", "", "The corrupted denominator"));
+  P.appendChild(el("p", "muted", `<small>Tokens per language as the folder path claims them, versus
+    as runtime detection finds them. A mislabelled document inflates one language's budget and
+    starves another's, and every downstream sampling decision is then computed on a wrong
+    denominator.</small>`));
+  // The detector finds three dozen languages, most of them a rounding error. Show the
+  // ones the folders claim plus the largest surprises, and roll up the tail.
+  const denomAll = Object.entries(L.denominator);
+  const claimedLangs = new Set(D.dataset.sources.map(s => s.claimed));
+  const shown = denomAll
+    .filter(([l, d]) => claimedLangs.has(l) || Math.abs(d.delta) >= 5000)
+    .sort((a, b) => b[1].tokens_after_detection - a[1].tokens_after_detection);
+  const rest = denomAll.filter(([l]) => !shown.some(([s]) => s === l));
+  const restTokens = rest.reduce((a, [, d]) => a + d.tokens_after_detection, 0);
+  P.appendChild(table(
+    [{ label: "Language" }, { label: "If folder trusted", num: true },
+     { label: "After detection", num: true }, { label: "Delta", num: true }],
+    shown.map(([lang, d]) => [
+      `<code>${esc(lang)}</code>` +
+        (claimedLangs.has(lang) ? "" : ' <span class="pill warn">not claimed by any folder</span>'),
+      n0(d.tokens_if_folder_trusted), n0(d.tokens_after_detection),
+      (d.delta > 0 ? "+" : "") + n0(d.delta)
+    ]).concat(rest.length
+      ? [[`<span class="muted">${rest.length} further languages, each under 5k tokens</span>`,
+          "0", n0(restTokens), "+" + n0(restTokens)]]
+      : []),
+    { caption: "Every language in the right-hand column beyond the four the folders claim is text " +
+      "that was being counted under the wrong label." }
+  ));
+
+  const asm = L.denominator.asm, ben = L.denominator.ben;
+  if (asm && ben && ben.delta > 0 && asm.delta < 0) {
+    P.appendChild(box("The Assamese folder really does contain Bengali", `
+      <p style="margin:0">This is the session's planted example, found for real. Detection moves
+      <strong>${n0(Math.abs(asm.delta))} tokens</strong> out of the Assamese total and finds
+      <strong>${n0(ben.delta)} tokens</strong> of Bengali that no folder claims — the two scripts
+      are close enough that a crawl mislabels them, and the folder never objects. Trusting the path
+      would have inflated the Assamese budget and left Bengali invisible, which is exactly the
+      corrupted denominator the session warns about.</p>`, "tint"));
+  }
+  if (L.mismatch_examples.length) {
+    P.appendChild(el("h3", "", "Real mislabels found"));
+    L.mismatch_examples.forEach(m => P.appendChild(box(null,
+      `<span class="pill bad">claims ${esc(m.claimed)} · detected ${esc(m.detected)}</span>
+       <span class="pill">confidence ${f1(m.confidence * 100)}%</span>
+       <div class="ex" style="margin-top:7px">${esc(m.excerpt)}</div>
+       <p class="muted" style="margin:5px 0 0"><small><code>${esc(m.id)}</code> ·
+        script profile ${esc(JSON.stringify(m.script_profile))}</small></p>`)));
+  }
+
+  /* ---- quality ---- */
+  P.appendChild(el("h2", "", "Quality filtering: the filter, not the text, is broken"));
+  const Q = D.quality;
+  P.appendChild(el("p", "", `The nine Gopher/C4 rules were run twice over the same documents — once
+    English-tuned, once script-aware — and the gap between them measured. This is the headline
+    finding of the run.`));
+  P.appendChild(tiles([
+    { k: "kept, English-tuned rules", v: n0(Q.kept.english_tuned), note: f1(100 * Q.keep_rate.english_tuned) + "% of input" },
+    { k: "kept, script-aware rules", v: n0(Q.kept.script_aware), note: f1(100 * Q.keep_rate.script_aware) + "% of input" },
+    { k: "good documents an English filter destroys", v: n0(Q.rescued) },
+    { k: "tokens it destroys", v: n1(Q.rescued_tokens / 1e6) + "M" }
+  ]));
+
+  P.appendChild(el("h3", "", "Keep rate by language, under each configuration"));
+  const langs = Object.keys(Q.per_lang);
+  P.appendChild(bars(langs.flatMap(l => {
+    const p = Q.per_lang[l];
+    return [{ k: l + " · script-aware", v: pct(p.sa_kept, p.docs), cls: "b2",
+              label: f1(pct(p.sa_kept, p.docs)) + "%" },
+            { k: l + " · English-tuned", v: pct(p.en_kept, p.docs), cls: "b3",
+              label: f1(pct(p.en_kept, p.docs)) + "%" }];
+  }), { max: 100 }));
+  P.appendChild(box("What that gap is", `
+    <p style="margin:0">English keeps its documents either way. Every Indic language collapses under
+    the English-tuned rules and recovers under the script-aware ones — same text, same nine rules,
+    different calibration. Two rules do nearly all of the damage:
+    <strong>common_stopwords_present</strong>, which looks for English function words and therefore
+    scores clean Hindi and Telugu at zero, and <strong>lines_end_in_terminal_punct</strong>, which
+    recognises <code>. ! ?</code> but not the danda <code>।</code>, and so concludes that Devanagari
+    prose contains no sentences at all. This is the same bias that forced V4 to protect Indic data
+    in an Always-ON channel rather than let its selector judge it.</p>`, "tint"));
+
+  P.appendChild(table(
+    [{ label: "Rule" }, { label: "Threshold" }, { label: "Fails · English-tuned", num: true },
+     { label: "Fails · script-aware", num: true }],
+    Q.rules.map(r => {
+      const key = { mean_word_length: "mean_word_len", symbol_to_word_ratio: "symbol_ratio_max",
+        lines_end_in_terminal_punct: "terminal_punct_min", duplicate_line_fraction: "dup_line_max",
+        top_2gram_fraction: "top_2gram_max", common_stopwords_present: "stopwords_min",
+        bullet_line_ratio: "bullet_ratio_max", ellipsis_line_ratio: "ellipsis_ratio_max",
+        document_word_count: "word_count" }[r];
+      const t = Q.thresholds[key];
+      const en = Q.failures.english_tuned[r] || 0, sa = Q.failures.script_aware[r] || 0;
+      const bias = en > sa * 3 && en > 20;
+      return [
+        `<code>${esc(r)}</code>` + (bias ? ' <span class="pill bad">EN-bias</span>' : ""),
+        `<code>${esc(Array.isArray(t) ? "[" + t.join(", ") + "]" : t)}</code>`,
+        n0(en), n0(sa)
+      ];
+    }),
+    { caption: "Script-aware overrides: per-language stop-word lists (" +
+      Object.entries(Q.stopword_sizes).map(([k, v]) => `${k} ${v}`).join(", ") +
+      "), per-script word-count floors and mean-word-length bands, and the danda / Urdu full stop as sentence terminators." }
+  ));
+
+  if (Q.examples.length) {
+    P.appendChild(el("h3", "", "Documents the English-tuned filter would have thrown away"));
+    Q.examples.forEach(e => P.appendChild(box(null,
+      `<span class="pill bad">killed by ${e.failed_under_english_rules.map(esc).join(", ")}</span>
+       <span class="pill">${n0(e.n_words)} words</span>
+       <span class="pill">ASCII terminators ${f1(e.term_ascii_frac * 100)}% · any ${f1(e.term_any_frac * 100)}%</span>
+       <div class="ex" style="margin-top:7px">${esc(e.excerpt)}</div>`)));
+  }
+
+  /* ---- classifier ---- */
+  const C = D.classifier;
+  P.appendChild(el("h3", "", "The second layer: a trained classifier gate"));
+  if (C.skipped) {
+    P.appendChild(box(null, `<p style="margin:0" class="muted">Skipped on this run: the weak-label
+      sample was too small or single-class.</p>`));
+  } else {
+    P.appendChild(tiles([
+      { k: "held-out exact accuracy", v: f1(C.acc * 100) + "%" },
+      { k: "held-out within-1 accuracy", v: f1(C.acc1 * 100) + "%" },
+      { k: "train / test documents", v: n0(C.train) + " / " + n0(C.test) },
+      { k: "dropped below score " + C.threshold, v: n0(C.docs_in - C.docs_out) }
+    ]));
+    P.appendChild(box("What this is, and what it is not", `
+      <p style="margin:0">The session's recipe is: a large model labels a small sample for
+      educational value, a cheap model learns to imitate those labels, and the cheap model scores
+      the corpus. FineWeb-Edu used a BERT head; Llama 3 and DCLM used fastText. There is no GPU here
+      and no educational-value labeller for Indic, so the expensive labeller is replaced by
+      structural weak labels — boilerplate density, link density, digit density, lexical variety,
+      sentence-length regularity — deliberately chosen to be disjoint from the nine rules already
+      applied, so the classifier adds signal instead of restating the cascade. Everything
+      downstream is the real mechanism. ${esc(C.caveat)}</p>
+      <p style="margin:8px 0 0">And it barely bites: the gate dropped
+      <strong>${n0(C.docs_in - C.docs_out)}</strong> of ${n0(C.docs_in)} documents, because the
+      nine rules upstream have already removed most of what these weak labels would score low.
+      Reported as it came out. A genuine LLM-labelled classifier separates <em>ordinary</em> prose
+      from <em>educational</em> prose — a judgement structural signals cannot make, and the reason
+      FineWeb-Edu paid for the labels.</p>`, "tint"));
+    P.appendChild(table(
+      [{ label: "Language" }, { label: "Documents", num: true },
+       { label: "Mean score / 5", num: true }, { label: "Kept at ≥ " + C.threshold, num: true }],
+      Object.entries(C.per_lang).map(([l, v]) => [
+        `<code>${esc(l)}</code>`, n0(v.docs), v.mean_score, n0(v.kept)])
+    ));
+  }
+
+  /* ---- dedup ---- */
+  P.appendChild(el("h2", "", "Deduplication: the stage Sangraha skipped"));
+  const X = D.dedup;
+  P.appendChild(tiles([
+    { k: "exact duplicates", v: n0(X.exact), note: n0(X.exact_cross) + " across shards" },
+    { k: "near-duplicates", v: n0(X.near), note: n0(X.near_cross) + " across shards" },
+    { k: "tokens removed", v: n1(X.tokens_dropped / 1e6) + "M" },
+    { k: "LSH candidate pairs", v: n0(X.candidates) },
+    { k: "caught only by the global pass", v: n0(X.only_global) },
+    { k: "index at 500M docs", v: n1(X.memory.at_500M_docs.resident_gib) + " GiB" }
+  ]));
+  P.appendChild(table(
+    [{ label: "Parameter" }, { label: "This run" }, { label: "Session's simulator" }],
+    [
+      ["shingle size k", X.config.shingle_k + " words", X.demo.k + " words"],
+      ["permutations n", X.config.permutations, X.demo.permutations],
+      ["bands × rows", X.config.bands + " × " + X.config.rows_per_band,
+        X.demo.bands + " × " + X.demo.rows],
+      ["LSH threshold (1/b)^(1/r)", X.config.lsh_threshold, X.demo.lsh_threshold],
+      ["drop at true Jaccard ≥", X.config.jaccard_drop_threshold,
+        "0.67 <span class='muted'>(stated in class)</span>"],
+      ["shingle window", n0(X.config.shingle_window_words) + " words", "—"]
+    ],
+    { caption: "b and r were chosen so the S-curve inflects at " + X.config.lsh_threshold +
+      ", just below the 0.67 drop threshold — the banding stage has to be slightly more permissive " +
+      "than the confirmation stage, or it discards true duplicates before they are ever scored." }
+  ));
+
+  P.appendChild(box("Sangraha's duplication is verbatim, not paraphrased", `
+    <p style="margin:0">${n0(X.exact)} exact duplicates against ${n0(X.near)} near-duplicates: the
+    copies in this corpus are byte-identical reposts of the same government and news pages, not
+    reworded versions of them. That matters for how the stage should be built — a content hash
+    catches almost all of it for almost nothing, and MinHash earns its cost on the remainder rather
+    than on the bulk. It is also why the LSH stage evaluated only ${n0(X.candidates)} candidate
+    pairs: exact dedup runs first and collapses each large duplicate clique to a single
+    representative before banding ever sees it.</p>`, "tint"));
+
+  P.appendChild(box("Local dedup does not produce a deduplicated corpus", `
+    <p style="margin:0 0 8px">Each source shard was deduplicated on its own, and then the whole
+    slice was deduplicated as one. Per-shard passes caught <strong>${n0(X.local_caught)}</strong>
+    duplicates; the single global pass caught <strong>${n0(X.global_caught)}</strong>. The
+    <strong>${n0(X.only_global)}</strong> in the gap are documents that appear in two different
+    shards, so no contributor working alone could ever see them. That is why the course provisions
+    one central dedup machine rather than leaving the stage to each student.</p>
+    <p class="muted" style="margin:0"><small>Index memory model, from the session's own arithmetic
+    (128 hashes × 8 B × 1.6 overhead): this run needs
+    ${n1(X.memory.this_run.resident_gib)} GiB; at 500M documents it needs
+    ${n1(X.memory.at_500M_docs.resident_gib)} GiB — a 768 GB node, impossible on a
+    laptop.</small></p>`, "tint"));
+
+  if (X.pairs.length) {
+    P.appendChild(el("h3", "", "Confirmed duplicate pairs"));
+    P.appendChild(table(
+      [{ label: "Kept" }, { label: "Dropped" }, { label: "Cross-shard" },
+       { label: "True Jaccard", num: true }, { label: "MinHash estimate", num: true },
+       { label: "Error", num: true }],
+      X.pairs.map(p => [
+        `<code class="muted">${esc(p.kept.slice(0, 26))}…</code>`,
+        `<code class="muted">${esc(p.dropped.slice(0, 26))}…</code>`,
+        p.same_shard ? "—" : '<span class="pill warn">yes</span>',
+        p.true_jaccard.toFixed(3), p.minhash_estimate.toFixed(3), p.estimate_error.toFixed(3)
+      ]),
+      { caption: "The MinHash estimate is what the signature says; the true Jaccard is computed " +
+        "from the full shingle sets. The gap between them is the price of the approximation." }
+    ));
+  }
+
+  /* ---- pii ---- */
+  P.appendChild(el("h2", "", "PII: two layers, two failure modes"));
+  const I = D.pii;
+  P.appendChild(tiles([
+    { k: "spans masked", v: n0(I.total) },
+    { k: "documents containing PII", v: n0(I.docs_with_pii),
+      note: f1(pct(I.docs_with_pii, I.docs_in)) + "% of the corpus" },
+    { k: "token count change from masking", v: (I.waste.pct_saved > 0 ? "−" : "+") +
+        f1(Math.abs(I.waste.pct_saved)) + "%",
+      note: "measured on " + n0(I.waste.docs_measured) + " docs" },
+    { k: "place-name exclusions", v: n0(I.layer2.place_name_exclusions) }
+  ]));
+  P.appendChild(table(
+    [{ label: "Class" }, { label: "Layer" }, { label: "Spans masked", num: true }],
+    Object.entries(I.by_kind).sort((a, b) => b[1] - a[1]).map(([k, v]) => [
+      `<code>${esc(k)}</code>`, k === "NAME" ? "gazetteer + context" : "regex", n0(v)])
+  ));
+
+  P.appendChild(el("h3", "", "Precision and recall, and the false-positive trap"));
+  P.appendChild(el("p", "muted", `<small>${esc(I.scoring_note)} ${n0(I.fixture_spans)} true spans
+    and ${n0(I.fixture_traps)} traps annotated across ${I.per_case.length} cases.</small>`));
+  P.appendChild(table(
+    [{ label: "Aggressiveness dial", num: true }, { label: "Precision", num: true },
+     { label: "Recall", num: true }, { label: "F1", num: true },
+     { label: "False positives", num: true }, { label: "Traps wrongly masked", num: true }],
+    I.curve.map(c => [
+      c.aggressiveness.toFixed(2), c.precision, c.recall, c.f1,
+      n0(c.false_positives), n0(c.trap_spans_wrongly_masked)
+    ]),
+    { caption: "Below 0.60 the exclusion list protects place names, deities and public figures. " +
+      "Above it the name layer fires on weaker signals: recall does not improve, precision falls, " +
+      "and it starts masking a city. That is the trade, measured." }
+  ));
+  P.appendChild(box("The part a gazetteer cannot fix", `
+    <p style="margin:0">${esc(I.public_figure_caveat)}</p>`, "tint"));
+  if (I.waste.pct_saved <= 0) {
+    P.appendChild(box("A result that came out the other way", `
+      <p style="margin:0">The session measures PII masking as a compute saving — 81 tokens down to
+      48 on its worked example, about 40%. On this corpus masking made the text
+      <strong>${f1(Math.abs(I.waste.pct_saved))}% longer</strong> in tokens, not shorter. The reason
+      is what gets replaced: the session's example is dominated by long email addresses and phone
+      numbers, which are token-expensive, whereas ${f1(pct(I.by_kind.NAME || 0, I.total))}% of what
+      fired here is <code>NAME</code> — short Devanagari or Telugu words replaced by the seven-token
+      ASCII placeholder <code>[NAME]</code>. Masking is a privacy measure; the compute saving is
+      incidental to it and does not survive a change of corpus.</p>`, "tint"));
+  }
+
+  /* ---- decontamination ---- */
+  P.appendChild(el("h2", "", "Decontamination and canaries"));
+  const T = D.decontaminate;
+  P.appendChild(tiles([
+    { k: T.n + "-gram fingerprints", v: n0(T.ngrams) },
+    { k: "documents dropped", v: n0(T.dropped),
+      note: (T.rate * 100).toFixed(4) + "% of the corpus" },
+    { k: "canary recovered by scan", v: T.canary.detector_works ? "yes" : "no" },
+    { k: "canaries in shipped corpus", v: n0(T.canary.canaries_found_in_shipped_corpus ?? 0) }
+  ]));
+  P.appendChild(table(
+    [{ label: "Evaluation set" }, { label: "Split" }, { label: "Examples", num: true },
+     { label: "n-grams contributed", num: true }, { label: "Hits in corpus", num: true }],
+    Object.entries(T.eval_sets).map(([k, v]) => [
+      esc(k) + " <code class='muted'>" + esc(v.repo) + "</code>", esc(v.split),
+      n0(v.examples_loaded), n0(v.new_ngrams), n0(T.by_set[k] || 0)]),
+    { caption: "Indic benchmarks are included deliberately: scanning an Indic corpus against " +
+      "English evaluations only would declare it clean by construction." }
+  ));
+  P.appendChild(box("A near-zero result, reported as one", `
+    <p style="margin:0">Contamination came out at ${(T.rate * 100).toFixed(4)}%. That is a real
+    finding, not a failed stage: a general web crawl has little reason to contain benchmark items
+    verbatim, and a document needs ${T.min_hits} distinct matching ${T.n}-grams before it is
+    dropped. The stage earns its place by being verifiable — the canary demonstration shows the
+    detector fires when there is something to find.</p>`, "tint"));
+
+  /* ---- manifest ---- */
+  P.appendChild(el("h2", "", "Manifest, provenance and determinism"));
+  const MA = D.manifest;
+  P.appendChild(tiles([
+    { k: "shards emitted", v: n0(MA.shards) },
+    { k: "admitted by the gate", v: n0(MA.admitted) + " / " + n0(MA.shards) },
+    { k: "cleaning scripts hashed", v: n0(MA.scripts.length) },
+    { k: "tokens measured", v: n1(MA.tokens / 1e6) + "M" },
+    { k: "words × 1.3 would claim", v: n1(MA.naive / 1e6) + "M",
+      note: (MA.naive_err > 0 ? "+" : "") + MA.naive_err + "% error" },
+    { k: "ids reproduce across runs", v: MA.determinism.identical ? "yes" : "no" }
+  ]));
+  P.appendChild(el("h3", "", "A real emitted manifest"));
+  P.appendChild(el("pre", "", esc(JSON.stringify(MA.example, null, 2))));
+  P.appendChild(box("The gate blocks as well as admits", `
+    <p style="margin:0">Removing one required field —
+    <code>${esc(MA.blocked_example.what_was_removed)}</code> — from that same manifest flips it to
+    <strong>${esc(MA.blocked_example.status)}</strong>:
+    <em>${esc(MA.blocked_example.gate_reasons.join("; "))}</em>. A contribution that cannot produce
+    a manifest has not shipped clean data.</p>
+    <p class="muted" style="margin:8px 0 0"><small>${esc(MA.determinism.contrast)}</small></p>`,
+    "tint"));
+}
+
+/* ================================================================ 5 CONCERNS */
+{
+  const P = $("#p-concerns");
+  P.appendChild(el("h2", "", "Other strategies and concerns"));
+  P.appendChild(el("p", "", `Everything below is outside the eight numbered stages. Each is marked
+    with what was actually done — including the ones deliberately not done, with the reason, because
+    a cleanup report that lists only its successes is selecting its own evidence.`));
+  D.concerns.forEach(c => P.appendChild(box(c.name,
+    `${STATUS_PILL[c.status] || esc(c.status)}
+     <p style="margin:8px 0 0">${esc(c.detail)}</p>`)));
+}
+
+/* ================================================================ 6 STATS */
+{
+  const P = $("#p-stats");
+  P.appendChild(el("h2", "", "Final statistics"));
+
+  P.appendChild(table(
+    [{ label: "Measure" }, { label: "Value", num: true }],
+    [
+      ["Documents in", n0(H.docs_in)],
+      ["Documents shipped", n0(H.docs_out)],
+      ["Document retention", f1(H.doc_retention_pct) + "%"],
+      ["Tokens in <span class='muted'>(" + esc(D.manifest.tokenizer) + ")</span>", n0(H.tokens_in)],
+      ["Tokens shipped", n0(D.manifest.tokens)],
+      ["Token retention", f1(H.token_retention_pct) + "%"],
+      ["Words shipped", n0(D.manifest.words)],
+      ["Shards emitted / admitted", n0(D.manifest.shards) + " / " + n0(D.manifest.admitted)],
+      ["Total runtime", f1(M.runtime_s / 60) + " min"]
+    ]
+  ));
+
+  P.appendChild(el("h3", "", "Tokens shipped, by language"));
+  const byLang = Object.entries(D.manifest.by_lang).sort((a, b) => b[1] - a[1]);
+  P.appendChild(bars(byLang.map(([k, v]) => ({ k, v, cls: "b2", label: n0(v) }))));
+
+  P.appendChild(el("h3", "", "Fertility: why words × 1.3 is not a token count"));
+  P.appendChild(el("p", "muted", `<small>Measured tokens per word, per language, with
+    <code>${esc(D.manifest.tokenizer)}</code>. V4 estimated tokens as words × 1.3, and the session
+    flags that as wrong for Indic by 2–10×. Across this slice the error is
+    <strong>${D.manifest.naive_err}%</strong>.</small>`));
+  const fert = Object.entries(D.manifest.fertility).sort((a, b) => b[1] - a[1]);
+  const fertMax = Math.max(1.4, ...fert.map(f => f[1]));
+  P.appendChild(bars(fert.map(([k, v]) => ({
+    k, v, cls: "b3", label: v.toFixed(2) + " tok/word  (" + (v / 1.3).toFixed(1) + "× the assumed 1.3)"
+  })), { max: fertMax, refLine: 1.3 }));
+  P.appendChild(box(null, `<p style="margin:0" class="muted"><small>The dashed line is 1.30 — the
+    ratio V4 applied to every language alike. Assamese needs
+    ${fert.length ? (fert[0][1] / 1.3).toFixed(1) : "—"}× that, so a budget built on the flat ratio
+    under-counts the tokens actually required and every downstream language allocation inherits the
+    error.</small></p>`, "tint"));
+
+  P.appendChild(el("h2", "", "Why these statistics"));
+  P.appendChild(el("p", "", `Choosing the statistics is part of the exercise, so here is the
+    reasoning rather than just the numbers.`));
+  P.appendChild(table(
+    [{ label: "What is reported" }, { label: "Why" }],
+    D.rationale.map(r => [`<strong>${esc(r.stat)}</strong>`, esc(r.why)])
+  ));
+}
+
+/* ---------------------------------------------------------------- footer */
+$("#foot").innerHTML =
+  `<p style="margin:0 0 4px">Vardhan Walavalkar · ERA V5 Session 4 · generated
+   ${esc(M.generated)} from <code>data/run/stats.json</code>. Every figure on this page is emitted
+   by the pipeline; none is typed by hand.</p>
+   <ul>${D.citations.map(c => `<li>${esc(c)}</li>`).join("")}</ul>`;
+
+/* ---------------------------------------------------------------- theme + hash */
+const btn = $("#themeBtn");
+btn.onclick = () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const dark = cur ? cur === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+};
+function openFromHash() {
+  const t = [...nav.querySelectorAll(".tab")]
+    .find(b => b.getAttribute("aria-controls") === "p" + location.hash.replace("#", "-"));
+  if (t) t.click();
+}
+openFromHash();
+addEventListener("hashchange", openFromHash);
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+{
+  "stage": "06-pii",
+  "regex_classes": [
+    "EMAIL",
+    "PHONE",
+    "IPV4",
+    "AADHAAR",
+    "PAN",
+    "GSTIN",
+    "CREDENTIAL"
+  ],
+  "name_layer": {
+    "kind": "gazetteer + context gating (no GPU available for NER)",
+    "given_names": 50,
+    "surnames": 38,
+    "place_name_exclusions": 46,
+    "aggressiveness_used": 0.3
+  },
+  "docs_in": 60631,
+  "docs_out": 60631,
+  "docs_dropped": 0,
+  "docs_with_pii": 5124,
+  "spans_masked_by_kind": {
+    "NAME": 12953,
+    "EMAIL": 157,
+    "PHONE": 215,
+    "IPV4": 18,
+    "AADHAAR": 6,
+    "CREDENTIAL": 1
+  },
+  "spans_masked_total": 13350,
+  "chars_removed": 3660,
+  "token_waste": {
+    "docs_measured": 500,
+    "tokens_before": 313404,
+    "tokens_after": 315223,
+    "pct_saved": -0.58
+  },
+  "precision_curve": [
+    {
+      "aggressiveness": 0.1,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.3,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.45,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.6,
+      "true_positives": 15,
+      "false_positives": 8,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 8,
+      "precision": 0.6522,
+      "recall": 1.0,
+      "f1": 0.7895,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 10,
+          "tp": 8,
+          "fp": 2,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 8,
+          "tp": 7,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 5,
+          "tp": 0,
+          "fp": 5,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.8,
+      "true_positives": 15,
+      "false_positives": 8,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 8,
+      "precision": 0.6522,
+      "recall": 1.0,
+      "f1": 0.7895,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 10,
+          "tp": 8,
+          "fp": 2,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 8,
+          "tp": 7,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 5,
+          "tp": 0,
+          "fp": 5,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    }
+  ],
+  "fixture_cases": [
+    "session example (forum post, en+hi)",
+    "support ticket with credentials",
+    "public-figure and place-name trap (no private PII)",
+    "clean prose, no identifiers"
+  ],
+  "fixture_spans_annotated": 15,
+  "fixture_traps_annotated": 10,
+  "scoring_note": "Precision and recall come from hand-annotated fixtures, including the session's own PII example -- a web crawl has no ground truth. The corpus numbers above are a tally of what fired, with no precision claim attached to them. The two are reported separately on purpose.",
+  "public_figure_caveat": "The name layer cannot tell a private individual from a public figure, and in an Indic web corpus the most frequent person-names are public figures, deities and mythological characters. Masking those costs real knowledge; keeping them risks real people. The exclusion list holds 46 entries including ambedkar, gandhi, kalam, nehru, tagore, which is a blunt instrument and is reported as one.",
+  "examples": [
+    {
+      "id": "unv-hin:9c8a06523fb1e74208397fc22d38a65176c369472054656906e2e2bd96ed8c12",
+      "masked": {
+        "PHONE": 1,
+        "NAME": 3
+      },
+      "scrubbed_excerpt": "नई दिल्ली। नागरिकता संशोधन कानून (CAA) की असलियत बताने के लिए अब बीजेपी देश में जागरूकता अभियान छेड़ रही है। साथ ही विपक्षी पार्टियों और नेताओं पर निशाने साधने में भी कोई कोर-कसर नहीं छोड़ रही है। पार्टी प्रवक्ता संबित पात्रा ने भी CAA के मुद्दे पर कांग्रेस को"
+    },
+    {
+      "id": "unv-hin:adb0f558f7d98a2e66e69f636c8e89994c82edc0cc9f3f9ca76702009ad14d71",
+      "masked": {
+        "EMAIL": 1,
+        "PHONE": 1
+      },
+      "scrubbed_excerpt": "उत्तर-प्रदेश के बनारस में संस्कृत और संगीत के विद्वान पंडित सुखदेव प्रसाद के घर में सितारा देवी का जन्म हुआ। दिन था 8 नवंबर 1920 और मात्र सोलह साल की उम्र में उनके नृत्य से प्रभावित होकर महकबी रबिन्द्रनाथ टैगोर ने उन्हें नृत्य सम्राज्ञी की उपाधि दी। बनारस घरान"
+    },
+    {
+      "id": "unv-hin:adc8da866ee8887e18066751b5f7a83dcc4d960e8c282af78bac6fd26dddaa77",
+      "masked": {
+        "EMAIL": 1,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "मधेपुरा/बिहार : दर्शन परिषद् बिहार का 42 वां वार्षिक राष्ट्रीय अधिवेशन 'शिक्षा, समाज एवं संस्कृति' पर केन्द्रित होगा। मानव संसाधन विकास मंत्रालय भारत सरकार के अंतर्गत संचालित भारतीय दार्शनिक अनुसंधान परिषद् नई दिल्ली द्वारा संपोषित यह आयोजन 12 से 14 दिसंबर 201"
+    },
+    {
+      "id": "unv-hin:c2f536049e0f723e25263208d9b06728cf30a3c9b210dfe646c42eb36339ad80",
+      "masked": {
+        "EMAIL": 1,
+        "PHONE": 1
+      },
+      "scrubbed_excerpt": "आज विजयदशमी के दिन आपको मैं अतीत में 14 वर्ष पीछे ले चलता हूं। यह बात वर्ष 2007 की है, तब मैं गोविन्दजी के साथ सुदूर दक्षिण किष्किंधा गया था। हम वहां बसवराज पाटिल जी, सेडम के बुलावे पर गए थे। उद्देश्य था कि पंपा सरोवर के पवित्र तट पर बैठकर आगे की दशा-दिशा तय क"
+    },
+    {
+      "id": "unv-hin:0c41f0f3e07d21570e3235bc101da22dc0d4e82ab44ef00b65540f8d6f9da46f",
+      "masked": {
+        "EMAIL": 1,
+        "PHONE": 1,
+        "NAME": 2
+      },
+      "scrubbed_excerpt": "सूचना मिली कि १२ और १३ दिसंबर २००९ को छत्तीसगढ़ की राजधानी रायपुर में पूरे देश से लगभग पच्चीस नारी अधिकार संगठनों की कार्यकर्त्ताएँ इकट्ठा होने वाली हैं, जो राज्य सत्ता द्वारा किए जाने वाले दमनों के दौरान किए जाने वाली यौन-हिंसा पर अपनी जानकारियों, अनुभवों और "
+    },
+    {
+      "id": "unv-hin:1ebc4e9de13965217a53f5abeb0c13a680389975fa8e66b1ed3f760c02452401",
+      "masked": {
+        "AADHAAR": 1,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "Posted on June 3, 2021 Author Israr Khan +[AADHAAR] Comment(0) बागपत । बागपत कलेक्ट्रेट परिसर में जिलाधिकारी बागपत डा राजकमल यादव की पहल पर एक कोविड़ टीकाकरण कैंप का आयोजन किया गया, जिसमें मीड़ियाकर्मियों और उनके परिजनों को कोविड़ महामारी से बचने के लिये टीके "
+    },
+    {
+      "id": "unv-hin:23af22f32cf8653ccfe866a05369d4b74b16e6e286fbc8ff9ef7d0ebf8602022",
+      "masked": {
+        "EMAIL": 2,
+        "PHONE": 1
+      },
+      "scrubbed_excerpt": "24 साल पहले हुई कन्या भ्रूण हत्या ने बदली ज़िंदगी; अब तक 415 बच्चियों का जीवन संवार चुकी हैं यह डॉक्टर! साल 1994 में 'प्री कन्सेप्शन और प्री नेटल डायग्नोस्टिक टेक्निक्स एक्ट' (PCPNDT) पारित होने के बावजूद इन दोनों राज्यों में कन्या भ्रूण हत्या के हज़ारो मामले "
+    },
+    {
+      "id": "unv-hin:54511b3512adb7005f8fb69e23fd85ea137905b55d4b624fb1d219eccdd20f7a",
+      "masked": {
+        "PHONE": 1,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "विज्ञान से जुड़ा है विज्ञान कथा का भविष्य! । Scientific World\\nविज्ञान से जुड़ा है विज्ञान कथा का भविष्य!\\n90रविवार\\n(तस्लीम द्वारा आयोजित ' क्षेत्रीय भाषाओं में विज्ञान कथा लेखन ' दो दिवसीय (26-27 दिसम्बर, 2011) कार्यशाला में दिया गया वक...\\n(तस्लीम द्वारा आय"
+    }
+  ]
+}

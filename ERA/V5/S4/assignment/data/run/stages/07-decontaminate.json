@@ -1,0 +1,129 @@
+{
+  "stage": "07-decontaminate",
+  "ngram_n": 13,
+  "min_matching_ngrams_to_drop": 2,
+  "eval_sets": {
+    "MMLU": {
+      "repo": "cais/mmlu",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 86705
+    },
+    "GSM8K": {
+      "repo": "openai/gsm8k",
+      "split": "test",
+      "examples_loaded": 1319,
+      "new_ngrams": 127455
+    },
+    "HellaSwag": {
+      "repo": "Rowan/hellaswag",
+      "split": "validation",
+      "examples_loaded": 3000,
+      "new_ngrams": 167794
+    },
+    "MILU-Hindi": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 134775
+    },
+    "MILU-Telugu": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 154852
+    },
+    "MILU-Bengali": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 141532
+    }
+  },
+  "eval_ngrams_total": 813113,
+  "docs_in": 60631,
+  "docs_out": 60174,
+  "docs_dropped": 457,
+  "tokens_dropped": 744231,
+  "contamination_rate": 0.007537,
+  "hits_by_eval_set": {
+    "MILU-Hindi": 1369,
+    "MILU-Telugu": 189
+  },
+  "examples": [
+    {
+      "id": "unv-hin:7f56e8f810d0d7c320874874aa52f4d06081cc08a632fd6df2ba47a4faa41a55",
+      "matching_ngrams": 5,
+      "eval_sets": {
+        "MILU-Hindi": 5
+      },
+      "excerpt": "शहर में फैले कोविड के संकट में परेशानी का सामना कर रहे 1,400 से अधिक पावरलूम बुनकरों ने कपड़ा व्यापारियों के लिए ग्रे या अधूरे कपड़ों की बिक्री के सामने भुगतान के लिए डिजिटल माध्यम या ऑनलाइन पेमेंट का उपयोग करना अनिवार्य"
+    },
+    {
+      "id": "unv-hin:80b9cb60d713418e514d14bd8ca8b7c215198ab8f023635ec7c1c9595fe6d8a9",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Hindi": 4
+      },
+      "excerpt": "खेल मंत्रालय ने 29 अगस्त को खेल दिवस के मौके पर दिए जाने वाले नेशनल स्पोर्ट्स अवॉर्ड के लिए सिलेक्शन पैनल की शुक्रवार को घोषणा की। इसमें पूर्व भारतीय क्रिकेटर वीरेंद्र सहवाग के अलावा मेंस हॉकी टीम के पूर्व कप्तान सरदार स"
+    },
+    {
+      "id": "unv-hin:80bcafe981161c666a36c3db79e6130080eb6f39d59b4a3cb664061e1c3257fe",
+      "matching_ngrams": 2,
+      "eval_sets": {
+        "MILU-Hindi": 2
+      },
+      "excerpt": "यूरोपीय संघ में तीन महीने के लिए, एक प्रशासनिक शाखा बनाई गई है, जो विशेष रूप से रूस के साथ सूचना युद्ध के लिए बनाई गई है। समूह का आधिकारिक नाम ईस्ट स्ट्रैटकॉम टीम है, जो पूर्वी रणनीतिक संचार टीम के लिए छोटा है। रूसी में "
+    },
+    {
+      "id": "unv-hin:85a62a97e363040420b76abf1d9288f25170215b1c997cfbc7d547c7534a893f",
+      "matching_ngrams": 2,
+      "eval_sets": {
+        "MILU-Hindi": 2
+      },
+      "excerpt": "हम आपकी प्रतिक्रिया सुनकर खुश हैं, रैंकिंग हैंड पोकर। फ्रेंकेनलॉट्स मॉन्स्टर सिनेमाई अनुपात का एक पोकीज़ गेम है। नए स्पिन में जमा करने के लिए बहुत सारे विकल्प नहीं हैं, जो एनीमेशन। कुल्लोट्टा ने विधिवत अनुपालन किया और बद"
+    },
+    {
+      "id": "unv-hin:86a4ad88734993d758f98f3cf247a38a051f396a39bdb173c32a79194b51c776",
+      "matching_ngrams": 8,
+      "eval_sets": {
+        "MILU-Hindi": 8
+      },
+      "excerpt": "सरकार ने भारत को एक डिजिटल सशक्त समाज और ज्ञान की अर्थव्यवस्था में रूपांतरित करने के लिए एक महत्वाकांक्षी परिकल्पना के साथ डिजिटल इंडिया कार्यक्रम शुरू किया है। कार्यक्रम में नागरिकों को विभिन्न ई-गवर्नेंस पहलों से जोड़न"
+    },
+    {
+      "id": "unv-hin:87da46168f608b35fd154443e4d3cfce56c27910689168c37ad5da0087829b4f",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Hindi": 4
+      },
+      "excerpt": "भारत में तेजी से बढ़ रही कोविड-19 से संक्रमित लोगों की संख्या के बाद केंद्र सरकार ने शनिवार को परीक्षण किट के निर्यात पर तत्काल प्रभाव से रोक लगा दी है। वाणिज्य मंत्रालय ने इसको लेकर अधिसूचना भी जारी कर दी है। हिंदुस्तान"
+    },
+    {
+      "id": "unv-hin:8e6d5c87738441e6ff15a167dff17839cca3680b7dad03d0cf5d64bbd8d5c1f4",
+      "matching_ngrams": 3,
+      "eval_sets": {
+        "MILU-Hindi": 3
+      },
+      "excerpt": "दिल्ली का क्लब क्रिकेट खतरनाक कोरोना वायरस की मार झेल रहा है और इस सत्र के सभी हॉट वैदर क्रिकेट टूर्नामेंट कोरोना की भेंट चढ़ चुके हैं। क्लब क्रिकेट दिल्ली की घरेलू क्रिकेट की जान है और यहां से ही राष्ट्रीय स्तर की प्रति"
+    },
+    {
+      "id": "unv-hin:941ea2df391bf85bbbb395a67d2c19ac5b68e4a6d2d105abda62a06c024ec26c",
+      "matching_ngrams": 5,
+      "eval_sets": {
+        "MILU-Hindi": 5
+      },
+      "excerpt": "1.) TCS LGBT कर्मचारियों को लाभ प्रदान करने के लिए अपनी स्वास्थ्य बीमा पॉलिसी में बदलाव की घोषणा करने वाली टाटा समूह की पहली कंपनियों में से एक बन गई है। स्वास्थ्य बीमा पॉलिसी में बदलाव से अब कंपनी के सभी समलैंगिक, उभयलि"
+    }
+  ],
+  "canary": {
+    "canaries_minted": 3,
+    "planted_in_probe_shard": "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15",
+    "recovered_by_scan": [
+      "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15"
+    ],
+    "detector_works": true,
+    "canaries_found_in_shipped_corpus": 0,
+    "note": "A canary is a rare literal and is scanned for as one; the 13-gram index cannot match it, since every window containing it also contains its neighbouring words. None are written into the shipped corpus."
+  }
+}

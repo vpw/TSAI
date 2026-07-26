@@ -1,0 +1,143 @@
+{
+  "stage": "fixtures",
+  "purpose": "Correctness fixtures for clean_text(), rebuilt from the session's own Widget 2 examples. These are FIXTURES, not corpus measurements.",
+  "cases": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "name": "English web scrape",
+      "kind": "web",
+      "chars_before": 262,
+      "chars_after": 227,
+      "noise_removed_by_class": {
+        "replacement": 1
+      },
+      "joiners_kept": {},
+      "ghost_tags_flagged": {},
+      "before": "Cookie notice: We &amp; our 47 partners use cookies. By clicking &quot;Accept&quot; you consent. It&#8217;s the crawler&#8217;s job to fetch every page from the open web. Encoding glitch here � corrupted one byte.\tTabs and    multiple     spaces should collapse.",
+      "after": "Cookie notice: We & our 47 partners use cookies. By clicking \"Accept\" you consent. It’s the crawler’s job to fetch every page from the open web. Encoding glitch here corrupted one byte. Tabs and multiple spaces should collapse.",
+      "unified": null,
+      "checks": {
+        "no_entities": true,
+        "no_replacement": true,
+        "single_spaced": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Chat log (ghost tags)",
+      "kind": "conversation",
+      "chars_before": 208,
+      "chars_after": 208,
+      "noise_removed_by_class": {},
+      "joiners_kept": {},
+      "ghost_tags_flagged": {
+        "bracket_role": 3,
+        "xml_role": 2
+      },
+      "before": "[SYSTEM] You are a helpful data-cleaning assistant.\n[USER] How do I dedupe a 15-trillion-token corpus?\n[ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning.\n<USER>raw serialized conversation turn</USER>",
+      "after": "[SYSTEM] You are a helpful data-cleaning assistant. [USER] How do I dedupe a 15-trillion-token corpus? [ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning. <USER>raw serialized conversation turn</USER>",
+      "unified": "<|system|> You are a helpful data-cleaning assistant. <|user|> How do I dedupe a 15-trillion-token corpus? <|assistant|> Use MinHash plus LSH, then hash AFTER cleaning. <|user|>raw serialized conversation turn<|end|>",
+      "checks": {
+        "ghost_flagged": true,
+        "unifies": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Hindi (Devanagari)",
+      "kind": "indic",
+      "chars_before": 183,
+      "chars_after": 171,
+      "noise_removed_by_class": {
+        "zero_width": 2
+      },
+      "joiners_kept": {
+        "ZWNJ": 1,
+        "ZWJ": 1
+      },
+      "ghost_tags_flagged": {},
+      "before": "﻿नमस्ते &amp; डेटा सफाई में स्वागत है। संयुक्त अक्षर: क‌् — ZWNJ ko rakhna zaroori.​ जोड़ने वाला: र‍ — ZWJ real Eyelash-Ra. HTML entity: &#2309; = अ, aur BOM va ZWSP hataane chaahiye.",
+      "after": "नमस्ते & डेटा सफाई में स्वागत है। संयुक्त अक्षर: क‌् — ZWNJ ko rakhna zaroori. जोड़ने वाला: र‍ — ZWJ real Eyelash-Ra. HTML entity: अ = अ, aur BOM va ZWSP hataane chaahiye.",
+      "unified": null,
+      "checks": {
+        "keeps_zwnj": true,
+        "keeps_zwj": true,
+        "drops_bom_zwsp": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Telugu with bidi override",
+      "kind": "indic",
+      "chars_before": 118,
+      "chars_after": 116,
+      "noise_removed_by_class": {
+        "control": 1,
+        "bidi": 1
+      },
+      "joiners_kept": {
+        "ZWNJ": 1,
+        "ZWJ": 1
+      },
+      "ghost_tags_flagged": {},
+      "before": "కిరణజన్య సంయోగక్రియ. ZWNJ (క‌్) stops the conjunct, keep it. ZWJ (ర‍) is valid.\u0007 Bidi override ‮reversed and stripped.",
+      "after": "కిరణజన్య సంయోగక్రియ. ZWNJ (క‌్) stops the conjunct, keep it. ZWJ (ర‍) is valid. Bidi override reversed and stripped.",
+      "unified": null,
+      "checks": {
+        "keeps_zwnj": true,
+        "keeps_zwj": true,
+        "drops_bidi_control": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Code snippet",
+      "kind": "code",
+      "chars_before": 166,
+      "chars_after": 123,
+      "noise_removed_by_class": {},
+      "joiners_kept": {},
+      "ghost_tags_flagged": {},
+      "before": "def clean(s):\n    if len(s) &gt; 0 &amp;&amp; s[0] &lt; limit:\n        return s.strip()   # nbsp-padded comment\n    else:\n        return None  # CRLF + tab-prefixed\r\n",
+      "after": "def clean(s): if len(s) > 0 && s[0] < limit: return s.strip() # nbsp-padded comment else: return None # CRLF + tab-prefixed",
+      "unified": null,
+      "checks": {
+        "no_entities": true,
+        "unescapes_operators": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Mixed / worst case (stress)",
+      "kind": "stress",
+      "chars_before": 137,
+      "chars_after": 124,
+      "noise_removed_by_class": {
+        "control": 1,
+        "zero_width": 2,
+        "bidi": 1,
+        "private_use": 1,
+        "replacement": 1
+      },
+      "joiners_kept": {
+        "ZWNJ": 1,
+        "ZWJ": 1
+      },
+      "ghost_tags_flagged": {
+        "bracket_role": 1
+      },
+      "before": "﻿Mixed​ case: &amp;amp; double-escaped, � bad byte, \u0001control, ‮bidi, private-use, Indic joiners क‌् and र‍ must survive.   [USER] ghost.",
+      "after": "Mixed case: &amp; double-escaped, bad byte, control, bidi, private-use, Indic joiners क‌् and र‍ must survive. [USER] ghost.",
+      "unified": null,
+      "checks": {
+        "no_replacement": true,
+        "keeps_zwnj": true,
+        "keeps_zwj": true,
+        "ghost_flagged": true
+      },
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,772 @@
+[
+  {
+    "shard_id": "shard_023a339380c1",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "023a339380c1421f85e32761da3981f8a9fa34ecaf0f87cb8f1b45c9d2aabeb6",
+    "token_count": 3439028,
+    "tokenizer": "sarvam1",
+    "word_count": 2460580,
+    "naive_words_x_1_3_estimate": 3198754,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0000.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_5e36bf1e73f3",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "5e36bf1e73f35968273fcbafee76dfb24726b104f035089b8851f0935ad280b2",
+    "token_count": 3533184,
+    "tokenizer": "sarvam1",
+    "word_count": 2522952,
+    "naive_words_x_1_3_estimate": 3279838,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0001.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_82bcd1b44e94",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "82bcd1b44e94dff7d6b7ffc4aab7e9d5b580533ddd68af47185ab7dec3fa23ef",
+    "token_count": 3541127,
+    "tokenizer": "sarvam1",
+    "word_count": 2524479,
+    "naive_words_x_1_3_estimate": 3281823,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0002.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_70fe407b3d9a",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "70fe407b3d9a3f9e265cd22726717e8e665c92577e810d084001fe60f7e4d546",
+    "token_count": 3216736,
+    "tokenizer": "sarvam1",
+    "word_count": 2277842,
+    "naive_words_x_1_3_estimate": 2961195,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0003.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_4a4341fa4e6b",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "4a4341fa4e6bc7d0357cc134a39be737d71d18c2333a328cda5ae564d6d2cd94",
+    "token_count": 2997860,
+    "tokenizer": "sarvam1",
+    "word_count": 2066506,
+    "naive_words_x_1_3_estimate": 2686458,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0004.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_7adeaa5d006c",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "7adeaa5d006cdab27ee84506b41815bbeabc733ddded2220d53155e452bb9c9e",
+    "token_count": 2957886,
+    "tokenizer": "sarvam1",
+    "word_count": 2060256,
+    "naive_words_x_1_3_estimate": 2678333,
+    "lang_distribution": {
+      "hin": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0005.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_178d3ea67d6a",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "178d3ea67d6a7b88cebba8dbdcc3735da6c92196cc6680163f1e75fa42fd3000",
+    "token_count": 2977358,
+    "tokenizer": "sarvam1",
+    "word_count": 2016605,
+    "naive_words_x_1_3_estimate": 2621586,
+    "lang_distribution": {
+      "hin": 94.8,
+      "tel": 5.2
+    },
+    "documents": 5000,
+    "file": "shard-0006.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_56060efb7a80",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "56060efb7a80f63a9b8399ca494f62aebd62e9dc1406293fd6ce57732d277b40",
+    "token_count": 3420740,
+    "tokenizer": "sarvam1",
+    "word_count": 1368002,
+    "naive_words_x_1_3_estimate": 1778403,
+    "lang_distribution": {
+      "tel": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0007.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_e837a4d86f49",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "e837a4d86f49230696b9ab8a58b5c2fcb6363d09ae19eac9ca76bb6d77aedfa9",
+    "token_count": 3269718,
+    "tokenizer": "sarvam1",
+    "word_count": 1322374,
+    "naive_words_x_1_3_estimate": 1719086,
+    "lang_distribution": {
+      "tel": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0008.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_ef0783801d36",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "ef0783801d36ece15dffe2909734fbd7e3e914ed452e9a7d131c73db087ccef1",
+    "token_count": 3431802,
+    "tokenizer": "sarvam1",
+    "word_count": 1803926,
+    "naive_words_x_1_3_estimate": 2345104,
+    "lang_distribution": {
+      "tel": 53.8,
+      "eng": 46.2
+    },
+    "documents": 5000,
+    "file": "shard-0009.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_fb535f3fdf35",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "fb535f3fdf3586a05a3d3615e90d91353498ee0cd62d097557baf2008fe89a17",
+    "token_count": 3616925,
+    "tokenizer": "sarvam1",
+    "word_count": 2352037,
+    "naive_words_x_1_3_estimate": 3057648,
+    "lang_distribution": {
+      "eng": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0010.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_6d003ed81d22",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "6d003ed81d22797b5f5325f91639a46cc3d3a117733149b06396bf8bd0934ce5",
+    "token_count": 6220253,
+    "tokenizer": "sarvam1",
+    "word_count": 2306860,
+    "naive_words_x_1_3_estimate": 2998918,
+    "lang_distribution": {
+      "eng": 55.2,
+      "asm": 44.8
+    },
+    "documents": 5000,
+    "file": "shard-0011.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  {
+    "shard_id": "shard_978f91c78399",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "74a71d4fc7501def9a12e569ca07857c5ce5a822e16d40e76bd9009c2cebe781"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-26T12:04:02Z",
+    "sha256": "978f91c783991b6a56c90aa8d951b9ceff045b908e506557d9b49eca962a55ff",
+    "token_count": 266536,
+    "tokenizer": "sarvam1",
+    "word_count": 63689,
+    "naive_words_x_1_3_estimate": 82796,
+    "lang_distribution": {
+      "asm": 100.0
+    },
+    "documents": 174,
+    "file": "shard-0012.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  }
+]

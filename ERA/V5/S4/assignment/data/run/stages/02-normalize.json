@@ -1,0 +1,122 @@
+{
+  "stage": "02-normalize",
+  "docs_in": 64712,
+  "docs_out": 64712,
+  "docs_dropped": 0,
+  "dropped_empty_after_clean": 0,
+  "chars_in": 156655364,
+  "chars_out": 156432283,
+  "chars_removed": 223081,
+  "noise_chars_removed_by_class": {
+    "bidi": 46,
+    "replacement": 48,
+    "control": 7,
+    "private_use": 15,
+    "zero_width": 1
+  },
+  "noise_chars_removed_total": 117,
+  "joiners_kept": {
+    "ZWJ": 231
+  },
+  "docs_with_html_entities": 7,
+  "docs_changed_by_nfc": 276,
+  "ghost_tag_docs": 0,
+  "ghost_tag_hits_by_kind": {},
+  "ghost_tag_hits_total": 0,
+  "docs_format_unified": 0,
+  "canonical_format": {
+    "user": "<|user|>",
+    "assistant": "<|assistant|>",
+    "system": "<|system|>",
+    "end": "<|end|>"
+  },
+  "garbage_vocab_slots_before": 2,
+  "garbage_vocab_slots_after": 0,
+  "byte_fallback_slots_before": 102,
+  "garbage_audit_docs_scanned": 40000,
+  "garbage_audit_note": "A garbage slot is a vocab entry whose piece is nothing but noise characters. Byte-fallback pieces (<0xE0>) are counted separately: on well-formed Indic text they are the tokenizer working, not dirt.",
+  "examples": [
+    {
+      "id": "unv-hin:80e9f33565152c4159411b6b5d9b3b4528a33b7fae7754852501b65015fb32b2",
+      "src": "unv-hin",
+      "removed": {
+        "bidi": 3
+      },
+      "joiners_in_doc": {},
+      "chars_before": 6007,
+      "chars_after": 6003
+    },
+    {
+      "id": "unv-hin:a9fe34df0139785dc2ca86810029a48ac7140c95bdf2868ba68dfea7e91a6eb1",
+      "src": "unv-hin",
+      "removed": {
+        "replacement": 4
+      },
+      "joiners_in_doc": {},
+      "chars_before": 6410,
+      "chars_after": 6405
+    },
+    {
+      "id": "unv-hin:0fadcd898625311232551fdda3d0844172a31dae69a09bbf8b7966c9991970d5",
+      "src": "unv-hin",
+      "removed": {
+        "bidi": 9
+      },
+      "joiners_in_doc": {},
+      "chars_before": 6554,
+      "chars_after": 6544
+    },
+    {
+      "id": "unv-hin:140ec45813d3ec94473c76c5cfc10f352a8308e35ebdbf5e6fa24d22b101db78",
+      "src": "unv-hin",
+      "removed": {
+        "control": 3
+      },
+      "joiners_in_doc": {},
+      "chars_before": 1737,
+      "chars_after": 1733
+    },
+    {
+      "id": "unv-hin:b1d993d3c5f3e72e0d6de16675543419450b5def97d1d894501ee83f34393052",
+      "src": "unv-hin",
+      "removed": {
+        "private_use": 4
+      },
+      "joiners_in_doc": {},
+      "chars_before": 18091,
+      "chars_after": 18086
+    },
+    {
+      "id": "unv-hin:bcfb4530540d310ce9cc554ee99ad6c3a8676cb7831498022f6377045f4e42ca",
+      "src": "unv-hin",
+      "removed": {
+        "private_use": 3
+      },
+      "joiners_in_doc": {},
+      "chars_before": 3390,
+      "chars_after": 3383
+    },
+    {
+      "id": "unv-hin:e44736fb8b0ad8ddd3e8c237b1288388102b4e2c36955c41805a9275d753ddd3",
+      "src": "unv-hin",
+      "removed": {
+        "replacement": 6
+      },
+      "joiners_in_doc": {},
+      "chars_before": 21261,
+      "chars_after": 21254
+    },
+    {
+      "id": "unv-hin:3d6cd2a01c9616542d1a7fdcc7b43c5318519655a4cc3df878e76b4517f11699",
+      "src": "unv-hin",
+      "removed": {
+        "bidi": 7
+      },
+      "joiners_in_doc": {},
+      "chars_before": 1795,
+      "chars_after": 1787
+    }
+  ],
+  "ghost_examples": [],
+  "hash_order": "sha256 computed AFTER clean_text(), not before"
+}
