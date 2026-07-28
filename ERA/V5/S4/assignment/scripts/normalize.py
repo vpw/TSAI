@@ -57,6 +57,17 @@ JOINERS = {"ZWNJ": "‌", "ZWJ": "‍"}
 WS_RE = re.compile(r"\s+")
 ENTITY_RE = re.compile(r"&(?:[a-zA-Z][a-zA-Z0-9]{1,31}|#\d{1,7}|#[xX][0-9a-fA-F]{1,6});")
 
+# The session's own clean_text() collapses every run of whitespace to one space,
+# including newlines -- correct for a single crawled paragraph, but it turns any
+# document with real line structure (lists, poems, code, quoted dialogue) into one
+# unreadable line. So whitespace collapses *within* each line, not across the
+# document: a line's leading indentation is kept (capped, so a formatting artifact
+# can't ship 200 leading spaces), its internal runs of horizontal whitespace collapse
+# to one space, and runs of blank lines collapse to a single blank separator.
+LINE_WS_RE = re.compile(r"[^\S\n]+")  # horizontal whitespace, not the newline itself
+BLANK_RUN_RE = re.compile(r"\n{3,}")
+MAX_INDENT = 16
+
 
 def denoise(s: str) -> str:
     """Everything clean_text() does except the final whitespace collapse."""
@@ -65,17 +76,29 @@ def denoise(s: str) -> str:
     return NOISE_RE.sub("", s)  # KEEPS U+200C ZWNJ and U+200D ZWJ
 
 
+def collapse_whitespace(s: str) -> str:
+    """Collapse per line, keeping line breaks and indentation intact."""
+    s = s.replace("\r\n", "\n").replace("\r", "\n")
+    lines = []
+    for ln in s.split("\n"):
+        rest = ln.lstrip(" \t")
+        indent = ln[: len(ln) - len(rest)].expandtabs(4)
+        if len(indent) > MAX_INDENT:
+            indent = " " * MAX_INDENT
+        lines.append(indent + LINE_WS_RE.sub(" ", rest).rstrip())
+    return BLANK_RUN_RE.sub("\n\n", "\n".join(lines)).strip("\n \t")
+
+
 def clean_text(s: str) -> str:
-    """The session's cleaner, verbatim in behaviour."""
-    return WS_RE.sub(" ", denoise(s)).strip()
+    """The session's cleaner, with one change: the whitespace collapse is per-line."""
+    return collapse_whitespace(denoise(s))
 
 
 # ------------------------------------------------- line structure, captured early
 #
-# clean_text() collapses every run of whitespace, which is correct for the shipped
-# corpus but destroys the line structure four of the nine Gopher/C4 rules are defined
-# over. So the line-level counts are taken here, after denoising and before the
-# collapse, and carried on the record for stage 4 to threshold.
+# Line-level counts are taken on the denoised text, before collapse_whitespace() caps
+# indentation and folds blank-line runs, so stage 4's Gopher/C4 thresholds see the
+# document's structure exactly as it arrived.
 
 ASCII_TERMINAL = (".", "!", "?", '."', ".'", '!"', '?"')
 # Danda and double danda end a Devanagari sentence; Urdu uses its own full stop and
@@ -298,7 +321,7 @@ def main():
 
             denoised = denoise(raw)
             lstats = line_stats(denoised)
-            cleaned = WS_RE.sub(" ", denoised).strip()
+            cleaned = collapse_whitespace(denoised)
 
             hits = scan_ghost_tags(cleaned)
             if hits:

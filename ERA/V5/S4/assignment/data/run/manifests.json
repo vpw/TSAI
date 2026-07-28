@@ -1,6 +1,6 @@
 [
   {
-    "shard_id": "shard_023a339380c1",
+    "shard_id": "shard_a777d1e0eb5b",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -11,11 +11,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -42,9 +42,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "023a339380c1421f85e32761da3981f8a9fa34ecaf0f87cb8f1b45c9d2aabeb6",
-    "token_count": 3439028,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "a777d1e0eb5b575e4b7eb85e280483e972bcb446e622eb8ffffbe9f89971365b",
+    "token_count": 3490291,
     "tokenizer": "sarvam1",
     "word_count": 2460580,
     "naive_words_x_1_3_estimate": 3198754,
@@ -59,7 +59,7 @@
     ]
   },
   {
-    "shard_id": "shard_5e36bf1e73f3",
+    "shard_id": "shard_005bdcc6a00a",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -70,11 +70,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -101,9 +101,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "5e36bf1e73f35968273fcbafee76dfb24726b104f035089b8851f0935ad280b2",
-    "token_count": 3533184,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "005bdcc6a00ac08af836d2f64f63c1227228c768658e443e239a01abf67f049c",
+    "token_count": 3583151,
     "tokenizer": "sarvam1",
     "word_count": 2522952,
     "naive_words_x_1_3_estimate": 3279838,
@@ -118,7 +118,7 @@
     ]
   },
   {
-    "shard_id": "shard_82bcd1b44e94",
+    "shard_id": "shard_8a85a429d28e",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -129,11 +129,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -160,12 +160,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "82bcd1b44e94dff7d6b7ffc4aab7e9d5b580533ddd68af47185ab7dec3fa23ef",
-    "token_count": 3541127,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "8a85a429d28e9c291ab7b906df4ad8f996d25949d319864b90388cd6d0241eb1",
+    "token_count": 3591974,
     "tokenizer": "sarvam1",
-    "word_count": 2524479,
-    "naive_words_x_1_3_estimate": 3281823,
+    "word_count": 2524313,
+    "naive_words_x_1_3_estimate": 3281607,
     "lang_distribution": {
       "hin": 100.0
     },
@@ -177,7 +177,7 @@
     ]
   },
   {
-    "shard_id": "shard_70fe407b3d9a",
+    "shard_id": "shard_351cd3992cce",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -188,11 +188,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -219,12 +219,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "70fe407b3d9a3f9e265cd22726717e8e665c92577e810d084001fe60f7e4d546",
-    "token_count": 3216736,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "351cd3992cce8b2456da6fb747dd506c84b11c959e657827d12d3d6aa2a726ec",
+    "token_count": 3263478,
     "tokenizer": "sarvam1",
-    "word_count": 2277842,
-    "naive_words_x_1_3_estimate": 2961195,
+    "word_count": 2278729,
+    "naive_words_x_1_3_estimate": 2962348,
     "lang_distribution": {
       "hin": 100.0
     },
@@ -236,7 +236,7 @@
     ]
   },
   {
-    "shard_id": "shard_4a4341fa4e6b",
+    "shard_id": "shard_b968bce310bf",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -247,11 +247,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -278,12 +278,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "4a4341fa4e6bc7d0357cc134a39be737d71d18c2333a328cda5ae564d6d2cd94",
-    "token_count": 2997860,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "b968bce310bfa5fe70ecd357c316ba041108f01aad41d7793f9db0ff704afd83",
+    "token_count": 3035896,
     "tokenizer": "sarvam1",
-    "word_count": 2066506,
-    "naive_words_x_1_3_estimate": 2686458,
+    "word_count": 2066850,
+    "naive_words_x_1_3_estimate": 2686905,
     "lang_distribution": {
       "hin": 100.0
     },
@@ -295,7 +295,7 @@
     ]
   },
   {
-    "shard_id": "shard_7adeaa5d006c",
+    "shard_id": "shard_90512bc5fad4",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -306,11 +306,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -337,12 +337,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "7adeaa5d006cdab27ee84506b41815bbeabc733ddded2220d53155e452bb9c9e",
-    "token_count": 2957886,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "90512bc5fad4aa8278fdde0e6938940e1223b8e5d3055a4b0f47554a31027f12",
+    "token_count": 2990952,
     "tokenizer": "sarvam1",
-    "word_count": 2060256,
-    "naive_words_x_1_3_estimate": 2678333,
+    "word_count": 2057659,
+    "naive_words_x_1_3_estimate": 2674957,
     "lang_distribution": {
       "hin": 100.0
     },
@@ -354,7 +354,7 @@
     ]
   },
   {
-    "shard_id": "shard_178d3ea67d6a",
+    "shard_id": "shard_db2a080f89d1",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -365,11 +365,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -396,12 +396,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "178d3ea67d6a7b88cebba8dbdcc3735da6c92196cc6680163f1e75fa42fd3000",
-    "token_count": 2977358,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "db2a080f89d1660f3b3de0ef30652f9b9da6fd763954c0ad5a023f64d2be7209",
+    "token_count": 3019786,
     "tokenizer": "sarvam1",
-    "word_count": 2016605,
-    "naive_words_x_1_3_estimate": 2621586,
+    "word_count": 2019179,
+    "naive_words_x_1_3_estimate": 2624933,
     "lang_distribution": {
       "hin": 94.8,
       "tel": 5.2
@@ -414,7 +414,7 @@
     ]
   },
   {
-    "shard_id": "shard_56060efb7a80",
+    "shard_id": "shard_74eac8525964",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -425,11 +425,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -456,12 +456,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "56060efb7a80f63a9b8399ca494f62aebd62e9dc1406293fd6ce57732d277b40",
-    "token_count": 3420740,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "74eac8525964b1d1fcbde6da78b1377b4f09bd9684bc65f6b5b7b42f24a0db60",
+    "token_count": 3456956,
     "tokenizer": "sarvam1",
-    "word_count": 1368002,
-    "naive_words_x_1_3_estimate": 1778403,
+    "word_count": 1368082,
+    "naive_words_x_1_3_estimate": 1778507,
     "lang_distribution": {
       "tel": 100.0
     },
@@ -473,7 +473,7 @@
     ]
   },
   {
-    "shard_id": "shard_e837a4d86f49",
+    "shard_id": "shard_1d8e4ff404c0",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -484,11 +484,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -515,12 +515,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "e837a4d86f49230696b9ab8a58b5c2fcb6363d09ae19eac9ca76bb6d77aedfa9",
-    "token_count": 3269718,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "1d8e4ff404c0a73a55ba9f6e3b784f1f7f37bcfc42512b753109a6bcb44c704b",
+    "token_count": 3307099,
     "tokenizer": "sarvam1",
-    "word_count": 1322374,
-    "naive_words_x_1_3_estimate": 1719086,
+    "word_count": 1322545,
+    "naive_words_x_1_3_estimate": 1719308,
     "lang_distribution": {
       "tel": 100.0
     },
@@ -532,7 +532,7 @@
     ]
   },
   {
-    "shard_id": "shard_ef0783801d36",
+    "shard_id": "shard_eb2f652b5cd3",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -543,11 +543,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -574,12 +574,12 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "ef0783801d36ece15dffe2909734fbd7e3e914ed452e9a7d131c73db087ccef1",
-    "token_count": 3431802,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "eb2f652b5cd32957c3d69d6625c278eb4842abc14439d2954d7fa30a9928ee53",
+    "token_count": 3483476,
     "tokenizer": "sarvam1",
-    "word_count": 1803926,
-    "naive_words_x_1_3_estimate": 2345104,
+    "word_count": 1803764,
+    "naive_words_x_1_3_estimate": 2344893,
     "lang_distribution": {
       "tel": 53.8,
       "eng": 46.2
@@ -592,7 +592,7 @@
     ]
   },
   {
-    "shard_id": "shard_fb535f3fdf35",
+    "shard_id": "shard_b346d2cbdc45",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -603,11 +603,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -634,9 +634,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "fb535f3fdf3586a05a3d3615e90d91353498ee0cd62d097557baf2008fe89a17",
-    "token_count": 3616925,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "b346d2cbdc455dc2271c625d1e4677e4fae4496c8c6d8656c9a69d950c19c7d9",
+    "token_count": 3680018,
     "tokenizer": "sarvam1",
     "word_count": 2352037,
     "naive_words_x_1_3_estimate": 3057648,
@@ -651,7 +651,7 @@
     ]
   },
   {
-    "shard_id": "shard_6d003ed81d22",
+    "shard_id": "shard_8cc9429b21e6",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -662,11 +662,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -693,9 +693,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "6d003ed81d22797b5f5325f91639a46cc3d3a117733149b06396bf8bd0934ce5",
-    "token_count": 6220253,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "8cc9429b21e68991c58ab05747ae60a408fae55cd11ccb6d90cbe1b99eb05edb",
+    "token_count": 6279627,
     "tokenizer": "sarvam1",
     "word_count": 2306860,
     "naive_words_x_1_3_estimate": 2998918,
@@ -711,7 +711,7 @@
     ]
   },
   {
-    "shard_id": "shard_978f91c78399",
+    "shard_id": "shard_9c8278661532",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -722,11 +722,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -753,9 +753,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "978f91c783991b6a56c90aa8d951b9ceff045b908e506557d9b49eca962a55ff",
-    "token_count": 266536,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "9c82786615323ea54be656b2983c5397f5d7aa38a661ec24a5905f0e48be15b5",
+    "token_count": 267937,
     "tokenizer": "sarvam1",
     "word_count": 63689,
     "naive_words_x_1_3_estimate": 82796,

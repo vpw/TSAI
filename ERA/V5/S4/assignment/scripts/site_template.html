@@ -518,10 +518,13 @@ TABS.forEach(([id, label], i) => {
     const chk = Object.entries(r.checks)
       .map(([k, v]) => `<span class="pill ${v ? "ok" : "bad"}">${esc(k)}</span>`).join(" ");
     const inner = el("div");
+    // Code keeps line breaks and indentation after cleaning now, so its boxes need
+    // pre-wrap or the browser's own whitespace collapsing would flatten it right back.
+    const exStyle = r.kind === "code" ? ' style="white-space:pre-wrap"' : "";
     inner.insertAdjacentHTML("beforeend",
-      `<div class="ex"><span class="lbl">before · ${r.chars[0]} chars</span>${showInvis(r.before)}</div>
-       <div class="ex"><span class="lbl">after · ${r.chars[1]} chars</span>${showInvis(r.after)}</div>` +
-      (r.unified ? `<div class="ex"><span class="lbl">unified to the canonical format</span>${showInvis(r.unified)}</div>` : "") +
+      `<div class="ex"${exStyle}><span class="lbl">before · ${r.chars[0]} chars</span>${showInvis(r.before)}</div>
+       <div class="ex"${exStyle}><span class="lbl">after · ${r.chars[1]} chars</span>${showInvis(r.after)}</div>` +
+      (r.unified ? `<div class="ex"${exStyle}><span class="lbl">unified to the canonical format</span>${showInvis(r.unified)}</div>` : "") +
       `<div style="margin-top:6px">${chk}</div>` +
       (Object.keys(r.ghosts).length
         ? `<p class="muted" style="margin:6px 0 0"><small>ghost markers flagged:
@@ -601,7 +604,9 @@ TABS.forEach(([id, label], i) => {
        <span class="pill">confidence ${f1(m.confidence * 100)}%</span>
        <div class="ex" style="margin-top:7px">${esc(m.excerpt)}</div>
        <p class="muted" style="margin:5px 0 0"><small><code>${esc(m.id)}</code> ·
-        script profile ${esc(JSON.stringify(m.script_profile))}</small></p>`)));
+        script profile ${esc(JSON.stringify(m.script_profile))}</small></p>` +
+       (m.note ? `<p class="muted" style="margin:7px 0 0"><small>⚠ <b>detected label is also
+         wrong:</b> ${esc(m.note)}</small></p>` : ""))));
   }
 
   /* ---- quality ---- */

@@ -264,7 +264,7 @@
       "script_profile": {
         "Deva": 1.0
       },
-      "excerpt": "480 : ललितविस्तर पुरे`चरति पिण्डम् ।।753 ।। केचिद् अवोचल्छको देवराजः, अपरे भणन्ति सुयामो देवपुत्रः । तथापि संतुपितं वा निमितरच, अपरे भणन्ति सुनिमित एष देवः ॥ 754।। केचित् पुनर्भणन्ति चन्द्रसूर्यो, तथापि च राहुर्बलिश्च वे"
+      "excerpt": "480 : ललितविस्तर\nपुरे`चरति पिण्डम् ।।753 ।। केचिद् अवोचल्छको देवराजः, अपरे भणन्ति सुयामो देवपुत्रः । तथापि संतुपितं वा निमितरच, अपरे भणन्ति सुनिमित एष देवः ॥ 754।। केचित् पुनर्भणन्ति चन्द्रसूर्यो, तथापि च राहुर्बलिश्च वे"
     },
     {
       "id": "ver-hin:833c643200d64b8fe5493b93874052d96bb27a1bf10b940c1594a7524312418e",
@@ -286,7 +286,8 @@
       "script_profile": {
         "Deva": 1.0
       },
-      "excerpt": "कवि अब्दुल रहमानकृत सन्देशरासक [ १७१ वातनी खात्री होय के कर्ता हयात नथी किंतु कीर्तिशेष धयेलो छे, तो ए तेना मुखशी सांभळवानी संभावना न करी शके. एथी कदाच टिप्पनकार अने रासकार समसमथी होय एम बनवा जोग छे. अथवा टिप्पनकार पहेला"
+      "excerpt": "कवि अब्दुल रहमानकृत सन्देशरासक [ १७१\nवातनी खात्री होय के कर्ता हयात नथी किंतु कीर्तिशेष धयेलो छे, तो ए तेना मुखशी सांभळवानी संभावना न करी शके. एथी कदाच टिप्पनकार अने रासकार समसमथी होय एम बनवा जोग छे. अथवा टिप्पनकार पहेला",
+      "note": "Detector says Marathi; text is actually Old Gujarati (opens with Sandesh Rasak, 13th c.) written in Devanagari, a script lid.176 essentially never sees Gujarati in. Neither the folder label (hin) nor the detector (mar) is right -- illustrates that runtime detection is evidence, not ground truth."
     },
     {
       "id": "ver-tel:c99f5484bd4c490daf2f9f3cc8392c08e4856b94d4f7671f1505101b98e61940",
@@ -298,7 +299,7 @@
         "Latn": 0.074,
         "Deva": 0.926
       },
-      "excerpt": "What does it mean ? For & elecburi field JXE = 7. = Ple इस मामले का होना जरूरी नहीं है; उदाहरण के लिए कहिए यदि मैं एक भू-संपर्कित गोले के अंदर आवेश लेता हूं। फिर, यह आवेश, चूंकि यह एक धात्विक भू-संपर्कित गोले द्वारा परिर"
+      "excerpt": "What does it\nmean ?\nFor & elecburi field JXE =\n7. = Ple\nइस मामले का होना जरूरी नहीं है; उदाहरण के लिए कहिए यदि मैं एक भू-संपर्कित गोले के अंदर आवेश लेता हूं। फिर, यह आवेश, चूंकि यह एक धात्विक भू-संपर्कित गोले द्वारा परिर"
     },
     {
       "id": "ver-eng:6e1d714e7e657f5999924c8e7fcb43de2e8d2221",
@@ -310,7 +311,7 @@
         "Latn": 0.954,
         "Arab": 0.046
       },
-      "excerpt": "Tianhui- yek ji hilberîner û dabînkerên pêşeng ên çîpên UV LED karûbarê çîpê ODM / OEM UV peyda dike. Pêkhateyên sereke yên dezenfektekirina avê ya Uv-ê hilberên îthalkirî ne. Hilber bi fonksiyonên mezin ewle û pêbawer e"
+      "excerpt": "Tianhui- yek ji hilberîner û dabînkerên pêşeng ên çîpên UV LED karûbarê çîpê ODM / OEM UV peyda dike.\nPêkhateyên sereke yên dezenfektekirina avê ya Uv-ê hilberên îthalkirî ne. Hilber bi fonksiyonên mezin ewle û pêbawer e"
     },
     {
       "id": "ver-eng:fa1e28290a2e8ab80d04cb7ddf02fa5e70ff85f5",
@@ -322,7 +323,7 @@
         "Orya": 0.34,
         "Latn": 0.66
       },
-      "excerpt": "112 ସଦାପ୍ରଭୁଙ୍କର ପ୍ରଶଂସା କର। ଯେଉଁ ଲୋକ ସଦାପ୍ରଭୁଙ୍କୁ ଭୟ ଓ ସମ୍ମାନ କରେ, ସେମାନେ ସମ୍ମାନରେ ଭାଗ୍ୟବାନ୍ ହୁଅନ୍ତି, ଯିଏକି ତାଙ୍କର ଆଦେଶ ପାଳନ କରିବାରେ ବହୁତ ବିଶ୍ୱସ୍ତ ହୋଇଥାଏ, 2 ତା’ର ବଂଶଧର ଭୂପୃଷ୍ଠରେ ବିକ୍ରମଶାଳୀ ହେବେ। ସରଳ ଲୋକର ବଂଶଧର ଆଶୀର୍ବାଦ "
+      "excerpt": "112 ସଦାପ୍ରଭୁଙ୍କର ପ୍ରଶଂସା କର।\nଯେଉଁ ଲୋକ ସଦାପ୍ରଭୁଙ୍କୁ ଭୟ ଓ ସମ୍ମାନ କରେ, ସେମାନେ ସମ୍ମାନରେ ଭାଗ୍ୟବାନ୍ ହୁଅନ୍ତି,\nଯିଏକି ତାଙ୍କର ଆଦେଶ ପାଳନ କରିବାରେ ବହୁତ ବିଶ୍ୱସ୍ତ ହୋଇଥାଏ,\n2 ତା’ର ବଂଶଧର ଭୂପୃଷ୍ଠରେ ବିକ୍ରମଶାଳୀ ହେବେ।\nସରଳ ଲୋକର ବଂଶଧର ଆଶୀର୍ବାଦ "
     },
     {
       "id": "ver-eng:b05ef34f20aab1e23196718e1a54fb2aa8d12cae",
@@ -364,7 +365,7 @@
       "claimed": "hin",
       "detected": "hin",
       "latin_fraction": 0.181,
-      "excerpt": "This website uses cookie or similar technologies, to enhance your browsing experience and provide personalised recommendations. By continuing to use our website, you agree to our Privacy Policy and Cookie Policy. बेनीपुर"
+      "excerpt": "This website uses cookie or similar technologies, to enhance your browsing experience and provide personalised recommendations. By continuing to use our website, you agree to our Privacy Policy and Cookie Policy.\nबेनीपुर"
     },
     {
       "id": "unv-hin:7f470ab33ad6bc1f9a6b132dfe427d4a3e76f53489e67c73c59af25960a9d237",
@@ -378,7 +379,7 @@
       "claimed": "hin",
       "detected": "hin",
       "latin_fraction": 0.22,
-      "excerpt": "आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur) में महामहिम राष्ट्रपति रामनाथ कोविंद (president ramnath kovind) का आगमन होने वाला है। दमोह, आशीष कुमार जैन। आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur"
+      "excerpt": "आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur) में महामहिम राष्ट्रपति रामनाथ कोविंद (president ramnath kovind) का आगमन होने वाला है।\nदमोह, आशीष कुमार जैन। आज दमोह जिले (damoh district) के संग्रामपुर (sangrampur"
     }
   ]
 }

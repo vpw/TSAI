@@ -33,11 +33,11 @@
     },
     {
       "script": "normalize.py",
-      "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+      "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
     },
     {
       "script": "langid_stage.py",
-      "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+      "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
     },
     {
       "script": "quality.py",
@@ -64,25 +64,25 @@
       "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
     }
   ],
-  "tokens_total": 42889153,
-  "words_total": 25146108,
-  "naive_words_x_1_3_total": 32689942,
-  "naive_estimate_error_pct": -23.78,
+  "tokens_total": 43450641,
+  "words_total": 25147239,
+  "naive_words_x_1_3_total": 32691412,
+  "naive_estimate_error_pct": -24.76,
   "tokens_by_lang": {
-    "hin": 22499002,
-    "tel": 8591899,
-    "eng": 7290369,
-    "asm": 4507883
+    "hin": 22809785,
+    "tel": 8685167,
+    "eng": 7421472,
+    "asm": 4534217
   },
   "fertility_tokens_per_word": {
-    "hin": 1.419,
-    "tel": 2.481,
-    "eng": 1.539,
-    "asm": 4.155
+    "hin": 1.438,
+    "tel": 2.508,
+    "eng": 1.567,
+    "asm": 4.18
   },
   "tokenizer": "sarvam1",
   "example_manifest_admitted": {
-    "shard_id": "shard_023a339380c1",
+    "shard_id": "shard_a777d1e0eb5b",
     "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
     "license_class": "CC-BY-4.0",
     "contributor_id": "era5-vardhan",
@@ -93,11 +93,11 @@
       },
       {
         "script": "normalize.py",
-        "sha256": "b1aa13e3ab291b1606835f0806b9b38abb75e29a350be9586ce2d6c150db8e60"
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
       },
       {
         "script": "langid_stage.py",
-        "sha256": "68648da88415809157076dc39beea3632ee8753c5593a2118b0d71ae1dc145f4"
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
       },
       {
         "script": "quality.py",
@@ -124,9 +124,9 @@
         "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
       }
     ],
-    "ingest_timestamp": "2026-07-26T12:04:02Z",
-    "sha256": "023a339380c1421f85e32761da3981f8a9fa34ecaf0f87cb8f1b45c9d2aabeb6",
-    "token_count": 3439028,
+    "ingest_timestamp": "2026-07-27T17:02:07Z",
+    "sha256": "a777d1e0eb5b575e4b7eb85e280483e972bcb446e622eb8ffffbe9f89971365b",
+    "token_count": 3490291,
     "tokenizer": "sarvam1",
     "word_count": 2460580,
     "naive_words_x_1_3_estimate": 3198754,
@@ -150,20 +150,20 @@
   "determinism": {
     "runs_compared": 2,
     "shard_ids_run1": [
-      "shard_023a339380c1",
-      "shard_5e36bf1e73f3",
-      "shard_82bcd1b44e94"
+      "shard_a777d1e0eb5b",
+      "shard_005bdcc6a00a",
+      "shard_8a85a429d28e"
     ],
     "shard_ids_run2": [
-      "shard_023a339380c1",
-      "shard_5e36bf1e73f3",
-      "shard_82bcd1b44e94"
+      "shard_a777d1e0eb5b",
+      "shard_005bdcc6a00a",
+      "shard_8a85a429d28e"
     ],
     "sha256_run1": [
-      "023a339380c1421f85e32761da3981f8a9fa34ecaf0f87cb8f1b45c9d2aabeb6"
+      "a777d1e0eb5b575e4b7eb85e280483e972bcb446e622eb8ffffbe9f89971365b"
     ],
     "sha256_run2": [
-      "023a339380c1421f85e32761da3981f8a9fa34ecaf0f87cb8f1b45c9d2aabeb6"
+      "a777d1e0eb5b575e4b7eb85e280483e972bcb446e622eb8ffffbe9f89971365b"
     ],
     "identical": true,
     "contrast": "V4 built ids from row_number() over a non-deterministic ordering, so the same input produced different ids on every run."

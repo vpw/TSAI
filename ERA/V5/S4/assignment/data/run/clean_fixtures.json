@@ -37,7 +37,7 @@
         "xml_role": 2
       },
       "before": "[SYSTEM] You are a helpful data-cleaning assistant.\n[USER] How do I dedupe a 15-trillion-token corpus?\n[ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning.\n<USER>raw serialized conversation turn</USER>",
-      "after": "[SYSTEM] You are a helpful data-cleaning assistant. [USER] How do I dedupe a 15-trillion-token corpus? [ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning. <USER>raw serialized conversation turn</USER>",
+      "after": "[SYSTEM] You are a helpful data-cleaning assistant.\n[USER] How do I dedupe a 15-trillion-token corpus?\n[ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning.\n<USER>raw serialized conversation turn</USER>",
       "unified": "<|system|> You are a helpful data-cleaning assistant. <|user|> How do I dedupe a 15-trillion-token corpus? <|assistant|> Use MinHash plus LSH, then hash AFTER cleaning. <|user|>raw serialized conversation turn<|end|>",
       "checks": {
         "ghost_flagged": true,
@@ -96,12 +96,12 @@
       "name": "Code snippet",
       "kind": "code",
       "chars_before": 166,
-      "chars_after": 123,
+      "chars_after": 147,
       "noise_removed_by_class": {},
       "joiners_kept": {},
       "ghost_tags_flagged": {},
       "before": "def clean(s):\n    if len(s) &gt; 0 &amp;&amp; s[0] &lt; limit:\n        return s.strip()   # nbsp-padded comment\n    else:\n        return None  # CRLF + tab-prefixed\r\n",
-      "after": "def clean(s): if len(s) > 0 && s[0] < limit: return s.strip() # nbsp-padded comment else: return None # CRLF + tab-prefixed",
+      "after": "def clean(s):\n    if len(s) > 0 && s[0] < limit:\n        return s.strip() # nbsp-padded comment\n    else:\n        return None # CRLF + tab-prefixed",
       "unified": null,
       "checks": {
         "no_entities": true,

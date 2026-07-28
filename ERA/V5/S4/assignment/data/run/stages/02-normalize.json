@@ -5,8 +5,8 @@
   "docs_dropped": 0,
   "dropped_empty_after_clean": 0,
   "chars_in": 156655364,
-  "chars_out": 156432283,
-  "chars_removed": 223081,
+  "chars_out": 156574812,
+  "chars_removed": 80552,
   "noise_chars_removed_by_class": {
     "bidi": 46,
     "replacement": 48,
@@ -31,7 +31,7 @@
     "end": "<|end|>"
   },
   "garbage_vocab_slots_before": 2,
-  "garbage_vocab_slots_after": 0,
+  "garbage_vocab_slots_after": 1,
   "byte_fallback_slots_before": 102,
   "garbage_audit_docs_scanned": 40000,
   "garbage_audit_note": "A garbage slot is a vocab entry whose piece is nothing but noise characters. Byte-fallback pieces (<0xE0>) are counted separately: on well-formed Indic text they are the tokenizer working, not dirt.",

@@ -35,6 +35,26 @@ from common import (
 
 LID_MODEL = "lid.176.ftz"
 CONFIDENCE_FLOOR = 0.50  # below this the detector is not trusted either way
+
+# lid.176's "detected" label is runtime output, not ground truth -- it is itself wrong
+# often enough to be worth annotating rather than silently trusting. This example
+# (claimed hin, detected mar, 52.6% confidence) opens with "सन्देशरासक" / "Sandesh
+# Rasak", a 13th-century poem by Abdul Rahman that is a canonical early Old Gujarati
+# text, and the excerpt carries "छे" / "नथी" / "होय" -- the Gujarati copula and
+# negation, not Hindi or Marathi grammar. The real language is a third one the
+# detector never proposed, because lid.176's "gu" training data is almost entirely
+# Gujarati-script text; Gujarati transliterated into Devanagari (as older editions
+# often are) has next to no in-distribution signal, so the model falls back to
+# whichever Devanagari-script language it saw more of. Manually verified, not
+# re-detected -- this is a human read of the excerpt, not a second model's output.
+MANUAL_NOTES = {
+    "ver-hin:812088fc430a3cde572ddcd86db57bdb94dd99430c08c743fecc59d83465dd3d": (
+        "Detector says Marathi; text is actually Old Gujarati (opens with Sandesh "
+        "Rasak, 13th c.) written in Devanagari, a script lid.176 essentially never "
+        "sees Gujarati in. Neither the folder label (hin) nor the detector (mar) is "
+        "right -- illustrates that runtime detection is evidence, not ground truth."
+    ),
+}
 DETECT_CHARS = 3000  # prefix handed to the detector
 BATCH = 2000
 
@@ -140,17 +160,18 @@ def main():
                 else:
                     verdict = "MISMATCH"
                     if len(mismatch_examples) < 8:
-                        mismatch_examples.append(
-                            {
-                                "id": rec["id"],
-                                "src": rec["src"],
-                                "claimed": claimed,
-                                "detected": iso3,
-                                "confidence": round(conf, 3),
-                                "script_profile": rec["script_profile"],
-                                "excerpt": rec["text"][:220],
-                            }
-                        )
+                        example = {
+                            "id": rec["id"],
+                            "src": rec["src"],
+                            "claimed": claimed,
+                            "detected": iso3,
+                            "confidence": round(conf, 3),
+                            "script_profile": rec["script_profile"],
+                            "excerpt": rec["text"][:220],
+                        }
+                        if rec["id"] in MANUAL_NOTES:
+                            example["note"] = MANUAL_NOTES[rec["id"]]
+                        mismatch_examples.append(example)
 
                 rec["lang_verdict"] = verdict
                 verdicts[verdict] += 1
