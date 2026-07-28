@@ -1,0 +1,176 @@
+{
+  "stage": "05-dedup",
+  "config": {
+    "shingle_k": 5,
+    "permutations": 126,
+    "bands": 18,
+    "rows_per_band": 7,
+    "lsh_threshold": 0.6617,
+    "jaccard_drop_threshold": 0.67,
+    "shingle_window_words": 1200
+  },
+  "session_demo_config": {
+    "k": 5,
+    "bands": 6,
+    "rows": 4,
+    "permutations": 24,
+    "lsh_threshold": 0.639
+  },
+  "docs_in": 60909,
+  "docs_out": 60631,
+  "docs_dropped": 278,
+  "tokens_dropped": 125880,
+  "exact_duplicates": 264,
+  "exact_duplicates_cross_shard": 0,
+  "near_duplicates": 14,
+  "near_duplicates_cross_shard": 2,
+  "lsh_candidate_pairs_global": 946,
+  "lsh_candidate_pairs_local_total": 788,
+  "caught_by_local_passes_only": 276,
+  "caught_by_global_pass": 278,
+  "missed_by_local_caught_by_global": 2,
+  "dropped_by_source": {
+    "ver-hin": 272,
+    "ver-eng": 3,
+    "unv-hin": 3
+  },
+  "confirmed_pairs": [
+    {
+      "kept": "unv-hin:88858a35c13705187488f4d3c87c162ff875bdb45017f6ee6649e92b35f1a939",
+      "dropped": "unv-hin:60319063b93cb036c29861f49c12a820b9f3053d7f4092207c59aa077f4723ec",
+      "same_shard": true,
+      "true_jaccard": 0.7363,
+      "minhash_estimate": 0.7302,
+      "estimate_error": 0.0061,
+      "shingles_kept": 470,
+      "shingles_dropped": 478
+    },
+    {
+      "kept": "unv-hin:98b4ade41e5f7a816305ce8136f722d5ece7213a474f0aaaa30f9f5e79b4c748",
+      "dropped": "ver-hin:52882097664a2234ed3fb8dfd3a08dc2bf4332f4",
+      "same_shard": false,
+      "true_jaccard": 0.9811,
+      "minhash_estimate": 1.0,
+      "estimate_error": 0.0189,
+      "shingles_kept": 528,
+      "shingles_dropped": 518
+    },
+    {
+      "kept": "unv-hin:2409b35411e24f816ed7ac61f1b636a4220383f7a1f72e0b4835350c9cb2cf4d",
+      "dropped": "unv-hin:d7015f5727ab25390de22b7a1f1123b5906a9078989b962a8143ec5219c0bd78",
+      "same_shard": true,
+      "true_jaccard": 0.6741,
+      "minhash_estimate": 0.7778,
+      "estimate_error": 0.1037,
+      "shingles_kept": 113,
+      "shingles_dropped": 113
+    },
+    {
+      "kept": "unv-hin:bda994f7615e0cf363b7162aeb758f8279b09ddbf57abd010730cf361b188f84",
+      "dropped": "unv-hin:3460b9d33296db827c61db5b7f073b7e980d322571a32983c4edd220c3bfd69e",
+      "same_shard": true,
+      "true_jaccard": 0.8266,
+      "minhash_estimate": 0.8889,
+      "estimate_error": 0.0623,
+      "shingles_kept": 240,
+      "shingles_dropped": 213
+    },
+    {
+      "kept": "unv-hin:5367b03e187f6aa3311a4b6144346ea1c0af9082d5faa67d40b3bf449d19a5fa",
+      "dropped": "ver-hin:51514ee1c48cfda00df52af069022bf446cec4dbba640cd9296bd399aa89d24c",
+      "same_shard": false,
+      "true_jaccard": 0.9949,
+      "minhash_estimate": 1.0,
+      "estimate_error": 0.0051,
+      "shingles_kept": 392,
+      "shingles_dropped": 394
+    },
+    {
+      "kept": "ver-hin:3f67f125a0bd722eac9298ed65a3e431214d760b",
+      "dropped": "ver-hin:76012b9a6fdbf715a0525b516ada20269c001887",
+      "same_shard": true,
+      "true_jaccard": 0.7981,
+      "minhash_estimate": 0.8651,
+      "estimate_error": 0.0669,
+      "shingles_kept": 392,
+      "shingles_dropped": 383
+    },
+    {
+      "kept": "ver-hin:f121b3d614cf1cc6699b89ddee23a61414ac6141",
+      "dropped": "ver-hin:2f7ad189a355bd06e35d1ae15423161f25e4e915",
+      "same_shard": true,
+      "true_jaccard": 0.8684,
+      "minhash_estimate": 0.627,
+      "estimate_error": 0.2414,
+      "shingles_kept": 73,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin:f121b3d614cf1cc6699b89ddee23a61414ac6141",
+      "dropped": "ver-hin:4fa8083f145e7e4f557b274194ca74dd257803f3",
+      "same_shard": true,
+      "true_jaccard": 0.8684,
+      "minhash_estimate": 0.619,
+      "estimate_error": 0.2494,
+      "shingles_kept": 73,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin:f121b3d614cf1cc6699b89ddee23a61414ac6141",
+      "dropped": "ver-hin:31ec6a0e98464bc4dfc5de5a174603984028a6af",
+      "same_shard": true,
+      "true_jaccard": 0.825,
+      "minhash_estimate": 0.619,
+      "estimate_error": 0.206,
+      "shingles_kept": 73,
+      "shingles_dropped": 73
+    },
+    {
+      "kept": "ver-hin:f121b3d614cf1cc6699b89ddee23a61414ac6141",
+      "dropped": "ver-hin:88329f27f5b203ffa22b9258b4c41dd1efff15a9",
+      "same_shard": true,
+      "true_jaccard": 0.8571,
+      "minhash_estimate": 0.619,
+      "estimate_error": 0.2381,
+      "shingles_kept": 73,
+      "shingles_dropped": 70
+    },
+    {
+      "kept": "ver-hin:c4944fa42a6d6c29e550ed7e1c9ee3bff6f829c4",
+      "dropped": "ver-hin:cbbe68332ed6fe65e3cc43144c06e387600ff6e5",
+      "same_shard": true,
+      "true_jaccard": 0.8684,
+      "minhash_estimate": 0.8651,
+      "estimate_error": 0.0033,
+      "shingles_kept": 73,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-eng:e1e0fb804a5d7219a18c4ff768d0ed40e02b9596abd1c7317d78496535a19c02",
+      "dropped": "ver-eng:800ed181a87f51b22eae013ae68597fb5ccbc8dfe709e509ea7413a897ce0574",
+      "same_shard": true,
+      "true_jaccard": 0.7757,
+      "minhash_estimate": 0.8016,
+      "estimate_error": 0.0259,
+      "shingles_kept": 190,
+      "shingles_dropped": 190
+    }
+  ],
+  "index_memory": {
+    "this_run": {
+      "docs": 60909,
+      "signature_bytes_per_doc": 1024,
+      "overhead_factor": 1.6,
+      "resident_bytes": 99793305,
+      "resident_gib": 0.09
+    },
+    "at_500M_docs": {
+      "docs": 500000000,
+      "signature_bytes_per_doc": 1024,
+      "overhead_factor": 1.6,
+      "resident_bytes": 819200000000,
+      "resident_gib": 762.94
+    }
+  },
+  "note": "Local per-shard dedup does not produce a globally deduplicated corpus. The gap is 'missed_by_local_caught_by_global'."
+}

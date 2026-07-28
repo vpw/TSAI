@@ -1,0 +1,14 @@
+.venv/
+models/
+__pycache__/
+*.pyc
+
+# Downloaded parquet, cached eval sets, and every intermediate stage file.
+data/raw/
+data/stage/
+
+# The cleaned corpus itself (~319 MB). Regenerate with scripts/driver.py.
+# data/run/stats.json, manifests.json and stages/ ARE tracked -- they are the
+# evidence behind the widget and the report.
+data/run/shards/
+data/run/*.log

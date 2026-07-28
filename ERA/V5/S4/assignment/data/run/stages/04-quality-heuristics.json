@@ -1,0 +1,361 @@
+{
+  "stage": "04-quality-heuristics",
+  "rules": [
+    "mean_word_length",
+    "symbol_to_word_ratio",
+    "lines_end_in_terminal_punct",
+    "duplicate_line_fraction",
+    "top_2gram_fraction",
+    "common_stopwords_present",
+    "bullet_line_ratio",
+    "ellipsis_line_ratio",
+    "document_word_count"
+  ],
+  "thresholds_base": {
+    "mean_word_len": [
+      3.0,
+      10.0
+    ],
+    "symbol_ratio_max": 0.1,
+    "terminal_punct_min": 0.3,
+    "dup_line_max": 0.3,
+    "top_2gram_max": 0.2,
+    "stopwords_min": 2,
+    "bullet_ratio_max": 0.9,
+    "ellipsis_ratio_max": 0.3,
+    "word_count": [
+      50,
+      100000
+    ]
+  },
+  "script_overrides": {
+    "Telu": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Taml": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Knda": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Mlym": {
+      "word_count": [
+        20,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        20.0
+      ]
+    },
+    "Deva": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Beng": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Guru": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Gujr": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Orya": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Arab": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    }
+  },
+  "stopword_list_sizes": {
+    "eng": 32,
+    "hin": 34,
+    "mar": 21,
+    "nep": 20,
+    "san": 16,
+    "ben": 25,
+    "asm": 25,
+    "tel": 25,
+    "tam": 15,
+    "urd": 18
+  },
+  "docs_in": 64268,
+  "docs_out": 60943,
+  "docs_dropped": 3325,
+  "kept_by_config": {
+    "english_tuned": 11820,
+    "script_aware": 60943
+  },
+  "tokens_kept_by_config": {
+    "english_tuned": 8791427,
+    "script_aware": 44402734
+  },
+  "keep_rate_by_config": {
+    "english_tuned": 0.1839,
+    "script_aware": 0.9483
+  },
+  "rule_failures_by_config": {
+    "english_tuned": {
+      "common_stopwords_present": 50165,
+      "lines_end_in_terminal_punct": 30329,
+      "bullet_line_ratio": 153,
+      "ellipsis_line_ratio": 52,
+      "duplicate_line_fraction": 100,
+      "document_word_count": 807,
+      "mean_word_length": 14,
+      "top_2gram_fraction": 21,
+      "symbol_to_word_ratio": 18
+    },
+    "script_aware": {
+      "lines_end_in_terminal_punct": 1412,
+      "bullet_line_ratio": 153,
+      "ellipsis_line_ratio": 52,
+      "duplicate_line_fraction": 100,
+      "document_word_count": 241,
+      "common_stopwords_present": 1636,
+      "mean_word_length": 4,
+      "top_2gram_fraction": 21,
+      "symbol_to_word_ratio": 18
+    }
+  },
+  "rescued_docs_total": 49163,
+  "rescued_tokens_total": 35627196,
+  "rescued_by_lang": {
+    "hin": 34476,
+    "tel": 12312,
+    "asm": 2375
+  },
+  "rescued_tokens_by_lang": {
+    "hin": 23028627,
+    "tel": 8102081,
+    "asm": 4496488
+  },
+  "rescued_by_english_rule_that_killed_them": {
+    "common_stopwords_present": 47381,
+    "lines_end_in_terminal_punct": 28733,
+    "document_word_count": 309,
+    "mean_word_length": 1
+  },
+  "per_lang": {
+    "hin": {
+      "docs": 36233,
+      "en_kept": 955,
+      "sa_kept": 35431,
+      "tokens": 25047011,
+      "sa_tokens": 23662677
+    },
+    "tel": {
+      "docs": 15054,
+      "en_kept": 743,
+      "sa_kept": 13015,
+      "tokens": 9966096,
+      "sa_tokens": 8766567
+    },
+    "eng": {
+      "docs": 10435,
+      "en_kept": 10083,
+      "sa_kept": 10083,
+      "tokens": 7572140,
+      "sa_tokens": 7433802
+    },
+    "asm": {
+      "docs": 2546,
+      "en_kept": 39,
+      "sa_kept": 2414,
+      "tokens": 4735774,
+      "sa_tokens": 4539688
+    }
+  },
+  "rescued_examples": [
+    {
+      "id": "unv-hin:7d54e80b012eacaba53561c1e4a3311299c403481b12b2037c6b42f0a65acd57",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "common_stopwords_present"
+      ],
+      "n_words": 273,
+      "mean_word_len": 3.96,
+      "term_ascii_frac": 1.0,
+      "term_any_frac": 1.0,
+      "excerpt": "बनारस से प्रकाशित \"पूर्वांचल आजकल\" के बंद होने की चर्चा । No. 1 Indian Media News Portal\\nबनारस से प्रकाशित \"पूर्वांचल आजकल\" के बंद होने की चर्चा\\nबनारस से प्रकाशित सांध्य दैनिक के बंद होने की चर्चाएं हैं. अखबार पिछले कुछ दिनों से शहर में न"
+    },
+    {
+      "id": "unv-hin:7d5c516f5a630d4c1dfb07150de2f531156415c4f1c29dc84ce5ab56a7969063",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "common_stopwords_present"
+      ],
+      "n_words": 284,
+      "mean_word_len": 4.31,
+      "term_ascii_frac": 0.917,
+      "term_any_frac": 0.917,
+      "excerpt": "स्वेता त्रिपाठी एक भारतीय न्यूज़ एंकर और पत्रकार हैं, वह रिपब्लिक भारत न्यूज़ चैनल पर सीनियर न्यूज़ एंकर कार्य करती हैं. उन्होंने भारत के मशहूर न्यूज़ चैनल जैसे जी न्यूज़ और इंडिया टीवी के लिए काम किया हैं.\nस्वेता त्रिपाठी मूल रूप से दिल्ली"
+    },
+    {
+      "id": "unv-hin:7d5ca3193e4e4e52bf4acc3427d2af96c289b0c5bc71082a6734d4e735ae95a9",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 286,
+      "mean_word_len": 4.23,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 0.833,
+      "excerpt": "यूएई में फंसे भारतीयों को कोरोनोवायरस संकट के दौरान अपने गृह देश में वापस ले जाने की आशा है, क्योंकि भारतीय नागरिक उड्डयन नियामक 'विशेष रूप से अनुमोदित उड़ानों' पर विचार कर रहा है।\nयूएई में भारतीय अधिकारी और मिशन इन उड़ानों को शुरू किए जाने"
+    },
+    {
+      "id": "unv-hin:7d66efc01b0cd7a7230f8cc88fe80ca41d5a94dcff36532d238462bbcf01e785",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "common_stopwords_present"
+      ],
+      "n_words": 186,
+      "mean_word_len": 3.97,
+      "term_ascii_frac": 1.0,
+      "term_any_frac": 1.0,
+      "excerpt": "भारतीय टीम के दिग्गज ऑफ स्पिनर हरभजन सिंह ( Harbhajan Singh) इन दिनों अपनी अपकमिंग फिल्म 'फ्रेंडशिप' (Friendship) को लेकर सुपर एक्साइडेट हैं. वह आए दिन ही सोशल अकाउंट पर फ्रेंडशिप से संबंधित कुछ न कुछ जानकारी फैंस के साथ साझा करते हैं. हाल "
+    },
+    {
+      "id": "unv-hin:7d79be7bff990e9d42272220025fd98345acbf43860188d0ee83c9222e440a91",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 151,
+      "mean_word_len": 3.89,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "बी.बी.एन.: थाना बद्दी के तहत गांव चनालमाजरा में एक युवक को तलवार व चाकू से वार कर घायल करने का मामला सामने आया है। पुलिस ने मामला दर्ज कर कार्रवाई शुरू कर दी है। पुलिस से मिली जानकारी के अनुसार यह मामला अनिल कुमार पुत्र सुखदयाल सिंह निवासी "
+    },
+    {
+      "id": "unv-hin:7d8a8b76dd10a861c2f1a73e9e337eb7148f66c4c6a844acfa7323d0547e83f5",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "common_stopwords_present"
+      ],
+      "n_words": 263,
+      "mean_word_len": 4.41,
+      "term_ascii_frac": 1.0,
+      "term_any_frac": 1.0,
+      "excerpt": "बिहार में तीन चरणों, 28 अक्टूबर, तीन नवंबर और सात नवबंर को, मतदान होगा. बिहार चुनाव के लिए भाजपा के प्रभारी फडणवीस हैं.\nमहाराष्ट्र कांग्रेस ने सोमवार को कहा कि यदि जनता दल यूनाइटेड (जदयू) \"मुंबई पुलिस का अपमान करने वाले\" बिहार के पूर्व डीजी"
+    },
+    {
+      "id": "unv-hin:7d8be2648266c128395b67b0521d50bda528ac96848baf660949dba2e19dbaa5",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 625,
+      "mean_word_len": 4.1,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "आज बहुत सी राशि के जातकों को अचानक धन लाभ मिलने का योग बन रहा है साथ हीउनकी सेहत भी अच्छी रहने वाली है।\nमेष राशि के जातक किसी खाने की चीज के प्रति आप विचलित रहेंगे। सेहत का ख्याल रखने की जरूरत है। संतान पक्ष से आपके रिश्ते पहले से और बेहतर "
+    },
+    {
+      "id": "unv-hin:7d9333cff64dd7423c86878b55b60496072f992fcf77497e3a9509ed16355eec",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 405,
+      "mean_word_len": 3.96,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "लेने वालों के लिए, लोकप्रिय दलालों की रेटिंग और समीक्षा फीस 0.10 से 0.25% तक होती है। नेटवर्क द्वारा आवश्यक लेनदेन शुल्क से परे निकासी के लिए कोई शुल्क नहीं है। Poloniex मंच पर अद्वितीय उपकरणों में से एक चैट बॉक्स है जो लगातार उपयोगकर्ता सह"
+    },
+    {
+      "id": "unv-hin:7d93d6c26a1c3e526cd8376906655a85ebd44e36d2c44e01c2446eafe7020f14",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 302,
+      "mean_word_len": 4.07,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "मीडियाकर्मी ने शनिवार को पुलिस को शिकायत देकर आरोपी अध्यापक के खिलाफ कार्रवाई करने की मांग की है।\nफतेहाबाद । सरकारी स्कूलों में जिन अध्यापकों के कंधों पर देश का भविष्य संवारने की जिम्मेदारी है। वहीं अध्यापक देश के भविष्य से किस तरह खिलवाड़ "
+    },
+    {
+      "id": "unv-hin:7d98913d01fd9e6cb4699b6e1357178b46fda61f864661f16396e1870a116961",
+      "lang": "hin",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 109,
+      "mean_word_len": 4.43,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "जम्मू। अमरनाथ यात्रा के लिए 3,451 तीर्थयात्रियों का एक और जत्था शुक्रवार को जम्मू से रवाना हुआ। पुलिस का कहना है कि भगवती नगर यात्री निवास से 110 वाहनों में सवार ये तीर्थयात्री बालटाल और पहलगाम आधार शिविरों की ओर रवाना हुए।\nजम्मू एवं कश्मीर"
+    }
+  ],
+  "shipped_config": "script_aware"
+}

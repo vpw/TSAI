@@ -1,0 +1,38 @@
+{
+  "MMLU": {
+    "repo": "cais/mmlu",
+    "split": "test",
+    "examples_loaded": 3000,
+    "new_ngrams": 86705
+  },
+  "GSM8K": {
+    "repo": "openai/gsm8k",
+    "split": "test",
+    "examples_loaded": 1319,
+    "new_ngrams": 127455
+  },
+  "HellaSwag": {
+    "repo": "Rowan/hellaswag",
+    "split": "validation",
+    "examples_loaded": 3000,
+    "new_ngrams": 167794
+  },
+  "MILU-Hindi": {
+    "repo": "murthyrudra/milu-cleaned",
+    "split": "test",
+    "examples_loaded": 3000,
+    "new_ngrams": 134775
+  },
+  "MILU-Telugu": {
+    "repo": "murthyrudra/milu-cleaned",
+    "split": "test",
+    "examples_loaded": 3000,
+    "new_ngrams": 154852
+  },
+  "MILU-Bengali": {
+    "repo": "murthyrudra/milu-cleaned",
+    "split": "test",
+    "examples_loaded": 3000,
+    "new_ngrams": 141532
+  }
+}
