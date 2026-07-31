@@ -11,3 +11,6 @@ data/tokens/*
 
 # Per-arm training logs are pulled from the box for the record.
 !logs/
+
+# 8.5MB duplicate of S4/assignment/models/; scripts fall back to that path.
+models/
