@@ -66,7 +66,10 @@ case "${1:-status}" in
   stop)
     q stop-instances --instance-ids "$INSTANCE_ID" --output text >/dev/null
     echo -n "stopping"
-    for _ in $(seq 1 60); do
+    # A g4dn with instance-store volumes can sit in `stopping` for several minutes while the
+    # ephemeral disks are scrubbed. 5 minutes was not enough on the real run and produced a
+    # false alarm; allow 15 before shouting.
+    for _ in $(seq 1 180); do
       s="$(state)"
       [ "$s" = "stopped" ] && { echo " -> stopped (verified)"; exit 0; }
       sleep 5; echo -n "."

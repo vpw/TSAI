@@ -244,11 +244,123 @@ practice.
 
 ## 9. The proxy: the mixture as a testable hypothesis
 
-A mixture is a hypothesis until a cheap run has tested it. Seven runs on one T4, decision rules
-fixed and committed **before** the runs, in [`proxy/HYPOTHESES.md`](proxy/HYPOTHESES.md).
-Full numbers: [`proxy/RESULTS.md`](proxy/RESULTS.md).
+A mixture is a hypothesis until a cheap run has tested it. **Eight runs, 5.2 GPU-hours on one
+T4**, decision rules fixed and committed **before** the runs
+([`proxy/HYPOTHESES.md`](proxy/HYPOTHESES.md), commit `920006f`). Full numbers:
+[`proxy/RESULTS.md`](proxy/RESULTS.md).
 
-<!-- PROXY_RESULTS -->
+40.3M parameters (14.2M non-embedding — the 68,096-entry sarvam1 vocabulary is the rest), 75M
+tokens per arm, identical architecture / optimiser / seed / token count across arms. Only the
+mixture differs. Metric is per-domain **bits-per-byte** on held-out documents excluded from every
+training pool by content hash; on the agentic set only assistant tokens are scored.
+
+Each lane carries a **unique-token cap** so the proxy repeats it at the epoch count the full-scale
+ledger implies. Realised: agentic 3.89 epochs, verified Indic 2.49, reasoning 2.25, STEM 1.89,
+code 0.51, web 0.16 — the plan's own numbers. The proxy is testing the repetition pressure, not
+just the lane proportions.
+
+### Results
+
+| Lane | A proposed | B web-heavy | C no floor | D verified-only | σ (seed) |
+|---|---:|---:|---:|---:|---:|
+| `general_web` | 1.5074 | **1.4051** | 1.4750 | 1.5055 | 0.0139 |
+| `code` | 1.0240 | 1.1704 | **0.9902** | 1.0245 | 0.0164 |
+| `stem` | 1.6012 | 1.6223 | **1.5673** | 1.5994 | 0.0212 |
+| `reasoning` | 1.0990 | 1.5515 | **1.0722** | 1.1012 | 0.0148 |
+| `agentic` | **1.0393** | 1.2208 | 1.1977 | 1.0423 | 0.0236 |
+| `long_context` | 1.4865 | **1.4035** | 1.4516 | 1.4835 | 0.0139 |
+| `indic_A_verified` | 1.4427 | 1.7720 | 2.3014 | **1.4040** | **0.2588** |
+| `indic_B_unverified` | **0.6939** | 0.7665 | 2.2011 | 0.6984 | 0.0085 |
+| `indic_C_translated` | **1.1016** | 1.1511 | 1.7692 | 1.1732 | 0.0095 |
+| `indic_D_synthetic` | **0.6821** | 0.7596 | 2.0817 | 0.8014 | 0.0079 |
+
+σ is the arm-A-vs-arm-A-different-seed gap. **Absolute bpb is not comparable across rows** — a
+Devanagari character costs ~3 UTF-8 bytes against 1 for ASCII (measured: Indic lanes run 6.3–9.2
+bytes/token, English 2.4–4.0), so Indic rows sit lower at equal skill. Read across a row only.
+
+### Verdicts against the rules as declared
+
+**1. Mixture vs the web-heavy default — REFUTED on the general-web clause.**
+A beats B on agentic by 0.1816 (7.7× σ) and on verified Indic by 0.3293 (1.27× σ — thin), and by
+0.45 on reasoning. But general web costs **+7.28%** relative against the **2%** budget I fixed in
+advance, so the rule fails. Arm B trains on 72% web against A's 32%; B modelling web better was
+never in doubt and the 2% budget was set before the effect size was known. That is a badly chosen
+threshold, not a surprise about the mixture — and the honest move is to report the rule as failed
+and quote the real price. **7.3% general-web bpb is what the capability lanes cost.** The threshold
+is not rewritten after the fact.
+
+**2. Does the protected floor earn its cost — YES, decisively.** This is the strongest result in
+the experiment.
+
+| Removing the floor costs | | Removing the floor gains | |
+|---|---:|---|---:|
+| `indic_B_unverified` | 1.5071 (178× σ) | `general_web` | 0.0324 (2.3× σ) |
+| `indic_D_synthetic` | 1.3996 (177× σ) | `code` | 0.0338 (2.1× σ) |
+| `indic_A_verified` | 0.8587 (3.3× σ) | `stem` | 0.0339 (1.6× σ) |
+| `indic_C_translated` | 0.6676 (70× σ) | `long_context` | 0.0349 (2.5× σ) |
+| `agentic` | 0.1584 (6.7× σ) | `reasoning` | 0.0269 (1.8× σ) |
+
+The floor is **not free** — every unprotected lane is measurably worse with it on. But it costs
+~0.03 bpb each and buys 0.9–1.5. That ratio is the argument, and it is now a measurement rather
+than an assertion.
+
+The asymmetry refines the plan. Arms C zeroes *both* Indic and agentic, yet Indic collapses ~5×
+harder. Agentic trajectories are English JSON — the model recovers much of that from web and code.
+Nothing else in the mixture teaches Devanagari. The OPUS widget's point was that agentic is the
+lane no benchmark-derived proxy will ever *select*; this measures the complementary fact, that
+Indic is the lane the model can least afford to *lose*. Both are true and they are different claims.
+
+**3. Four-tier Indic split vs verified-only — NO SIGNAL. The rule is untestable here.**
+A is 0.0387 bpb worse than D on verified Indic — **0.15× the σ of 0.2588 on that lane**. The
+verified-Indic lane is 18× noisier than the median lane, because its validation set is the
+smallest (275k scored tokens against 1.5M for web) and its content the most heterogeneous (S4's
+verified pool mixes Assamese, English, Hindi, Telugu). Arm A scored 1.4427; the identical mixture
+on a different seed scored 1.7015.
+
+**A single-seed experiment would have "shown" whichever direction its seed landed on.** The seed
+repeat is what separates a result from an artifact, and it is the reason this comparison is
+reported as undecided rather than as support for either design.
+
+**4. Transition stability — NOT REPRODUCED.**
+
+| Probe | Embeddings | Warmup | Peak ratio at the seam | Same statistic, no seam nearby |
+|---|---|---:|---:|---:|
+| E1 | **frozen** | none | 3.63× | 3.24× |
+| E2 | trainable | none | 2.89× | 2.58× |
+| E3 | trainable | 10% band | 3.50× | 3.47× |
+
+The last column is the control: the same peak-over-baseline statistic applied to settled training
+with no mixture change nearby. It already produces 2.6–3.5× excursions, and two of the three are
+themselves over the 3× threshold. The seam is the largest gradient of each run, but only by 1–15%.
+**At 40M parameters this test cannot separate a mixture transition from ordinary gradient noise.**
+The frozen-vs-trainable direction matches the widget, but the frozen run also runs hotter *away*
+from the seam — a whole-run property of freezing, not a spike it causes at the seam. The warmup
+band did not lower the peak. The widget's 19× gap (151× vs 8.0×) does not appear; this is 1.26×.
+
+None of that refutes the practice at 120B, where embeddings carry far more of the representation
+and shifts are far larger in absolute tokens. It says the proxy cannot be used as evidence for it:
+§8's warmup-band commitment rests on the session's measurement and V4's production experience, not
+on this run.
+
+### What the proxy actually licenses
+
+Confirmed: the protected floor earns its cost, by a factor of ~30 in bpb traded. The mixture beats
+the web-heavy default on every capability lane. The agentic supervised fraction (45.3% measured on
+real corpora) sits between the widget's 53% and 43%.
+
+Not licensed: the four-tier Indic split (no signal), the transition-warmup policy (not
+reproduced), and any claim resting on verified-Indic bpb alone (σ too large). At 40.3M parameters
+and 75M tokens this is the rung *below* the assignment's 1B/3B suggestion, and it is labelled as
+such. The arithmetic for doing it properly, at this machine's measured 7.6 TFLOP/s:
+
+| Rung | Params | Tokens (20×) | FLOPs/arm | T4-hours/arm | 8 arms |
+|---|---:|---:|---:|---:|---:|
+| this run | 40M | 75M | 0.02 EFLOP | 0.7 | 5.2 |
+| 1B | 1B | 20B | 120 EFLOP | 4,403 | 35,221 |
+| 3B | 3B | 60B | 1,080 EFLOP | 39,623 | 316,981 |
+
+A single Chinchilla-optimal 1B arm is ~183 T4-days. That is why the cheap rung was run, and why
+its negative results are reported as limits of the rung rather than as findings about the plan.
 
 ---
 

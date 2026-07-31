@@ -1,0 +1,23 @@
+arm=E1_hard_frozen hard step, embeddings frozen
+params total=40.3M  non-embedding=14.2M  d_model=384 layers=8 d_ffn=1024
+tokens=19M  steps=1144  tokens/step=16384  accum=2  flops/token=247M
+  step     0/1144  loss 11.204  gn   6.41    18375 tok/s  eta  17.0 min
+  step   200/1144  loss  9.677  gn   0.73    35364 tok/s  eta   7.3 min
+  step   400/1144  loss  9.107  gn   0.61    35364 tok/s  eta   5.7 min
+  step   600/1144  loss  8.929  gn   0.66    35361 tok/s  eta   4.2 min
+  step   800/1144  loss  8.912  gn   0.67    35361 tok/s  eta   2.7 min
+  step  1000/1144  loss  8.145  gn   1.01    35363 tok/s  eta   1.1 min
+  step  1143/1144  loss  7.478  gn   1.30    35362 tok/s  eta   0.0 min
+
+E1_hard_frozen: 8.8 min  35375 tok/s  8.72 TFLOP/s
+  bpb general_web            3.3243
+  bpb code                   3.9767
+  bpb stem                   4.1295
+  bpb reasoning              4.2493
+  bpb agentic                3.1974
+  bpb long_context           3.3943
+  bpb indic_A_verified       2.0812
+  bpb indic_B_unverified     1.4579
+  bpb indic_C_translated     2.1835
+  bpb indic_D_synthetic      1.4727
+  transition peak 3.633x baseline -> unstable

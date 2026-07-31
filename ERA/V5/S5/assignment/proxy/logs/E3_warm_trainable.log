@@ -1,0 +1,23 @@
+arm=E3_warm_trainable 10% warmup band, embeddings trainable
+params total=40.3M  non-embedding=14.2M  d_model=384 layers=8 d_ffn=1024
+tokens=19M  steps=1144  tokens/step=16384  accum=2  flops/token=247M
+  step     0/1144  loss 11.204  gn   6.51    17152 tok/s  eta  18.2 min
+  step   200/1144  loss  5.776  gn   0.78    32089 tok/s  eta   8.0 min
+  step   400/1144  loss  5.008  gn   0.63    32182 tok/s  eta   6.3 min
+  step   600/1144  loss  5.093  gn   0.64    32212 tok/s  eta   4.6 min
+  step   800/1144  loss  4.970  gn   0.66    32230 tok/s  eta   2.9 min
+  step  1000/1144  loss  4.017  gn   0.76    32237 tok/s  eta   1.2 min
+  step  1143/1144  loss  3.388  gn   0.93    32242 tok/s  eta   0.0 min
+
+E3_warm_trainable: 9.7 min  32253 tok/s  7.95 TFLOP/s
+  bpb general_web            1.9744
+  bpb code                   1.8367
+  bpb stem                   2.2466
+  bpb reasoning              1.7116
+  bpb agentic                1.6611
+  bpb long_context           1.9743
+  bpb indic_A_verified       1.6976
+  bpb indic_B_unverified     0.8568
+  bpb indic_C_translated     1.3042
+  bpb indic_D_synthetic      0.8489
+  transition peak 3.495x baseline -> unstable

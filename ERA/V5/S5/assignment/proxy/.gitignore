@@ -8,3 +8,6 @@ data/tokens/*
 !data/raw/sources.json
 !data/pools/pool_stats.json
 !data/tokens/token_stats.json
+
+# Per-arm training logs are pulled from the box for the record.
+!logs/

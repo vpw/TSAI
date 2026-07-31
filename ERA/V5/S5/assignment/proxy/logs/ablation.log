@@ -1,0 +1,148 @@
+=== A_proposed  start 13:26:54 ===
+  step  4576/4577  loss  3.256  gn   0.76    31082 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.5248  code=1.0295  stem=1.5875  reasoning=1.0898  agentic=1.0504  long_cont=1.4572  indic_A_v=1.3672  indic_B_u=0.6939  indic_C_t=1.1016  indic_D_s=0.6811
+
+A_proposed: 40.7 min  30705 tok/s  7.57 TFLOP/s
+  bpb general_web            1.5074
+  bpb code                   1.0240
+  bpb stem                   1.6012
+  bpb reasoning              1.0990
+  bpb agentic                1.0393
+  bpb long_context           1.4865
+  bpb indic_A_verified       1.4427
+  bpb indic_B_unverified     0.6939
+  bpb indic_C_translated     1.1016
+  bpb indic_D_synthetic      0.6821
+--- A_proposed done 14:08:57
+=== B_web_heavy  start 14:08:57 ===
+  step  4576/4577  loss  3.867  gn   0.71    30978 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.4238  code=1.1725  stem=1.6117  reasoning=1.5500  agentic=1.2010  long_cont=1.3928  indic_A_v=1.6256  indic_B_u=0.7665  indic_C_t=1.1511  indic_D_s=0.7607
+
+B_web_heavy: 40.8 min  30603 tok/s  7.55 TFLOP/s
+  bpb general_web            1.4051
+  bpb code                   1.1704
+  bpb stem                   1.6223
+  bpb reasoning              1.5515
+  bpb agentic                1.2208
+  bpb long_context           1.4035
+  bpb indic_A_verified       1.7720
+  bpb indic_B_unverified     0.7665
+  bpb indic_C_translated     1.1511
+  bpb indic_D_synthetic      0.7596
+--- B_web_heavy done 14:51:07
+=== C_no_floor  start 14:51:07 ===
+  step  4576/4577  loss  3.042  gn   0.71    31210 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.4933  code=0.9970  stem=1.5508  reasoning=1.0646  agentic=1.1966  long_cont=1.4234  indic_A_v=2.1809  indic_B_u=2.2011  indic_C_t=1.7692  indic_D_s=2.0878
+
+C_no_floor: 40.5 min  30830 tok/s  7.60 TFLOP/s
+  bpb general_web            1.4750
+  bpb code                   0.9902
+  bpb stem                   1.5673
+  bpb reasoning              1.0722
+  bpb agentic                1.1977
+  bpb long_context           1.4516
+  bpb indic_A_verified       2.3014
+  bpb indic_B_unverified     2.2011
+  bpb indic_C_translated     1.7692
+  bpb indic_D_synthetic      2.0817
+--- C_no_floor done 15:32:59
+=== D_verified_only  start 15:32:59 ===
+  step  4576/4577  loss  3.265  gn   0.80    31061 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.5226  code=1.0322  stem=1.5841  reasoning=1.0900  agentic=1.0528  long_cont=1.4550  indic_A_v=1.3210  indic_B_u=0.6984  indic_C_t=1.1732  indic_D_s=0.7971
+
+D_verified_only: 40.7 min  30683 tok/s  7.57 TFLOP/s
+  bpb general_web            1.5055
+  bpb code                   1.0245
+  bpb stem                   1.5994
+  bpb reasoning              1.1012
+  bpb agentic                1.0423
+  bpb long_context           1.4835
+  bpb indic_A_verified       1.4040
+  bpb indic_B_unverified     0.6984
+  bpb indic_C_translated     1.1732
+  bpb indic_D_synthetic      0.8014
+--- D_verified_only done 16:15:02
+=== A_seed2  start 16:15:02 ===
+  step  4576/4577  loss  3.462  gn   0.75    31058 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.5127  code=1.0173  stem=1.5649  reasoning=1.0781  agentic=1.0276  long_cont=1.4440  indic_A_v=1.5842  indic_B_u=0.6855  indic_C_t=1.0921  indic_D_s=0.6736
+
+A_proposed_seed2: 40.7 min  30681 tok/s  7.57 TFLOP/s
+  bpb general_web            1.4935
+  bpb code                   1.0076
+  bpb stem                   1.5800
+  bpb reasoning              1.0843
+  bpb agentic                1.0157
+  bpb long_context           1.4726
+  bpb indic_A_verified       1.7015
+  bpb indic_B_unverified     0.6855
+  bpb indic_C_translated     1.0921
+  bpb indic_D_synthetic      0.6742
+--- A_seed2 done 16:57:06
+=== E1_hard_frozen  start 16:57:06 ===
+  step  1143/1144  loss  7.478  gn   1.30    35362 tok/s  eta   0.0 min
+
+E1_hard_frozen: 8.8 min  35375 tok/s  8.72 TFLOP/s
+  bpb general_web            3.3243
+  bpb code                   3.9767
+  bpb stem                   4.1295
+  bpb reasoning              4.2493
+  bpb agentic                3.1974
+  bpb long_context           3.3943
+  bpb indic_A_verified       2.0812
+  bpb indic_B_unverified     1.4579
+  bpb indic_C_translated     2.1835
+  bpb indic_D_synthetic      1.4727
+  transition peak 3.633x baseline -> unstable
+--- E1_hard_frozen done 17:07:16
+=== E2_hard_trainable  start 17:07:16 ===
+  step  1143/1144  loss  3.335  gn   0.90    32239 tok/s  eta   0.0 min
+
+E2_hard_trainable: 9.7 min  32251 tok/s  7.95 TFLOP/s
+  bpb general_web            1.9800
+  bpb code                   1.8177
+  bpb stem                   2.2451
+  bpb reasoning              1.6921
+  bpb agentic                1.6534
+  bpb long_context           1.9791
+  bpb indic_A_verified       1.7192
+  bpb indic_B_unverified     0.8526
+  bpb indic_C_translated     1.3032
+  bpb indic_D_synthetic      0.8431
+  transition peak 2.893x baseline -> controlled
+--- E2_hard_trainable done 17:18:17
+=== E3_warm_trainable  start 17:18:17 ===
+  step  1143/1144  loss  3.388  gn   0.93    32242 tok/s  eta   0.0 min
+
+E3_warm_trainable: 9.7 min  32253 tok/s  7.95 TFLOP/s
+  bpb general_web            1.9744
+  bpb code                   1.8367
+  bpb stem                   2.2466
+  bpb reasoning              1.7116
+  bpb agentic                1.6611
+  bpb long_context           1.9743
+  bpb indic_A_verified       1.6976
+  bpb indic_B_unverified     0.8568
+  bpb indic_C_translated     1.3042
+  bpb indic_D_synthetic      0.8489
+  transition peak 3.495x baseline -> unstable
+--- E3_warm_trainable done 17:29:17
+=== all arms attempted 17:29:17 ===
+total 368
+drwxrwxr-x 2 ubuntu ubuntu  4096 Jul 31 17:29 .
+drwxrwxr-x 7 ubuntu ubuntu  4096 Jul 31 13:11 ..
+-rw-rw-r-- 1 ubuntu ubuntu 18436 Jul 31 14:08 A_proposed.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 37413 Jul 31 14:08 A_proposed.json
+-rw-rw-r-- 1 ubuntu ubuntu 18436 Jul 31 16:57 A_proposed_seed2.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 37432 Jul 31 16:57 A_proposed_seed2.json
+-rw-rw-r-- 1 ubuntu ubuntu 18436 Jul 31 14:51 B_web_heavy.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 36718 Jul 31 14:51 B_web_heavy.json
+-rw-rw-r-- 1 ubuntu ubuntu 18436 Jul 31 15:32 C_no_floor.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 36189 Jul 31 15:32 C_no_floor.json
+-rw-rw-r-- 1 ubuntu ubuntu 18436 Jul 31 16:15 D_verified_only.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 36655 Jul 31 16:15 D_verified_only.json
+-rw-rw-r-- 1 ubuntu ubuntu  4704 Jul 31 17:07 E1_hard_frozen.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 13023 Jul 31 17:07 E1_hard_frozen.json
+-rw-rw-r-- 1 ubuntu ubuntu  4704 Jul 31 17:18 E2_hard_trainable.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 13040 Jul 31 17:18 E2_hard_trainable.json
+-rw-rw-r-- 1 ubuntu ubuntu  4704 Jul 31 17:29 E3_warm_trainable.gradnorms.npy
+-rw-rw-r-- 1 ubuntu ubuntu 13060 Jul 31 17:29 E3_warm_trainable.json

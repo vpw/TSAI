@@ -109,6 +109,17 @@ def main():
         a, b = x["final_bpb"].get(ln), y["final_bpb"].get(ln)
         return None if a is None or b is None else b - a
 
+    def three_way(d, s):
+        """A difference smaller than the lane's seed noise is not evidence either way.
+        Failing to confirm is not the same as refuting, and they are labelled differently."""
+        if d is None:
+            return "no data"
+        if d > s:
+            return "confirms"
+        if d < -s:
+            return "refutes"
+        return "no signal"
+
     # Rule 1: A vs B
     if A and B:
         d_ind = cmp_lane(A, B, "indic_A_verified")
@@ -121,13 +132,25 @@ def main():
         ok_web = web_rel is not None and web_rel <= WEB_TOLERANCE
         ok = ok_ind and ok_ag and ok_web
         w(f"**1. Mixture vs the web-heavy default — "
-          f"{'CONFIRMED' if ok else 'REFUTED'}**\n")
+          f"{'CONFIRMED' if ok else 'REFUTED on the general-web clause'}**\n")
         w(f"- verified Indic: A is {fmt(d_ind)} bpb {'better' if (d_ind or 0) > 0 else 'worse'} "
-          f"than B (σ={fmt(s_ind)}) → {'passes' if ok_ind else 'FAILS'}")
+          f"than B, σ={fmt(s_ind)} → {'passes' if ok_ind else 'FAILS'}"
+          + (f" (only {d_ind / s_ind:.2f}× the noise band — thin)"
+             if ok_ind and s_ind and d_ind / s_ind < 2 else ""))
         w(f"- agentic: A is {fmt(d_ag)} bpb {'better' if (d_ag or 0) > 0 else 'worse'} "
-          f"than B (σ={fmt(s_ag)}) → {'passes' if ok_ag else 'FAILS'}")
-        w(f"- general web cost: {web_rel * 100:+.2f}% relative "
-          f"(budget {WEB_TOLERANCE * 100:.0f}%) → {'passes' if ok_web else 'FAILS'}\n")
+          f"than B, σ={fmt(s_ag)} → {'passes' if ok_ag else 'FAILS'} "
+          f"({d_ag / s_ag:.1f}× the noise band)" if s_ag else "")
+        w(f"- general web cost: {web_rel * 100:+.2f}% relative against a "
+          f"{WEB_TOLERANCE * 100:.0f}% budget → **{'passes' if ok_web else 'FAILS'}**\n")
+        if not ok_web:
+            w("  The declared rule makes this fatal, so the arm is reported as refuted. Worth")
+            w("  saying plainly what happened: arm B trains on 72% web against arm A's 32%, so B")
+            w("  modelling web better was never in doubt — the 2% budget was set before the")
+            w("  effect size was known and was simply too tight. That is a badly chosen")
+            w("  threshold, not a surprise about the mixture, and the honest move is to report")
+            w(f"  the rule as failed and quote the real price: **{web_rel * 100:.1f}% general-web")
+            w("  bpb is what the capability lanes cost.** The threshold is not rewritten after")
+            w("  the fact.\n")
         verdicts.append(("mixture_beats_web_heavy", ok))
 
     # Rule 2: the floor
@@ -138,59 +161,125 @@ def main():
         ok = (d_ind or 0) > s_ind and (d_ag or 0) > s_ag
         w(f"**2. Does the protected floor earn its cost — "
           f"{'YES' if ok else 'NOT DEMONSTRATED'}**\n")
-        w(f"- removing it costs {fmt(d_ind)} bpb on verified Indic (σ={fmt(s_ind)})")
-        w(f"- removing it costs {fmt(d_ag)} bpb on agentic (σ={fmt(s_ag)})")
-        for ln in ("general_web", "code", "stem"):
-            g = cmp_lane(C, A, ln)
-            w(f"- price paid on `{ln}`: {fmt(g)} bpb "
-              f"{'gained by dropping the floor' if (g or 0) > 0 else 'lost'}")
+        w(f"- removing it costs **{fmt(d_ind)} bpb on verified Indic** "
+          f"(σ={fmt(s_ind)}, {d_ind / s_ind:.1f}× the noise band)" if s_ind else "")
+        w(f"- removing it costs **{fmt(d_ag)} bpb on agentic** "
+          f"(σ={fmt(s_ag)}, {d_ag / s_ag:.1f}× the noise band)" if s_ag else "")
+        for ln in ("indic_B_unverified", "indic_C_translated", "indic_D_synthetic"):
+            g = cmp_lane(A, C, ln)
+            s = sigma.get(ln, 0)
+            w(f"- and {fmt(g)} bpb on `{ln}` ({g / s:.0f}× σ)" if s else "")
         w("")
+        w("  What the floor costs, on the lanes it takes batch share away from:\n")
+        w("  | Lane | A (floor on) | C (floor off) | price of the floor | vs σ |")
+        w("  |---|---:|---:|---:|---:|")
+        for ln in ("general_web", "code", "stem", "reasoning", "long_context"):
+            g = cmp_lane(C, A, ln)
+            s = sigma.get(ln, 0)
+            if g is None:
+                continue
+            w(f"  | `{ln}` | {fmt(A['final_bpb'][ln])} | {fmt(C['final_bpb'][ln])} | "
+              f"{fmt(g)} | {g / s:.1f}× |" if s else "")
+        w("")
+        w("  The floor is not free — every unprotected lane is measurably worse with it on — but")
+        w("  the price is ~0.03 bpb each while the Indic lanes move by 0.9 to 1.5. That ratio,")
+        w("  not the sign, is the argument for the floor.\n")
         verdicts.append(("floor_earns_its_cost", ok))
 
     # Rule 3: four-tier vs verified-only
     if A and D:
         d = cmp_lane(A, D, "indic_A_verified")
         s = sigma.get("indic_A_verified", 0)
-        ok = (d or 0) > s
-        w(f"**3. Four-tier Indic split vs verified-only — "
-          f"{'CONFIRMED' if ok else 'REFUTED'}**\n")
-        w(f"- on held-out verified Indic, A is {fmt(d)} bpb "
-          f"{'better' if (d or 0) > 0 else 'worse'} than D (σ={fmt(s)})")
-        if (d or 0) <= s:
+        outcome = three_way(d, s)
+        label = {"confirms": "CONFIRMED", "refutes": "REFUTED",
+                 "no signal": "NO SIGNAL AT THIS SCALE"}[outcome]
+        w(f"**3. Four-tier Indic split vs verified-only — {label}**\n")
+        w(f"- on held-out verified Indic, A is {fmt(abs(d) if d else 0)} bpb "
+          f"{'better' if (d or 0) > 0 else 'worse'} than D, against σ={fmt(s)} on that lane")
+        if outcome == "no signal":
+            w(f"- **{fmt(abs(d) if d else 0)} is {abs(d) / s:.2f}× the seed-noise band, so this")
+            w("  comparison decides nothing.** The verified-Indic lane is the noisiest in the")
+            w("  experiment (σ 18× the median), because its validation set is the smallest and")
+            w("  its content the most heterogeneous. Neither the four-tier split nor")
+            w("  verified-only is supported over the other here; the rule is untestable at this")
+            w("  scale rather than failed. A single-seed run would have 'shown' whichever")
+            w("  direction its seed happened to land on.")
+        elif outcome == "refutes":
             w("- the tiering did **not** beat spending the whole Indic budget on repeated")
             w("  verified text at this scale; reported as a refutation, not smoothed over")
         w("")
+        # The declared rule judges the verified lane only. The other three tiers are what
+        # tiering is also meant to buy, so they are shown next to the verdict rather than
+        # folded into it.
+        w("  Supplementary — the tiers arm D never sees (not part of the declared rule):\n")
+        w("  | Indic lane | A | D | A − D |")
+        w("  |---|---:|---:|---:|")
+        for ln in ("indic_A_verified", "indic_B_unverified", "indic_C_translated",
+                   "indic_D_synthetic"):
+            a, b = A["final_bpb"].get(ln), D["final_bpb"].get(ln)
+            if a is None or b is None:
+                continue
+            w(f"  | `{ln}` | {fmt(a)} | {fmt(b)} | {fmt(a - b)} |")
+        w("")
+        w("  A negative last column means arm A is better on that tier. Arm D trains on none of")
+        w("  the unverified, translated or synthetic tiers, so any gap there is the coverage the")
+        w("  four-tier split buys — which held-out *verified* perplexity alone cannot see.\n")
         verdicts.append(("four_tier_beats_verified_only", ok))
 
     # Rule 4: transition
     es = [(n, runs[n]) for n in E_ARMS if runs.get(n)]
     if es:
-        w("**4. Transition stability**\n")
-        w("| Probe | shift | embeddings | warmup | peak grad-norm ratio | verdict |")
-        w("|---|---|---|---:|---:|---|")
+        w("**4. Transition stability — NOT REPRODUCED AT THIS SCALE**\n")
+        w("The reported ratio is peak grad norm in the 300 steps after the switch, over the")
+        w("median of the 200 before. Reading that alone would say the seam is unstable. It is")
+        w("not enough on its own, so the last column applies the *same* statistic to settled")
+        w("training far away from the seam — steps 100→switch−200 and switch+300→end, with the")
+        w("initialisation transient excluded:\n")
+        w("| Probe | embeddings | warmup | peak ratio at the seam | same statistic, no seam nearby |")
+        w("|---|---|---:|---:|---:|")
         for n, r in es:
             t = r.get("transition") or {}
-            frozen = "frozen" if "frozen" in n else "trainable"
-            warm = f"{t.get('warmup_steps', 0)} steps"
-            w(f"| `{n}` | main→anneal | {frozen} | {warm} | "
-              f"{fmt(t.get('peak_ratio_x'), 2)}× | {t.get('verdict', '—')} |")
+            frozen = "**frozen**" if "frozen" in n else "trainable"
+            gn_path = os.path.join(RESULTS, f"{n}.gradnorms.npy")
+            elsewhere = None
+            if os.path.exists(gn_path):
+                import numpy as np
+                g = np.load(gn_path)
+                s = t.get("switch_step", len(g) // 2)
+                settled = np.concatenate([g[100:max(s - 200, 100)], g[s + 300:]])
+                base = t.get("baseline_grad_norm_median_pre") or 1.0
+                if settled.size:
+                    elsewhere = float(settled.max()) / base
+            w(f"| `{n}` | {frozen} | {t.get('warmup_steps', 0)} steps | "
+              f"{fmt(t.get('peak_ratio_x'), 2)}× | {fmt(elsewhere, 2)}× |")
         w("")
+        w("Settled training with no mixture change anywhere near it already produces 2.6-3.5×")
+        w("excursions. The seam is the single largest gradient of the run in all three probes,")
+        w("but only by 1-15%, and two of the three *background* figures are themselves over the")
+        w("3× threshold. **At 40M parameters the peak-ratio-against-3× test does not")
+        w("discriminate a mixture transition from ordinary gradient noise.**\n")
         r1 = (runs.get("E1_hard_frozen") or {}).get("transition") or {}
         r2 = (runs.get("E2_hard_trainable") or {}).get("transition") or {}
         r3 = (runs.get("E3_warm_trainable") or {}).get("transition") or {}
         p1, p2, p3 = (x.get("peak_ratio_x") for x in (r1, r2, r3))
         if p1 and p2:
-            dom = p1 > p2
-            w(f"- frozen vs trainable embeddings at the *same* shift: "
-              f"{fmt(p1, 2)}× vs {fmt(p2, 2)}× → "
-              f"{'frozen embeddings dominate, as claimed' if dom else 'no such domination here'}")
-            verdicts.append(("frozen_embeddings_dominate_spike", bool(dom)))
+            w(f"- **Frozen vs trainable embeddings**, identical shift: {fmt(p1, 2)}× vs "
+              f"{fmt(p2, 2)}×. The direction matches the widget's claim, but the effect is not")
+            w("  specific to the seam: the frozen run also runs hotter *away* from the seam, so")
+            w("  what is measured is a whole-run property of freezing embeddings, not a")
+            w("  transition spike it causes. The widget's 151× vs 8.0× (a 19× gap) does not")
+            w("  appear here; this is a 1.26× gap.")
+            verdicts.append(("frozen_embeddings_dominate_spike", False))
         if p1 and p3:
-            ok = p1 > 3.0 >= p3
-            w(f"- hard step {fmt(p1, 2)}× vs warmup band {fmt(p3, 2)}× against the 3× "
-              f"threshold → {'reproduces' if ok else 'does not cleanly reproduce'}")
-            verdicts.append(("warmup_band_controls_transition", bool(ok)))
+            w(f"- **Warmup band**: {fmt(p3, 2)}× with a 10% band against {fmt(p2, 2)}× for the")
+            w("  same configuration with a hard step. The band did not lower the peak — it was")
+            w("  slightly higher. **Refuted at this scale.**")
+            verdicts.append(("warmup_band_controls_transition", False))
         w("")
+        w("None of this refutes the practice at 120B, where embeddings carry far more of the")
+        w("representation and mixture shifts are much larger in absolute tokens. It does say the")
+        w("proxy cannot be used as evidence for it, and the plan's warmup-band commitment rests")
+        w("on the session's measurement and V4's production experience, not on this run.\n")
 
     # -------------------------------------------------------- lanes with nothing to say
     quiet = []
