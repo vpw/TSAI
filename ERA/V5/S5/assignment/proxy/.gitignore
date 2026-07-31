@@ -1,0 +1,4 @@
+# Regenerable: raw downloads, intermediate text pools, tokenized arrays.
+data/raw/
+data/pools/
+data/tokens/
