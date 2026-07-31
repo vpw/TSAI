@@ -1,0 +1,126 @@
+{
+  "_source": "resources/s5-widget-data.md — Widget 3 'SOTA Dataset Inventory' (session section 4), read off the live widget on 2026-07-30. Sample and token counts are the widget's own figures. 'confirmed' rows are flagged by the widget as verified from course sources; the rest carry its 'approx' badge.",
+  "_units": "tokens are absolute counts",
+  "slots": {
+    "code": {
+      "widget_slot_total": 1100000000000,
+      "datasets": [
+        {"name": "The Stack v2", "source": "BigCode / Software Heritage", "samples": 600000000, "tokens": 900000000000, "license": "permissive + opt-out", "tier": "B", "confidence": "approx"},
+        {"name": "D3 Code (V4 corpus)", "source": "V4 run", "samples": 250000000, "tokens": 199000000000, "license": "V4 lineage", "tier": "B", "confidence": "confirmed"},
+        {"name": "CommitPack / CommitPackFT", "source": "BigCode", "samples": 4000000, "tokens": 4000000000, "license": "mixed / permissive", "tier": "B", "confidence": "approx"}
+      ]
+    },
+    "agentic": {
+      "widget_slot_total": 627000000,
+      "widget_flag": "SLOT RUNS THIN",
+      "datasets": [
+        {"name": "ToolBench", "source": "OpenBMB", "samples": 120000, "tokens": 80000000, "license": "Apache-2.0", "tier": "D", "confidence": "approx", "shape": "function-call"},
+        {"name": "Glaive function-calling v2", "source": "Glaive", "samples": 113000, "tokens": 50000000, "license": "Apache-2.0", "tier": "D", "confidence": "approx", "shape": "function-call"},
+        {"name": "ToolACE", "source": "ToolACE", "samples": 110000, "tokens": 60000000, "license": "Apache-2.0", "tier": "A/D", "confidence": "approx", "shape": "function-call"},
+        {"name": "xLAM / APIGen", "source": "Salesforce", "samples": 60000, "tokens": 25000000, "license": "CC-BY (mixed)", "tier": "A/D", "confidence": "approx", "shape": "function-call"},
+        {"name": "Nexus / NexusRaven", "source": "Nexusflow", "samples": 40000, "tokens": 30000000, "license": "CC-BY-4.0", "tier": "A", "confidence": "approx", "shape": "function-call"},
+        {"name": "SWE-smith", "source": "SWE-smith", "samples": 26000, "tokens": 120000000, "license": "task licenses", "tier": "A", "confidence": "approx", "shape": "trajectory"},
+        {"name": "Hermes function-calling", "source": "NousResearch", "samples": 15000, "tokens": 22000000, "license": "Apache-2.0", "tier": "A/D", "confidence": "approx", "shape": "function-call"},
+        {"name": "OpenHands rollouts", "source": "All-Hands / OpenHands", "samples": 10000, "tokens": 90000000, "license": "mixed", "tier": "A", "confidence": "approx", "shape": "trajectory"},
+        {"name": "SWE-Gym", "source": "SWE-Gym", "samples": 2400, "tokens": 150000000, "license": "task licenses", "tier": "A", "confidence": "approx", "shape": "trajectory"}
+      ]
+    },
+    "reasoning": {
+      "widget_slot_total": 85100000000,
+      "datasets": [
+        {"name": "AON (V4 corpus)", "source": "V4 run", "samples": 40000000, "tokens": 78000000000, "license": "V4 lineage", "tier": "A", "confidence": "confirmed"},
+        {"name": "OpenMathReasoning", "source": "NVIDIA", "samples": 3200000, "tokens": 2000000000, "license": "CC-BY-4.0", "tier": "A/D", "confidence": "approx"},
+        {"name": "OpenThoughts2", "source": "OpenThoughts", "samples": 1100000, "tokens": 3000000000, "license": "Apache-2.0", "tier": "A/D", "confidence": "approx"},
+        {"name": "NuminaMath", "source": "Numina", "samples": 860000, "tokens": 500000000, "license": "Apache / CC-BY", "tier": "A", "confidence": "approx"},
+        {"name": "OpenR1-Math (R1-distilled)", "source": "Hugging Face", "samples": 220000, "tokens": 1600000000, "license": "Apache-2.0", "tier": "D", "confidence": "approx"}
+      ]
+    },
+    "long_context": {
+      "widget_slot_total": 100000000000,
+      "_note": "Both rows are repackings of tokens already counted in other slots, not independent supply.",
+      "datasets": [
+        {"name": "Repo-packed code (32K+)", "source": "packed from code corpora", "samples": 1500000, "tokens": 60000000000, "license": "permissive", "tier": "B", "confidence": "approx", "derived_from": "code"},
+        {"name": "Book-length corpora (packed)", "source": "books + long docs", "samples": 400000, "tokens": 40000000000, "license": "mixed / public-domain", "tier": "B", "confidence": "approx", "derived_from": "general_web"}
+      ]
+    },
+    "indic": {
+      "widget_slot_total": 276000000000,
+      "widget_flag": "SLOT RUNS THIN",
+      "widget_real_vs_synth": {"real": 114000000000, "synthetic": 162000000000},
+      "datasets": [
+        {"name": "Sangraha (synthetic)", "source": "AI4Bharat", "samples": 90000000, "tokens": 162000000000, "license": "CC-BY-4.0", "tier": "C", "confidence": "confirmed", "indic_tier": "D_synthetic"},
+        {"name": "Samanantar", "source": "AI4Bharat", "samples": 49700000, "tokens": 2000000000, "license": "CC0 / CC-BY", "tier": "C", "confidence": "approx", "indic_tier": "C_translated"},
+        {"name": "Sangraha (verified)", "source": "AI4Bharat", "samples": 40000000, "tokens": 64000000000, "license": "CC-BY-4.0", "tier": "A", "confidence": "confirmed", "indic_tier": "A_verified"},
+        {"name": "BPCC (parallel)", "source": "AI4Bharat", "samples": 22000000, "tokens": 3000000000, "license": "CC-BY-4.0", "tier": "C", "confidence": "approx", "indic_tier": "C_translated"},
+        {"name": "Sangraha (unverified)", "source": "AI4Bharat", "samples": 15000000, "tokens": 24000000000, "license": "CC-BY-4.0", "tier": "B", "confidence": "confirmed", "indic_tier": "B_unverified"},
+        {"name": "IndicCorpV2", "source": "AI4Bharat", "samples": 10000000, "tokens": 20900000000, "license": "CC-BY / mixed", "tier": "B", "confidence": "approx", "indic_tier": "B_unverified"}
+      ]
+    },
+    "general_web_and_stem": {
+      "widget_slot_total": 4800000000000,
+      "_note": "The mixture composer splits this single inventory slot into General web 4.5T + STEM/math 250B. The inventory itself does not label which rows are STEM; the plausible STEM rows total 146B, not 250B. Flagged, not reconciled.",
+      "datasets": [
+        {"name": "DCLM-Baseline", "source": "DataComp-LM", "samples": 2600000000, "tokens": 2600000000000, "license": "mixed / CommonCrawl", "tier": "B", "confidence": "approx", "kind": "web"},
+        {"name": "FineWeb-Edu", "source": "Hugging Face", "samples": 1300000000, "tokens": 1300000000000, "license": "ODC-By", "tier": "B", "confidence": "approx", "kind": "web"},
+        {"name": "D2 Web-Diverse (V4)", "source": "V4 run", "samples": 780000000, "tokens": 627000000000, "license": "V4 lineage", "tier": "B", "confidence": "confirmed", "kind": "web"},
+        {"name": "D1 Web-Foundation (V4)", "source": "V4 run", "samples": 200000000, "tokens": 164000000000, "license": "V4 lineage", "tier": "B", "confidence": "confirmed", "kind": "web"},
+        {"name": "D4 STEM (V4)", "source": "V4 run", "samples": 60000000, "tokens": 49000000000, "license": "V4 lineage", "tier": "B", "confidence": "confirmed", "kind": "stem"},
+        {"name": "peS2o", "source": "AI2", "samples": 40000000, "tokens": 42000000000, "license": "ODC-By", "tier": "A", "confidence": "approx", "kind": "stem"},
+        {"name": "proof-pile-2", "source": "EleutherAI", "samples": 5000000, "tokens": 55000000000, "license": "mixed", "tier": "A", "confidence": "approx", "kind": "stem"}
+      ]
+    }
+  },
+  "local_contribution": {
+    "_source": "../../S4/assignment/data/run/stats.json — this repo's own S4 cleaning run",
+    "name": "Sangraha slice, cleaned (S4)",
+    "docs_in": 64712,
+    "docs_out": 60174,
+    "tokens_in": 48008963,
+    "tokens_out": 43450641,
+    "tokenizer": "sarvam1",
+    "counts_toward": "indic.A_verified and indic.B_unverified",
+    "measured_fertility_tokens_per_word": {"hin": 1.438, "tel": 2.508, "eng": 1.567, "asm": 4.180}
+  },
+  "opus": {
+    "_source": "resources/s5-widget-data.md — Widget 7",
+    "keep_fraction_to_multiplier": {"10": 14.0, "20": 10.4, "40": 6.0, "60": 4.3, "90": 3.1},
+    "v4_production_keep_fraction": 0.40,
+    "v4_effective_multiplier": 6.0,
+    "compute_overhead": 0.047,
+    "always_on_floor_v4": 0.08,
+    "trained_share_english_heavy_proxy": {"floor_off": {"indic": 0.0, "agentic": 0.0}, "floor_on": {"indic": 0.130, "agentic": 0.163}},
+    "trained_share_balanced_proxy": {"floor_off": {"indic": 0.197, "agentic": 0.0}, "floor_on": {"indic": 0.158, "agentic": 0.197}}
+  },
+  "agentic_supervision": {
+    "_source": "resources/s5-widget-data.md — Widget 5",
+    "long_trajectory": {"tokens_trained_on": 356, "tokens_seen": 668, "supervised_fraction": 0.53},
+    "one_shot_call": {"tokens_trained_on": 42, "tokens_seen": 98, "supervised_fraction": 0.43}
+  },
+  "reasoning_bands": {
+    "_source": "resources/s5-widget-data.md — Widget 6",
+    "low": {"steps": 2, "tokens": 37, "solve_rate": 0.62, "verdict": "thin but cheap"},
+    "medium": {"steps": 4, "tokens": 74, "solve_rate": 0.77, "verdict": "well spent"},
+    "high": {"steps": 6, "tokens": 161, "solve_rate": 0.91, "verdict": "well spent"},
+    "ultra": {"steps": 14, "tokens": 346, "solve_rate": 0.95, "verdict": "wasted effort"}
+  },
+  "curriculum_stage_profiles": {
+    "_source": "resources/s5-widget-data.md — Widget 8, read by driving the stage marker",
+    "_lanes": ["general_web", "code", "reasoning", "long_context", "indic", "stem"],
+    "0": [55, 15, 3, 2, 15, 10],
+    "25": [45, 20, 6, 3, 16, 10],
+    "50": [25, 28, 18, 5, 14, 10],
+    "75": [18, 30, 16, 18, 12, 6],
+    "100": [8, 22, 20, 10, 30, 10]
+  },
+  "transition_stability": {
+    "_source": "resources/s5-widget-data.md — Widget 9, measured by driving the controls",
+    "_threshold": 3.0,
+    "measurements": [
+      {"sharpness": 1.0, "warmup_band_B_tokens": 0, "frozen_embeddings": true, "peak_grad_norm_x": 151.0, "verdict": "unstable"},
+      {"sharpness": 1.0, "warmup_band_B_tokens": 0, "frozen_embeddings": false, "peak_grad_norm_x": 8.0, "verdict": "unstable"},
+      {"sharpness": 1.0, "warmup_band_B_tokens": 3, "frozen_embeddings": true, "peak_grad_norm_x": 6.0, "verdict": "unstable"},
+      {"sharpness": 1.0, "warmup_band_B_tokens": 5, "frozen_embeddings": true, "peak_grad_norm_x": 3.4, "verdict": "unstable"},
+      {"sharpness": 0.4, "warmup_band_B_tokens": 3, "frozen_embeddings": false, "peak_grad_norm_x": 1.5, "verdict": "controlled and recovered"}
+    ]
+  }
+}
