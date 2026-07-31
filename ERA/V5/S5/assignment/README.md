@@ -151,10 +151,16 @@ agentic share, because the selector widget shows they starve for *different reas
 | Balanced | on | 15.8% | 19.7% |
 
 Read the second row: **fixing the proxy rescues Indic and does nothing for agentic.** Indic starves
-because the proxy is English-shaped, and a balanced proxy cures that. Agentic starves because
-trajectories look low-utility to *any* benchmark-derived proxy — half their tokens are
-observations the model is not scored on. Only the floor saves it. The session's prose does not
-draw this distinction; the widget does.
+because the proxy is English-shaped, and a balanced proxy cures that. Agentic survives no proxy we
+have — the likeliest reason being that roughly half a trajectory's tokens are observations nobody
+scores, so its projected utility is low however the proxy is built (measured supervised fraction:
+45.3%, §4). Only the floor saves it. The session's prose does not draw this distinction; the
+widget does.
+
+This is a claim about what the selector *picks*. §9 measures the complementary quantity — what the
+model *loses* when the lane goes to zero — and finds Indic loses about five times more than
+agentic. Both hold: agentic is the lane no proxy will choose, Indic is the lane the model can
+least afford to lose. The floor is doing two different jobs.
 
 ---
 
@@ -244,8 +250,9 @@ practice.
 
 ## 9. The proxy: the mixture as a testable hypothesis
 
-A mixture is a hypothesis until a cheap run has tested it. **Eight runs, 5.2 GPU-hours on one
-T4**, decision rules fixed and committed **before** the runs
+A mixture is a hypothesis until a cheap run has tested it. **Eight runs, 3.9 GPU-hours of training
+on one T4** (4.0 h wall for the ablation, ~4.3 h of instance uptime including setup and
+evaluation), decision rules fixed and committed **before** the runs
 ([`proxy/HYPOTHESES.md`](proxy/HYPOTHESES.md), commit `920006f`). Full numbers:
 [`proxy/RESULTS.md`](proxy/RESULTS.md).
 
@@ -355,7 +362,7 @@ such. The arithmetic for doing it properly, at this machine's measured 7.6 TFLOP
 
 | Rung | Params | Tokens (20×) | FLOPs/arm | T4-hours/arm | 8 arms |
 |---|---:|---:|---:|---:|---:|
-| this run | 40M | 75M | 0.02 EFLOP | 0.7 | 5.2 |
+| this run | 40M | 75M | 0.02 EFLOP | 0.68 | **3.9 (measured)** |
 | 1B | 1B | 20B | 120 EFLOP | 4,403 | 35,221 |
 | 3B | 3B | 60B | 1,080 EFLOP | 39,623 | 316,981 |
 
@@ -419,6 +426,14 @@ words.
 | RULER@32K < 85% | the 6% long-context lane is not buying anything measurable; fold it back into code and web packing |
 | Sangraha synthetic proves to degrade Indic benchmarks | tier D drops from 31.3% of the Indic lane and the lane shrinks — there is no other supplier to backfill with |
 | A 1B/3B proxy contradicts the T4 result | this plan's mixture claims are provisional at 40M params; the larger rung governs |
+
+Three things the proxy was **unable to settle**, carried as open rather than assumed:
+
+| Open question | Why it is open | What would close it |
+|---|---|---|
+| Four-tier Indic vs verified-only (§3) | the gap was 0.15× the seed noise on that lane | a larger rung, and a verified-Indic validation set big enough to cut σ — the 275k-token set here is the experiment's weakest link |
+| Warmup bands at stage seams (§8) | settled training already produces 2.6–3.5× grad-norm excursions, so the test does not discriminate at 40M | the same probe at 1B+, where embeddings carry more of the representation |
+| The 7.3% general-web price (§9) | measured, but against a 2% budget chosen before the effect size was known | decide the acceptable web regression against a downstream benchmark, not against bpb |
 
 ### Numbers the session contradicts itself on
 
