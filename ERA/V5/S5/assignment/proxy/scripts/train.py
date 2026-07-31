@@ -259,14 +259,23 @@ def main():
     if is_transition:
         pre = grad_norms[max(switch_step - 200, 0):switch_step]
         post = grad_norms[switch_step:switch_step + 300]
-        base = float(np.median(pre)) if pre else float("nan")
-        peak = float(np.max(post)) if post else float("nan")
+        # fp16 + GradScaler can emit inf/nan norms on steps the scaler then skips. Those are
+        # real instability but they make a ratio meaningless, so they are counted separately
+        # and the ratio is taken over the finite values.
+        pre_f = [g for g in pre if np.isfinite(g)]
+        post_f = [g for g in post if np.isfinite(g)]
+        n_nonfinite = sum(1 for g in pre + post if not np.isfinite(g))
+        base = float(np.median(pre_f)) if pre_f else float("nan")
+        peak = float(np.max(post_f)) if post_f else float("nan")
+        ratio = peak / base if (base and np.isfinite(base) and np.isfinite(peak)) else None
         trans = {"switch_step": switch_step, "warmup_steps": warm_steps,
                  "baseline_grad_norm_median_pre": round(base, 4),
                  "peak_grad_norm_post": round(peak, 4),
-                 "peak_ratio_x": round(peak / base, 3) if base else None,
+                 "peak_ratio_x": round(ratio, 3) if ratio is not None else None,
+                 "nonfinite_grad_norm_steps": n_nonfinite,
                  "threshold_x": 3.0,
-                 "verdict": ("controlled" if base and peak / base <= 3.0 else "unstable")}
+                 "verdict": ("controlled" if ratio is not None and ratio <= 3.0
+                             else "unstable")}
 
     os.makedirs(RESULTS, exist_ok=True)
     name = args.arm + (f"_{args.tag}" if args.tag else "")

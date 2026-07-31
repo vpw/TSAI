@@ -1,0 +1,4 @@
+# Regenerable: downloaded parquet shards and intermediate stage files.
+data/raw/
+data/stage/
+models
