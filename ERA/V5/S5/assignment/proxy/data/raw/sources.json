@@ -1,0 +1,104 @@
+{
+ "fetched_at_utc": "2026-07-31T12:58:40Z",
+ "sources": [
+  {
+   "name": "fineweb-edu-000.parquet",
+   "url": "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu/resolve/main/sample/10BT/000_00000.parquet",
+   "lane": "general_web",
+   "note": "FineWeb-Edu (inventory: 1.3T tokens)",
+   "bytes": 2152819114,
+   "sha256": "b1ba7b2ce4cb5ea6ef42dca40263eabb85f37700d01693a68e9b30a31d78e871",
+   "status": "ok"
+  },
+  {
+   "name": "codeparrot-001.json.gz",
+   "url": "https://huggingface.co/datasets/codeparrot/codeparrot-clean/resolve/main/file-000000000001.json.gz",
+   "lane": "code",
+   "note": "stands in for The Stack v2 (gated); same shape, permissive Python",
+   "bytes": 246127841,
+   "sha256": "3726a0239b5cb7d0ef3ea36886c533d0becc7404217763015559edb546d53c94",
+   "status": "ok"
+  },
+  {
+   "name": "commitpackft-python.jsonl",
+   "url": "https://huggingface.co/datasets/bigcode/commitpackft/resolve/main/data/python/data.jsonl",
+   "lane": "code",
+   "note": "CommitPack / CommitPackFT (inventory: 4B tokens)",
+   "bytes": 135858935,
+   "sha256": "d167da37e1058371c48e057cd8815d03700c867dd8bcf58e61420d4dcd288d73",
+   "status": "ok"
+  },
+  {
+   "name": "openwebmath-000.parquet",
+   "url": "https://huggingface.co/datasets/open-web-math/open-web-math/resolve/main/data/train-00000-of-00114-5a023365406cb9c4.parquet",
+   "lane": "stem",
+   "note": "proof-pile-2 component (inventory: 55B tokens)",
+   "bytes": 236268485,
+   "sha256": "18d7ef70a6ef61f09c020950626d7e6e61d1300f3f85beddbd3b3c6801071a41",
+   "status": "ok"
+  },
+  {
+   "name": "openr1-math-000.parquet",
+   "url": "https://huggingface.co/datasets/open-r1/OpenR1-Math-220k/resolve/main/data/train-00000-of-00010.parquet",
+   "lane": "reasoning",
+   "note": "OpenR1-Math, R1-distilled (inventory: 1.6B tokens)",
+   "bytes": 213636225,
+   "sha256": "ccc3a95e4875dc4cff9bec2f0fb1c93e4c9cbb24fb24853fd0b96c416e1a263c",
+   "status": "ok"
+  },
+  {
+   "name": "glaive-fc-v2.json",
+   "url": "https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2/resolve/main/glaive-function-calling-v2.json",
+   "lane": "agentic",
+   "note": "Glaive function-calling v2 (inventory: 50M tokens)",
+   "bytes": 271190065,
+   "sha256": "e9b5d671812b5ca2fbd7b625a37d5c99a19576c37252cdc806defe256aea6dad",
+   "status": "ok"
+  },
+  {
+   "name": "toolace.json",
+   "url": "https://huggingface.co/datasets/Team-ACE/ToolACE/resolve/main/data.json",
+   "lane": "agentic",
+   "note": "ToolACE (inventory: 60M tokens)",
+   "bytes": 37154735,
+   "sha256": "ba12c083fca7e8da48c67ad5b895e495447da7c66e39a2e19742c082e6cb537e",
+   "status": "ok"
+  },
+  {
+   "name": "hermes-fc.json",
+   "url": "https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1/resolve/main/func-calling.json",
+   "lane": "agentic",
+   "note": "Hermes function-calling, multi-turn (inventory: 22M tokens)",
+   "bytes": 20554130,
+   "sha256": "769478035a886678d525d057ea66e3fd1e247f43e35c8d6d7cc866e080b6742b",
+   "status": "ok"
+  },
+  {
+   "name": "hermes-fc-single.json",
+   "url": "https://huggingface.co/datasets/NousResearch/hermes-function-calling-v1/resolve/main/func-calling-singleturn.json",
+   "lane": "agentic",
+   "note": "Hermes function-calling, single-turn",
+   "bytes": 17793686,
+   "sha256": "fb2df9fe3f295dfd65b223c2dbf04d6b90006357d737f8f8927749f0bea09527",
+   "status": "ok"
+  },
+  {
+   "name": "samanantar-hi-000.parquet",
+   "url": "https://huggingface.co/datasets/ai4bharat/samanantar/resolve/main/hi/train-00000-of-00008.parquet",
+   "lane": "indic_C_translated",
+   "note": "Samanantar (inventory: 2B tokens, tier C)",
+   "bytes": 239534641,
+   "sha256": "f396924b5c0e17568bde7369d5bc12a92aed21c0cdc0480e75b68bd73886c0a4",
+   "status": "ok"
+  },
+  {
+   "name": "sangraha-synth-hin-000.parquet",
+   "url": "https://huggingface.co/datasets/ai4bharat/sangraha/resolve/main/synthetic/hin_Deva/wiki_hin_Deva_0000_of_0063.parquet",
+   "lane": "indic_D_synthetic",
+   "note": "Sangraha synthetic (inventory: 162B tokens, tier D)",
+   "bytes": 257258473,
+   "sha256": "40eee3b27477ec1925edcb5526ba42b4b03d8378770132b8a1db39d87c136aaa",
+   "status": "ok"
+  }
+ ]
+}
