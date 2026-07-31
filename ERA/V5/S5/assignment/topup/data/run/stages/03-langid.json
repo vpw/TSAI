@@ -1,0 +1,326 @@
+{
+  "stage": "03-langid",
+  "detector": "fastText lid.176.ftz (176 languages)",
+  "confidence_floor": 0.5,
+  "docs_in": 277284,
+  "docs_out": 276820,
+  "docs_dropped": 464,
+  "verdicts": {
+    "MATCH": 264495,
+    "CODE_SWITCHED": 12325,
+    "LOW_CONFIDENCE": 384,
+    "ROMANIZED": 55,
+    "MISMATCH": 25
+  },
+  "mean_confidence": 0.9838,
+  "quarantined": 464,
+  "code_switched": 12325,
+  "romanized_indic": 55,
+  "low_confidence": 384,
+  "mislabelled_caught_by_detection": 25,
+  "mislabelled_caught_by_folder_trust": 0,
+  "naive_iso1_vs_iso3_false_mismatches": 276885,
+  "iso_code_map_used": {
+    "as": "asm",
+    "bn": "ben",
+    "gu": "guj",
+    "hi": "hin",
+    "kn": "kan",
+    "ks": "kas",
+    "ml": "mal",
+    "mr": "mar",
+    "ne": "nep",
+    "or": "ory",
+    "pa": "pan",
+    "sa": "san",
+    "sd": "snd",
+    "ta": "tam",
+    "te": "tel",
+    "ur": "urd",
+    "en": "eng"
+  },
+  "claimed_to_detected_pairs": {
+    "hin->hin": 47288,
+    "mar->mar": 40969,
+    "tam->tam": 32764,
+    "ben->ben": 32256,
+    "mal->mal": 31814,
+    "kan->kan": 29550,
+    "guj->guj": 23775,
+    "ory->ory": 20937,
+    "pan->pan": 17532,
+    "kan->eng": 34,
+    "kan->es": 25,
+    "mar->hin": 23,
+    "kan->fi": 23,
+    "mal->zh": 17,
+    "mal->fi": 15,
+    "hin->eng": 14,
+    "kan->mg": 14,
+    "ory->eng": 12,
+    "tam->zh": 11,
+    "mal->eng": 10,
+    "mal->kan": 9,
+    "ory->mg": 8,
+    "hin->nep": 7,
+    "hin->san": 6,
+    "kan->tl": 6,
+    "mal->es": 6,
+    "ory->es": 6,
+    "ben->eng": 5,
+    "mar->eng": 5,
+    "kan->it": 5,
+    "kan->id": 5,
+    "ory->id": 5,
+    "kan->pt": 4,
+    "guj->fi": 4,
+    "guj->eng": 4,
+    "mal->tam": 4,
+    "pan->uz": 4,
+    "pan->eng": 4,
+    "ben->mg": 3,
+    "kan->tel": 3
+  },
+  "token_denominator": {
+    "ar": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 3970,
+      "delta": 3970
+    },
+    "ben": {
+      "tokens_if_folder_trusted": 26741110,
+      "tokens_after_detection": 26755198,
+      "delta": 14088
+    },
+    "eng": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 126243,
+      "delta": 126243
+    },
+    "es": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 10265,
+      "delta": 10265
+    },
+    "fi": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 5050,
+      "delta": 5050
+    },
+    "guj": {
+      "tokens_if_folder_trusted": 20001573,
+      "tokens_after_detection": 19967263,
+      "delta": -34310
+    },
+    "hin": {
+      "tokens_if_folder_trusted": 30000523,
+      "tokens_after_detection": 29890959,
+      "delta": -109564
+    },
+    "kan": {
+      "tokens_if_folder_trusted": 19049453,
+      "tokens_after_detection": 19005273,
+      "delta": -44180
+    },
+    "la": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 782,
+      "delta": 782
+    },
+    "mal": {
+      "tokens_if_folder_trusted": 20001500,
+      "tokens_after_detection": 19991493,
+      "delta": -10007
+    },
+    "mar": {
+      "tokens_if_folder_trusted": 25000207,
+      "tokens_after_detection": 25006368,
+      "delta": 6161
+    },
+    "mg": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 37759,
+      "delta": 37759
+    },
+    "no": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 3505,
+      "delta": 3505
+    },
+    "ory": {
+      "tokens_if_folder_trusted": 14959282,
+      "tokens_after_detection": 14945603,
+      "delta": -13679
+    },
+    "pan": {
+      "tokens_if_folder_trusted": 13803249,
+      "tokens_after_detection": 13794576,
+      "delta": -8673
+    },
+    "san": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 2455,
+      "delta": 2455
+    },
+    "sq": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 5992,
+      "delta": 5992
+    },
+    "tam": {
+      "tokens_if_folder_trusted": 22753852,
+      "tokens_after_detection": 22747297,
+      "delta": -6555
+    },
+    "tel": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 9189,
+      "delta": 9189
+    },
+    "tk": {
+      "tokens_if_folder_trusted": 0,
+      "tokens_after_detection": 1509,
+      "delta": 1509
+    }
+  },
+  "mismatch_examples": [
+    {
+      "id": "ver-hin2:260fbb97946e873f02d5144ff0663c1273c15b6947a2e969b22845b6733b79ab",
+      "src": "ver-hin2",
+      "claimed": "hin",
+      "detected": "eng",
+      "confidence": 0.923,
+      "script_profile": {
+        "Latn": 0.835,
+        "Deva": 0.165
+      },
+      "excerpt": "ST quota and after rejection of the promotion of Shri Shivarkar, another employee, Shri C.K.Kapde was promoted to the vacant post of Shri Shivarkar, but the said promotion was also rejected by the management of WCL on th"
+    },
+    {
+      "id": "ver-hin2:de1f14038ee0cf0448bade3a7144c6b11b70ec98",
+      "src": "ver-hin2",
+      "claimed": "hin",
+      "detected": "tel",
+      "confidence": 0.607,
+      "script_profile": {
+        "Deva": 0.544,
+        "Telu": 0.456
+      },
+      "excerpt": "1. सांझ को वे दो दूत सदोम के पास आए : और लूत सदोम के फाटक के पास बैठा था : सो उनको देखकर वह उन से भेंट करने के लिये उठा; और मुंह के बल झुककर दण्डवत् कर कहा;\n2. నా ప్రభువులారా, దయచేసి మీ దాసుని యింటికి వచ్చి రాత్రి వెళ్లబ"
+    },
+    {
+      "id": "ver-hin2:5268699191180708fe701429ec56e43ad99f7c7cab0c224f9488a52e83d56477",
+      "src": "ver-hin2",
+      "claimed": "hin",
+      "detected": "mar",
+      "confidence": 0.52,
+      "script_profile": {
+        "Deva": 1.0,
+        "Latn": 0.0
+      },
+      "excerpt": "दिया ८, एवं चउरिदिया १०, असलिपंचिदिया अपज्जतगा ११ असमिपंचिदिया पज्जतगा १२, सन्निपंचिंदिया अपजतगा १३, सन्निपंचिंदिया पजतगा १४ । एएसि णं भंते । चउद्दसविहाणं संसारसमा बन्नगाणं जीवाणं जहनुक्कोसगस्स जोगस्स कयरे २ जाव विसेसाहि"
+    },
+    {
+      "id": "ver-hin2:f30e8877cec0be93807dab2f5fdda70a0b54faa1",
+      "src": "ver-hin2",
+      "claimed": "hin",
+      "detected": "ben",
+      "confidence": 0.99,
+      "script_profile": {
+        "Beng": 1.0
+      },
+      "excerpt": "আহ! তোমরা হলে সেই সর্বশেষ অনন্যসাধারণ বসতি যারা ব্ল্যাক ড্রাগনের পতাকাতলে আসেনি।\nনিরাপদ রাখতেই এসেছে।\nআনুগত্য স্বীকার করতে হবে সাথে সামান্য কর দিতে হবে।\nতোমাদের দ্বিধাটা দেখতে পাচ্ছি আমি।\nতার সাথে পরিচয় করিয়ে দেই।\nব্ল্"
+    },
+    {
+      "id": "ver-mar:10a8bfdf0d483598a60350a93df35966cf65e4f63c4a52d511e720d2c9ee664b",
+      "src": "ver-mar",
+      "claimed": "mar",
+      "detected": "hin",
+      "confidence": 0.607,
+      "script_profile": {
+        "Deva": 1.0
+      },
+      "excerpt": "घरि नसणे बसणे पार्थ रथी चाकरसे कामाला ।। २ ।। यवन कबीर नामें महा साधू विणिला त्याचा शेला ॥ ३ ॥ दीनवत्सल नामास्तव जातो काय वदावें तुला ॥ 8 ॥\nराजाराम लीन प्रासादिक मनिचा संशय गेला ।। बोला हो० ॥ ५ ॥\nसुजनता घरी सुजनता घरी रे"
+    },
+    {
+      "id": "ver-mar:dd6e87ccd0c631fc5e52317e0bf9f68b787f495a",
+      "src": "ver-mar",
+      "claimed": "mar",
+      "detected": "hin",
+      "confidence": 0.695,
+      "script_profile": {
+        "Latn": 0.208,
+        "Deva": 0.792
+      },
+      "excerpt": "Find Your Name in Maharashtra Voter List 2019 Elections. From Following section you will able to find Your Polling Booth in your City. So Search Polling Booth For this 2019 Maharashtra Elections.\n मतदार यादीत आपले नाव आह"
+    },
+    {
+      "id": "ver-mar:fcd67aab8542934e89a74fe6183341b28845e3c0",
+      "src": "ver-mar",
+      "claimed": "mar",
+      "detected": "hin",
+      "confidence": 0.596,
+      "script_profile": {
+        "Deva": 0.913,
+        "Latn": 0.087
+      },
+      "excerpt": "लाईव्ह न्यूज :\nIND vs WI 2nd Test : २ तासानंतर पाऊस थांबला, कव्हर्स काढले; पण, भारतीय खेळाडू अजून नाही पोहोचले, नेमके काय घडले?\n नाशिक :\nनाशिक :\nनाशिक :\nतब्बल ५ महिन्यांनंतर कोरोनाबाधित पुन्हा ६०० पार !\n नाशिक :\nनाशिक :\n"
+    },
+    {
+      "id": "ver-mar:b2374d2c003103962e945a501ad0d505832b531e",
+      "src": "ver-mar",
+      "claimed": "mar",
+      "detected": "hin",
+      "confidence": 0.66,
+      "script_profile": {
+        "Deva": 0.961,
+        "Latn": 0.039
+      },
+      "excerpt": "लक्ष्मी चालिसाचा पाठ करून मिळवा धनदेवतेचा आशीर्वाद, वाचा लक्ष्मी चालीसा (laxmi Chalisa)\nमातु लक्ष्मी करि कृपा करो हृदय में वास।\n सिंधु सुता विष्णुप्रिये नत शिर बारंबार।\n यही मोर अरदास, हाथ जोड़ विनती करूं।\n विनवौं नित्य "
+    }
+  ],
+  "codeswitch_examples": [
+    {
+      "id": "ver-ben:2d71ab08d9383962a0cf4578658da54f5bb49a0c",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.241,
+      "excerpt": "আজ থেকেই দক্ষিণবঙ্গে আবহাওয়ার উন্নতি। পশ্চিমাঞ্চলের জেলাগুলি ছাড়া অন্যত্র বৃষ্টি কমবে। পূর্বাভাস আলিপুর আবহাওয়া দফতরের।\n Panchayat Election: রাজ্যে এবার বিশ্ববিদ্যালয়ের পড়ুয়াই অন্তর্বর্তী উপাচার্য!\n Panchayat Elect"
+    },
+    {
+      "id": "ver-ben:3a072af181873c7f2864e730c4466b136ce331e2",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.207,
+      "excerpt": "তৃণমূল মুখপত্র কুণাল ঘোষের (Kunal Ghosh) কটাক্ষের মুখে বিজেপি সাংসদ সৌমিত্র খাঁ (Soumitra Khan) এবং বিধানসভার বিরোধী দলনেতা শুভেন্দু অধিকারী (Suvendu Adhikari)। কুণাল দাবি করেন, বিরোধী দলনেতার সাম্প্রদায়িক বিদ্বেষমূলক ম"
+    },
+    {
+      "id": "ver-ben:1f6bc7f7e51586a4899aa915133dcb4eb8beab88",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.151,
+      "excerpt": "বিশ্ব টেস্ট চ্যাম্পিয়নশিপ( World test championsh) খেলার আগে ১৮ দিনের কোয়ারেন্টাইনে থাকতে হবে ভারতীয় দলকে( india team)। এদিন এমনটাই জানালেন বিসিসিআইয়ের (bcci)এক কর্তা। ইংল্যান্ডে উড়ে যাওয়ার আগে দেশে ৮ দিন, এবং ইংল্য"
+    },
+    {
+      "id": "ver-ben:f21400c7f04e45c3484078e872f89fb4ca60a78f09c3d8b3ff51d3e406ab2090",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.159,
+      "excerpt": "শিক্ষার মনস্তত্ত্ব\n(২) সামস্ততন্ত্রবাদ (oligarohic doctrine ); (৩) অরাজকভাবাদ ( anarchic doctrine ).\nরাজতন্ত্রবাদ : এই মতে বুদ্ধি হইতেছে একটি অধিরাজ কেন্দ্রীয় শক্তির লীলা। এই কেন্দ্রীয় শক্তি জীবনের বিভিন্ন ক্ষেত্রে বিভ"
+    },
+    {
+      "id": "ver-ben:bc9e47ee67370cdec708735c8f1248c09ad93a68e8a3845c03e05868c287a82f",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.227,
+      "excerpt": "রবীন্দ্রনাথ ১৩০৮ সালে বঙ্গদর্শন (নব পৰ্যায়) পত্রিকায় 'ব্রাহ্মণ' নামক এক প্রবন্ধে লিখেছিলেন-\"আমাদের বর্তমান সমাজের ভদ্র সম্প্রদায় - অর্থাৎ বৈদ্য, কায়স্থ ও বণিক সম্প্রদায় - সমাজ যদি ইহাদিগকে দ্বিজ বলিয়া গণ্য না করে, "
+    },
+    {
+      "id": "ver-ben:1b993412e7a29b88953b51b00a73cf9c96d9f92b",
+      "claimed": "ben",
+      "detected": "ben",
+      "latin_fraction": 0.154,
+      "excerpt": "শ্রীনগর, ১৩ জুনঃ শনিবার ফের সেনা-জঙ্গী সংঘর্ষে উত্তপ্ত উপত্যকায়। আজ ভোরবেলা জম্মু-কাশ্মীরের (Jammu & Kashmir) কুলগাম এবং অনন্তনাগে দুটি পৃথক সংঘর্ষে সেনার হাতে মৃত্যু হয়েছে অন্তত ৪ সন্ত্রাসবাদীর (Terroists)। কুলগাম (Ku"
+    }
+  ]
+}

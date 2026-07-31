@@ -1,0 +1,127 @@
+{
+  "stage": "04b-quality-classifier",
+  "skipped": false,
+  "recipe": "weak structural labels -> fastText supervised -> expected-value score, the session's recipe with a heuristic labeller standing in for an LLM",
+  "labeller": "structural weak labels (boilerplate, link, digit, variety, sentence regularity)",
+  "model": "fastText supervised, dim=64, wordNgrams=2, epoch=8",
+  "threshold": 3.0,
+  "weak_label_distribution": {
+    "1": 3,
+    "2": 25,
+    "3": 655,
+    "4": 4221,
+    "5": 35096
+  },
+  "train_size": 32000,
+  "test_size": 8000,
+  "heldout_exact_accuracy": 0.8704,
+  "heldout_within_one_accuracy": 0.9834,
+  "docs_in": 256635,
+  "docs_out": 256528,
+  "docs_dropped": 107,
+  "tokens_kept": 178611002,
+  "score_histogram": {
+    "2": 35,
+    "3": 413,
+    "4": 11459,
+    "5": 244728
+  },
+  "per_lang": {
+    "ben": {
+      "docs": 31114,
+      "kept": 31111,
+      "mean_score": 4.958
+    },
+    "hin": {
+      "docs": 45739,
+      "kept": 45724,
+      "mean_score": 4.871
+    },
+    "mar": {
+      "docs": 39572,
+      "kept": 39560,
+      "mean_score": 4.986
+    },
+    "tam": {
+      "docs": 26463,
+      "kept": 26462,
+      "mean_score": 4.948
+    },
+    "kan": {
+      "docs": 27449,
+      "kept": 27443,
+      "mean_score": 4.937
+    },
+    "guj": {
+      "docs": 22209,
+      "kept": 22205,
+      "mean_score": 4.959
+    },
+    "mal": {
+      "docs": 27253,
+      "kept": 27229,
+      "mean_score": 4.828
+    },
+    "pan": {
+      "docs": 17072,
+      "kept": 17071,
+      "mean_score": 4.87
+    },
+    "ory": {
+      "docs": 19764,
+      "kept": 19723,
+      "mean_score": 4.952
+    }
+  },
+  "dropped_examples": [
+    {
+      "id": "ver-ben:08464b5ab67fd45a44558f40b43e82a68c11e5cb7839153d1ed029458c8a8659",
+      "lang": "ben",
+      "edu_score": 2.641,
+      "excerpt": "রাণী জয়মতী।\nচন্দ্রনাথ ও রুদ্রসিংহকে স্কন্ধে করিয়া পলায়িত প্রহরীর সহিত কুকিসৈন্যগণের, প্রবেশ। ।\nপলায়িত প্রহরী কুকিরাজ ! কুকিরাজ ! সৰ্ব্বনাশ হ'য়েছে! মাকে আজ আমরা হারিয়ে এসেছি; কিছুতেই ক্ষুধিত ব্যা"
+    },
+    {
+      "id": "ver-ben:7001cb29ed37026d6e74e543237a57892fdf334ff08cbb124b895640069117c2",
+      "lang": "ben",
+      "edu_score": 2.668,
+      "excerpt": "পাহিজা রাগ ।\nশরত নিরিত হৈল কিমের উষয়। ব্রজকরা জলক্রীড়া করিতে চ যমুনার জলে বজ্রঅলঙ্কার এড়ি। বিষজ্রে করিরা স্নানপুঞ্জি দেবী চণ্ডী। স্তুতিকা প্রতিমা কৰি দেই পুষ্প পাণি। বহু মাগে স্বামী হউক্-দেব চক্রপা"
+    },
+    {
+      "id": "ver-ben:d0f425f5e084698ee41f2a9821fa295a763f9943",
+      "lang": "ben",
+      "edu_score": 2.289,
+      "excerpt": "Copyright © HT Media Limited All rights reserved.\n কলকাতার আরও কাছে দুর্যোগের কালো মেঘ, আজ কোথায় তাণ্ডব চালাবে অতি গভীর নিম্নচাপটি?\n রবির তেজে কাটছে ছুটি, নতুন সপ্তাহে কি কলকাতায় জারি থাকবে বৃষ্টি?\n"
+    },
+    {
+      "id": "ver-hin2:75c6bfe8a59a73ba4cc838df73105403c11e395d",
+      "lang": "hin",
+      "edu_score": 2.046,
+      "excerpt": "घुड़चढ़ी से ठीक पहले पुलिस ने दबोचा दूल्हा, मुकदमे की वजह जान सदमे में आया परिवार, आखिर क्या है मामला?\n फेसबुक पर दोस्ती, घर से भागकर कोर्ट मैरिज... अब शख्स ने क्यों ली पत्नी, सास और ससुर की जान?\n B. "
+    },
+    {
+      "id": "ver-hin2:f45bb0203f5aec3df28b251ff1cf73b5b2fd0828b36fb01a29f27f7673c72b7e",
+      "lang": "hin",
+      "edu_score": 2.834,
+      "excerpt": "सुन मयूरा\nउड़-उड़ के मयूरा चले जाना जरा, अम्बे माँ की अटरिया बैठ जाना जरा । करेंगी स्नान जब नील-सरोवर में, कमल बनकर तू खिल जाना जरा,\nअम्बे माँ की अटरिया बैठ जाना जरा ॥\nकेश सवारेंगी जब कनक कंघी से,\nचुन"
+    },
+    {
+      "id": "ver-hin2:4e72ac6a66597f02530a805baac225558c4b99f1",
+      "lang": "hin",
+      "edu_score": 2.431,
+      "excerpt": "You agree to our privacy and cookie policy while login to our website.\n (+91)\nYou agree to our privacy and cookie policy while login to our website.\n चीन में बिजनेस ड्रिंकिंग का चलन काफी पुराना है. जि"
+    },
+    {
+      "id": "ver-hin2:9a956c11187fb2f787973908b9356a7a8f27b567",
+      "lang": "hin",
+      "edu_score": 2.95,
+      "excerpt": "विंडोज के लिए स्क्रिप्ट कैसे लिखूँ?\nप्रोग्राम फ़्रेम डिस्प्ले विज्ञापन कैसे हटाएं?\nडायनामिक आईपी कैसे बनाइए और इसके लिए क्या है?\nएक विश्वसनीय पीसी उपयोगकर्ता क्या होना चाहिए?\nAutorun सॉफ्टवेयर क्या है"
+    },
+    {
+      "id": "ver-hin2:748783f2d8057726049d3df78153a5311fd8be6e",
+      "lang": "hin",
+      "edu_score": 2.9,
+      "excerpt": "सुर आशा के,,,\nसुर आशा के,,,\nकालिमा रात की मिट जाने दो।\nअधर मुस्कान सजा दो।\nदोस्त हम हैं साथ बतला दो।\nख़ुशियों की चादर रंग दो।\nतारा एक अपना भी जड़ दो।\nहौसले की तुम डोर थमा दो।\nबुझते मन में नव ज्योति जग"
+    }
+  ],
+  "caveat": "The labels are weak/heuristic, not LLM-generated. The classifier reproduces the mechanism and its cost profile, not FineWeb-Edu's quality."
+}

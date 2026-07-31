@@ -1,0 +1,177 @@
+{
+  "stage": "05-dedup",
+  "config": {
+    "shingle_k": 5,
+    "permutations": 126,
+    "bands": 18,
+    "rows_per_band": 7,
+    "lsh_threshold": 0.6617,
+    "jaccard_drop_threshold": 0.67,
+    "shingle_window_words": 1200
+  },
+  "session_demo_config": {
+    "k": 5,
+    "bands": 6,
+    "rows": 4,
+    "permutations": 24,
+    "lsh_threshold": 0.639
+  },
+  "docs_in": 256528,
+  "docs_out": 255772,
+  "docs_dropped": 756,
+  "tokens_dropped": 345852,
+  "exact_duplicates": 732,
+  "exact_duplicates_cross_shard": 0,
+  "near_duplicates": 24,
+  "near_duplicates_cross_shard": 0,
+  "lsh_candidate_pairs_global": 62406,
+  "lsh_candidate_pairs_local_total": 62219,
+  "caught_by_local_passes_only": 756,
+  "caught_by_global_pass": 756,
+  "missed_by_local_caught_by_global": 0,
+  "dropped_by_source": {
+    "ver-hin2": 753,
+    "ver-tam": 1,
+    "ver-ory": 1,
+    "ver-kan": 1
+  },
+  "confirmed_pairs": [
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:f66c255fea813ee9d865dbf11ec6cc0b9bb3339f",
+      "same_shard": true,
+      "true_jaccard": 0.9306,
+      "minhash_estimate": 0.9524,
+      "estimate_error": 0.0218,
+      "shingles_kept": 70,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:5790ef86127e2ad43673afd1a95e3574c19b6cb2",
+      "same_shard": true,
+      "true_jaccard": 0.9041,
+      "minhash_estimate": 0.9206,
+      "estimate_error": 0.0165,
+      "shingles_kept": 70,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:94efe021823551ac3f9e04f51dbb004117655b69",
+      "same_shard": true,
+      "true_jaccard": 0.9041,
+      "minhash_estimate": 0.9206,
+      "estimate_error": 0.0165,
+      "shingles_kept": 70,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:0f628821f78e6625cfcdb3b6482651c1e6223262",
+      "same_shard": true,
+      "true_jaccard": 0.8571,
+      "minhash_estimate": 0.8651,
+      "estimate_error": 0.0079,
+      "shingles_kept": 70,
+      "shingles_dropped": 73
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:51a88a202aca8cd2d1ce3fddc3b511da944d73f5",
+      "same_shard": true,
+      "true_jaccard": 0.8919,
+      "minhash_estimate": 0.9206,
+      "estimate_error": 0.0287,
+      "shingles_kept": 70,
+      "shingles_dropped": 70
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:6371c44dfd399b7b4873718181909735bcb9abd5",
+      "same_shard": true,
+      "true_jaccard": 0.8571,
+      "minhash_estimate": 0.873,
+      "estimate_error": 0.0159,
+      "shingles_kept": 70,
+      "shingles_dropped": 73
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:73536e3c41e4b79bdb856c9fa5552bc7f8f395b8",
+      "same_shard": true,
+      "true_jaccard": 0.88,
+      "minhash_estimate": 0.9127,
+      "estimate_error": 0.0327,
+      "shingles_kept": 70,
+      "shingles_dropped": 71
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:8044662227ae602301c07fc67a9ec8eb0690e451",
+      "same_shard": true,
+      "true_jaccard": 0.9041,
+      "minhash_estimate": 0.9127,
+      "estimate_error": 0.0086,
+      "shingles_kept": 70,
+      "shingles_dropped": 69
+    },
+    {
+      "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+      "dropped": "ver-hin2:0fcd366a9fa6d7a87d537f088fccdcd754e42918",
+      "same_shard": true,
+      "true_jaccard": 0.8571,
+      "minhash_estimate": 0.8413,
+      "estimate_error": 0.0159,
+      "shingles_kept": 70,
+      "shingles_dropped": 73
+    },
+    {
+      "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+      "dropped": "ver-hin2:52bc3cb0c697ddbeca98557664120ff5eae56d8a",
+      "same_shard": true,
+      "true_jaccard": 0.6865,
+      "minhash_estimate": 0.754,
+      "estimate_error": 0.0674,
+      "shingles_kept": 383,
+      "shingles_dropped": 494
+    },
+    {
+      "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+      "dropped": "ver-hin2:5557c8b633ea9b2c6c9f6e1f95471048ed37f6d0",
+      "same_shard": true,
+      "true_jaccard": 0.947,
+      "minhash_estimate": 0.9603,
+      "estimate_error": 0.0133,
+      "shingles_kept": 383,
+      "shingles_dropped": 388
+    },
+    {
+      "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+      "dropped": "ver-hin2:43bf1b92f0692a79c8c3a7432f9bbd3e094b8282",
+      "same_shard": true,
+      "true_jaccard": 0.8686,
+      "minhash_estimate": 0.9127,
+      "estimate_error": 0.0441,
+      "shingles_kept": 383,
+      "shingles_dropped": 385
+    }
+  ],
+  "index_memory": {
+    "this_run": {
+      "docs": 256528,
+      "signature_bytes_per_doc": 1024,
+      "overhead_factor": 1.6,
+      "resident_bytes": 420295475,
+      "resident_gib": 0.39
+    },
+    "at_500M_docs": {
+      "docs": 500000000,
+      "signature_bytes_per_doc": 1024,
+      "overhead_factor": 1.6,
+      "resident_bytes": 819200000000,
+      "resident_gib": 762.94
+    }
+  },
+  "note": "Local per-shard dedup does not produce a globally deduplicated corpus. The gap is 'missed_by_local_caught_by_global'."
+}

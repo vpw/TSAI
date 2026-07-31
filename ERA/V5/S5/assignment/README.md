@@ -44,11 +44,11 @@ SFT / reasoning-training / preference 1% each.
 | Long-context | 6 | 8 | 140.6B | 100.0B | 1.41 | repeat |
 | Agentic / tool-use | 2 | 8 | 49.4B | **627M** | **78.85** | **must synthesise** |
 
-Composer defaults were web 34 / reasoning 6; we move 2 points from web to reasoning. Web is the
-only lane with 30× headroom over its demand, so the two points are free there, and reasoning is
-the lane whose benchmarks (AIME, GPQA Diamond, HLE, FrontierMath) the model is most likely to be
-judged on. Everything else matches the composer. The anneal column is the composer's own "V5
-anneal" preset, unchanged.
+Composer defaults were web 34 / reasoning 6; we move 2 points from web to reasoning. Web has the
+largest headroom of any lane — 4.69T of unique supply against 733.4B of demand, **6.4×** — so the
+two points cost nothing there, while reasoning is the lane whose benchmarks (AIME, GPQA Diamond,
+HLE, FrontierMath) the model is most likely to be judged on. Everything else matches the composer.
+The anneal column is the composer's own "V5 anneal" preset, unchanged.
 
 ### What each lane is meant to win, and what fills it
 
@@ -254,7 +254,47 @@ Full numbers: [`proxy/RESULTS.md`](proxy/RESULTS.md).
 
 ## 10. Cleaning status against the cumulative target
 
-<!-- CLEANING_RESULTS -->
+The mixture says the Indic **verified** tier carries 42.3% of the Indic lane at 2.5 epochs, so
+that is where this session's cleaning went. Full report: [`topup/TOPUP_REPORT.md`](topup/TOPUP_REPORT.md).
+
+| | Tokens |
+|---|---:|
+| S4 pass (hin/tel/eng/asm) | 43.5M |
+| **S5 pass** (ben, hin·2, mar, tam, kan, guj, mal, pan, ory) | **176.9M** |
+| Cumulative | **220.4M** |
+| Stated target (8% of 4T) | 320B |
+| Progress | **0.069%** |
+
+192.3M → 176.9M tokens at **92.01% retention**, 52/52 shards admitted, 554 documents (0.217%)
+dropped by the 813,113-n-gram MILU firewall.
+
+That 0.069% is the honest number: one workstation pass is a rounding error against a 320B target.
+What it actually buys is a measured per-language yield curve — and it caught a defect that would
+have scaled.
+
+**The cleaner silently deleted five languages.** The quality stage asks "does this document
+contain at least 2 common words of its language", and `stopword_set()` fell back to the *English*
+list for any language it had none for. So a Kannada page was checked for English stop-words, found
+none, and was dropped.
+
+| | Languages | Kept before | Kept after |
+|---|---|---:|---:|
+| S4 shipped a stop-word list | ben, hin, mar, tam | 80.6–96.9% | 80.8–96.8% |
+| S4 shipped none | **kan, guj, mal, pan, ory** | **2.9–5.7%** | **85.7–97.4%** |
+
+The split falls exactly along whether a list existed. Slice retention went from **53.16% to
+91.90%**, and the full pass lands at 92.01% against S4's 90.51% on its own four languages — the
+fixed cleaner now treats nine languages the way S4 treated four. The lists were counted out of the
+corpus by document frequency rather than written from memory, and a missing list is now recorded
+in the stage stats instead of being absorbed into the fallback.
+
+This is the data-gating point the assignment makes: **a mixture is only as trustworthy as the
+cleaned tokens behind it.** The Indic lane's 16% share assumed verified supply that a language-blind
+cleaner would have thrown away at a 20:1 rate in five of the nine languages it was asked to cover.
+
+One number worth keeping: this pass measured **176.9M tokens against 113.3M** from the
+words × 1.3 rule of thumb — a **36% gap**. Indic fertility is why the ledger counts tokens, never
+words.
 
 ---
 

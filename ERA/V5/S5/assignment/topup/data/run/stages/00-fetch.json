@@ -1,0 +1,203 @@
+{
+  "stage": "00-fetch",
+  "dataset": "ai4bharat/sangraha",
+  "revision": "8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8",
+  "license": "CC-BY-4.0",
+  "smoke": false,
+  "docs_in": 0,
+  "docs_out": 277285,
+  "tokens_out": 192310750,
+  "chars_out": 619378368,
+  "sources": {
+    "ver-ben": {
+      "key": "ver-ben",
+      "pool": "verified",
+      "claimed_lang": "ben",
+      "repo_path": "verified/ben/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/ben/data-0.parquet",
+      "bytes": 391867808,
+      "sha256": "5745f9a93f3e1d52bc1e4615f1133afe3b9f20e7bfbcefd26cbd9c321a5c604e",
+      "rows_in_file": 149797,
+      "row_groups": 1,
+      "docs_taken": 32269,
+      "raw_tokens": 26741110,
+      "raw_chars": 82312934,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 12,
+        "block_len_docs": 2689,
+        "block_gap_rows": 12483
+      },
+      "token_budget": 30000000
+    },
+    "ver-hin2": {
+      "key": "ver-hin2",
+      "pool": "verified",
+      "claimed_lang": "hin",
+      "repo_path": "verified/hin/data-1.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/hin/data-1.parquet",
+      "bytes": 374495016,
+      "sha256": "ea77bc9266d8aca4be0009ca5c270c50c8cff1fb6a7651ce4ff9215d6ebb68a8",
+      "rows_in_file": 174763,
+      "row_groups": 1,
+      "docs_taken": 47321,
+      "raw_tokens": 30000523,
+      "raw_chars": 104566291,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 12,
+        "block_len_docs": 4092,
+        "block_gap_rows": 14563
+      },
+      "token_budget": 30000000
+    },
+    "ver-mar": {
+      "key": "ver-mar",
+      "pool": "verified",
+      "claimed_lang": "mar",
+      "repo_path": "verified/mar/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/mar/data-0.parquet",
+      "bytes": 381849801,
+      "sha256": "394f7a33ebee8e2c75f1e93d09e63eb7cb224589aa226043048b24523c729be3",
+      "rows_in_file": 174763,
+      "row_groups": 1,
+      "docs_taken": 41002,
+      "raw_tokens": 25000207,
+      "raw_chars": 88366177,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 12,
+        "block_len_docs": 3539,
+        "block_gap_rows": 14563
+      },
+      "token_budget": 25000000
+    },
+    "ver-tam": {
+      "key": "ver-tam",
+      "pool": "verified",
+      "claimed_lang": "tam",
+      "repo_path": "verified/tam/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/tam/data-0.parquet",
+      "bytes": 357869888,
+      "sha256": "7787405e9881a0cc6fe62dbdbb109c51b4e05971236eea41d83e5bc724e9a26d",
+      "rows_in_file": 149796,
+      "row_groups": 1,
+      "docs_taken": 32783,
+      "raw_tokens": 22753852,
+      "raw_chars": 82017956,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 12,
+        "block_len_docs": 2732,
+        "block_gap_rows": 12483
+      },
+      "token_budget": 25000000
+    },
+    "ver-kan": {
+      "key": "ver-kan",
+      "pool": "verified",
+      "claimed_lang": "kan",
+      "repo_path": "verified/kan/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/kan/data-0.parquet",
+      "bytes": 368175508,
+      "sha256": "291ad9d11034bb18a185176c58c69dab79867f6f1633dd33b0b0d7a98bd62f74",
+      "rows_in_file": 174762,
+      "row_groups": 1,
+      "docs_taken": 29694,
+      "raw_tokens": 19049453,
+      "raw_chars": 61080020,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 11,
+        "block_len_docs": 2699,
+        "block_gap_rows": 15887
+      },
+      "token_budget": 20000000
+    },
+    "ver-guj": {
+      "key": "ver-guj",
+      "pool": "verified",
+      "claimed_lang": "guj",
+      "repo_path": "verified/guj/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/guj/data-0.parquet",
+      "bytes": 374269246,
+      "sha256": "ff4529617aead4bd47b2c9f5d62778b9b98699daabde82f7535997704db10e2d",
+      "rows_in_file": 149797,
+      "row_groups": 1,
+      "docs_taken": 23790,
+      "raw_tokens": 20001573,
+      "raw_chars": 58006472,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 9,
+        "block_len_docs": 2729,
+        "block_gap_rows": 16644
+      },
+      "token_budget": 20000000
+    },
+    "ver-mal": {
+      "key": "ver-mal",
+      "pool": "verified",
+      "claimed_lang": "mal",
+      "repo_path": "verified/mal/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/mal/data-0.parquet",
+      "bytes": 333917916,
+      "sha256": "de1cee391b3703ddfdcf73bec83247cefc1b2b0e9c90b2c0da9a5d05a8027615",
+      "rows_in_file": 174763,
+      "row_groups": 1,
+      "docs_taken": 31899,
+      "raw_tokens": 20001501,
+      "raw_chars": 61224529,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 12,
+        "block_len_docs": 2734,
+        "block_gap_rows": 14563
+      },
+      "token_budget": 20000000
+    },
+    "ver-pan": {
+      "key": "ver-pan",
+      "pool": "verified",
+      "claimed_lang": "pan",
+      "repo_path": "verified/pan/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/pan/data-0.parquet",
+      "bytes": 358049731,
+      "sha256": "39ef1a3e7e50e704b43495f63d73b58d76144173d5bdcc9933107a54d68ba883",
+      "rows_in_file": 149797,
+      "row_groups": 1,
+      "docs_taken": 17546,
+      "raw_tokens": 13803249,
+      "raw_chars": 42185878,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 7,
+        "block_len_docs": 2506,
+        "block_gap_rows": 21399
+      },
+      "token_budget": 15000000
+    },
+    "ver-ory": {
+      "key": "ver-ory",
+      "pool": "verified",
+      "claimed_lang": "ory",
+      "repo_path": "verified/ori/data-0.parquet",
+      "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/ori/data-0.parquet",
+      "bytes": 372271028,
+      "sha256": "cce0dc3307e022a191c1d4c156fff960e56bd414adfb25b02807b821f2c1907e",
+      "rows_in_file": 189757,
+      "row_groups": 1,
+      "docs_taken": 20981,
+      "raw_tokens": 14959282,
+      "raw_chars": 39618111,
+      "sampling": {
+        "mode": "contiguous blocks spread across the shard",
+        "blocks": 8,
+        "block_len_docs": 2622,
+        "block_gap_rows": 23719
+      },
+      "token_budget": 15000000
+    }
+  },
+  "output": "data/stage/00-raw.jsonl.gz"
+}

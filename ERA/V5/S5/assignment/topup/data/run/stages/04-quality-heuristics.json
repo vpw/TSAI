@@ -1,0 +1,418 @@
+{
+  "stage": "04-quality-heuristics",
+  "rules": [
+    "mean_word_length",
+    "symbol_to_word_ratio",
+    "lines_end_in_terminal_punct",
+    "duplicate_line_fraction",
+    "top_2gram_fraction",
+    "common_stopwords_present",
+    "bullet_line_ratio",
+    "ellipsis_line_ratio",
+    "document_word_count"
+  ],
+  "thresholds_base": {
+    "mean_word_len": [
+      3.0,
+      10.0
+    ],
+    "symbol_ratio_max": 0.1,
+    "terminal_punct_min": 0.3,
+    "dup_line_max": 0.3,
+    "top_2gram_max": 0.2,
+    "stopwords_min": 2,
+    "bullet_ratio_max": 0.9,
+    "ellipsis_ratio_max": 0.3,
+    "word_count": [
+      50,
+      100000
+    ]
+  },
+  "script_overrides": {
+    "Telu": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Taml": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Knda": {
+      "word_count": [
+        25,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        16.0
+      ]
+    },
+    "Mlym": {
+      "word_count": [
+        20,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        20.0
+      ]
+    },
+    "Deva": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Beng": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Guru": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Gujr": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Orya": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    },
+    "Arab": {
+      "word_count": [
+        35,
+        100000
+      ],
+      "mean_word_len": [
+        3.0,
+        12.0
+      ]
+    }
+  },
+  "stopword_list_sizes": {
+    "eng": 32,
+    "hin": 34,
+    "mar": 21,
+    "nep": 20,
+    "san": 16,
+    "ben": 25,
+    "asm": 25,
+    "tel": 25,
+    "tam": 15,
+    "urd": 18,
+    "kan": 25,
+    "guj": 25,
+    "mal": 25,
+    "pan": 25,
+    "ory": 25
+  },
+  "languages_with_no_stopword_list": [],
+  "docs_in": 276820,
+  "docs_out": 256635,
+  "docs_dropped": 20185,
+  "kept_by_config": {
+    "english_tuned": 11540,
+    "script_aware": 256635
+  },
+  "tokens_kept_by_config": {
+    "english_tuned": 8518484,
+    "script_aware": 178636741
+  },
+  "keep_rate_by_config": {
+    "english_tuned": 0.0417,
+    "script_aware": 0.9271
+  },
+  "rule_failures_by_config": {
+    "english_tuned": {
+      "lines_end_in_terminal_punct": 104520,
+      "common_stopwords_present": 260289,
+      "document_word_count": 6334,
+      "duplicate_line_fraction": 879,
+      "top_2gram_fraction": 161,
+      "mean_word_length": 2858,
+      "bullet_line_ratio": 444,
+      "ellipsis_line_ratio": 305,
+      "symbol_to_word_ratio": 48
+    },
+    "script_aware": {
+      "common_stopwords_present": 12027,
+      "document_word_count": 586,
+      "lines_end_in_terminal_punct": 6983,
+      "duplicate_line_fraction": 879,
+      "top_2gram_fraction": 161,
+      "bullet_line_ratio": 444,
+      "ellipsis_line_ratio": 305,
+      "mean_word_length": 66,
+      "symbol_to_word_ratio": 48
+    }
+  },
+  "rescued_docs_total": 245791,
+  "rescued_tokens_total": 170316178,
+  "rescued_by_lang": {
+    "ben": 30775,
+    "hin": 44554,
+    "mar": 36669,
+    "tam": 24068,
+    "kan": 25976,
+    "guj": 21102,
+    "mal": 26273,
+    "pan": 16753,
+    "ory": 19621
+  },
+  "rescued_tokens_by_lang": {
+    "ben": 25601057,
+    "hin": 27650998,
+    "mar": 21938294,
+    "tam": 18253314,
+    "kan": 16073638,
+    "guj": 17382244,
+    "mal": 16516292,
+    "pan": 13094616,
+    "ory": 13805725
+  },
+  "rescued_by_english_rule_that_killed_them": {
+    "lines_end_in_terminal_punct": 96663,
+    "common_stopwords_present": 241643,
+    "document_word_count": 3217,
+    "mean_word_length": 2098
+  },
+  "per_lang": {
+    "ben": {
+      "docs": 32254,
+      "en_kept": 344,
+      "sa_kept": 31114,
+      "tokens": 26703192,
+      "sa_tokens": 25835859
+    },
+    "hin": {
+      "docs": 47271,
+      "en_kept": 1185,
+      "sa_kept": 45739,
+      "tokens": 29848527,
+      "sa_tokens": 28182936
+    },
+    "mar": {
+      "docs": 40951,
+      "en_kept": 2924,
+      "sa_kept": 39572,
+      "tokens": 24940433,
+      "sa_tokens": 24069650
+    },
+    "tam": {
+      "docs": 32742,
+      "en_kept": 2831,
+      "sa_kept": 26463,
+      "tokens": 22721058,
+      "sa_tokens": 20297698
+    },
+    "kan": {
+      "docs": 29547,
+      "en_kept": 1507,
+      "sa_kept": 27449,
+      "tokens": 18697341,
+      "sa_tokens": 17356727
+    },
+    "guj": {
+      "docs": 23774,
+      "en_kept": 1117,
+      "sa_kept": 22209,
+      "tokens": 19948554,
+      "sa_tokens": 18347068
+    },
+    "mal": {
+      "docs": 31813,
+      "en_kept": 1151,
+      "sa_kept": 27253,
+      "tokens": 19866180,
+      "sa_tokens": 17381146
+    },
+    "pan": {
+      "docs": 17532,
+      "en_kept": 319,
+      "sa_kept": 17072,
+      "tokens": 13780471,
+      "sa_tokens": 13288257
+    },
+    "ory": {
+      "docs": 20936,
+      "en_kept": 162,
+      "sa_kept": 19764,
+      "tokens": 14871921,
+      "sa_tokens": 13877400
+    }
+  },
+  "rescued_examples": [
+    {
+      "id": "ver-ben:7c2fe5a1ffd753aba26f090146edebcb",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 241,
+      "mean_word_len": 4.97,
+      "term_ascii_frac": 0.143,
+      "term_any_frac": 1.0,
+      "excerpt": "কি বলব? যা বলতে আসছি তা দেখছি সবাই আপনাকে বলেই দিয়েছে।একি স্টাইলের ধন্যবাদ আরেকবার দিতে চাচ্ছিনা।তবে আপনার এই প্রচেষ্টা আমাদের যততুকু সাহায্য করেছে তা ধন্যবাদের মত ছোট শব্দ দিয়ে প্রকাশ করা যায়না।মনে প্রানে আপনার জন্য দোয়া করছি।\nআপনি যে "
+    },
+    {
+      "id": "ver-ben:be99c3b41ac09961659d7a187d463f02",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 430,
+      "mean_word_len": 5.06,
+      "term_ascii_frac": 0.143,
+      "term_any_frac": 1.0,
+      "excerpt": "বিকাশ অ্যাপের মধ্যে সেভিংস স্কিম বা ডিপিএস খোলার সুযোগ রয়েছে। বিকাশ অ্যাপ ব্যবহার করে আইডিএলসি তে টাকা জমানো যাবে। কোনো বাড়তি ঝামেলা ছাড়া ঘরে বসে এই সেভিংস বা টাকা সঞ্চয় করার স্কিম পরিচালনা করা যাবে। চলুন জেনে নেওয়া যাক বিকাশ সেভিংস সম"
+    },
+    {
+      "id": "ver-ben:0cf723f9c209b721b4eb24b2c6157af9",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 60,
+      "mean_word_len": 4.75,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "সত্যিই কী আপনার মনে হয় তিনি চুক্তির শর্ত পালন করবেন? বাক্যটাকে দু-ভাগ করে জিগেশ করলো ক্রেগ আর ফ্রাই।\nসন্দেহ করার অবকাশ কই? উত্তর দিলো কিন-ফো। আমার অবস্থা যে সম্পূর্ণ বদলে গিয়েছে, তার তো বিন্দুবিসর্গও ও জানে না। তাই ও কী করে আন্দাজ করবে যে"
+    },
+    {
+      "id": "ver-ben:e906ce3f0e74e3440508a2acb8366848ff7ec9b0",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 199,
+      "mean_word_len": 5.81,
+      "term_ascii_frac": 0.25,
+      "term_any_frac": 1.0,
+      "excerpt": "- #IndiaWorld Population Day 2023: শীর্ষে ভারত, জনসংখ্যার নিরিখে প্রথম দশে রয়েছে কোন দেশগুলি?\n গত কয়েক বছরে একাধিক সেনা হেলিকপ্টার ভেঙে পড়ার ঘটনা সামনে এসেছে। তাদের মধ্যে সবথেকে ভয়াবহ হল কুন্নুরে সেনা হেলিকপ্টার ভেঙে দেশের 'চিফ ডিফেন্স "
+    },
+    {
+      "id": "ver-ben:70625c37a5ba62e474e3ba99e5980885855bc4a57d43f673800838e9008c377d",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 714,
+      "mean_word_len": 5.26,
+      "term_ascii_frac": 0.231,
+      "term_any_frac": 0.846,
+      "excerpt": "তো শুধু সেই কথাই মনে পড়ছে। কত সুখ - কত হাসি - কত কান্নার কত্ত ছোট কথা মনে পড়ছে, যা এর আগে কোনদিন মনে পড়ে নি।\nকিশোরবাবুর খুড়তুতো ভাই অতুল তার সঙ্গে পড়ত। তার সঙ্গে মিলে একদিন তারা দুজনে একখানা কাঁচি নিয়ে পরস্পরের চুল ভুরু কেটে ছ আনা দশ "
+    },
+    {
+      "id": "ver-ben:8baee2d382ab303fb0c7e5a5906885361a3a1e46",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 129,
+      "mean_word_len": 5.35,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "শুক্রবার (০৪ ডিসেম্বর) উত্তর কাউনিয়া হাউজিং শের-ই- বাংলা নগর হযরত বেলাল ইবনে রাবাহ (রাঃ) জামে মসজিদে জুমার নামাজের পূর্বে মুসুল্লীদের মাঝে করোনা ভাইরাসের বিস্তার রোধে সচেতনতামূলক বক্তব্যে তিনি এ সব কথা বলেন।\nএ সময় তিনি আরও বলেন, সমাজে সকল"
+    },
+    {
+      "id": "ver-ben:e9734fd715e84ae988db84f7c146e1952d260125",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 527,
+      "mean_word_len": 5.95,
+      "term_ascii_frac": 0.091,
+      "term_any_frac": 0.955,
+      "excerpt": "মুসলমানদের দুরাবস্থার শেষ নেই। তারা সর্বত্র পরাজিত ও অপমানিত। মুসলমানদের অপমান করার সঙ্গে সঙ্গে কুরআন, নবী (সা. ), ইসলাম ধর্ম ও সংস্কৃতি নিয়ে ব্যঙ্গ বিদ্রæপ চলছে। কারণসমূহ কমই আমরা খুঁজে দেখি। কারণ না জানলে প্রতিকার কীভাবে হবে?\n আমরা এখন প"
+    },
+    {
+      "id": "ver-ben:d7d0205efca7a07e23199dca048f576f876f84ca",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 327,
+      "mean_word_len": 5.72,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 0.929,
+      "excerpt": "মেষ (Aries):মার্চ ২১ থেকে এপ্রিল ১৯। কোনও বিষয়ে ঝাঁপিয়ে পড়ার আগে ভাল করে চিন্তা-ভাবনা করা দরকার। পার্টনারের সঙ্গে আপনাকে আরও সহানুভূতিশীল হতে হবে।\n বৃষ (Taurus):এপ্রিল ২০ থেকে মে ২০। জীবন ইদানীং উত্থান-পতনের মধ্য দিয়ে যেতে পারে। আজ সম্প"
+    },
+    {
+      "id": "ver-ben:572565d4c75f12df38291da70caf6479754ea346",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 123,
+      "mean_word_len": 5.56,
+      "term_ascii_frac": 0.25,
+      "term_any_frac": 0.75,
+      "excerpt": "এই পোস্টটি শেয়ার করতে চাইলে :\nমানুষের জীবনযাত্রার মান ও দ্রব্যমূল্যের বৃদ্ধি এবং টাকার মান কমে যাওয়ার কারণে ৫০ ও ১ টাকার পয়সাসহ সব ধরণের ধাতব পয়সা হারিয়ে যাচ্ছে বলে মনে করেন অর্থনীতিবিদরা।\n তবে অনুসন্ধানে দেখা গেছে, সিন্ডিকেটের দখলে এস"
+    },
+    {
+      "id": "ver-ben:12b0c8f5dd17c94abd52d57f4c2c2311132908d4",
+      "lang": "ben",
+      "failed_under_english_rules": [
+        "lines_end_in_terminal_punct",
+        "common_stopwords_present"
+      ],
+      "n_words": 194,
+      "mean_word_len": 5.55,
+      "term_ascii_frac": 0.0,
+      "term_any_frac": 1.0,
+      "excerpt": "শুক্রবার টস জিতে প্রথমে ফিল্ডিংয়ের সিদ্ধান্ত নেন ইংল্যান্ড অধিনায়ক ইয়ন মর্গ্যান।\nনিজস্ব প্রতিবেদন : কার্ডিফে কামব্যাক ইংল্যান্ডের। টিম ইন্ডিয়াকে ৫ উইকেটে হারিয়ে টি-টোয়েন্টি সিরিজে সমতা ফেরাল মর্গ্যান বাহিনী। ওল্ড ট্র্যাফোর্ডে প্রথম টি"
+    }
+  ],
+  "shipped_config": "script_aware"
+}

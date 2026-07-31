@@ -57,34 +57,52 @@ def main():
         w("language\". `stopword_set()` fell back to the **English** list for any language it had")
         w("no list for — so a Kannada page was checked for English stop-words, found none, and was")
         w("dropped. Five languages had no list.\n")
-        w("| Language | docs seen | kept before fix | kept after fix |")
-        w("|---|---:|---:|---:|")
+        w("The `before` column is measured on the smoke slice (9,329 docs) that exposed the")
+        w("defect; the `after` column is this full pass. They are different sample sizes, so read")
+        w("the column pair as the size of the effect, not as a paired test.\n")
+        w("| Language | stop-word list in S4 | docs (full pass) | kept before fix | kept after fix |")
+        w("|---|---|---:|---:|---:|")
         before = {"ben": 96.6, "hin": 96.9, "mar": 95.6, "tam": 80.6,
                   "kan": 5.1, "guj": 4.4, "mal": 3.8, "pan": 5.7, "ory": 2.9}
+        had_list = {"ben", "hin", "mar", "tam"}
         for lang, v in sorted(per_lang.items()):
             after = 100.0 * v["sa_kept"] / max(v["docs"], 1)
             b = before.get(lang)
-            w(f"| `{lang}` | {v['docs']:,} | {b:.1f}% | {after:.1f}% |"
-              if b is not None else
-              f"| `{lang}` | {v['docs']:,} | — | {after:.1f}% |")
+            has = "yes" if lang in had_list else "**no**"
+            w(f"| `{lang}` | {has} | {v['docs']:,} | "
+              f"{b:.1f}% | {after:.1f}% |" if b is not None else
+              f"| `{lang}` | {has} | {v['docs']:,} | — | {after:.1f}% |")
         w("")
-        w("Whole-slice token retention went from **53.16% to 91.90%** once the five missing lists")
-        w("were added — 38.7 points of yield that were being discarded silently, in exactly the")
-        w("languages the Indic lane is short of. The lists were counted out of the corpus by")
-        w("document frequency rather than written from memory")
-        w("(`scripts/derive_stopwords.py`, `data/run/derived_stopwords.json`), and a missing list")
-        w("is now recorded in the stage stats instead of being absorbed into the English fallback.\n")
+        w("The split is exactly along whether S4 shipped a list: the four languages that had one")
+        w("are unchanged, the five that did not go from 3-6% to 86-97%. On the smoke slice whole-")
+        w("run token retention went from **53.16% to 91.90%**; the full pass lands at **92.01%**,")
+        w("against S4's 90.51% on its own four languages — so the fixed cleaner now treats nine")
+        w("languages the way S4 treated four.\n")
+        w("The lists were counted out of the corpus by document frequency rather than written")
+        w("from memory (`scripts/derive_stopwords.py`, `data/run/derived_stopwords.json`), and a")
+        w("missing list is now recorded in the stage stats instead of being absorbed into the")
+        w("English fallback.\n")
+        w("Tamil is the one language with a list that still keeps noticeably less (80.8%). Its")
+        w("list is also the shortest S4 shipped, at 15 entries against 21-34 for the others —")
+        w("the same defect in milder form, and the next thing to fix.\n")
         missing = q.get("languages_with_no_stopword_list", [])
         w(f"Languages still with no list after this pass: "
           f"{', '.join('`' + m + '`' for m in missing) if missing else '**none**'}.\n")
 
-    w("## Caveats\n")
-    w("- The MILU-Bengali eval fingerprint fetch returned 0 examples (the datasets-server rate")
-    w("  limits unauthenticated paging), so Bengali documents were decontaminated against the")
-    w("  Hindi and Telugu MILU splits only. Bengali contamination is therefore **unmeasured**,")
-    w("  not measured-as-zero.")
+    dec = s["stages"].get("07-decontaminate", {})
+    w("## Decontamination and caveats\n")
+    w(f"- Eval firewall: **{dec.get('eval_ngrams_total', 0):,} distinct {dec.get('ngram_n')}-grams** "
+      f"across the MILU Hindi / Telugu / Bengali splits; "
+      f"**{dec.get('docs_dropped', 0):,} documents dropped** as contaminated "
+      f"({100 * dec.get('contamination_rate', 0):.3f}%, {dec.get('tokens_dropped', 0):,} tokens), "
+      f"canary recovered.")
+    w("  The smoke pass had lost the Bengali split to datasets-server rate limiting; the full")
+    w("  pass fetched all three, so Bengali contamination is measured here, not assumed.")
     w("- `claimed_lang` for Odia is written `ory`, the pipeline's ISO-639-3 label, while")
-    w("  Sangraha's folder is `ori`. The folder name is not trusted for anything else either.\n")
+    w("  Sangraha's folder is `ori`. The folder name is not trusted for anything else either.")
+    w("- Token counts are measured with the sarvam1 tokenizer, not estimated from word counts:")
+    w("  the run reports 176.9M measured against 113.3M from the words×1.3 rule of thumb, a")
+    w("  **36% gap**. Indic fertility is why the ledger counts tokens and not words.\n")
 
     with open(OUT, "w") as f:
         f.write("\n".join(L) + "\n")
