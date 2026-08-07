@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Plan — 40B India-First Model · ERA V5 S3</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #fcfcfb; --page: #f9f9f7;
+    --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --baseline: #c3c2b7; --ring: rgba(11,11,11,0.10);
+    --s1:#2a78d6; --s2:#008300; --s3:#e87ba4; --s4:#eda100; --s5:#1baf7a; --s6:#eb6834;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --surface:#1a1a19; --page:#0d0d0d;
+      --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --baseline:#383835; --ring: rgba(255,255,255,0.10);
+      --s1:#3987e5; --s2:#008300; --s3:#d55181; --s4:#c98500; --s5:#199e70; --s6:#d95926;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--page); color: var(--ink);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 2.2rem 1rem 3rem;
+  }
+  main { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 1.55rem; line-height: 1.25; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-2); margin: .5rem 0 1.4rem; max-width: 62ch; }
+  h2 { font-size: 1.02rem; margin: 2rem 0 .6rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); }
+  h2 .q { color: var(--muted); font-weight: 500; }
+  p { margin: .5rem 0; max-width: 76ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 10px; margin: 1.2rem 0; }
+  .tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: .7rem .9rem; }
+  .tile b { display: block; font-size: 1.35rem; font-weight: 650; }
+  .tile span { color: var(--ink-2); font-size: .82rem; }
+  table { border-collapse: collapse; width: 100%; margin: .7rem 0; font-size: .88rem; }
+  th { text-align: left; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--baseline); padding: .3rem .55rem .3rem 0; }
+  td { border-bottom: 1px solid var(--grid); padding: .34rem .55rem .34rem 0; vertical-align: top; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .stack { display: flex; height: 34px; border-radius: 6px; overflow: hidden; background: var(--surface); margin: .8rem 0 .35rem; }
+  .stack .seg { position: relative; border-right: 2px solid var(--page); display:flex; align-items:center; justify-content:center; }
+  .stack .seg:last-child { border-right: 0; }
+  .stack .seg i { font-style: normal; font-size: .74rem; font-weight: 600; color: #fff; }
+  .legend { display: flex; flex-wrap: wrap; gap: .35rem 1rem; font-size: .8rem; color: var(--ink-2); margin-bottom: .4rem; }
+  .legend b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .bars { display: grid; grid-template-columns: max-content 1fr max-content; gap: 6px 10px; align-items: center; margin: .8rem 0; font-size: .84rem; }
+  .bars .lbl { color: var(--ink-2); }
+  .bars .trk { position: relative; height: 14px; }
+  .bars .bar { position: absolute; inset: 0 auto 0 0; background: var(--s1); border-radius: 0 4px 4px 0; }
+  .bars .val { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+  .note { font-size: .82rem; color: var(--muted); max-width: 76ch; }
+  ol { margin: .5rem 0 .5rem 1.2rem; max-width: 76ch; }
+  ol li { margin: .3rem 0; }
+  .box { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: .8rem 1rem; margin: .8rem 0; max-width: 76ch; }
+  footer { margin-top: 2.5rem; font-size: .8rem; color: var(--muted); }
+  a { color: var(--s1); }
+  #tip { position: fixed; pointer-events: none; background: var(--surface); border: 1px solid var(--ring);
+        border-radius: 8px; padding: .35rem .6rem; font-size: .8rem; box-shadow: 0 2px 10px rgba(0,0,0,.12);
+        opacity: 0; transition: opacity .1s; z-index: 10; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A Data Plan for a 40B, Gemma-4-Class, India-First Model</h1>
+  <p class="sub">ERA V5 · Session 3 assignment · Vardhan Walavalkar. Every number below is a decision,
+  and every decision is gated by a proxy-model ablation before it touches the full run.</p>
+
+  <div class="tiles">
+    <div class="tile"><b>8T</b><span>pre-training tokens (200/param; Chinchilla floor 0.8T)</span></div>
+    <div class="tile"><b>12</b><span>Indic languages, 2 tiers, all 9 Brahmic blocks + Perso-Arabic</span></div>
+    <div class="tile"><b>1.22</b><span>weighted corpus fertility target (V4 era: ~1.33)</span></div>
+    <div class="tile"><b>196,608</b><span>vocab = 3×2¹⁶, derived from fertility targets</span></div>
+  </div>
+
+  <h2><span class="q">Q1 ·</span> What data, and why</h2>
+  <p><b>Pre-training (8T consumed).</b> Gemma-class peers train ~14T; we close the gap with
+  OPUS-style dynamic selection on the general pools (V4 measured up to 6× effective tokens; we
+  claim a conservative 2–3×) — never on Indic, which the V4 selector provably undervalued.</p>
+
+  <div class="legend" id="lg"></div>
+  <div class="stack" id="mix" role="img" aria-label="Pre-training mixture: web foundation 34%, web diverse + India-English 14%, code 22%, STEM 14%, Indic 12%, agentic 4%"></div>
+  <table>
+    <tr><th>Pool</th><th class="num">Share</th><th>Contents · rationale</th></tr>
+    <tr><td>D1 Web foundation</td><td class="num">34% · 2.7T</td><td>FineWeb-Edu/DCLM-grade filtered web — language & world knowledge.</td></tr>
+    <tr><td>D2 Web diverse + India-English</td><td class="num">14% · 1.1T</td><td>Incl. <b>0.45T Indian-perspective English</b>: newspaper archives, court judgments, Parliament/PIB records, Indian historiography. The Indian worldview mostly lives in English written in India — collect it deliberately.</td></tr>
+    <tr><td>D3 Code</td><td class="num">22% · 1.75T</td><td>Repos + issues + tests + execution feedback. Code buys reasoning everywhere, not just coding.</td></tr>
+    <tr><td>D4 STEM</td><td class="num">14% · 1.1T</td><td>Math/science text, worked solutions, DeepSeekMath-style mined math.</td></tr>
+    <tr><td>D5 Indic</td><td class="num">12% · 1.0T</td><td>~300B <b>verified-human</b> tokens (Sangraha-verified slivers, IndicCorp, books, govt, ASR-from-speech) × ~3 epochs (≤4 ceiling) + synthetic top-up capped at 40%, flagged. Headline token counts are ~65% machine translation — plan on verified counts only.</td></tr>
+    <tr><td>D6 Agentic</td><td class="num">4% · 0.3T</td><td>Tool-call logs, terminal/browser trajectories, API docs, structured JSON.</td></tr>
+  </table>
+  <p><b>Three structural rules:</b> a <b>10% always-on batch share</b> for Indic + India-English,
+  exempt from the quality selector (V4's 8% channel, widened — two protected objectives: language and worldview);
+  a <b>15% anneal reserve</b> of top-decile math/code/documentary-register text set aside on day one for the
+  LR-cooldown (OLMo-2: GSM 24→67 from a tiny reserve); and a <b>staged curriculum</b> — web-heavy at the small
+  seed stages, code/STEM/Indic-heavy at 40B, shares fixed per stage by ablation.</p>
+  <p><b>Post-training.</b> <b>SFT ~1M pairs</b> (30% Indic <i>native-authored</i> — translated instructions teach
+  translationese; 25% code w/ execution; 15% agentic multi-turn; 15% reasoning-tagged math/science; 15% general+safety).
+  <b>Preference ~400K</b>, incl. a 100K India corpus by Indian annotators — register &amp; honorifics per language,
+  neutrality across Indian parties, Indian legal-ethical frames: this is where "India-first" is actually installed;
+  pre-training supplies knowledge, preferences supply stance. <b>RLVR ~80K</b> verifiable prompts
+  (30K math-checked, 25K unit-tested code, 15K sandboxed agentic tasks, 10K Indic with FLORES-anchored +
+  script-correctness verifiers) — verifiers get their own test suite, since a broken verifier teaches the wrong behaviour.</p>
+
+  <h2><span class="q">Q2 ·</span> Cleaning, for these objectives</h2>
+  <ol>
+    <li><b>Extract</b> with a rendering-based extractor (not naive HTML strip); NFC-normalize; per-paragraph script ID; Hinglish kept first-class.</li>
+    <li><b>Quality-filter script-aware:</b> FineWeb-Edu-style classifier for English; a per-language fastText classifier for each Indic language, seeded from ~5K native-speaker-labeled docs and grown by iterative mining. An English-tuned filter is never applied to Indic — that is precisely how V4's selector erased it. Indian-English registers ("prepone", "do the needful") whitelisted.</li>
+    <li><b>Dedup per snapshot</b> (exact + MinHash) — global dedup removed ~58% and scored worse in FineWeb; cross-dataset dedup for code corpora.</li>
+    <li><b>Decontaminate</b> against every target benchmark and our own held-out sets: source exclusion + exact + n-gram + embedding similarity, with canary GUIDs planted to detect leaks after the fact.</li>
+    <li><b>Provenance &amp; license at collection time</b> (permissive / attribution / restricted buckets) — one unknown-provenance source flags the whole blend; Sangraha's CC-BY obligations honored.</li>
+  </ol>
+  <p class="note">Every step is validated by 140M–1B proxy runs that only need to <i>rank</i> recipes, not predict final scores. A corpus change without an ablation is an opinion.</p>
+
+  <h2><span class="q">Q3 ·</span> Testing against the objective</h2>
+  <table>
+    <tr><th>Objective</th><th>Benchmarks (≤12 total — evaluation budget is real)</th></tr>
+    <tr><td>Gemma-4-class general</td><td>MMLU-Pro, GPQA-Diamond — beat Gemma 4's published numbers.</td></tr>
+    <tr><td>Coding</td><td>LiveCodeBench, SWE-bench Verified.</td></tr>
+    <tr><td>Math/science</td><td>MATH-500 + AIME set.</td></tr>
+    <tr><td>Agentic</td><td>BFCL (function calling) + τ-bench-class terminal/browser tasks.</td></tr>
+    <tr><td>Indic</td><td>MILU, IndicGenBench, FLORES-200 (translation + our fertility meter). Target: +10 pts over Gemma 4.</td></tr>
+    <tr><td>India-first</td><td><b>"BharatDrishti"</b> — a golden proxy we must author ourselves: fresh India-centric QA (history from Indian historiography, civics, law, culture) plus an India-perspective preference eval judged by Indian annotators; scored as win-rate vs Gemma 4 (target ≥60%). Freshly authored ⇒ unleakable.</td></tr>
+  </table>
+  <p>Three-tier firewall as in V4: training pools / benchmark-<i>train</i> splits (format familiarity only, inside always-on) /
+  golden proxies that never enter a batch. Per-checkpoint validation runs ~5% subsets of <i>all</i> domains simultaneously,
+  so a mixture change that buys code with English or Hindi is caught the day it happens.</p>
+
+  <h2><span class="q">Q4 ·</span> Fertility targets → vocabulary size</h2>
+  <p>Fertility (tokens per FLORES-200 word; lower = better, 1.0 ideal) is the real data budget: at V4-era
+  fertility, "500B Hindi tokens" was ~135B words. Targets, LP-allocated per measured deficit:</p>
+  <div class="bars" id="fert"></div>
+  <p class="note">Dravidian targets sit higher because agglutinative words are longer — the LP equalizes
+  <i>per-character</i> cost, not per-word optics. V4-era baselines for scale: Hindi 3.7×, Bengali 4.4×, Tamil 7.1×, Telugu 8.2×.
+  Agentic gets the tightest non-English target because agentic traces are our longest contexts — low fertility there buys the most usable context window.</p>
+  <div class="box">
+    <b>Vocab arithmetic.</b> Start from BrahmicTokenizer-131K's retrofit method (prune out-of-scope scripts,
+    LP-allocate slots to measured deficits — its 2,372 Indic slots already gave Odia 4.3× compression).
+    Needed beyond 131K: ~45K Indic subword slots (≈3–4K per language to pull Dravidian under 1.9),
+    ~6K math/LaTeX (<code>\frac</code>, <code>\sum</code> as single tokens), ~4K agentic/markup (JSON keys, schema punctuation),
+    ~2K code-mixing; ~10K reclaimed by pruning. ≈178K → round to <b>196,608 = 3×2¹⁶</b>.
+    <br><b>Why it's affordable:</b> Kronecker embeddings make the input side ~50M params regardless of vocab;
+    only the softmax head scales — 196,608 × 5,120 ≈ 1.0B params, 2.5% of the model.
+    <b>Why not 262K:</b> &lt;2% marginal fertility gain and a fatter undertrained tail (LP constraint: no slot below ~50K expected occurrences in 8T).
+    <b>Why not 131K:</b> Dravidian fertility stays ≥2.0, forfeiting ~7% of the effective corpus on the flagship objective.
+    Weighted mixture fertility lands at <b>≈1.22</b> — 8T tokens ≈ 6.5T words, ~9% more content for the same compute than the V4-era 1.33.
+  </div>
+
+  <footer>
+    Grounded in ERA V4 artifacts: LightningLM "Reversible Foundations" (arxiv 2606.07404) ·
+    BrahmicTokenizer-131K (arxiv 2605.29379) · Kronecker Embeddings (arxiv 2605.29459) ·
+    S2 tokenizer assignment measurements · Session-3 material.
+  </footer>
+</main>
+<div id="tip"></div>
+<script>
+  const MIX = [
+    ["D1 Web foundation", 34, "var(--s1)", "2.7T tokens"],
+    ["D2 Web diverse + India-English", 14, "var(--s2)", "1.1T tokens (0.45T India-English)"],
+    ["D3 Code", 22, "var(--s3)", "1.75T tokens"],
+    ["D4 STEM", 14, "var(--s4)", "1.1T tokens"],
+    ["D5 Indic", 12, "var(--s5)", "1.0T tokens (~300B verified-human ×3)"],
+    ["D6 Agentic", 4, "var(--s6)", "0.3T tokens"],
+  ];
+  const mix = document.getElementById("mix"), lg = document.getElementById("lg");
+  const tip = document.getElementById("tip");
+  for (const [name, pct, color, detail] of MIX) {
+    const seg = document.createElement("div");
+    seg.className = "seg"; seg.style.width = pct + "%"; seg.style.background = color;
+    if (pct >= 12) seg.innerHTML = "<i>" + pct + "%</i>";
+    seg.addEventListener("mousemove", e => {
+      tip.textContent = `${name} — ${pct}% · ${detail}`;
+      tip.style.opacity = 1;
+      tip.style.left = Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8) + "px";
+      tip.style.top = (e.clientY + 14) + "px";
+    });
+    seg.addEventListener("mouseleave", () => tip.style.opacity = 0);
+    mix.appendChild(seg);
+    lg.insertAdjacentHTML("beforeend", `<span><b style="background:${color}"></b>${name} ${pct}%</span>`);
+  }
+  const FERT = [
+    ["English", 1.20], ["Code", 1.00], ["Agentic", 1.10], ["Math", 1.30], ["Science", 1.35],
+    ["Hindi", 1.45], ["Urdu", 1.50], ["Marathi / Punjabi", 1.55], ["Bengali / Gujarati", 1.60],
+    ["Assamese", 1.65], ["Odia", 1.70], ["Tamil / Telugu", 1.80], ["Kannada", 1.85], ["Malayalam", 1.90],
+  ];
+  const fert = document.getElementById("fert"), max = 2.0;
+  for (const [name, v] of FERT) {
+    fert.insertAdjacentHTML("beforeend",
+      `<span class="lbl">${name}</span><span class="trk"><span class="bar" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="val">${v.toFixed(2)}</span>`);
+  }
+</script>
+</body>
+</html>
