@@ -1,0 +1,16 @@
+# Regenerable: raw downloads, intermediate text pools, tokenized arrays.
+data/raw/*
+data/pools/*
+data/tokens/*
+
+# ...but keep the small stats files, which are the evidence behind numbers quoted in the
+# README (supervised-token fraction, per-lane token counts, source checksums).
+!data/raw/sources.json
+!data/pools/pool_stats.json
+!data/tokens/token_stats.json
+
+# Per-arm training logs are pulled from the box for the record.
+!logs/
+
+# 8.5MB duplicate of S4/assignment/models/; scripts fall back to that path.
+models/

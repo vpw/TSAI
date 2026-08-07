@@ -1,0 +1,121 @@
+{
+ "tokenizer": "tokenizer-sarvam1.json",
+ "vocab_size": 68096,
+ "eos_id": 2,
+ "train_dtype": "uint32",
+ "mask_dtype": "uint8",
+ "lanes": {
+  "general_web": {
+   "docs": 189527,
+   "val_docs": 1292,
+   "train_tokens": 223816707,
+   "val_tokens": 1504459,
+   "chars": 900000290,
+   "bytes_total": 904676709,
+   "chars_per_token": 3.994,
+   "bytes_per_token": 4.015,
+   "seconds": 116.6
+  },
+  "code": {
+   "docs": 76063,
+   "val_docs": 424,
+   "train_tokens": 196107748,
+   "val_tokens": 1574666,
+   "chars": 560000498,
+   "bytes_total": 560580122,
+   "chars_per_token": 2.833,
+   "bytes_per_token": 2.836,
+   "seconds": 95.5
+  },
+  "stem": {
+   "docs": 34466,
+   "val_docs": 372,
+   "train_tokens": 84832760,
+   "val_tokens": 711745,
+   "chars": 260003486,
+   "bytes_total": 262548477,
+   "chars_per_token": 3.039,
+   "bytes_per_token": 3.069,
+   "seconds": 41.1
+  },
+  "reasoning": {
+   "docs": 9374,
+   "val_docs": 103,
+   "train_tokens": 65152903,
+   "val_tokens": 753638,
+   "chars": 157740976,
+   "bytes_total": 159861117,
+   "chars_per_token": 2.393,
+   "bytes_per_token": 2.426,
+   "seconds": 24.7
+  },
+  "agentic": {
+   "docs": 127972,
+   "val_docs": 1218,
+   "train_tokens": 82645091,
+   "val_tokens": 790876,
+   "chars": 304022599,
+   "bytes_total": 303965997,
+   "chars_per_token": 3.644,
+   "bytes_per_token": 3.643,
+   "seconds": 45.4,
+   "supervised_token_fraction": 0.4526,
+   "supervised_byte_fraction": 0.4675
+  },
+  "long_context": {
+   "docs": 2520,
+   "val_docs": 29,
+   "train_tokens": 43991394,
+   "val_tokens": 489948,
+   "chars": 170004592,
+   "bytes_total": 170752178,
+   "chars_per_token": 3.822,
+   "bytes_per_token": 3.839,
+   "seconds": 23.3
+  },
+  "indic_A_verified": {
+   "docs": 42649,
+   "val_docs": 414,
+   "train_tokens": 30745122,
+   "val_tokens": 275722,
+   "chars": 98554423,
+   "bytes_total": 210482144,
+   "chars_per_token": 3.177,
+   "bytes_per_token": 6.785,
+   "seconds": 18.6
+  },
+  "indic_B_unverified": {
+   "docs": 17508,
+   "val_docs": 175,
+   "train_tokens": 12363214,
+   "val_tokens": 125772,
+   "chars": 44906354,
+   "bytes_total": 113701733,
+   "chars_per_token": 3.596,
+   "bytes_per_token": 9.104,
+   "seconds": 8.6
+  },
+  "indic_C_translated": {
+   "docs": 22093,
+   "val_docs": 230,
+   "train_tokens": 19600433,
+   "val_tokens": 205051,
+   "chars": 70000669,
+   "bytes_total": 123362275,
+   "chars_per_token": 3.534,
+   "bytes_per_token": 6.229,
+   "seconds": 11.6
+  },
+  "indic_D_synthetic": {
+   "docs": 54368,
+   "val_docs": 518,
+   "train_tokens": 48882857,
+   "val_tokens": 489853,
+   "chars": 170000861,
+   "bytes_total": 431440510,
+   "chars_per_token": 3.443,
+   "bytes_per_token": 8.738,
+   "seconds": 34.4
+  }
+ }
+}

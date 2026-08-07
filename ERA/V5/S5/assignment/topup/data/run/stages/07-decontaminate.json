@@ -1,0 +1,129 @@
+{
+  "stage": "07-decontaminate",
+  "ngram_n": 13,
+  "min_matching_ngrams_to_drop": 2,
+  "eval_sets": {
+    "MMLU": {
+      "repo": "cais/mmlu",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 86705
+    },
+    "GSM8K": {
+      "repo": "openai/gsm8k",
+      "split": "test",
+      "examples_loaded": 1319,
+      "new_ngrams": 127455
+    },
+    "HellaSwag": {
+      "repo": "Rowan/hellaswag",
+      "split": "validation",
+      "examples_loaded": 3000,
+      "new_ngrams": 167794
+    },
+    "MILU-Hindi": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 134775
+    },
+    "MILU-Telugu": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 154852
+    },
+    "MILU-Bengali": {
+      "repo": "murthyrudra/milu-cleaned",
+      "split": "test",
+      "examples_loaded": 3000,
+      "new_ngrams": 141532
+    }
+  },
+  "eval_ngrams_total": 813113,
+  "docs_in": 255772,
+  "docs_out": 255218,
+  "docs_dropped": 554,
+  "tokens_dropped": 937610,
+  "contamination_rate": 0.002166,
+  "hits_by_eval_set": {
+    "MILU-Bengali": 425,
+    "MILU-Hindi": 1423
+  },
+  "examples": [
+    {
+      "id": "ver-ben:5d574f014caf4fef428ab5919db3e143fdac77e3",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Bengali": 4
+      },
+      "excerpt": "আয়ের নিরিখে গত বছরের তুলনায় দু'ধাপ পিছিয়ে পড়েছেন বিরাট। নতুন পরিসংখ্যান অনুযায়ী, ভারতীয় দল ও রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোরের হয়ে খেলে মোট ২৯ লক্ষ ডলার আয় করেন তিনি। পাশাপাশি ব্র্যান্ড এনডোর্সমেন্ট করে 'কিং কো"
+    },
+    {
+      "id": "ver-ben:d296bffc63c8d6cd51eb3c31a7a439f58beb1367",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Bengali": 4
+      },
+      "excerpt": "রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোরঃ ১৮৯/৫ (কার্তিক-৬৬*, ম্যাক্সওয়েল ৫৫)\nদিল্লি ক্যাপিটালসঃ ১৭৩/৭ (ওয়ার্নার-৬৬, পন্থ ৩৪)\nসংবাদ প্রতিদিন ডিজিটাল ডেস্কঃ দীনেশ কার্তিকের দাপুটে ব্যাটিংয়ের জোরে ম্যাচ জিতল রয়্যাল চ্যালেঞ্জা"
+    },
+    {
+      "id": "ver-ben:66e76de108908fbc970f4ee03349842d3e3aa7ae",
+      "matching_ngrams": 5,
+      "eval_sets": {
+        "MILU-Bengali": 5
+      },
+      "excerpt": "Bangla News Dunia , পল্লব : ক্যান্সার এড়িয়ে চলা সম্ভব কারণ রোগটি মূলত জীবন-যাপনের সঙ্গে সংশ্লিষ্ট। সাধারণত ক্যান্সার প্রতিরোধের প্রথম পদক্ষেপ হলো শরীরচর্চা এবং তামাকজাত পণ্য ভোগ বন্ধ করা। নিয়মিত স্বাস্থ্যকর খাদ্যাভ্যা"
+    },
+    {
+      "id": "ver-ben:ce8c71966991516fda62f24ab051b7156fb39de0",
+      "matching_ngrams": 2,
+      "eval_sets": {
+        "MILU-Bengali": 2
+      },
+      "excerpt": "\"আই তো ইয়োরে ওয়ান্টিনি লাইফে, ইউ তো পুওরে ওয়ান্টেছ\", ইংরেজির ভেজাল মেশানো 'বাংরেজি' এই 'প্যারোডি' (ব্যঙ্গ) গান লিখেছিলেন সেকালে দাদাঠাকুর নামে খ্যাত শরৎ চন্দ্র পণ্ডিত (১৮৮১-১৯৬৮ খ্রিস্টাব্দ)। রামকুমার চট্টোপাধ্যায়ের "
+    },
+    {
+      "id": "ver-ben:81897cef7ea8e153d3ceab1790528b0e7861d16d",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Bengali": 4
+      },
+      "excerpt": "ঘনিয়ে আসছে আইসিসি বিশ্বকাপ-২০১৯। আগামী ২৩ এপ্রিলের মধ্যে প্রতিযোগিতায় অংশগ্রহণকারী দলগুলোর জন্য স্কোয়াড ঘোষণার বাধ্যবাধকতা রয়েছে।\n এরই মধ্যে বেশ কয়েটি দলের স্কোয়াড ঘোষণা করা হয়েছে। আসছে ১৫ এপ্রিল বিশ্বকাপ স্কোয়াড"
+    },
+    {
+      "id": "ver-ben:c1319bdb5be7be81541494f96dc8f99ff1c1a308",
+      "matching_ngrams": 4,
+      "eval_sets": {
+        "MILU-Bengali": 4
+      },
+      "excerpt": "বাংলা হান্ট নিউজ ডেস্কঃ গতকাল লখনৌয়ের ভারতরত্ন শ্রী অটল বিহারী বাজপেয়ী একানা স্টেডিয়ামের মন্থর পিচে লখনৌ সুপার জায়ান্টস (LSG) বনাম রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোর (RCB) ম্যাচ অত্যন্ত বিরক্তিকর ভাবে এগিয়েছিল। শেষপর"
+    },
+    {
+      "id": "ver-ben:7037a4340447570a17371ff7b13116a8e6966c6f",
+      "matching_ngrams": 5,
+      "eval_sets": {
+        "MILU-Bengali": 5
+      },
+      "excerpt": "- 3 hrs ago Vipreet Rajyoga 2023: বিপরীত রাজযোগে প্রচুর ধনসম্পদ লাভ করবেন ৪ রাশির জাতক!\n - 15 hrs ago Budh Gochar 2023: ২৫ জুলাই বুধের গোচর, সূর্যের মতো ঝকমক করবে ৩ রাশির ভাগ্য!\n - 16 hrs ago ত্বকের ঔজ্জ্বল্য বাড়াতে একা"
+    },
+    {
+      "id": "ver-ben:a0697993a2405df0a1e397776deb61eb895360a8",
+      "matching_ngrams": 3,
+      "eval_sets": {
+        "MILU-Bengali": 3
+      },
+      "excerpt": "যমুনা নিউজ বিডিঃ ভারতের আসাম ও অরুণাচল রাজ্যের সীমান্তে সংঘর্ষে দুজন নিহত ও তিনজন নিখোঁজ। বিশ্ব পরিবেশ দিবস উপলক্ষ্যে সীমান্ত এলাকায় জড়ো হয়েছিলেন অনেকেই। আর সেখানেই গুলি চালনো হয়েছে। পুলিশ জানিয়েছে, আসামের ধেমাজি জে"
+    }
+  ],
+  "canary": {
+    "canaries_minted": 3,
+    "planted_in_probe_shard": "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15",
+    "recovered_by_scan": [
+      "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15"
+    ],
+    "detector_works": true,
+    "canaries_found_in_shipped_corpus": 0,
+    "note": "A canary is a rare literal and is scanned for as one; the 13-gram index cannot match it, since every window containing it also contains its neighbouring words. None are written into the shipped corpus."
+  }
+}

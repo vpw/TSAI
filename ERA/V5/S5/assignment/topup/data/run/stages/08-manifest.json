@@ -1,0 +1,181 @@
+{
+  "stage": "08-manifest",
+  "docs_in": 255218,
+  "docs_out": 255218,
+  "docs_dropped": 0,
+  "shards": 52,
+  "shards_admitted": 52,
+  "shards_blocked": 0,
+  "docs_per_shard": 5000,
+  "required_fields": [
+    "shard_id",
+    "source_url",
+    "license_class",
+    "contributor_id",
+    "cleaning_scripts",
+    "ingest_timestamp",
+    "sha256",
+    "token_count",
+    "lang_distribution"
+  ],
+  "license_allowlist": [
+    "Apache-2.0",
+    "CC-BY-4.0",
+    "CC-BY-SA-4.0",
+    "CC0-1.0",
+    "MIT"
+  ],
+  "license_class": "CC-BY-4.0",
+  "cleaning_scripts": [
+    {
+      "script": "fetch_corpus.py",
+      "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+    },
+    {
+      "script": "normalize.py",
+      "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
+    },
+    {
+      "script": "langid_stage.py",
+      "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
+    },
+    {
+      "script": "quality.py",
+      "sha256": "c9f19afbec398ea041e205f3e9454a234a670c663145d42e3c9b3d8208935d6e"
+    },
+    {
+      "script": "quality_clf.py",
+      "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+    },
+    {
+      "script": "dedup.py",
+      "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+    },
+    {
+      "script": "pii.py",
+      "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+    },
+    {
+      "script": "decontaminate.py",
+      "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+    },
+    {
+      "script": "manifest.py",
+      "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+    }
+  ],
+  "tokens_total": 176939773,
+  "words_total": 87152439,
+  "naive_words_x_1_3_total": 113298171,
+  "naive_estimate_error_pct": -35.97,
+  "tokens_by_lang": {
+    "ben": 25597280,
+    "hin": 27018110,
+    "mar": 23957748,
+    "tam": 20267898,
+    "kan": 17324073,
+    "guj": 18319443,
+    "mal": 17344450,
+    "pan": 13267275,
+    "ory": 13843496
+  },
+  "fertility_tokens_per_word": {
+    "ben": 2.09,
+    "hin": 1.459,
+    "mar": 1.927,
+    "tam": 2.443,
+    "kan": 2.477,
+    "guj": 1.985,
+    "mal": 3.158,
+    "pan": 1.64,
+    "ory": 2.364
+  },
+  "tokenizer": "sarvam1",
+  "example_manifest_admitted": {
+    "shard_id": "shard_e84bba20ec66",
+    "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+    "license_class": "CC-BY-4.0",
+    "contributor_id": "era5-vardhan",
+    "cleaning_scripts": [
+      {
+        "script": "fetch_corpus.py",
+        "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+      },
+      {
+        "script": "normalize.py",
+        "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
+      },
+      {
+        "script": "langid_stage.py",
+        "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
+      },
+      {
+        "script": "quality.py",
+        "sha256": "c9f19afbec398ea041e205f3e9454a234a670c663145d42e3c9b3d8208935d6e"
+      },
+      {
+        "script": "quality_clf.py",
+        "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+      },
+      {
+        "script": "dedup.py",
+        "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+      },
+      {
+        "script": "pii.py",
+        "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+      },
+      {
+        "script": "decontaminate.py",
+        "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+      },
+      {
+        "script": "manifest.py",
+        "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+      }
+    ],
+    "ingest_timestamp": "2026-07-31T14:32:45Z",
+    "sha256": "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95",
+    "token_count": 4221024,
+    "tokenizer": "sarvam1",
+    "word_count": 2010111,
+    "naive_words_x_1_3_estimate": 2613144,
+    "lang_distribution": {
+      "ben": 100.0
+    },
+    "documents": 5000,
+    "file": "shard-0000.jsonl",
+    "status": "ADMITTED",
+    "gate_reasons": [
+      "all required fields present; licence on the allow-list"
+    ]
+  },
+  "example_manifest_blocked": {
+    "status": "BLOCKED",
+    "gate_reasons": [
+      "missing: cleaning_scripts"
+    ],
+    "what_was_removed": "cleaning_scripts"
+  },
+  "determinism": {
+    "runs_compared": 2,
+    "shard_ids_run1": [
+      "shard_e84bba20ec66",
+      "shard_d79cca486e85",
+      "shard_6f57a3afc923"
+    ],
+    "shard_ids_run2": [
+      "shard_e84bba20ec66",
+      "shard_d79cca486e85",
+      "shard_6f57a3afc923"
+    ],
+    "sha256_run1": [
+      "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95"
+    ],
+    "sha256_run2": [
+      "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95"
+    ],
+    "identical": true,
+    "contrast": "V4 built ids from row_number() over a non-deterministic ordering, so the same input produced different ids on every run."
+  }
+}

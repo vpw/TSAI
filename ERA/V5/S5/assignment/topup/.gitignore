@@ -1,0 +1,15 @@
+# Mirrors S4's ignore rules -- this is S4's pipeline pointed at a new slice.
+.venv/
+models
+__pycache__/
+*.pyc
+
+# Downloaded parquet and every intermediate stage file.
+data/raw/
+data/stage/
+
+# The cleaned corpus itself (~1.5 GB). Regenerate with scripts/driver.py.
+# data/run/stats.json, manifests.json, stages/ and derived_stopwords.json ARE
+# tracked -- they are the evidence behind TOPUP_REPORT.md.
+data/run/shards/
+data/run/*.log

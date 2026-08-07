@@ -1,0 +1,71 @@
+{
+ "pools": [
+  {
+   "lane": "general_web",
+   "docs": 189527,
+   "chars": 900000290
+  },
+  {
+   "lane": "code",
+   "docs": 76063,
+   "chars": 560000498
+  },
+  {
+   "lane": "stem",
+   "docs": 34466,
+   "chars": 260003486
+  },
+  {
+   "lane": "reasoning",
+   "docs": 9374,
+   "chars": 157740976
+  },
+  {
+   "lane": "agentic",
+   "docs": 128043,
+   "chars": 304022599,
+   "per_source": {
+    "glaive-fc-v2.json": 112957,
+    "toolace.json": 11300,
+    "hermes-fc.json": 1893,
+    "hermes-fc-single.json": 1893
+   }
+  },
+  {
+   "lane": "long_context",
+   "docs": 2520,
+   "chars": 170004592,
+   "packed_repo_docs": 327,
+   "packed_web_docs": 2193
+  },
+  {
+   "lane": "indic_A_verified",
+   "docs": 42649,
+   "chars": 98554423,
+   "by_lang": {
+    "hin": 17218,
+    "tel": 12949,
+    "eng": 10070,
+    "asm": 2412
+   }
+  },
+  {
+   "lane": "indic_B_unverified",
+   "docs": 17508,
+   "chars": 44906354,
+   "by_lang": {
+    "hin": 17508
+   }
+  },
+  {
+   "lane": "indic_C_translated",
+   "docs": 22093,
+   "chars": 70000669
+  },
+  {
+   "lane": "indic_D_synthetic",
+   "docs": 54368,
+   "chars": 170000861
+  }
+ ]
+}

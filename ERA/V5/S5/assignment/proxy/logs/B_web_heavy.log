@@ -1,0 +1,43 @@
+arm=B_web_heavy naive web-heavy V4 start (web 72 / code 13 / STEM 7 / Indic 8)
+params total=40.3M  non-embedding=14.2M  d_model=384 layers=8 d_ffn=1024
+tokens=75M  steps=4577  tokens/step=16384  accum=2  flops/token=247M
+  step     0/4577  loss 11.206  gn   5.19    16762 tok/s  eta  74.6 min
+  step   200/4577  loss  6.084  gn   0.69    30273 tok/s  eta  39.5 min
+  step   400/4577  loss  5.167  gn   0.63    31235 tok/s  eta  36.5 min
+  step   600/4577  loss  5.056  gn   0.68    31570 tok/s  eta  34.4 min
+  step   800/4577  loss  4.806  gn   0.61    31742 tok/s  eta  32.5 min
+  step  1000/4577  loss  4.443  gn   0.75    31847 tok/s  eta  30.7 min
+    [eval @ 25%] general_w=1.6982  code=1.9023  stem=2.1259  reasoning=2.2682  agentic=1.6539  long_cont=1.7421  indic_A_v=1.5367  indic_B_u=0.9136  indic_C_t=1.3113  indic_D_s=0.9176
+  step  1200/4577  loss  4.638  gn   0.65    30435 tok/s  eta  30.3 min
+  step  1400/4577  loss  4.655  gn   0.62    30685 tok/s  eta  28.3 min
+  step  1600/4577  loss  4.409  gn   0.65    30875 tok/s  eta  26.3 min
+  step  1800/4577  loss  4.198  gn   0.69    31025 tok/s  eta  24.4 min
+  step  2000/4577  loss  4.078  gn   0.61    31145 tok/s  eta  22.6 min
+  step  2200/4577  loss  3.976  gn   0.64    31244 tok/s  eta  20.8 min
+    [eval @ 50%] general_w=1.5326  code=1.4131  stem=1.7854  reasoning=1.7723  agentic=1.3781  long_cont=1.5245  indic_A_v=1.4753  indic_B_u=0.8383  indic_C_t=1.2252  indic_D_s=0.8425
+  step  2400/4577  loss  4.084  gn   0.64    30596 tok/s  eta  19.4 min
+  step  2600/4577  loss  4.279  gn   0.64    30719 tok/s  eta  17.6 min
+  step  2800/4577  loss  3.632  gn   0.67    30825 tok/s  eta  15.7 min
+  step  3000/4577  loss  4.007  gn   0.67    30917 tok/s  eta  13.9 min
+  step  3200/4577  loss  4.034  gn   0.74    30998 tok/s  eta  12.1 min
+  step  3400/4577  loss  3.677  gn   0.67    31069 tok/s  eta  10.3 min
+    [eval @ 75%] general_w=1.4539  code=1.2250  stem=1.6525  reasoning=1.5963  agentic=1.2467  long_cont=1.4259  indic_A_v=1.7381  indic_B_u=0.7912  indic_C_t=1.1712  indic_D_s=0.7871
+  step  3600/4577  loss  3.808  gn   0.69    30648 tok/s  eta   8.7 min
+  step  3800/4577  loss  3.699  gn   0.75    30730 tok/s  eta   6.9 min
+  step  4000/4577  loss  3.700  gn   0.72    30803 tok/s  eta   5.1 min
+  step  4200/4577  loss  3.721  gn   0.73    30870 tok/s  eta   3.3 min
+  step  4400/4577  loss  3.770  gn   0.72    30929 tok/s  eta   1.6 min
+  step  4576/4577  loss  3.867  gn   0.71    30978 tok/s  eta   0.0 min
+    [eval @ 100%] general_w=1.4238  code=1.1725  stem=1.6117  reasoning=1.5500  agentic=1.2010  long_cont=1.3928  indic_A_v=1.6256  indic_B_u=0.7665  indic_C_t=1.1511  indic_D_s=0.7607
+
+B_web_heavy: 40.8 min  30603 tok/s  7.55 TFLOP/s
+  bpb general_web            1.4051
+  bpb code                   1.1704
+  bpb stem                   1.6223
+  bpb reasoning              1.5515
+  bpb agentic                1.2208
+  bpb long_context           1.4035
+  bpb indic_A_verified       1.7720
+  bpb indic_B_unverified     0.7665
+  bpb indic_C_translated     1.1511
+  bpb indic_D_synthetic      0.7596

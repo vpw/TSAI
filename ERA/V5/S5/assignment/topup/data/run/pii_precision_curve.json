@@ -1,0 +1,242 @@
+[
+  {
+    "aggressiveness": 0.1,
+    "true_positives": 15,
+    "false_positives": 1,
+    "false_negatives": 0,
+    "trap_spans_wrongly_masked": 1,
+    "precision": 0.9375,
+    "recall": 1.0,
+    "f1": 0.9677,
+    "per_case": [
+      {
+        "case": "session example (forum post, en+hi)",
+        "true_spans": 8,
+        "found": 8,
+        "tp": 8,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "support ticket with credentials",
+        "true_spans": 7,
+        "found": 7,
+        "tp": 7,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "public-figure and place-name trap (no private PII)",
+        "true_spans": 0,
+        "found": 1,
+        "tp": 0,
+        "fp": 1,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "clean prose, no identifiers",
+        "true_spans": 0,
+        "found": 0,
+        "tp": 0,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      }
+    ]
+  },
+  {
+    "aggressiveness": 0.3,
+    "true_positives": 15,
+    "false_positives": 1,
+    "false_negatives": 0,
+    "trap_spans_wrongly_masked": 1,
+    "precision": 0.9375,
+    "recall": 1.0,
+    "f1": 0.9677,
+    "per_case": [
+      {
+        "case": "session example (forum post, en+hi)",
+        "true_spans": 8,
+        "found": 8,
+        "tp": 8,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "support ticket with credentials",
+        "true_spans": 7,
+        "found": 7,
+        "tp": 7,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "public-figure and place-name trap (no private PII)",
+        "true_spans": 0,
+        "found": 1,
+        "tp": 0,
+        "fp": 1,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "clean prose, no identifiers",
+        "true_spans": 0,
+        "found": 0,
+        "tp": 0,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      }
+    ]
+  },
+  {
+    "aggressiveness": 0.45,
+    "true_positives": 15,
+    "false_positives": 1,
+    "false_negatives": 0,
+    "trap_spans_wrongly_masked": 1,
+    "precision": 0.9375,
+    "recall": 1.0,
+    "f1": 0.9677,
+    "per_case": [
+      {
+        "case": "session example (forum post, en+hi)",
+        "true_spans": 8,
+        "found": 8,
+        "tp": 8,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "support ticket with credentials",
+        "true_spans": 7,
+        "found": 7,
+        "tp": 7,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "public-figure and place-name trap (no private PII)",
+        "true_spans": 0,
+        "found": 1,
+        "tp": 0,
+        "fp": 1,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "clean prose, no identifiers",
+        "true_spans": 0,
+        "found": 0,
+        "tp": 0,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      }
+    ]
+  },
+  {
+    "aggressiveness": 0.6,
+    "true_positives": 15,
+    "false_positives": 8,
+    "false_negatives": 0,
+    "trap_spans_wrongly_masked": 8,
+    "precision": 0.6522,
+    "recall": 1.0,
+    "f1": 0.7895,
+    "per_case": [
+      {
+        "case": "session example (forum post, en+hi)",
+        "true_spans": 8,
+        "found": 10,
+        "tp": 8,
+        "fp": 2,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "support ticket with credentials",
+        "true_spans": 7,
+        "found": 8,
+        "tp": 7,
+        "fp": 1,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "public-figure and place-name trap (no private PII)",
+        "true_spans": 0,
+        "found": 5,
+        "tp": 0,
+        "fp": 5,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "clean prose, no identifiers",
+        "true_spans": 0,
+        "found": 0,
+        "tp": 0,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      }
+    ]
+  },
+  {
+    "aggressiveness": 0.8,
+    "true_positives": 15,
+    "false_positives": 8,
+    "false_negatives": 0,
+    "trap_spans_wrongly_masked": 8,
+    "precision": 0.6522,
+    "recall": 1.0,
+    "f1": 0.7895,
+    "per_case": [
+      {
+        "case": "session example (forum post, en+hi)",
+        "true_spans": 8,
+        "found": 10,
+        "tp": 8,
+        "fp": 2,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "support ticket with credentials",
+        "true_spans": 7,
+        "found": 8,
+        "tp": 7,
+        "fp": 1,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "public-figure and place-name trap (no private PII)",
+        "true_spans": 0,
+        "found": 5,
+        "tp": 0,
+        "fp": 5,
+        "missed": 0,
+        "missed_spans": []
+      },
+      {
+        "case": "clean prose, no identifiers",
+        "true_spans": 0,
+        "found": 0,
+        "tp": 0,
+        "fp": 0,
+        "missed": 0,
+        "missed_spans": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,156 @@
+{
+  "stage": "02-normalize",
+  "docs_in": 277285,
+  "docs_out": 277284,
+  "docs_dropped": 1,
+  "dropped_empty_after_clean": 1,
+  "chars_in": 619378368,
+  "chars_out": 618982634,
+  "chars_removed": 395734,
+  "noise_chars_removed_by_class": {
+    "zero_width": 23,
+    "bidi": 100,
+    "control": 119,
+    "replacement": 597,
+    "private_use": 24
+  },
+  "noise_chars_removed_total": 863,
+  "joiners_kept": {
+    "ZWNJ": 1674,
+    "ZWJ": 7427
+  },
+  "docs_with_html_entities": 24,
+  "docs_changed_by_nfc": 18341,
+  "ghost_tag_docs": 4,
+  "ghost_tag_hits_by_kind": {
+    "chat_prefix": 4
+  },
+  "ghost_tag_hits_total": 4,
+  "docs_format_unified": 0,
+  "canonical_format": {
+    "user": "<|user|>",
+    "assistant": "<|assistant|>",
+    "system": "<|system|>",
+    "end": "<|end|>"
+  },
+  "garbage_vocab_slots_before": 2,
+  "garbage_vocab_slots_after": 1,
+  "byte_fallback_slots_before": 107,
+  "garbage_audit_docs_scanned": 40000,
+  "garbage_audit_note": "A garbage slot is a vocab entry whose piece is nothing but noise characters. Byte-fallback pieces (<0xE0>) are counted separately: on well-formed Indic text they are the tokenizer working, not dirt.",
+  "examples": [
+    {
+      "id": "ver-ben:f1973f94e54454e686b38d16352f2015a264f935",
+      "src": "ver-ben",
+      "removed": {
+        "zero_width": 12
+      },
+      "joiners_in_doc": {
+        "ZWNJ": 1
+      },
+      "chars_before": 11316,
+      "chars_after": 11364
+    },
+    {
+      "id": "ver-ben:f7add00da542acae27874e7aba01e538",
+      "src": "ver-ben",
+      "removed": {
+        "bidi": 3
+      },
+      "joiners_in_doc": {},
+      "chars_before": 4487,
+      "chars_after": 4483
+    },
+    {
+      "id": "ver-ben:21a97abe3774d60b68abf891d9721a2a",
+      "src": "ver-ben",
+      "removed": {
+        "bidi": 6
+      },
+      "joiners_in_doc": {},
+      "chars_before": 2744,
+      "chars_after": 2737
+    },
+    {
+      "id": "ver-ben:ef45f3ea27e3432182e63522d30291a4b8e4613b",
+      "src": "ver-ben",
+      "removed": {
+        "replacement": 5
+      },
+      "joiners_in_doc": {},
+      "chars_before": 2770,
+      "chars_after": 2763
+    },
+    {
+      "id": "ver-ben:a5a91afef8ab7736833c79adc2085aea",
+      "src": "ver-ben",
+      "removed": {
+        "bidi": 13
+      },
+      "joiners_in_doc": {},
+      "chars_before": 11867,
+      "chars_after": 11853
+    },
+    {
+      "id": "ver-hin2:2d1e62ffc747afa978938ba747b389132377f433",
+      "src": "ver-hin2",
+      "removed": {
+        "zero_width": 3
+      },
+      "joiners_in_doc": {},
+      "chars_before": 5621,
+      "chars_after": 5618
+    },
+    {
+      "id": "ver-hin2:0bf29e1cbfa76ec2e97ea2dfd24b5290c871484a",
+      "src": "ver-hin2",
+      "removed": {
+        "replacement": 4
+      },
+      "joiners_in_doc": {},
+      "chars_before": 9216,
+      "chars_after": 9210
+    },
+    {
+      "id": "ver-hin2:1aea6a7fd1b7601e7a897fd0a45931d47400e6d4",
+      "src": "ver-hin2",
+      "removed": {
+        "replacement": 5
+      },
+      "joiners_in_doc": {},
+      "chars_before": 3059,
+      "chars_after": 3052
+    }
+  ],
+  "ghost_examples": [
+    {
+      "id": "ver-tam:ebc2ae8c0d5bd1bced98127c5454e451bea8761d",
+      "markers": {
+        "chat_prefix": 1
+      },
+      "before": "Manage your notification subscription by clicking on the icon.\n To Start receiving timely alerts please follow the below steps:\nClick on the Menu icon of the browser, it opens up a list of options.\n Click on the \"Options \", it opens up the settings page,\nHere click on the \"Privac"
+    },
+    {
+      "id": "ver-ory:d205bd584f1c6df042d86433a6fbb86bd7a0e0b8",
+      "markers": {
+        "chat_prefix": 1
+      },
+      "before": "ପୃଷ୍ଠାଃOdisha Rajanitira Itihasa.pdf/୪୧ (ସମ୍ପାଦନା)\nBot: Automated text replacement (-ଆ +ଆ)\nଟିକେ (Bot: Automated text replacement (-ଆ +ଆ))\n|ପୃଷ୍ଠା ଲେଖା(ଯୋଡିବାକୁ ଥିବା)\n|ପୃଷ୍ଠା ଲେଖା(ଯୋଡିବାକୁ ଥିବା)\n|୮ କ ଧାଡ଼ିଃ\n|୮ କ ଧାଡ଼ିଃ\nସମୟରେ ସେ ବ୍ୟକ୍ତିଗତ ସତ୍ୟାଗ୍ରହ ନିମନ୍ତେ ମହାତ୍ମା ଗାନ୍ଧିଙ୍କ ଦ୍ୱାରା "
+    },
+    {
+      "id": "ver-ory:5a6f7e0ea74f0f15e48d519df32bb06bd90ecd6e",
+      "markers": {
+        "chat_prefix": 1
+      },
+      "before": "Bot: Automated text replacement (-୍ବ +୍ୱ)\nଟିକେ (Bot: Automated text replacement (-୍ବ +୍ୱ))\nଥାଏ ମୋ ମନେ ସ୍ନେହ-ଭକତି, ଲୋ ତଟିନି ! (୬)\nପଦେ ପୂଜୁଥିଲେ ଅନୁକ୍ଷଣ, ଲୋ ତଟିନି !(୯)\nସଜେ ତହିଁ ଦିବ୍ୟ ଚାରୁ ଚିତ୍ର, ଲୋ ତଟିନି ! (୧୩)\nକରେ ନାହିଁ ମୁଁ ତିଳେ ଗଣନ, ଲୋ ତଟିନି ! (୧୪)\nଚିତ୍ତେ ଜନ୍ନାଇବୁ ଏହି ମତି, ଲୋ ତଟିନ"
+    },
+    {
+      "id": "ver-ory:5031678e3b90e49bd55edfde7119cfb5dbca48f3",
+      "markers": {
+        "chat_prefix": 1
+      },
+      "before": "Bot: Automated text replacement (- ଟି +ଟି )\n(Jnanaranjan sahu (ଆଲୋଚନା) ଙ୍କ ଦେଇ କରାଯାଇଥିବା 24155 ସଙ୍କଳନଟି ପଛକୁ ଫେରାଇନିଆଗଲା)\nଟିକେ (Bot: Automated text replacement (- ଟି +ଟି ))\nହେ ଛ୍ୟା, ଇଂଲିଶକି ସବୁଠୁଁ ପଣ୍ଡିତ ଭାଷା ବୋଲି ଭାବି ତା ଜରିଆରେ ଶିଖିଥିବା ପୁଳାଏ ଅଜ୍ଞତାକୁ ଜ୍ଞାନ କହି ଅଯଥାରେ ବାହାଦୁରି "
+    }
+  ],
+  "hash_order": "sha256 computed AFTER clean_text(), not before"
+}

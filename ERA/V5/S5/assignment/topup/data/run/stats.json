@@ -1,0 +1,2336 @@
+{
+  "generated_at_utc": "2026-07-31T14:40:19Z",
+  "smoke": false,
+  "durations_seconds": {
+    "00-fetch": 163.0,
+    "fixtures": 0.1,
+    "02-normalize": 228.6,
+    "03-langid": 289.8,
+    "04-quality-heuristics": 94.5,
+    "04b-quality-classifier": 161.5,
+    "05-dedup": 252.1,
+    "06-pii": 308.7,
+    "07-decontaminate": 506.0,
+    "08-manifest": 436.6
+  },
+  "total_runtime_seconds": 2440.8,
+  "headline": {
+    "dataset": "ai4bharat/sangraha",
+    "revision": "8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8",
+    "license": "CC-BY-4.0",
+    "docs_in": 277285,
+    "tokens_in": 192310750,
+    "docs_out": 255218,
+    "tokens_out": 176939773,
+    "doc_retention_pct": 92.04,
+    "token_retention_pct": 92.01,
+    "shards": 52,
+    "shards_admitted": 52
+  },
+  "yield_descent": [
+    {
+      "stage": "0. Raw slice",
+      "docs": 277285,
+      "pct_docs": 100.0,
+      "dropped": 0
+    },
+    {
+      "stage": "1. Extract",
+      "docs": 277285,
+      "pct_docs": 100.0,
+      "dropped": 0,
+      "inherited": true,
+      "note": "Sangraha ships extracted text; extraction was Session 3's stage."
+    },
+    {
+      "stage": "2. Normalize",
+      "docs": 277284,
+      "pct_docs": 100.0,
+      "dropped": 1
+    },
+    {
+      "stage": "3. Language ID",
+      "docs": 276820,
+      "pct_docs": 99.83,
+      "dropped": 464
+    },
+    {
+      "stage": "4a. Quality (Gopher/C4)",
+      "docs": 256635,
+      "pct_docs": 92.55,
+      "dropped": 20185
+    },
+    {
+      "stage": "4b. Quality (classifier)",
+      "docs": 256528,
+      "pct_docs": 92.51,
+      "dropped": 107
+    },
+    {
+      "stage": "5. Deduplicate",
+      "docs": 255772,
+      "pct_docs": 92.24,
+      "dropped": 756
+    },
+    {
+      "stage": "6. PII scrub",
+      "docs": 255772,
+      "pct_docs": 92.24,
+      "dropped": 0
+    },
+    {
+      "stage": "7. Decontaminate",
+      "docs": 255218,
+      "pct_docs": 92.04,
+      "dropped": 554
+    },
+    {
+      "stage": "8. Manifest",
+      "docs": 255218,
+      "pct_docs": 92.04,
+      "dropped": 0
+    }
+  ],
+  "session_reference_yield": [
+    100,
+    92,
+    88,
+    61,
+    44,
+    43,
+    42,
+    42,
+    42
+  ],
+  "stages": {
+    "00-fetch": {
+      "stage": "00-fetch",
+      "dataset": "ai4bharat/sangraha",
+      "revision": "8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8",
+      "license": "CC-BY-4.0",
+      "smoke": false,
+      "docs_in": 0,
+      "docs_out": 277285,
+      "tokens_out": 192310750,
+      "chars_out": 619378368,
+      "sources": {
+        "ver-ben": {
+          "key": "ver-ben",
+          "pool": "verified",
+          "claimed_lang": "ben",
+          "repo_path": "verified/ben/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/ben/data-0.parquet",
+          "bytes": 391867808,
+          "sha256": "5745f9a93f3e1d52bc1e4615f1133afe3b9f20e7bfbcefd26cbd9c321a5c604e",
+          "rows_in_file": 149797,
+          "row_groups": 1,
+          "docs_taken": 32269,
+          "raw_tokens": 26741110,
+          "raw_chars": 82312934,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 12,
+            "block_len_docs": 2689,
+            "block_gap_rows": 12483
+          },
+          "token_budget": 30000000
+        },
+        "ver-hin2": {
+          "key": "ver-hin2",
+          "pool": "verified",
+          "claimed_lang": "hin",
+          "repo_path": "verified/hin/data-1.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/hin/data-1.parquet",
+          "bytes": 374495016,
+          "sha256": "ea77bc9266d8aca4be0009ca5c270c50c8cff1fb6a7651ce4ff9215d6ebb68a8",
+          "rows_in_file": 174763,
+          "row_groups": 1,
+          "docs_taken": 47321,
+          "raw_tokens": 30000523,
+          "raw_chars": 104566291,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 12,
+            "block_len_docs": 4092,
+            "block_gap_rows": 14563
+          },
+          "token_budget": 30000000
+        },
+        "ver-mar": {
+          "key": "ver-mar",
+          "pool": "verified",
+          "claimed_lang": "mar",
+          "repo_path": "verified/mar/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/mar/data-0.parquet",
+          "bytes": 381849801,
+          "sha256": "394f7a33ebee8e2c75f1e93d09e63eb7cb224589aa226043048b24523c729be3",
+          "rows_in_file": 174763,
+          "row_groups": 1,
+          "docs_taken": 41002,
+          "raw_tokens": 25000207,
+          "raw_chars": 88366177,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 12,
+            "block_len_docs": 3539,
+            "block_gap_rows": 14563
+          },
+          "token_budget": 25000000
+        },
+        "ver-tam": {
+          "key": "ver-tam",
+          "pool": "verified",
+          "claimed_lang": "tam",
+          "repo_path": "verified/tam/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/tam/data-0.parquet",
+          "bytes": 357869888,
+          "sha256": "7787405e9881a0cc6fe62dbdbb109c51b4e05971236eea41d83e5bc724e9a26d",
+          "rows_in_file": 149796,
+          "row_groups": 1,
+          "docs_taken": 32783,
+          "raw_tokens": 22753852,
+          "raw_chars": 82017956,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 12,
+            "block_len_docs": 2732,
+            "block_gap_rows": 12483
+          },
+          "token_budget": 25000000
+        },
+        "ver-kan": {
+          "key": "ver-kan",
+          "pool": "verified",
+          "claimed_lang": "kan",
+          "repo_path": "verified/kan/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/kan/data-0.parquet",
+          "bytes": 368175508,
+          "sha256": "291ad9d11034bb18a185176c58c69dab79867f6f1633dd33b0b0d7a98bd62f74",
+          "rows_in_file": 174762,
+          "row_groups": 1,
+          "docs_taken": 29694,
+          "raw_tokens": 19049453,
+          "raw_chars": 61080020,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 11,
+            "block_len_docs": 2699,
+            "block_gap_rows": 15887
+          },
+          "token_budget": 20000000
+        },
+        "ver-guj": {
+          "key": "ver-guj",
+          "pool": "verified",
+          "claimed_lang": "guj",
+          "repo_path": "verified/guj/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/guj/data-0.parquet",
+          "bytes": 374269246,
+          "sha256": "ff4529617aead4bd47b2c9f5d62778b9b98699daabde82f7535997704db10e2d",
+          "rows_in_file": 149797,
+          "row_groups": 1,
+          "docs_taken": 23790,
+          "raw_tokens": 20001573,
+          "raw_chars": 58006472,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 9,
+            "block_len_docs": 2729,
+            "block_gap_rows": 16644
+          },
+          "token_budget": 20000000
+        },
+        "ver-mal": {
+          "key": "ver-mal",
+          "pool": "verified",
+          "claimed_lang": "mal",
+          "repo_path": "verified/mal/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/mal/data-0.parquet",
+          "bytes": 333917916,
+          "sha256": "de1cee391b3703ddfdcf73bec83247cefc1b2b0e9c90b2c0da9a5d05a8027615",
+          "rows_in_file": 174763,
+          "row_groups": 1,
+          "docs_taken": 31899,
+          "raw_tokens": 20001501,
+          "raw_chars": 61224529,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 12,
+            "block_len_docs": 2734,
+            "block_gap_rows": 14563
+          },
+          "token_budget": 20000000
+        },
+        "ver-pan": {
+          "key": "ver-pan",
+          "pool": "verified",
+          "claimed_lang": "pan",
+          "repo_path": "verified/pan/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/pan/data-0.parquet",
+          "bytes": 358049731,
+          "sha256": "39ef1a3e7e50e704b43495f63d73b58d76144173d5bdcc9933107a54d68ba883",
+          "rows_in_file": 149797,
+          "row_groups": 1,
+          "docs_taken": 17546,
+          "raw_tokens": 13803249,
+          "raw_chars": 42185878,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 7,
+            "block_len_docs": 2506,
+            "block_gap_rows": 21399
+          },
+          "token_budget": 15000000
+        },
+        "ver-ory": {
+          "key": "ver-ory",
+          "pool": "verified",
+          "claimed_lang": "ory",
+          "repo_path": "verified/ori/data-0.parquet",
+          "url": "https://huggingface.co/datasets/ai4bharat/sangraha/blob/8b813c3f62d37b2fa174d68c31e8b35ae2fe85e8/verified/ori/data-0.parquet",
+          "bytes": 372271028,
+          "sha256": "cce0dc3307e022a191c1d4c156fff960e56bd414adfb25b02807b821f2c1907e",
+          "rows_in_file": 189757,
+          "row_groups": 1,
+          "docs_taken": 20981,
+          "raw_tokens": 14959282,
+          "raw_chars": 39618111,
+          "sampling": {
+            "mode": "contiguous blocks spread across the shard",
+            "blocks": 8,
+            "block_len_docs": 2622,
+            "block_gap_rows": 23719
+          },
+          "token_budget": 15000000
+        }
+      },
+      "output": "data/stage/00-raw.jsonl.gz"
+    },
+    "fixtures": {
+      "stage": "fixtures",
+      "purpose": "Correctness fixtures for clean_text(), rebuilt from the session's own Widget 2 examples. These are FIXTURES, not corpus measurements.",
+      "cases": 6,
+      "passed": 6,
+      "failed": 0,
+      "results": [
+        {
+          "name": "English web scrape",
+          "kind": "web",
+          "chars_before": 262,
+          "chars_after": 227,
+          "noise_removed_by_class": {
+            "replacement": 1
+          },
+          "joiners_kept": {},
+          "ghost_tags_flagged": {},
+          "before": "Cookie notice: We &amp; our 47 partners use cookies. By clicking &quot;Accept&quot; you consent. It&#8217;s the crawler&#8217;s job to fetch every page from the open web. Encoding glitch here � corrupted one byte.\tTabs and    multiple     spaces should collapse.",
+          "after": "Cookie notice: We & our 47 partners use cookies. By clicking \"Accept\" you consent. It’s the crawler’s job to fetch every page from the open web. Encoding glitch here corrupted one byte. Tabs and multiple spaces should collapse.",
+          "unified": null,
+          "checks": {
+            "no_entities": true,
+            "no_replacement": true,
+            "single_spaced": true
+          },
+          "passed": true
+        },
+        {
+          "name": "Chat log (ghost tags)",
+          "kind": "conversation",
+          "chars_before": 208,
+          "chars_after": 208,
+          "noise_removed_by_class": {},
+          "joiners_kept": {},
+          "ghost_tags_flagged": {
+            "bracket_role": 3,
+            "xml_role": 2
+          },
+          "before": "[SYSTEM] You are a helpful data-cleaning assistant.\n[USER] How do I dedupe a 15-trillion-token corpus?\n[ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning.\n<USER>raw serialized conversation turn</USER>",
+          "after": "[SYSTEM] You are a helpful data-cleaning assistant.\n[USER] How do I dedupe a 15-trillion-token corpus?\n[ASSISTANT] Use MinHash plus LSH, then hash AFTER cleaning.\n<USER>raw serialized conversation turn</USER>",
+          "unified": "<|system|> You are a helpful data-cleaning assistant. <|user|> How do I dedupe a 15-trillion-token corpus? <|assistant|> Use MinHash plus LSH, then hash AFTER cleaning. <|user|>raw serialized conversation turn<|end|>",
+          "checks": {
+            "ghost_flagged": true,
+            "unifies": true
+          },
+          "passed": true
+        },
+        {
+          "name": "Hindi (Devanagari)",
+          "kind": "indic",
+          "chars_before": 183,
+          "chars_after": 171,
+          "noise_removed_by_class": {
+            "zero_width": 2
+          },
+          "joiners_kept": {
+            "ZWNJ": 1,
+            "ZWJ": 1
+          },
+          "ghost_tags_flagged": {},
+          "before": "﻿नमस्ते &amp; डेटा सफाई में स्वागत है। संयुक्त अक्षर: क‌् — ZWNJ ko rakhna zaroori.​ जोड़ने वाला: र‍ — ZWJ real Eyelash-Ra. HTML entity: &#2309; = अ, aur BOM va ZWSP hataane chaahiye.",
+          "after": "नमस्ते & डेटा सफाई में स्वागत है। संयुक्त अक्षर: क‌् — ZWNJ ko rakhna zaroori. जोड़ने वाला: र‍ — ZWJ real Eyelash-Ra. HTML entity: अ = अ, aur BOM va ZWSP hataane chaahiye.",
+          "unified": null,
+          "checks": {
+            "keeps_zwnj": true,
+            "keeps_zwj": true,
+            "drops_bom_zwsp": true
+          },
+          "passed": true
+        },
+        {
+          "name": "Telugu with bidi override",
+          "kind": "indic",
+          "chars_before": 118,
+          "chars_after": 116,
+          "noise_removed_by_class": {
+            "control": 1,
+            "bidi": 1
+          },
+          "joiners_kept": {
+            "ZWNJ": 1,
+            "ZWJ": 1
+          },
+          "ghost_tags_flagged": {},
+          "before": "కిరణజన్య సంయోగక్రియ. ZWNJ (క‌్) stops the conjunct, keep it. ZWJ (ర‍) is valid.\u0007 Bidi override ‮reversed and stripped.",
+          "after": "కిరణజన్య సంయోగక్రియ. ZWNJ (క‌్) stops the conjunct, keep it. ZWJ (ర‍) is valid. Bidi override reversed and stripped.",
+          "unified": null,
+          "checks": {
+            "keeps_zwnj": true,
+            "keeps_zwj": true,
+            "drops_bidi_control": true
+          },
+          "passed": true
+        },
+        {
+          "name": "Code snippet",
+          "kind": "code",
+          "chars_before": 166,
+          "chars_after": 147,
+          "noise_removed_by_class": {},
+          "joiners_kept": {},
+          "ghost_tags_flagged": {},
+          "before": "def clean(s):\n    if len(s) &gt; 0 &amp;&amp; s[0] &lt; limit:\n        return s.strip()   # nbsp-padded comment\n    else:\n        return None  # CRLF + tab-prefixed\r\n",
+          "after": "def clean(s):\n    if len(s) > 0 && s[0] < limit:\n        return s.strip() # nbsp-padded comment\n    else:\n        return None # CRLF + tab-prefixed",
+          "unified": null,
+          "checks": {
+            "no_entities": true,
+            "unescapes_operators": true
+          },
+          "passed": true
+        },
+        {
+          "name": "Mixed / worst case (stress)",
+          "kind": "stress",
+          "chars_before": 137,
+          "chars_after": 124,
+          "noise_removed_by_class": {
+            "control": 1,
+            "zero_width": 2,
+            "bidi": 1,
+            "private_use": 1,
+            "replacement": 1
+          },
+          "joiners_kept": {
+            "ZWNJ": 1,
+            "ZWJ": 1
+          },
+          "ghost_tags_flagged": {
+            "bracket_role": 1
+          },
+          "before": "﻿Mixed​ case: &amp;amp; double-escaped, � bad byte, \u0001control, ‮bidi, private-use, Indic joiners क‌् and र‍ must survive.   [USER] ghost.",
+          "after": "Mixed case: &amp; double-escaped, bad byte, control, bidi, private-use, Indic joiners क‌् and र‍ must survive. [USER] ghost.",
+          "unified": null,
+          "checks": {
+            "no_replacement": true,
+            "keeps_zwnj": true,
+            "keeps_zwj": true,
+            "ghost_flagged": true
+          },
+          "passed": true
+        }
+      ]
+    },
+    "02-normalize": {
+      "stage": "02-normalize",
+      "docs_in": 277285,
+      "docs_out": 277284,
+      "docs_dropped": 1,
+      "dropped_empty_after_clean": 1,
+      "chars_in": 619378368,
+      "chars_out": 618982634,
+      "chars_removed": 395734,
+      "noise_chars_removed_by_class": {
+        "zero_width": 23,
+        "bidi": 100,
+        "control": 119,
+        "replacement": 597,
+        "private_use": 24
+      },
+      "noise_chars_removed_total": 863,
+      "joiners_kept": {
+        "ZWNJ": 1674,
+        "ZWJ": 7427
+      },
+      "docs_with_html_entities": 24,
+      "docs_changed_by_nfc": 18341,
+      "ghost_tag_docs": 4,
+      "ghost_tag_hits_by_kind": {
+        "chat_prefix": 4
+      },
+      "ghost_tag_hits_total": 4,
+      "docs_format_unified": 0,
+      "canonical_format": {
+        "user": "<|user|>",
+        "assistant": "<|assistant|>",
+        "system": "<|system|>",
+        "end": "<|end|>"
+      },
+      "garbage_vocab_slots_before": 2,
+      "garbage_vocab_slots_after": 1,
+      "byte_fallback_slots_before": 107,
+      "garbage_audit_docs_scanned": 40000,
+      "garbage_audit_note": "A garbage slot is a vocab entry whose piece is nothing but noise characters. Byte-fallback pieces (<0xE0>) are counted separately: on well-formed Indic text they are the tokenizer working, not dirt.",
+      "examples": [
+        {
+          "id": "ver-ben:f1973f94e54454e686b38d16352f2015a264f935",
+          "src": "ver-ben",
+          "removed": {
+            "zero_width": 12
+          },
+          "joiners_in_doc": {
+            "ZWNJ": 1
+          },
+          "chars_before": 11316,
+          "chars_after": 11364
+        },
+        {
+          "id": "ver-ben:f7add00da542acae27874e7aba01e538",
+          "src": "ver-ben",
+          "removed": {
+            "bidi": 3
+          },
+          "joiners_in_doc": {},
+          "chars_before": 4487,
+          "chars_after": 4483
+        },
+        {
+          "id": "ver-ben:21a97abe3774d60b68abf891d9721a2a",
+          "src": "ver-ben",
+          "removed": {
+            "bidi": 6
+          },
+          "joiners_in_doc": {},
+          "chars_before": 2744,
+          "chars_after": 2737
+        },
+        {
+          "id": "ver-ben:ef45f3ea27e3432182e63522d30291a4b8e4613b",
+          "src": "ver-ben",
+          "removed": {
+            "replacement": 5
+          },
+          "joiners_in_doc": {},
+          "chars_before": 2770,
+          "chars_after": 2763
+        },
+        {
+          "id": "ver-ben:a5a91afef8ab7736833c79adc2085aea",
+          "src": "ver-ben",
+          "removed": {
+            "bidi": 13
+          },
+          "joiners_in_doc": {},
+          "chars_before": 11867,
+          "chars_after": 11853
+        },
+        {
+          "id": "ver-hin2:2d1e62ffc747afa978938ba747b389132377f433",
+          "src": "ver-hin2",
+          "removed": {
+            "zero_width": 3
+          },
+          "joiners_in_doc": {},
+          "chars_before": 5621,
+          "chars_after": 5618
+        },
+        {
+          "id": "ver-hin2:0bf29e1cbfa76ec2e97ea2dfd24b5290c871484a",
+          "src": "ver-hin2",
+          "removed": {
+            "replacement": 4
+          },
+          "joiners_in_doc": {},
+          "chars_before": 9216,
+          "chars_after": 9210
+        },
+        {
+          "id": "ver-hin2:1aea6a7fd1b7601e7a897fd0a45931d47400e6d4",
+          "src": "ver-hin2",
+          "removed": {
+            "replacement": 5
+          },
+          "joiners_in_doc": {},
+          "chars_before": 3059,
+          "chars_after": 3052
+        }
+      ],
+      "ghost_examples": [
+        {
+          "id": "ver-tam:ebc2ae8c0d5bd1bced98127c5454e451bea8761d",
+          "markers": {
+            "chat_prefix": 1
+          },
+          "before": "Manage your notification subscription by clicking on the icon.\n To Start receiving timely alerts please follow the below steps:\nClick on the Menu icon of the browser, it opens up a list of options.\n Click on the \"Options \", it opens up the settings page,\nHere click on the \"Privac"
+        },
+        {
+          "id": "ver-ory:d205bd584f1c6df042d86433a6fbb86bd7a0e0b8",
+          "markers": {
+            "chat_prefix": 1
+          },
+          "before": "ପୃଷ୍ଠାଃOdisha Rajanitira Itihasa.pdf/୪୧ (ସମ୍ପାଦନା)\nBot: Automated text replacement (-ଆ +ଆ)\nଟିକେ (Bot: Automated text replacement (-ଆ +ଆ))\n|ପୃଷ୍ଠା ଲେଖା(ଯୋଡିବାକୁ ଥିବା)\n|ପୃଷ୍ଠା ଲେଖା(ଯୋଡିବାକୁ ଥିବା)\n|୮ କ ଧାଡ଼ିଃ\n|୮ କ ଧାଡ଼ିଃ\nସମୟରେ ସେ ବ୍ୟକ୍ତିଗତ ସତ୍ୟାଗ୍ରହ ନିମନ୍ତେ ମହାତ୍ମା ଗାନ୍ଧିଙ୍କ ଦ୍ୱାରା "
+        },
+        {
+          "id": "ver-ory:5a6f7e0ea74f0f15e48d519df32bb06bd90ecd6e",
+          "markers": {
+            "chat_prefix": 1
+          },
+          "before": "Bot: Automated text replacement (-୍ବ +୍ୱ)\nଟିକେ (Bot: Automated text replacement (-୍ବ +୍ୱ))\nଥାଏ ମୋ ମନେ ସ୍ନେହ-ଭକତି, ଲୋ ତଟିନି ! (୬)\nପଦେ ପୂଜୁଥିଲେ ଅନୁକ୍ଷଣ, ଲୋ ତଟିନି !(୯)\nସଜେ ତହିଁ ଦିବ୍ୟ ଚାରୁ ଚିତ୍ର, ଲୋ ତଟିନି ! (୧୩)\nକରେ ନାହିଁ ମୁଁ ତିଳେ ଗଣନ, ଲୋ ତଟିନି ! (୧୪)\nଚିତ୍ତେ ଜନ୍ନାଇବୁ ଏହି ମତି, ଲୋ ତଟିନ"
+        },
+        {
+          "id": "ver-ory:5031678e3b90e49bd55edfde7119cfb5dbca48f3",
+          "markers": {
+            "chat_prefix": 1
+          },
+          "before": "Bot: Automated text replacement (- ଟି +ଟି )\n(Jnanaranjan sahu (ଆଲୋଚନା) ଙ୍କ ଦେଇ କରାଯାଇଥିବା 24155 ସଙ୍କଳନଟି ପଛକୁ ଫେରାଇନିଆଗଲା)\nଟିକେ (Bot: Automated text replacement (- ଟି +ଟି ))\nହେ ଛ୍ୟା, ଇଂଲିଶକି ସବୁଠୁଁ ପଣ୍ଡିତ ଭାଷା ବୋଲି ଭାବି ତା ଜରିଆରେ ଶିଖିଥିବା ପୁଳାଏ ଅଜ୍ଞତାକୁ ଜ୍ଞାନ କହି ଅଯଥାରେ ବାହାଦୁରି "
+        }
+      ],
+      "hash_order": "sha256 computed AFTER clean_text(), not before"
+    },
+    "03-langid": {
+      "stage": "03-langid",
+      "detector": "fastText lid.176.ftz (176 languages)",
+      "confidence_floor": 0.5,
+      "docs_in": 277284,
+      "docs_out": 276820,
+      "docs_dropped": 464,
+      "verdicts": {
+        "MATCH": 264495,
+        "CODE_SWITCHED": 12325,
+        "LOW_CONFIDENCE": 384,
+        "ROMANIZED": 55,
+        "MISMATCH": 25
+      },
+      "mean_confidence": 0.9838,
+      "quarantined": 464,
+      "code_switched": 12325,
+      "romanized_indic": 55,
+      "low_confidence": 384,
+      "mislabelled_caught_by_detection": 25,
+      "mislabelled_caught_by_folder_trust": 0,
+      "naive_iso1_vs_iso3_false_mismatches": 276885,
+      "iso_code_map_used": {
+        "as": "asm",
+        "bn": "ben",
+        "gu": "guj",
+        "hi": "hin",
+        "kn": "kan",
+        "ks": "kas",
+        "ml": "mal",
+        "mr": "mar",
+        "ne": "nep",
+        "or": "ory",
+        "pa": "pan",
+        "sa": "san",
+        "sd": "snd",
+        "ta": "tam",
+        "te": "tel",
+        "ur": "urd",
+        "en": "eng"
+      },
+      "claimed_to_detected_pairs": {
+        "hin->hin": 47288,
+        "mar->mar": 40969,
+        "tam->tam": 32764,
+        "ben->ben": 32256,
+        "mal->mal": 31814,
+        "kan->kan": 29550,
+        "guj->guj": 23775,
+        "ory->ory": 20937,
+        "pan->pan": 17532,
+        "kan->eng": 34,
+        "kan->es": 25,
+        "mar->hin": 23,
+        "kan->fi": 23,
+        "mal->zh": 17,
+        "mal->fi": 15,
+        "hin->eng": 14,
+        "kan->mg": 14,
+        "ory->eng": 12,
+        "tam->zh": 11,
+        "mal->eng": 10,
+        "mal->kan": 9,
+        "ory->mg": 8,
+        "hin->nep": 7,
+        "hin->san": 6,
+        "kan->tl": 6,
+        "mal->es": 6,
+        "ory->es": 6,
+        "ben->eng": 5,
+        "mar->eng": 5,
+        "kan->it": 5,
+        "kan->id": 5,
+        "ory->id": 5,
+        "kan->pt": 4,
+        "guj->fi": 4,
+        "guj->eng": 4,
+        "mal->tam": 4,
+        "pan->uz": 4,
+        "pan->eng": 4,
+        "ben->mg": 3,
+        "kan->tel": 3
+      },
+      "token_denominator": {
+        "ar": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 3970,
+          "delta": 3970
+        },
+        "ben": {
+          "tokens_if_folder_trusted": 26741110,
+          "tokens_after_detection": 26755198,
+          "delta": 14088
+        },
+        "eng": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 126243,
+          "delta": 126243
+        },
+        "es": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 10265,
+          "delta": 10265
+        },
+        "fi": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 5050,
+          "delta": 5050
+        },
+        "guj": {
+          "tokens_if_folder_trusted": 20001573,
+          "tokens_after_detection": 19967263,
+          "delta": -34310
+        },
+        "hin": {
+          "tokens_if_folder_trusted": 30000523,
+          "tokens_after_detection": 29890959,
+          "delta": -109564
+        },
+        "kan": {
+          "tokens_if_folder_trusted": 19049453,
+          "tokens_after_detection": 19005273,
+          "delta": -44180
+        },
+        "la": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 782,
+          "delta": 782
+        },
+        "mal": {
+          "tokens_if_folder_trusted": 20001500,
+          "tokens_after_detection": 19991493,
+          "delta": -10007
+        },
+        "mar": {
+          "tokens_if_folder_trusted": 25000207,
+          "tokens_after_detection": 25006368,
+          "delta": 6161
+        },
+        "mg": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 37759,
+          "delta": 37759
+        },
+        "no": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 3505,
+          "delta": 3505
+        },
+        "ory": {
+          "tokens_if_folder_trusted": 14959282,
+          "tokens_after_detection": 14945603,
+          "delta": -13679
+        },
+        "pan": {
+          "tokens_if_folder_trusted": 13803249,
+          "tokens_after_detection": 13794576,
+          "delta": -8673
+        },
+        "san": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 2455,
+          "delta": 2455
+        },
+        "sq": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 5992,
+          "delta": 5992
+        },
+        "tam": {
+          "tokens_if_folder_trusted": 22753852,
+          "tokens_after_detection": 22747297,
+          "delta": -6555
+        },
+        "tel": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 9189,
+          "delta": 9189
+        },
+        "tk": {
+          "tokens_if_folder_trusted": 0,
+          "tokens_after_detection": 1509,
+          "delta": 1509
+        }
+      },
+      "mismatch_examples": [
+        {
+          "id": "ver-hin2:260fbb97946e873f02d5144ff0663c1273c15b6947a2e969b22845b6733b79ab",
+          "src": "ver-hin2",
+          "claimed": "hin",
+          "detected": "eng",
+          "confidence": 0.923,
+          "script_profile": {
+            "Latn": 0.835,
+            "Deva": 0.165
+          },
+          "excerpt": "ST quota and after rejection of the promotion of Shri Shivarkar, another employee, Shri C.K.Kapde was promoted to the vacant post of Shri Shivarkar, but the said promotion was also rejected by the management of WCL on th"
+        },
+        {
+          "id": "ver-hin2:de1f14038ee0cf0448bade3a7144c6b11b70ec98",
+          "src": "ver-hin2",
+          "claimed": "hin",
+          "detected": "tel",
+          "confidence": 0.607,
+          "script_profile": {
+            "Deva": 0.544,
+            "Telu": 0.456
+          },
+          "excerpt": "1. सांझ को वे दो दूत सदोम के पास आए : और लूत सदोम के फाटक के पास बैठा था : सो उनको देखकर वह उन से भेंट करने के लिये उठा; और मुंह के बल झुककर दण्डवत् कर कहा;\n2. నా ప్రభువులారా, దయచేసి మీ దాసుని యింటికి వచ్చి రాత్రి వెళ్లబ"
+        },
+        {
+          "id": "ver-hin2:5268699191180708fe701429ec56e43ad99f7c7cab0c224f9488a52e83d56477",
+          "src": "ver-hin2",
+          "claimed": "hin",
+          "detected": "mar",
+          "confidence": 0.52,
+          "script_profile": {
+            "Deva": 1.0,
+            "Latn": 0.0
+          },
+          "excerpt": "दिया ८, एवं चउरिदिया १०, असलिपंचिदिया अपज्जतगा ११ असमिपंचिदिया पज्जतगा १२, सन्निपंचिंदिया अपजतगा १३, सन्निपंचिंदिया पजतगा १४ । एएसि णं भंते । चउद्दसविहाणं संसारसमा बन्नगाणं जीवाणं जहनुक्कोसगस्स जोगस्स कयरे २ जाव विसेसाहि"
+        },
+        {
+          "id": "ver-hin2:f30e8877cec0be93807dab2f5fdda70a0b54faa1",
+          "src": "ver-hin2",
+          "claimed": "hin",
+          "detected": "ben",
+          "confidence": 0.99,
+          "script_profile": {
+            "Beng": 1.0
+          },
+          "excerpt": "আহ! তোমরা হলে সেই সর্বশেষ অনন্যসাধারণ বসতি যারা ব্ল্যাক ড্রাগনের পতাকাতলে আসেনি।\nনিরাপদ রাখতেই এসেছে।\nআনুগত্য স্বীকার করতে হবে সাথে সামান্য কর দিতে হবে।\nতোমাদের দ্বিধাটা দেখতে পাচ্ছি আমি।\nতার সাথে পরিচয় করিয়ে দেই।\nব্ল্"
+        },
+        {
+          "id": "ver-mar:10a8bfdf0d483598a60350a93df35966cf65e4f63c4a52d511e720d2c9ee664b",
+          "src": "ver-mar",
+          "claimed": "mar",
+          "detected": "hin",
+          "confidence": 0.607,
+          "script_profile": {
+            "Deva": 1.0
+          },
+          "excerpt": "घरि नसणे बसणे पार्थ रथी चाकरसे कामाला ।। २ ।। यवन कबीर नामें महा साधू विणिला त्याचा शेला ॥ ३ ॥ दीनवत्सल नामास्तव जातो काय वदावें तुला ॥ 8 ॥\nराजाराम लीन प्रासादिक मनिचा संशय गेला ।। बोला हो० ॥ ५ ॥\nसुजनता घरी सुजनता घरी रे"
+        },
+        {
+          "id": "ver-mar:dd6e87ccd0c631fc5e52317e0bf9f68b787f495a",
+          "src": "ver-mar",
+          "claimed": "mar",
+          "detected": "hin",
+          "confidence": 0.695,
+          "script_profile": {
+            "Latn": 0.208,
+            "Deva": 0.792
+          },
+          "excerpt": "Find Your Name in Maharashtra Voter List 2019 Elections. From Following section you will able to find Your Polling Booth in your City. So Search Polling Booth For this 2019 Maharashtra Elections.\n मतदार यादीत आपले नाव आह"
+        },
+        {
+          "id": "ver-mar:fcd67aab8542934e89a74fe6183341b28845e3c0",
+          "src": "ver-mar",
+          "claimed": "mar",
+          "detected": "hin",
+          "confidence": 0.596,
+          "script_profile": {
+            "Deva": 0.913,
+            "Latn": 0.087
+          },
+          "excerpt": "लाईव्ह न्यूज :\nIND vs WI 2nd Test : २ तासानंतर पाऊस थांबला, कव्हर्स काढले; पण, भारतीय खेळाडू अजून नाही पोहोचले, नेमके काय घडले?\n नाशिक :\nनाशिक :\nनाशिक :\nतब्बल ५ महिन्यांनंतर कोरोनाबाधित पुन्हा ६०० पार !\n नाशिक :\nनाशिक :\n"
+        },
+        {
+          "id": "ver-mar:b2374d2c003103962e945a501ad0d505832b531e",
+          "src": "ver-mar",
+          "claimed": "mar",
+          "detected": "hin",
+          "confidence": 0.66,
+          "script_profile": {
+            "Deva": 0.961,
+            "Latn": 0.039
+          },
+          "excerpt": "लक्ष्मी चालिसाचा पाठ करून मिळवा धनदेवतेचा आशीर्वाद, वाचा लक्ष्मी चालीसा (laxmi Chalisa)\nमातु लक्ष्मी करि कृपा करो हृदय में वास।\n सिंधु सुता विष्णुप्रिये नत शिर बारंबार।\n यही मोर अरदास, हाथ जोड़ विनती करूं।\n विनवौं नित्य "
+        }
+      ],
+      "codeswitch_examples": [
+        {
+          "id": "ver-ben:2d71ab08d9383962a0cf4578658da54f5bb49a0c",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.241,
+          "excerpt": "আজ থেকেই দক্ষিণবঙ্গে আবহাওয়ার উন্নতি। পশ্চিমাঞ্চলের জেলাগুলি ছাড়া অন্যত্র বৃষ্টি কমবে। পূর্বাভাস আলিপুর আবহাওয়া দফতরের।\n Panchayat Election: রাজ্যে এবার বিশ্ববিদ্যালয়ের পড়ুয়াই অন্তর্বর্তী উপাচার্য!\n Panchayat Elect"
+        },
+        {
+          "id": "ver-ben:3a072af181873c7f2864e730c4466b136ce331e2",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.207,
+          "excerpt": "তৃণমূল মুখপত্র কুণাল ঘোষের (Kunal Ghosh) কটাক্ষের মুখে বিজেপি সাংসদ সৌমিত্র খাঁ (Soumitra Khan) এবং বিধানসভার বিরোধী দলনেতা শুভেন্দু অধিকারী (Suvendu Adhikari)। কুণাল দাবি করেন, বিরোধী দলনেতার সাম্প্রদায়িক বিদ্বেষমূলক ম"
+        },
+        {
+          "id": "ver-ben:1f6bc7f7e51586a4899aa915133dcb4eb8beab88",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.151,
+          "excerpt": "বিশ্ব টেস্ট চ্যাম্পিয়নশিপ( World test championsh) খেলার আগে ১৮ দিনের কোয়ারেন্টাইনে থাকতে হবে ভারতীয় দলকে( india team)। এদিন এমনটাই জানালেন বিসিসিআইয়ের (bcci)এক কর্তা। ইংল্যান্ডে উড়ে যাওয়ার আগে দেশে ৮ দিন, এবং ইংল্য"
+        },
+        {
+          "id": "ver-ben:f21400c7f04e45c3484078e872f89fb4ca60a78f09c3d8b3ff51d3e406ab2090",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.159,
+          "excerpt": "শিক্ষার মনস্তত্ত্ব\n(২) সামস্ততন্ত্রবাদ (oligarohic doctrine ); (৩) অরাজকভাবাদ ( anarchic doctrine ).\nরাজতন্ত্রবাদ : এই মতে বুদ্ধি হইতেছে একটি অধিরাজ কেন্দ্রীয় শক্তির লীলা। এই কেন্দ্রীয় শক্তি জীবনের বিভিন্ন ক্ষেত্রে বিভ"
+        },
+        {
+          "id": "ver-ben:bc9e47ee67370cdec708735c8f1248c09ad93a68e8a3845c03e05868c287a82f",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.227,
+          "excerpt": "রবীন্দ্রনাথ ১৩০৮ সালে বঙ্গদর্শন (নব পৰ্যায়) পত্রিকায় 'ব্রাহ্মণ' নামক এক প্রবন্ধে লিখেছিলেন-\"আমাদের বর্তমান সমাজের ভদ্র সম্প্রদায় - অর্থাৎ বৈদ্য, কায়স্থ ও বণিক সম্প্রদায় - সমাজ যদি ইহাদিগকে দ্বিজ বলিয়া গণ্য না করে, "
+        },
+        {
+          "id": "ver-ben:1b993412e7a29b88953b51b00a73cf9c96d9f92b",
+          "claimed": "ben",
+          "detected": "ben",
+          "latin_fraction": 0.154,
+          "excerpt": "শ্রীনগর, ১৩ জুনঃ শনিবার ফের সেনা-জঙ্গী সংঘর্ষে উত্তপ্ত উপত্যকায়। আজ ভোরবেলা জম্মু-কাশ্মীরের (Jammu & Kashmir) কুলগাম এবং অনন্তনাগে দুটি পৃথক সংঘর্ষে সেনার হাতে মৃত্যু হয়েছে অন্তত ৪ সন্ত্রাসবাদীর (Terroists)। কুলগাম (Ku"
+        }
+      ]
+    },
+    "04-quality-heuristics": {
+      "stage": "04-quality-heuristics",
+      "rules": [
+        "mean_word_length",
+        "symbol_to_word_ratio",
+        "lines_end_in_terminal_punct",
+        "duplicate_line_fraction",
+        "top_2gram_fraction",
+        "common_stopwords_present",
+        "bullet_line_ratio",
+        "ellipsis_line_ratio",
+        "document_word_count"
+      ],
+      "thresholds_base": {
+        "mean_word_len": [
+          3.0,
+          10.0
+        ],
+        "symbol_ratio_max": 0.1,
+        "terminal_punct_min": 0.3,
+        "dup_line_max": 0.3,
+        "top_2gram_max": 0.2,
+        "stopwords_min": 2,
+        "bullet_ratio_max": 0.9,
+        "ellipsis_ratio_max": 0.3,
+        "word_count": [
+          50,
+          100000
+        ]
+      },
+      "script_overrides": {
+        "Telu": {
+          "word_count": [
+            25,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            16.0
+          ]
+        },
+        "Taml": {
+          "word_count": [
+            25,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            16.0
+          ]
+        },
+        "Knda": {
+          "word_count": [
+            25,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            16.0
+          ]
+        },
+        "Mlym": {
+          "word_count": [
+            20,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            20.0
+          ]
+        },
+        "Deva": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        },
+        "Beng": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        },
+        "Guru": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        },
+        "Gujr": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        },
+        "Orya": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        },
+        "Arab": {
+          "word_count": [
+            35,
+            100000
+          ],
+          "mean_word_len": [
+            3.0,
+            12.0
+          ]
+        }
+      },
+      "stopword_list_sizes": {
+        "eng": 32,
+        "hin": 34,
+        "mar": 21,
+        "nep": 20,
+        "san": 16,
+        "ben": 25,
+        "asm": 25,
+        "tel": 25,
+        "tam": 15,
+        "urd": 18,
+        "kan": 25,
+        "guj": 25,
+        "mal": 25,
+        "pan": 25,
+        "ory": 25
+      },
+      "languages_with_no_stopword_list": [],
+      "docs_in": 276820,
+      "docs_out": 256635,
+      "docs_dropped": 20185,
+      "kept_by_config": {
+        "english_tuned": 11540,
+        "script_aware": 256635
+      },
+      "tokens_kept_by_config": {
+        "english_tuned": 8518484,
+        "script_aware": 178636741
+      },
+      "keep_rate_by_config": {
+        "english_tuned": 0.0417,
+        "script_aware": 0.9271
+      },
+      "rule_failures_by_config": {
+        "english_tuned": {
+          "lines_end_in_terminal_punct": 104520,
+          "common_stopwords_present": 260289,
+          "document_word_count": 6334,
+          "duplicate_line_fraction": 879,
+          "top_2gram_fraction": 161,
+          "mean_word_length": 2858,
+          "bullet_line_ratio": 444,
+          "ellipsis_line_ratio": 305,
+          "symbol_to_word_ratio": 48
+        },
+        "script_aware": {
+          "common_stopwords_present": 12027,
+          "document_word_count": 586,
+          "lines_end_in_terminal_punct": 6983,
+          "duplicate_line_fraction": 879,
+          "top_2gram_fraction": 161,
+          "bullet_line_ratio": 444,
+          "ellipsis_line_ratio": 305,
+          "mean_word_length": 66,
+          "symbol_to_word_ratio": 48
+        }
+      },
+      "rescued_docs_total": 245791,
+      "rescued_tokens_total": 170316178,
+      "rescued_by_lang": {
+        "ben": 30775,
+        "hin": 44554,
+        "mar": 36669,
+        "tam": 24068,
+        "kan": 25976,
+        "guj": 21102,
+        "mal": 26273,
+        "pan": 16753,
+        "ory": 19621
+      },
+      "rescued_tokens_by_lang": {
+        "ben": 25601057,
+        "hin": 27650998,
+        "mar": 21938294,
+        "tam": 18253314,
+        "kan": 16073638,
+        "guj": 17382244,
+        "mal": 16516292,
+        "pan": 13094616,
+        "ory": 13805725
+      },
+      "rescued_by_english_rule_that_killed_them": {
+        "lines_end_in_terminal_punct": 96663,
+        "common_stopwords_present": 241643,
+        "document_word_count": 3217,
+        "mean_word_length": 2098
+      },
+      "per_lang": {
+        "ben": {
+          "docs": 32254,
+          "en_kept": 344,
+          "sa_kept": 31114,
+          "tokens": 26703192,
+          "sa_tokens": 25835859
+        },
+        "hin": {
+          "docs": 47271,
+          "en_kept": 1185,
+          "sa_kept": 45739,
+          "tokens": 29848527,
+          "sa_tokens": 28182936
+        },
+        "mar": {
+          "docs": 40951,
+          "en_kept": 2924,
+          "sa_kept": 39572,
+          "tokens": 24940433,
+          "sa_tokens": 24069650
+        },
+        "tam": {
+          "docs": 32742,
+          "en_kept": 2831,
+          "sa_kept": 26463,
+          "tokens": 22721058,
+          "sa_tokens": 20297698
+        },
+        "kan": {
+          "docs": 29547,
+          "en_kept": 1507,
+          "sa_kept": 27449,
+          "tokens": 18697341,
+          "sa_tokens": 17356727
+        },
+        "guj": {
+          "docs": 23774,
+          "en_kept": 1117,
+          "sa_kept": 22209,
+          "tokens": 19948554,
+          "sa_tokens": 18347068
+        },
+        "mal": {
+          "docs": 31813,
+          "en_kept": 1151,
+          "sa_kept": 27253,
+          "tokens": 19866180,
+          "sa_tokens": 17381146
+        },
+        "pan": {
+          "docs": 17532,
+          "en_kept": 319,
+          "sa_kept": 17072,
+          "tokens": 13780471,
+          "sa_tokens": 13288257
+        },
+        "ory": {
+          "docs": 20936,
+          "en_kept": 162,
+          "sa_kept": 19764,
+          "tokens": 14871921,
+          "sa_tokens": 13877400
+        }
+      },
+      "rescued_examples": [
+        {
+          "id": "ver-ben:7c2fe5a1ffd753aba26f090146edebcb",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 241,
+          "mean_word_len": 4.97,
+          "term_ascii_frac": 0.143,
+          "term_any_frac": 1.0,
+          "excerpt": "কি বলব? যা বলতে আসছি তা দেখছি সবাই আপনাকে বলেই দিয়েছে।একি স্টাইলের ধন্যবাদ আরেকবার দিতে চাচ্ছিনা।তবে আপনার এই প্রচেষ্টা আমাদের যততুকু সাহায্য করেছে তা ধন্যবাদের মত ছোট শব্দ দিয়ে প্রকাশ করা যায়না।মনে প্রানে আপনার জন্য দোয়া করছি।\nআপনি যে "
+        },
+        {
+          "id": "ver-ben:be99c3b41ac09961659d7a187d463f02",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 430,
+          "mean_word_len": 5.06,
+          "term_ascii_frac": 0.143,
+          "term_any_frac": 1.0,
+          "excerpt": "বিকাশ অ্যাপের মধ্যে সেভিংস স্কিম বা ডিপিএস খোলার সুযোগ রয়েছে। বিকাশ অ্যাপ ব্যবহার করে আইডিএলসি তে টাকা জমানো যাবে। কোনো বাড়তি ঝামেলা ছাড়া ঘরে বসে এই সেভিংস বা টাকা সঞ্চয় করার স্কিম পরিচালনা করা যাবে। চলুন জেনে নেওয়া যাক বিকাশ সেভিংস সম"
+        },
+        {
+          "id": "ver-ben:0cf723f9c209b721b4eb24b2c6157af9",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 60,
+          "mean_word_len": 4.75,
+          "term_ascii_frac": 0.0,
+          "term_any_frac": 1.0,
+          "excerpt": "সত্যিই কী আপনার মনে হয় তিনি চুক্তির শর্ত পালন করবেন? বাক্যটাকে দু-ভাগ করে জিগেশ করলো ক্রেগ আর ফ্রাই।\nসন্দেহ করার অবকাশ কই? উত্তর দিলো কিন-ফো। আমার অবস্থা যে সম্পূর্ণ বদলে গিয়েছে, তার তো বিন্দুবিসর্গও ও জানে না। তাই ও কী করে আন্দাজ করবে যে"
+        },
+        {
+          "id": "ver-ben:e906ce3f0e74e3440508a2acb8366848ff7ec9b0",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 199,
+          "mean_word_len": 5.81,
+          "term_ascii_frac": 0.25,
+          "term_any_frac": 1.0,
+          "excerpt": "- #IndiaWorld Population Day 2023: শীর্ষে ভারত, জনসংখ্যার নিরিখে প্রথম দশে রয়েছে কোন দেশগুলি?\n গত কয়েক বছরে একাধিক সেনা হেলিকপ্টার ভেঙে পড়ার ঘটনা সামনে এসেছে। তাদের মধ্যে সবথেকে ভয়াবহ হল কুন্নুরে সেনা হেলিকপ্টার ভেঙে দেশের 'চিফ ডিফেন্স "
+        },
+        {
+          "id": "ver-ben:70625c37a5ba62e474e3ba99e5980885855bc4a57d43f673800838e9008c377d",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 714,
+          "mean_word_len": 5.26,
+          "term_ascii_frac": 0.231,
+          "term_any_frac": 0.846,
+          "excerpt": "তো শুধু সেই কথাই মনে পড়ছে। কত সুখ - কত হাসি - কত কান্নার কত্ত ছোট কথা মনে পড়ছে, যা এর আগে কোনদিন মনে পড়ে নি।\nকিশোরবাবুর খুড়তুতো ভাই অতুল তার সঙ্গে পড়ত। তার সঙ্গে মিলে একদিন তারা দুজনে একখানা কাঁচি নিয়ে পরস্পরের চুল ভুরু কেটে ছ আনা দশ "
+        },
+        {
+          "id": "ver-ben:8baee2d382ab303fb0c7e5a5906885361a3a1e46",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 129,
+          "mean_word_len": 5.35,
+          "term_ascii_frac": 0.0,
+          "term_any_frac": 1.0,
+          "excerpt": "শুক্রবার (০৪ ডিসেম্বর) উত্তর কাউনিয়া হাউজিং শের-ই- বাংলা নগর হযরত বেলাল ইবনে রাবাহ (রাঃ) জামে মসজিদে জুমার নামাজের পূর্বে মুসুল্লীদের মাঝে করোনা ভাইরাসের বিস্তার রোধে সচেতনতামূলক বক্তব্যে তিনি এ সব কথা বলেন।\nএ সময় তিনি আরও বলেন, সমাজে সকল"
+        },
+        {
+          "id": "ver-ben:e9734fd715e84ae988db84f7c146e1952d260125",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 527,
+          "mean_word_len": 5.95,
+          "term_ascii_frac": 0.091,
+          "term_any_frac": 0.955,
+          "excerpt": "মুসলমানদের দুরাবস্থার শেষ নেই। তারা সর্বত্র পরাজিত ও অপমানিত। মুসলমানদের অপমান করার সঙ্গে সঙ্গে কুরআন, নবী (সা. ), ইসলাম ধর্ম ও সংস্কৃতি নিয়ে ব্যঙ্গ বিদ্রæপ চলছে। কারণসমূহ কমই আমরা খুঁজে দেখি। কারণ না জানলে প্রতিকার কীভাবে হবে?\n আমরা এখন প"
+        },
+        {
+          "id": "ver-ben:d7d0205efca7a07e23199dca048f576f876f84ca",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 327,
+          "mean_word_len": 5.72,
+          "term_ascii_frac": 0.0,
+          "term_any_frac": 0.929,
+          "excerpt": "মেষ (Aries):মার্চ ২১ থেকে এপ্রিল ১৯। কোনও বিষয়ে ঝাঁপিয়ে পড়ার আগে ভাল করে চিন্তা-ভাবনা করা দরকার। পার্টনারের সঙ্গে আপনাকে আরও সহানুভূতিশীল হতে হবে।\n বৃষ (Taurus):এপ্রিল ২০ থেকে মে ২০। জীবন ইদানীং উত্থান-পতনের মধ্য দিয়ে যেতে পারে। আজ সম্প"
+        },
+        {
+          "id": "ver-ben:572565d4c75f12df38291da70caf6479754ea346",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 123,
+          "mean_word_len": 5.56,
+          "term_ascii_frac": 0.25,
+          "term_any_frac": 0.75,
+          "excerpt": "এই পোস্টটি শেয়ার করতে চাইলে :\nমানুষের জীবনযাত্রার মান ও দ্রব্যমূল্যের বৃদ্ধি এবং টাকার মান কমে যাওয়ার কারণে ৫০ ও ১ টাকার পয়সাসহ সব ধরণের ধাতব পয়সা হারিয়ে যাচ্ছে বলে মনে করেন অর্থনীতিবিদরা।\n তবে অনুসন্ধানে দেখা গেছে, সিন্ডিকেটের দখলে এস"
+        },
+        {
+          "id": "ver-ben:12b0c8f5dd17c94abd52d57f4c2c2311132908d4",
+          "lang": "ben",
+          "failed_under_english_rules": [
+            "lines_end_in_terminal_punct",
+            "common_stopwords_present"
+          ],
+          "n_words": 194,
+          "mean_word_len": 5.55,
+          "term_ascii_frac": 0.0,
+          "term_any_frac": 1.0,
+          "excerpt": "শুক্রবার টস জিতে প্রথমে ফিল্ডিংয়ের সিদ্ধান্ত নেন ইংল্যান্ড অধিনায়ক ইয়ন মর্গ্যান।\nনিজস্ব প্রতিবেদন : কার্ডিফে কামব্যাক ইংল্যান্ডের। টিম ইন্ডিয়াকে ৫ উইকেটে হারিয়ে টি-টোয়েন্টি সিরিজে সমতা ফেরাল মর্গ্যান বাহিনী। ওল্ড ট্র্যাফোর্ডে প্রথম টি"
+        }
+      ],
+      "shipped_config": "script_aware"
+    },
+    "04b-quality-classifier": {
+      "stage": "04b-quality-classifier",
+      "skipped": false,
+      "recipe": "weak structural labels -> fastText supervised -> expected-value score, the session's recipe with a heuristic labeller standing in for an LLM",
+      "labeller": "structural weak labels (boilerplate, link, digit, variety, sentence regularity)",
+      "model": "fastText supervised, dim=64, wordNgrams=2, epoch=8",
+      "threshold": 3.0,
+      "weak_label_distribution": {
+        "1": 3,
+        "2": 25,
+        "3": 655,
+        "4": 4221,
+        "5": 35096
+      },
+      "train_size": 32000,
+      "test_size": 8000,
+      "heldout_exact_accuracy": 0.8704,
+      "heldout_within_one_accuracy": 0.9834,
+      "docs_in": 256635,
+      "docs_out": 256528,
+      "docs_dropped": 107,
+      "tokens_kept": 178611002,
+      "score_histogram": {
+        "2": 35,
+        "3": 413,
+        "4": 11459,
+        "5": 244728
+      },
+      "per_lang": {
+        "ben": {
+          "docs": 31114,
+          "kept": 31111,
+          "mean_score": 4.958
+        },
+        "hin": {
+          "docs": 45739,
+          "kept": 45724,
+          "mean_score": 4.871
+        },
+        "mar": {
+          "docs": 39572,
+          "kept": 39560,
+          "mean_score": 4.986
+        },
+        "tam": {
+          "docs": 26463,
+          "kept": 26462,
+          "mean_score": 4.948
+        },
+        "kan": {
+          "docs": 27449,
+          "kept": 27443,
+          "mean_score": 4.937
+        },
+        "guj": {
+          "docs": 22209,
+          "kept": 22205,
+          "mean_score": 4.959
+        },
+        "mal": {
+          "docs": 27253,
+          "kept": 27229,
+          "mean_score": 4.828
+        },
+        "pan": {
+          "docs": 17072,
+          "kept": 17071,
+          "mean_score": 4.87
+        },
+        "ory": {
+          "docs": 19764,
+          "kept": 19723,
+          "mean_score": 4.952
+        }
+      },
+      "dropped_examples": [
+        {
+          "id": "ver-ben:08464b5ab67fd45a44558f40b43e82a68c11e5cb7839153d1ed029458c8a8659",
+          "lang": "ben",
+          "edu_score": 2.641,
+          "excerpt": "রাণী জয়মতী।\nচন্দ্রনাথ ও রুদ্রসিংহকে স্কন্ধে করিয়া পলায়িত প্রহরীর সহিত কুকিসৈন্যগণের, প্রবেশ। ।\nপলায়িত প্রহরী কুকিরাজ ! কুকিরাজ ! সৰ্ব্বনাশ হ'য়েছে! মাকে আজ আমরা হারিয়ে এসেছি; কিছুতেই ক্ষুধিত ব্যা"
+        },
+        {
+          "id": "ver-ben:7001cb29ed37026d6e74e543237a57892fdf334ff08cbb124b895640069117c2",
+          "lang": "ben",
+          "edu_score": 2.668,
+          "excerpt": "পাহিজা রাগ ।\nশরত নিরিত হৈল কিমের উষয়। ব্রজকরা জলক্রীড়া করিতে চ যমুনার জলে বজ্রঅলঙ্কার এড়ি। বিষজ্রে করিরা স্নানপুঞ্জি দেবী চণ্ডী। স্তুতিকা প্রতিমা কৰি দেই পুষ্প পাণি। বহু মাগে স্বামী হউক্-দেব চক্রপা"
+        },
+        {
+          "id": "ver-ben:d0f425f5e084698ee41f2a9821fa295a763f9943",
+          "lang": "ben",
+          "edu_score": 2.289,
+          "excerpt": "Copyright © HT Media Limited All rights reserved.\n কলকাতার আরও কাছে দুর্যোগের কালো মেঘ, আজ কোথায় তাণ্ডব চালাবে অতি গভীর নিম্নচাপটি?\n রবির তেজে কাটছে ছুটি, নতুন সপ্তাহে কি কলকাতায় জারি থাকবে বৃষ্টি?\n"
+        },
+        {
+          "id": "ver-hin2:75c6bfe8a59a73ba4cc838df73105403c11e395d",
+          "lang": "hin",
+          "edu_score": 2.046,
+          "excerpt": "घुड़चढ़ी से ठीक पहले पुलिस ने दबोचा दूल्हा, मुकदमे की वजह जान सदमे में आया परिवार, आखिर क्या है मामला?\n फेसबुक पर दोस्ती, घर से भागकर कोर्ट मैरिज... अब शख्स ने क्यों ली पत्नी, सास और ससुर की जान?\n B. "
+        },
+        {
+          "id": "ver-hin2:f45bb0203f5aec3df28b251ff1cf73b5b2fd0828b36fb01a29f27f7673c72b7e",
+          "lang": "hin",
+          "edu_score": 2.834,
+          "excerpt": "सुन मयूरा\nउड़-उड़ के मयूरा चले जाना जरा, अम्बे माँ की अटरिया बैठ जाना जरा । करेंगी स्नान जब नील-सरोवर में, कमल बनकर तू खिल जाना जरा,\nअम्बे माँ की अटरिया बैठ जाना जरा ॥\nकेश सवारेंगी जब कनक कंघी से,\nचुन"
+        },
+        {
+          "id": "ver-hin2:4e72ac6a66597f02530a805baac225558c4b99f1",
+          "lang": "hin",
+          "edu_score": 2.431,
+          "excerpt": "You agree to our privacy and cookie policy while login to our website.\n (+91)\nYou agree to our privacy and cookie policy while login to our website.\n चीन में बिजनेस ड्रिंकिंग का चलन काफी पुराना है. जि"
+        },
+        {
+          "id": "ver-hin2:9a956c11187fb2f787973908b9356a7a8f27b567",
+          "lang": "hin",
+          "edu_score": 2.95,
+          "excerpt": "विंडोज के लिए स्क्रिप्ट कैसे लिखूँ?\nप्रोग्राम फ़्रेम डिस्प्ले विज्ञापन कैसे हटाएं?\nडायनामिक आईपी कैसे बनाइए और इसके लिए क्या है?\nएक विश्वसनीय पीसी उपयोगकर्ता क्या होना चाहिए?\nAutorun सॉफ्टवेयर क्या है"
+        },
+        {
+          "id": "ver-hin2:748783f2d8057726049d3df78153a5311fd8be6e",
+          "lang": "hin",
+          "edu_score": 2.9,
+          "excerpt": "सुर आशा के,,,\nसुर आशा के,,,\nकालिमा रात की मिट जाने दो।\nअधर मुस्कान सजा दो।\nदोस्त हम हैं साथ बतला दो।\nख़ुशियों की चादर रंग दो।\nतारा एक अपना भी जड़ दो।\nहौसले की तुम डोर थमा दो।\nबुझते मन में नव ज्योति जग"
+        }
+      ],
+      "caveat": "The labels are weak/heuristic, not LLM-generated. The classifier reproduces the mechanism and its cost profile, not FineWeb-Edu's quality."
+    },
+    "05-dedup": {
+      "stage": "05-dedup",
+      "config": {
+        "shingle_k": 5,
+        "permutations": 126,
+        "bands": 18,
+        "rows_per_band": 7,
+        "lsh_threshold": 0.6617,
+        "jaccard_drop_threshold": 0.67,
+        "shingle_window_words": 1200
+      },
+      "session_demo_config": {
+        "k": 5,
+        "bands": 6,
+        "rows": 4,
+        "permutations": 24,
+        "lsh_threshold": 0.639
+      },
+      "docs_in": 256528,
+      "docs_out": 255772,
+      "docs_dropped": 756,
+      "tokens_dropped": 345852,
+      "exact_duplicates": 732,
+      "exact_duplicates_cross_shard": 0,
+      "near_duplicates": 24,
+      "near_duplicates_cross_shard": 0,
+      "lsh_candidate_pairs_global": 62406,
+      "lsh_candidate_pairs_local_total": 62219,
+      "caught_by_local_passes_only": 756,
+      "caught_by_global_pass": 756,
+      "missed_by_local_caught_by_global": 0,
+      "dropped_by_source": {
+        "ver-hin2": 753,
+        "ver-tam": 1,
+        "ver-ory": 1,
+        "ver-kan": 1
+      },
+      "confirmed_pairs": [
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:f66c255fea813ee9d865dbf11ec6cc0b9bb3339f",
+          "same_shard": true,
+          "true_jaccard": 0.9306,
+          "minhash_estimate": 0.9524,
+          "estimate_error": 0.0218,
+          "shingles_kept": 70,
+          "shingles_dropped": 69
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:5790ef86127e2ad43673afd1a95e3574c19b6cb2",
+          "same_shard": true,
+          "true_jaccard": 0.9041,
+          "minhash_estimate": 0.9206,
+          "estimate_error": 0.0165,
+          "shingles_kept": 70,
+          "shingles_dropped": 69
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:94efe021823551ac3f9e04f51dbb004117655b69",
+          "same_shard": true,
+          "true_jaccard": 0.9041,
+          "minhash_estimate": 0.9206,
+          "estimate_error": 0.0165,
+          "shingles_kept": 70,
+          "shingles_dropped": 69
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:0f628821f78e6625cfcdb3b6482651c1e6223262",
+          "same_shard": true,
+          "true_jaccard": 0.8571,
+          "minhash_estimate": 0.8651,
+          "estimate_error": 0.0079,
+          "shingles_kept": 70,
+          "shingles_dropped": 73
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:51a88a202aca8cd2d1ce3fddc3b511da944d73f5",
+          "same_shard": true,
+          "true_jaccard": 0.8919,
+          "minhash_estimate": 0.9206,
+          "estimate_error": 0.0287,
+          "shingles_kept": 70,
+          "shingles_dropped": 70
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:6371c44dfd399b7b4873718181909735bcb9abd5",
+          "same_shard": true,
+          "true_jaccard": 0.8571,
+          "minhash_estimate": 0.873,
+          "estimate_error": 0.0159,
+          "shingles_kept": 70,
+          "shingles_dropped": 73
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:73536e3c41e4b79bdb856c9fa5552bc7f8f395b8",
+          "same_shard": true,
+          "true_jaccard": 0.88,
+          "minhash_estimate": 0.9127,
+          "estimate_error": 0.0327,
+          "shingles_kept": 70,
+          "shingles_dropped": 71
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:8044662227ae602301c07fc67a9ec8eb0690e451",
+          "same_shard": true,
+          "true_jaccard": 0.9041,
+          "minhash_estimate": 0.9127,
+          "estimate_error": 0.0086,
+          "shingles_kept": 70,
+          "shingles_dropped": 69
+        },
+        {
+          "kept": "ver-hin2:c22d31367b782b0bdf7f22911aa621d7c6a2fec5",
+          "dropped": "ver-hin2:0fcd366a9fa6d7a87d537f088fccdcd754e42918",
+          "same_shard": true,
+          "true_jaccard": 0.8571,
+          "minhash_estimate": 0.8413,
+          "estimate_error": 0.0159,
+          "shingles_kept": 70,
+          "shingles_dropped": 73
+        },
+        {
+          "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+          "dropped": "ver-hin2:52bc3cb0c697ddbeca98557664120ff5eae56d8a",
+          "same_shard": true,
+          "true_jaccard": 0.6865,
+          "minhash_estimate": 0.754,
+          "estimate_error": 0.0674,
+          "shingles_kept": 383,
+          "shingles_dropped": 494
+        },
+        {
+          "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+          "dropped": "ver-hin2:5557c8b633ea9b2c6c9f6e1f95471048ed37f6d0",
+          "same_shard": true,
+          "true_jaccard": 0.947,
+          "minhash_estimate": 0.9603,
+          "estimate_error": 0.0133,
+          "shingles_kept": 383,
+          "shingles_dropped": 388
+        },
+        {
+          "kept": "ver-hin2:904e5940caa40129fcc351f58e446c24e6acbf41",
+          "dropped": "ver-hin2:43bf1b92f0692a79c8c3a7432f9bbd3e094b8282",
+          "same_shard": true,
+          "true_jaccard": 0.8686,
+          "minhash_estimate": 0.9127,
+          "estimate_error": 0.0441,
+          "shingles_kept": 383,
+          "shingles_dropped": 385
+        }
+      ],
+      "index_memory": {
+        "this_run": {
+          "docs": 256528,
+          "signature_bytes_per_doc": 1024,
+          "overhead_factor": 1.6,
+          "resident_bytes": 420295475,
+          "resident_gib": 0.39
+        },
+        "at_500M_docs": {
+          "docs": 500000000,
+          "signature_bytes_per_doc": 1024,
+          "overhead_factor": 1.6,
+          "resident_bytes": 819200000000,
+          "resident_gib": 762.94
+        }
+      },
+      "note": "Local per-shard dedup does not produce a globally deduplicated corpus. The gap is 'missed_by_local_caught_by_global'."
+    },
+    "06-pii": {
+      "stage": "06-pii",
+      "regex_classes": [
+        "EMAIL",
+        "PHONE",
+        "IPV4",
+        "AADHAAR",
+        "PAN",
+        "GSTIN",
+        "CREDENTIAL"
+      ],
+      "name_layer": {
+        "kind": "gazetteer + context gating (no GPU available for NER)",
+        "given_names": 50,
+        "surnames": 38,
+        "place_name_exclusions": 46,
+        "aggressiveness_used": 0.3
+      },
+      "docs_in": 255772,
+      "docs_out": 255772,
+      "docs_dropped": 0,
+      "docs_with_pii": 10317,
+      "spans_masked_by_kind": {
+        "NAME": 19181,
+        "EMAIL": 956,
+        "PHONE": 1064,
+        "IPV4": 60,
+        "AADHAAR": 37,
+        "CREDENTIAL": 1
+      },
+      "spans_masked_total": 21299,
+      "chars_removed": 16471,
+      "token_waste": {
+        "docs_measured": 500,
+        "tokens_before": 315454,
+        "tokens_after": 315669,
+        "pct_saved": -0.07
+      },
+      "precision_curve": [
+        {
+          "aggressiveness": 0.1,
+          "true_positives": 15,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "trap_spans_wrongly_masked": 1,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "f1": 0.9677,
+          "per_case": [
+            {
+              "case": "session example (forum post, en+hi)",
+              "true_spans": 8,
+              "found": 8,
+              "tp": 8,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "support ticket with credentials",
+              "true_spans": 7,
+              "found": 7,
+              "tp": 7,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "public-figure and place-name trap (no private PII)",
+              "true_spans": 0,
+              "found": 1,
+              "tp": 0,
+              "fp": 1,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "clean prose, no identifiers",
+              "true_spans": 0,
+              "found": 0,
+              "tp": 0,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            }
+          ]
+        },
+        {
+          "aggressiveness": 0.3,
+          "true_positives": 15,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "trap_spans_wrongly_masked": 1,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "f1": 0.9677,
+          "per_case": [
+            {
+              "case": "session example (forum post, en+hi)",
+              "true_spans": 8,
+              "found": 8,
+              "tp": 8,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "support ticket with credentials",
+              "true_spans": 7,
+              "found": 7,
+              "tp": 7,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "public-figure and place-name trap (no private PII)",
+              "true_spans": 0,
+              "found": 1,
+              "tp": 0,
+              "fp": 1,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "clean prose, no identifiers",
+              "true_spans": 0,
+              "found": 0,
+              "tp": 0,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            }
+          ]
+        },
+        {
+          "aggressiveness": 0.45,
+          "true_positives": 15,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "trap_spans_wrongly_masked": 1,
+          "precision": 0.9375,
+          "recall": 1.0,
+          "f1": 0.9677,
+          "per_case": [
+            {
+              "case": "session example (forum post, en+hi)",
+              "true_spans": 8,
+              "found": 8,
+              "tp": 8,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "support ticket with credentials",
+              "true_spans": 7,
+              "found": 7,
+              "tp": 7,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "public-figure and place-name trap (no private PII)",
+              "true_spans": 0,
+              "found": 1,
+              "tp": 0,
+              "fp": 1,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "clean prose, no identifiers",
+              "true_spans": 0,
+              "found": 0,
+              "tp": 0,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            }
+          ]
+        },
+        {
+          "aggressiveness": 0.6,
+          "true_positives": 15,
+          "false_positives": 8,
+          "false_negatives": 0,
+          "trap_spans_wrongly_masked": 8,
+          "precision": 0.6522,
+          "recall": 1.0,
+          "f1": 0.7895,
+          "per_case": [
+            {
+              "case": "session example (forum post, en+hi)",
+              "true_spans": 8,
+              "found": 10,
+              "tp": 8,
+              "fp": 2,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "support ticket with credentials",
+              "true_spans": 7,
+              "found": 8,
+              "tp": 7,
+              "fp": 1,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "public-figure and place-name trap (no private PII)",
+              "true_spans": 0,
+              "found": 5,
+              "tp": 0,
+              "fp": 5,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "clean prose, no identifiers",
+              "true_spans": 0,
+              "found": 0,
+              "tp": 0,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            }
+          ]
+        },
+        {
+          "aggressiveness": 0.8,
+          "true_positives": 15,
+          "false_positives": 8,
+          "false_negatives": 0,
+          "trap_spans_wrongly_masked": 8,
+          "precision": 0.6522,
+          "recall": 1.0,
+          "f1": 0.7895,
+          "per_case": [
+            {
+              "case": "session example (forum post, en+hi)",
+              "true_spans": 8,
+              "found": 10,
+              "tp": 8,
+              "fp": 2,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "support ticket with credentials",
+              "true_spans": 7,
+              "found": 8,
+              "tp": 7,
+              "fp": 1,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "public-figure and place-name trap (no private PII)",
+              "true_spans": 0,
+              "found": 5,
+              "tp": 0,
+              "fp": 5,
+              "missed": 0,
+              "missed_spans": []
+            },
+            {
+              "case": "clean prose, no identifiers",
+              "true_spans": 0,
+              "found": 0,
+              "tp": 0,
+              "fp": 0,
+              "missed": 0,
+              "missed_spans": []
+            }
+          ]
+        }
+      ],
+      "fixture_cases": [
+        "session example (forum post, en+hi)",
+        "support ticket with credentials",
+        "public-figure and place-name trap (no private PII)",
+        "clean prose, no identifiers"
+      ],
+      "fixture_spans_annotated": 15,
+      "fixture_traps_annotated": 10,
+      "scoring_note": "Precision and recall come from hand-annotated fixtures, including the session's own PII example -- a web crawl has no ground truth. The corpus numbers above are a tally of what fired, with no precision claim attached to them. The two are reported separately on purpose.",
+      "public_figure_caveat": "The name layer cannot tell a private individual from a public figure, and in an Indic web corpus the most frequent person-names are public figures, deities and mythological characters. Masking those costs real knowledge; keeping them risks real people. The exclusion list holds 46 entries including ambedkar, gandhi, kalam, nehru, tagore, which is a blunt instrument and is reported as one.",
+      "examples": [
+        {
+          "id": "ver-hin2:15efa824795ce3b4210c350e47e675ef158adcae",
+          "masked": {
+            "EMAIL": 2,
+            "PHONE": 2
+          },
+          "scrubbed_excerpt": "कोरोना (Coronavirus) संकट में भारत की चुनौतियों और जरूरतों के लिए विश्व समुदाय मदद कर रहा है. भारत सरकार ने सुनिश्चित किया है कि विश्व सहायता को तुरंत और कारगर तरीके से राज्यों और केंद्र शासित प्रदेशों को भेजा जाए.\nकोनावायरस का संक्रमण थमने का नाम नहीं ले रहा "
+        },
+        {
+          "id": "ver-hin2:14e86a68039f0d6eafca42ed83ddead8763df601",
+          "masked": {
+            "PHONE": 2,
+            "NAME": 1
+          },
+          "scrubbed_excerpt": "अमरावती/ दि. 1 - राजस्थानी हितकारक मंडल अमरावती एवं राजस्थानी महिला मंडल, राजस्थानी युवा मंडल के व्दारा संयुक्त रुप से स्वर्गीय श्री श्रीनिवासजी माणकलालजी लढ्ढा की पावन स्मृति में रविवार 6 मार्च 2022 की शाम 5 बजे श्री माहेश्वरी भवन, धनराज लेन, अमरावती में सीए "
+        },
+        {
+          "id": "ver-hin2:8d123c22f61f1d825d800b9373237a5cc4fc4ecf0cb1aab099c0848b657e1153",
+          "masked": {
+            "EMAIL": 1,
+            "PHONE": 1
+          },
+          "scrubbed_excerpt": "तरंगिका के बारे में गीत\" (1895) और \"बुढ़िया इजेर्गील\" (1901) नामक कृतियों में क्रांतिकारी भावनाएँ प्रकट हो गई थीं। दो उपन्यासों, \"फोमा गोर्डेयेव\" (1899) और \"तीनों\" (1901 ) में गोर्की ने शहर के अमीर और गरीब लोगों के जीवन का वर्णन किया है। गोर्की ने अनेक नाटक लि"
+        },
+        {
+          "id": "ver-hin2:502d57fbaf5c517bbaac94c9bf898f41cc7606e6",
+          "masked": {
+            "PHONE": 1,
+            "NAME": 2
+          },
+          "scrubbed_excerpt": "सोलन - हिमाचल प्रदेश विधानसभा अध्यक्ष डा. राजीव बिंदल 15 अप्रैल को सोलन में आयोजित होने वाले जिला स्तरीय हिमाचल दिवस समारोह की अध्यक्षता करेंगे। यह जानकारी शुक्रवार को यहां उपायुक्त सोलन विनोद कुमार ने हिमाचल दिवस के आयोजन के संबंध में आयोजित बैठक की अध्यक्षता"
+        },
+        {
+          "id": "ver-hin2:f8586599abeb7965f79270b46baf4a1a0d16b566",
+          "masked": {
+            "PHONE": 1,
+            "NAME": 1
+          },
+          "scrubbed_excerpt": "भारत (आधिकारिक नामः भारत गणराज्य, Republic of India) दक्षिण एशिया में स्थित भारतीय उपमहाद्वीप का सबसे बड़ा देश है। पूर्ण रूप से उत्तरी गोलार्ध में स्थित भारत, भौगोलिक दृष्टि से विश्व में सातवाँ सबसे बड़ा और जनसंख्या के दृष्टिकोण से दूसरा सबसे बड़ा देश है। भारत"
+        },
+        {
+          "id": "ver-hin2:5deb5a076e811c81c808243c06e1b53b0e25f5cca7024a225c5af1197b0626ff",
+          "masked": {
+            "EMAIL": 2,
+            "PHONE": 1
+          },
+          "scrubbed_excerpt": "भारत सरकार राज्यों/ केंद्र शासित प्रदेशों के साथ मिलकर, एक वर्गीकृत, पूर्व-निर्धारित और सक्रिय दृष्टिकोण को अपनाते हुए, कोविड-19 की रोकथाम, नियंत्रण और प्रबंधन की दिशा में कई प्रकार के कदम उठा रही है। इनकी उच्चतम स्तर पर नियमित रूप से समीक्षा और निगरानी की जा "
+        },
+        {
+          "id": "ver-hin2:26863fa4a1f03a38e088afba1f35d5e048e048f716596387193371b7e5b1eb87",
+          "masked": {
+            "EMAIL": 1,
+            "NAME": 3
+          },
+          "scrubbed_excerpt": "विद्युत मण्डल को हुई हानि की वसूली [ऊर्जा]\n89. ( क्र. 1210 ) श्री प्रवीण पाठक : क्या ऊर्जा मंत्री महोदय यह बताने की कृपा करेंगे कि (क) क्या मुख्य महाप्रबंधक म.प्र. मध्य क्षेत्र विद्युत वितरण कम्पनी ग्वालियर द्वारा पत्र क्रमांक मु.म.प्र/ ग्वा.क्षे./11ए/18-19/10"
+        },
+        {
+          "id": "ver-hin2:9950ae9a2822a1c5a316ceee20a4ce8841647af3d2be672b6d795419e56881d7",
+          "masked": {
+            "IPV4": 1,
+            "NAME": 1
+          },
+          "scrubbed_excerpt": "उपर्युक्त पुत्रों के अतिरिक्त इसकी निम्नलिखित कन्याएँ भी थी : - १. पृथा, जो इसने अपने मित्र कुंतिभोज राजा की गोद में दी थी, एवं इसी कारण जो कुंती नाम से प्रसिद्ध हुई (म. आ. १०४.१ ३; म. द्रो. ११९.६-७) २. श्रुतदेवा ( श्रुतवेदा ); ३. श्रुतश्रवा; ४. राजाधिदेवा (ह."
+        }
+      ]
+    },
+    "07-decontaminate": {
+      "stage": "07-decontaminate",
+      "ngram_n": 13,
+      "min_matching_ngrams_to_drop": 2,
+      "eval_sets": {
+        "MMLU": {
+          "repo": "cais/mmlu",
+          "split": "test",
+          "examples_loaded": 3000,
+          "new_ngrams": 86705
+        },
+        "GSM8K": {
+          "repo": "openai/gsm8k",
+          "split": "test",
+          "examples_loaded": 1319,
+          "new_ngrams": 127455
+        },
+        "HellaSwag": {
+          "repo": "Rowan/hellaswag",
+          "split": "validation",
+          "examples_loaded": 3000,
+          "new_ngrams": 167794
+        },
+        "MILU-Hindi": {
+          "repo": "murthyrudra/milu-cleaned",
+          "split": "test",
+          "examples_loaded": 3000,
+          "new_ngrams": 134775
+        },
+        "MILU-Telugu": {
+          "repo": "murthyrudra/milu-cleaned",
+          "split": "test",
+          "examples_loaded": 3000,
+          "new_ngrams": 154852
+        },
+        "MILU-Bengali": {
+          "repo": "murthyrudra/milu-cleaned",
+          "split": "test",
+          "examples_loaded": 3000,
+          "new_ngrams": 141532
+        }
+      },
+      "eval_ngrams_total": 813113,
+      "docs_in": 255772,
+      "docs_out": 255218,
+      "docs_dropped": 554,
+      "tokens_dropped": 937610,
+      "contamination_rate": 0.002166,
+      "hits_by_eval_set": {
+        "MILU-Bengali": 425,
+        "MILU-Hindi": 1423
+      },
+      "examples": [
+        {
+          "id": "ver-ben:5d574f014caf4fef428ab5919db3e143fdac77e3",
+          "matching_ngrams": 4,
+          "eval_sets": {
+            "MILU-Bengali": 4
+          },
+          "excerpt": "আয়ের নিরিখে গত বছরের তুলনায় দু'ধাপ পিছিয়ে পড়েছেন বিরাট। নতুন পরিসংখ্যান অনুযায়ী, ভারতীয় দল ও রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোরের হয়ে খেলে মোট ২৯ লক্ষ ডলার আয় করেন তিনি। পাশাপাশি ব্র্যান্ড এনডোর্সমেন্ট করে 'কিং কো"
+        },
+        {
+          "id": "ver-ben:d296bffc63c8d6cd51eb3c31a7a439f58beb1367",
+          "matching_ngrams": 4,
+          "eval_sets": {
+            "MILU-Bengali": 4
+          },
+          "excerpt": "রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোরঃ ১৮৯/৫ (কার্তিক-৬৬*, ম্যাক্সওয়েল ৫৫)\nদিল্লি ক্যাপিটালসঃ ১৭৩/৭ (ওয়ার্নার-৬৬, পন্থ ৩৪)\nসংবাদ প্রতিদিন ডিজিটাল ডেস্কঃ দীনেশ কার্তিকের দাপুটে ব্যাটিংয়ের জোরে ম্যাচ জিতল রয়্যাল চ্যালেঞ্জা"
+        },
+        {
+          "id": "ver-ben:66e76de108908fbc970f4ee03349842d3e3aa7ae",
+          "matching_ngrams": 5,
+          "eval_sets": {
+            "MILU-Bengali": 5
+          },
+          "excerpt": "Bangla News Dunia , পল্লব : ক্যান্সার এড়িয়ে চলা সম্ভব কারণ রোগটি মূলত জীবন-যাপনের সঙ্গে সংশ্লিষ্ট। সাধারণত ক্যান্সার প্রতিরোধের প্রথম পদক্ষেপ হলো শরীরচর্চা এবং তামাকজাত পণ্য ভোগ বন্ধ করা। নিয়মিত স্বাস্থ্যকর খাদ্যাভ্যা"
+        },
+        {
+          "id": "ver-ben:ce8c71966991516fda62f24ab051b7156fb39de0",
+          "matching_ngrams": 2,
+          "eval_sets": {
+            "MILU-Bengali": 2
+          },
+          "excerpt": "\"আই তো ইয়োরে ওয়ান্টিনি লাইফে, ইউ তো পুওরে ওয়ান্টেছ\", ইংরেজির ভেজাল মেশানো 'বাংরেজি' এই 'প্যারোডি' (ব্যঙ্গ) গান লিখেছিলেন সেকালে দাদাঠাকুর নামে খ্যাত শরৎ চন্দ্র পণ্ডিত (১৮৮১-১৯৬৮ খ্রিস্টাব্দ)। রামকুমার চট্টোপাধ্যায়ের "
+        },
+        {
+          "id": "ver-ben:81897cef7ea8e153d3ceab1790528b0e7861d16d",
+          "matching_ngrams": 4,
+          "eval_sets": {
+            "MILU-Bengali": 4
+          },
+          "excerpt": "ঘনিয়ে আসছে আইসিসি বিশ্বকাপ-২০১৯। আগামী ২৩ এপ্রিলের মধ্যে প্রতিযোগিতায় অংশগ্রহণকারী দলগুলোর জন্য স্কোয়াড ঘোষণার বাধ্যবাধকতা রয়েছে।\n এরই মধ্যে বেশ কয়েটি দলের স্কোয়াড ঘোষণা করা হয়েছে। আসছে ১৫ এপ্রিল বিশ্বকাপ স্কোয়াড"
+        },
+        {
+          "id": "ver-ben:c1319bdb5be7be81541494f96dc8f99ff1c1a308",
+          "matching_ngrams": 4,
+          "eval_sets": {
+            "MILU-Bengali": 4
+          },
+          "excerpt": "বাংলা হান্ট নিউজ ডেস্কঃ গতকাল লখনৌয়ের ভারতরত্ন শ্রী অটল বিহারী বাজপেয়ী একানা স্টেডিয়ামের মন্থর পিচে লখনৌ সুপার জায়ান্টস (LSG) বনাম রয়্যাল চ্যালেঞ্জার্স ব্যাঙ্গালোর (RCB) ম্যাচ অত্যন্ত বিরক্তিকর ভাবে এগিয়েছিল। শেষপর"
+        },
+        {
+          "id": "ver-ben:7037a4340447570a17371ff7b13116a8e6966c6f",
+          "matching_ngrams": 5,
+          "eval_sets": {
+            "MILU-Bengali": 5
+          },
+          "excerpt": "- 3 hrs ago Vipreet Rajyoga 2023: বিপরীত রাজযোগে প্রচুর ধনসম্পদ লাভ করবেন ৪ রাশির জাতক!\n - 15 hrs ago Budh Gochar 2023: ২৫ জুলাই বুধের গোচর, সূর্যের মতো ঝকমক করবে ৩ রাশির ভাগ্য!\n - 16 hrs ago ত্বকের ঔজ্জ্বল্য বাড়াতে একা"
+        },
+        {
+          "id": "ver-ben:a0697993a2405df0a1e397776deb61eb895360a8",
+          "matching_ngrams": 3,
+          "eval_sets": {
+            "MILU-Bengali": 3
+          },
+          "excerpt": "যমুনা নিউজ বিডিঃ ভারতের আসাম ও অরুণাচল রাজ্যের সীমান্তে সংঘর্ষে দুজন নিহত ও তিনজন নিখোঁজ। বিশ্ব পরিবেশ দিবস উপলক্ষ্যে সীমান্ত এলাকায় জড়ো হয়েছিলেন অনেকেই। আর সেখানেই গুলি চালনো হয়েছে। পুলিশ জানিয়েছে, আসামের ধেমাজি জে"
+        }
+      ],
+      "canary": {
+        "canaries_minted": 3,
+        "planted_in_probe_shard": "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15",
+        "recovered_by_scan": [
+          "ERA5-S4-CANARY-00000000-0000-0000-9e37-79b97f4a7c15"
+        ],
+        "detector_works": true,
+        "canaries_found_in_shipped_corpus": 0,
+        "note": "A canary is a rare literal and is scanned for as one; the 13-gram index cannot match it, since every window containing it also contains its neighbouring words. None are written into the shipped corpus."
+      }
+    },
+    "08-manifest": {
+      "stage": "08-manifest",
+      "docs_in": 255218,
+      "docs_out": 255218,
+      "docs_dropped": 0,
+      "shards": 52,
+      "shards_admitted": 52,
+      "shards_blocked": 0,
+      "docs_per_shard": 5000,
+      "required_fields": [
+        "shard_id",
+        "source_url",
+        "license_class",
+        "contributor_id",
+        "cleaning_scripts",
+        "ingest_timestamp",
+        "sha256",
+        "token_count",
+        "lang_distribution"
+      ],
+      "license_allowlist": [
+        "Apache-2.0",
+        "CC-BY-4.0",
+        "CC-BY-SA-4.0",
+        "CC0-1.0",
+        "MIT"
+      ],
+      "license_class": "CC-BY-4.0",
+      "cleaning_scripts": [
+        {
+          "script": "fetch_corpus.py",
+          "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+        },
+        {
+          "script": "normalize.py",
+          "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
+        },
+        {
+          "script": "langid_stage.py",
+          "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
+        },
+        {
+          "script": "quality.py",
+          "sha256": "c9f19afbec398ea041e205f3e9454a234a670c663145d42e3c9b3d8208935d6e"
+        },
+        {
+          "script": "quality_clf.py",
+          "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+        },
+        {
+          "script": "dedup.py",
+          "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+        },
+        {
+          "script": "pii.py",
+          "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+        },
+        {
+          "script": "decontaminate.py",
+          "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+        },
+        {
+          "script": "manifest.py",
+          "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+        }
+      ],
+      "tokens_total": 176939773,
+      "words_total": 87152439,
+      "naive_words_x_1_3_total": 113298171,
+      "naive_estimate_error_pct": -35.97,
+      "tokens_by_lang": {
+        "ben": 25597280,
+        "hin": 27018110,
+        "mar": 23957748,
+        "tam": 20267898,
+        "kan": 17324073,
+        "guj": 18319443,
+        "mal": 17344450,
+        "pan": 13267275,
+        "ory": 13843496
+      },
+      "fertility_tokens_per_word": {
+        "ben": 2.09,
+        "hin": 1.459,
+        "mar": 1.927,
+        "tam": 2.443,
+        "kan": 2.477,
+        "guj": 1.985,
+        "mal": 3.158,
+        "pan": 1.64,
+        "ory": 2.364
+      },
+      "tokenizer": "sarvam1",
+      "example_manifest_admitted": {
+        "shard_id": "shard_e84bba20ec66",
+        "source_url": "https://huggingface.co/datasets/ai4bharat/sangraha",
+        "license_class": "CC-BY-4.0",
+        "contributor_id": "era5-vardhan",
+        "cleaning_scripts": [
+          {
+            "script": "fetch_corpus.py",
+            "sha256": "2f8a0bac41e033663436e588889fa814637e1eef6dec04bd0d6ab0a8d66db2a5"
+          },
+          {
+            "script": "normalize.py",
+            "sha256": "6afc35e5367dedb15cea36f1703da6d1e195b27de86eac7a6ab6a372284bc726"
+          },
+          {
+            "script": "langid_stage.py",
+            "sha256": "3887a860bdf5506ff72b4a9490e7eb32a4e7b6c22ed3addc124c4fd47aff56aa"
+          },
+          {
+            "script": "quality.py",
+            "sha256": "c9f19afbec398ea041e205f3e9454a234a670c663145d42e3c9b3d8208935d6e"
+          },
+          {
+            "script": "quality_clf.py",
+            "sha256": "6995034de0d03e625929d0959ce2cd54cc23e767178cc690a24dfeba85a157ca"
+          },
+          {
+            "script": "dedup.py",
+            "sha256": "ba41f44f95d053e57b542e49e9dd53d103cbd26d302f19c734ae1006ca62c495"
+          },
+          {
+            "script": "pii.py",
+            "sha256": "f0ac3502d7818c5c3e1ab001527b7d0c497bb383cf09f44df4ed1f941318d618"
+          },
+          {
+            "script": "decontaminate.py",
+            "sha256": "2977d874bbdcbb1bae3a63b74a6baee1cf63bce22918fc7fb59373b1adbdf507"
+          },
+          {
+            "script": "manifest.py",
+            "sha256": "5570e3781526d5975580cd1fa5c0cf6aba906671d38361322586c20a104eabcb"
+          }
+        ],
+        "ingest_timestamp": "2026-07-31T14:32:45Z",
+        "sha256": "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95",
+        "token_count": 4221024,
+        "tokenizer": "sarvam1",
+        "word_count": 2010111,
+        "naive_words_x_1_3_estimate": 2613144,
+        "lang_distribution": {
+          "ben": 100.0
+        },
+        "documents": 5000,
+        "file": "shard-0000.jsonl",
+        "status": "ADMITTED",
+        "gate_reasons": [
+          "all required fields present; licence on the allow-list"
+        ]
+      },
+      "example_manifest_blocked": {
+        "status": "BLOCKED",
+        "gate_reasons": [
+          "missing: cleaning_scripts"
+        ],
+        "what_was_removed": "cleaning_scripts"
+      },
+      "determinism": {
+        "runs_compared": 2,
+        "shard_ids_run1": [
+          "shard_e84bba20ec66",
+          "shard_d79cca486e85",
+          "shard_6f57a3afc923"
+        ],
+        "shard_ids_run2": [
+          "shard_e84bba20ec66",
+          "shard_d79cca486e85",
+          "shard_6f57a3afc923"
+        ],
+        "sha256_run1": [
+          "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95"
+        ],
+        "sha256_run2": [
+          "e84bba20ec66c57b4dfa82b9f2e646b8315520718f337a96f081c67a40a7fa95"
+        ],
+        "identical": true,
+        "contrast": "V4 built ids from row_number() over a non-deterministic ordering, so the same input produced different ids on every run."
+      }
+    }
+  },
+  "integrity": {
+    "docs_checked": 255218,
+    "noise_chars_surviving": 0,
+    "no_noise_survives": true,
+    "raw_docs_with_indic_joiners": 56,
+    "raw_joiner_docs_surviving_to_output": 14,
+    "shipped_docs_with_indic_joiners": 15,
+    "joiner_docs_from_html_unescape": 1,
+    "joiner_docs_that_lost_them": 0,
+    "joiners_preserved": true,
+    "note": "A cleaner that stripped every invisible character would ship zero documents containing ZWNJ or ZWJ. Joiners present as literal characters were preserved, and so were joiners that only appear after HTML unescaping turns `&zwj;` into U+200D -- which works only because unescaping runs before noise stripping and the noise pattern exempts the two joiners."
+  }
+}

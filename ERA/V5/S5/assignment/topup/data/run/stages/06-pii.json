@@ -1,0 +1,357 @@
+{
+  "stage": "06-pii",
+  "regex_classes": [
+    "EMAIL",
+    "PHONE",
+    "IPV4",
+    "AADHAAR",
+    "PAN",
+    "GSTIN",
+    "CREDENTIAL"
+  ],
+  "name_layer": {
+    "kind": "gazetteer + context gating (no GPU available for NER)",
+    "given_names": 50,
+    "surnames": 38,
+    "place_name_exclusions": 46,
+    "aggressiveness_used": 0.3
+  },
+  "docs_in": 255772,
+  "docs_out": 255772,
+  "docs_dropped": 0,
+  "docs_with_pii": 10317,
+  "spans_masked_by_kind": {
+    "NAME": 19181,
+    "EMAIL": 956,
+    "PHONE": 1064,
+    "IPV4": 60,
+    "AADHAAR": 37,
+    "CREDENTIAL": 1
+  },
+  "spans_masked_total": 21299,
+  "chars_removed": 16471,
+  "token_waste": {
+    "docs_measured": 500,
+    "tokens_before": 315454,
+    "tokens_after": 315669,
+    "pct_saved": -0.07
+  },
+  "precision_curve": [
+    {
+      "aggressiveness": 0.1,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.3,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.45,
+      "true_positives": 15,
+      "false_positives": 1,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 1,
+      "precision": 0.9375,
+      "recall": 1.0,
+      "f1": 0.9677,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 8,
+          "tp": 8,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 7,
+          "tp": 7,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 1,
+          "tp": 0,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.6,
+      "true_positives": 15,
+      "false_positives": 8,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 8,
+      "precision": 0.6522,
+      "recall": 1.0,
+      "f1": 0.7895,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 10,
+          "tp": 8,
+          "fp": 2,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 8,
+          "tp": 7,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 5,
+          "tp": 0,
+          "fp": 5,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    },
+    {
+      "aggressiveness": 0.8,
+      "true_positives": 15,
+      "false_positives": 8,
+      "false_negatives": 0,
+      "trap_spans_wrongly_masked": 8,
+      "precision": 0.6522,
+      "recall": 1.0,
+      "f1": 0.7895,
+      "per_case": [
+        {
+          "case": "session example (forum post, en+hi)",
+          "true_spans": 8,
+          "found": 10,
+          "tp": 8,
+          "fp": 2,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "support ticket with credentials",
+          "true_spans": 7,
+          "found": 8,
+          "tp": 7,
+          "fp": 1,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "public-figure and place-name trap (no private PII)",
+          "true_spans": 0,
+          "found": 5,
+          "tp": 0,
+          "fp": 5,
+          "missed": 0,
+          "missed_spans": []
+        },
+        {
+          "case": "clean prose, no identifiers",
+          "true_spans": 0,
+          "found": 0,
+          "tp": 0,
+          "fp": 0,
+          "missed": 0,
+          "missed_spans": []
+        }
+      ]
+    }
+  ],
+  "fixture_cases": [
+    "session example (forum post, en+hi)",
+    "support ticket with credentials",
+    "public-figure and place-name trap (no private PII)",
+    "clean prose, no identifiers"
+  ],
+  "fixture_spans_annotated": 15,
+  "fixture_traps_annotated": 10,
+  "scoring_note": "Precision and recall come from hand-annotated fixtures, including the session's own PII example -- a web crawl has no ground truth. The corpus numbers above are a tally of what fired, with no precision claim attached to them. The two are reported separately on purpose.",
+  "public_figure_caveat": "The name layer cannot tell a private individual from a public figure, and in an Indic web corpus the most frequent person-names are public figures, deities and mythological characters. Masking those costs real knowledge; keeping them risks real people. The exclusion list holds 46 entries including ambedkar, gandhi, kalam, nehru, tagore, which is a blunt instrument and is reported as one.",
+  "examples": [
+    {
+      "id": "ver-hin2:15efa824795ce3b4210c350e47e675ef158adcae",
+      "masked": {
+        "EMAIL": 2,
+        "PHONE": 2
+      },
+      "scrubbed_excerpt": "कोरोना (Coronavirus) संकट में भारत की चुनौतियों और जरूरतों के लिए विश्व समुदाय मदद कर रहा है. भारत सरकार ने सुनिश्चित किया है कि विश्व सहायता को तुरंत और कारगर तरीके से राज्यों और केंद्र शासित प्रदेशों को भेजा जाए.\nकोनावायरस का संक्रमण थमने का नाम नहीं ले रहा "
+    },
+    {
+      "id": "ver-hin2:14e86a68039f0d6eafca42ed83ddead8763df601",
+      "masked": {
+        "PHONE": 2,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "अमरावती/ दि. 1 - राजस्थानी हितकारक मंडल अमरावती एवं राजस्थानी महिला मंडल, राजस्थानी युवा मंडल के व्दारा संयुक्त रुप से स्वर्गीय श्री श्रीनिवासजी माणकलालजी लढ्ढा की पावन स्मृति में रविवार 6 मार्च 2022 की शाम 5 बजे श्री माहेश्वरी भवन, धनराज लेन, अमरावती में सीए "
+    },
+    {
+      "id": "ver-hin2:8d123c22f61f1d825d800b9373237a5cc4fc4ecf0cb1aab099c0848b657e1153",
+      "masked": {
+        "EMAIL": 1,
+        "PHONE": 1
+      },
+      "scrubbed_excerpt": "तरंगिका के बारे में गीत\" (1895) और \"बुढ़िया इजेर्गील\" (1901) नामक कृतियों में क्रांतिकारी भावनाएँ प्रकट हो गई थीं। दो उपन्यासों, \"फोमा गोर्डेयेव\" (1899) और \"तीनों\" (1901 ) में गोर्की ने शहर के अमीर और गरीब लोगों के जीवन का वर्णन किया है। गोर्की ने अनेक नाटक लि"
+    },
+    {
+      "id": "ver-hin2:502d57fbaf5c517bbaac94c9bf898f41cc7606e6",
+      "masked": {
+        "PHONE": 1,
+        "NAME": 2
+      },
+      "scrubbed_excerpt": "सोलन - हिमाचल प्रदेश विधानसभा अध्यक्ष डा. राजीव बिंदल 15 अप्रैल को सोलन में आयोजित होने वाले जिला स्तरीय हिमाचल दिवस समारोह की अध्यक्षता करेंगे। यह जानकारी शुक्रवार को यहां उपायुक्त सोलन विनोद कुमार ने हिमाचल दिवस के आयोजन के संबंध में आयोजित बैठक की अध्यक्षता"
+    },
+    {
+      "id": "ver-hin2:f8586599abeb7965f79270b46baf4a1a0d16b566",
+      "masked": {
+        "PHONE": 1,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "भारत (आधिकारिक नामः भारत गणराज्य, Republic of India) दक्षिण एशिया में स्थित भारतीय उपमहाद्वीप का सबसे बड़ा देश है। पूर्ण रूप से उत्तरी गोलार्ध में स्थित भारत, भौगोलिक दृष्टि से विश्व में सातवाँ सबसे बड़ा और जनसंख्या के दृष्टिकोण से दूसरा सबसे बड़ा देश है। भारत"
+    },
+    {
+      "id": "ver-hin2:5deb5a076e811c81c808243c06e1b53b0e25f5cca7024a225c5af1197b0626ff",
+      "masked": {
+        "EMAIL": 2,
+        "PHONE": 1
+      },
+      "scrubbed_excerpt": "भारत सरकार राज्यों/ केंद्र शासित प्रदेशों के साथ मिलकर, एक वर्गीकृत, पूर्व-निर्धारित और सक्रिय दृष्टिकोण को अपनाते हुए, कोविड-19 की रोकथाम, नियंत्रण और प्रबंधन की दिशा में कई प्रकार के कदम उठा रही है। इनकी उच्चतम स्तर पर नियमित रूप से समीक्षा और निगरानी की जा "
+    },
+    {
+      "id": "ver-hin2:26863fa4a1f03a38e088afba1f35d5e048e048f716596387193371b7e5b1eb87",
+      "masked": {
+        "EMAIL": 1,
+        "NAME": 3
+      },
+      "scrubbed_excerpt": "विद्युत मण्डल को हुई हानि की वसूली [ऊर्जा]\n89. ( क्र. 1210 ) श्री प्रवीण पाठक : क्या ऊर्जा मंत्री महोदय यह बताने की कृपा करेंगे कि (क) क्या मुख्य महाप्रबंधक म.प्र. मध्य क्षेत्र विद्युत वितरण कम्पनी ग्वालियर द्वारा पत्र क्रमांक मु.म.प्र/ ग्वा.क्षे./11ए/18-19/10"
+    },
+    {
+      "id": "ver-hin2:9950ae9a2822a1c5a316ceee20a4ce8841647af3d2be672b6d795419e56881d7",
+      "masked": {
+        "IPV4": 1,
+        "NAME": 1
+      },
+      "scrubbed_excerpt": "उपर्युक्त पुत्रों के अतिरिक्त इसकी निम्नलिखित कन्याएँ भी थी : - १. पृथा, जो इसने अपने मित्र कुंतिभोज राजा की गोद में दी थी, एवं इसी कारण जो कुंती नाम से प्रसिद्ध हुई (म. आ. १०४.१ ३; म. द्रो. ११९.६-७) २. श्रुतदेवा ( श्रुतवेदा ); ३. श्रुतश्रवा; ४. राजाधिदेवा (ह."
+    }
+  ]
+}
