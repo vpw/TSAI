@@ -121,6 +121,31 @@ class KroneckerCodec(ByteCodec):
             out *= scales[:, None]
         return _znorm_rows(out)
 
+    def unreachable_cells(self, byte_seqs: list[bytes]) -> dict:
+        """Grid cells no token in this vocabulary can ever activate.
+
+        UTF-8 is highly structured -- position 0 of a Devanagari token is always 0xE0, most
+        byte values never appear at most positions -- so the (256 x pos_dim) grid is far
+        larger than the set of (value, position) pairs that actually occur. Every unreachable
+        cell is a row of the projection matrix that receives no signal in the forward pass and
+        no gradient in the backward pass, before z-normalisation smears a constant over it.
+        """
+        used = set()
+        occ = np.zeros(self.pos_dim)
+        for bs in byte_seqs:
+            L = min(len(bs), self.pos_dim)
+            occ[:L] += 1
+            for p in range(L):
+                used.add((bs[p], p))
+        unreachable = self.code_dim - len(used)
+        return {
+            "code_dim": self.code_dim,
+            "cells_used": len(used),
+            "cells_unreachable": unreachable,
+            "unreachable_pct": round(100.0 * unreachable / self.code_dim, 2),
+            "mean_column_occupancy": float(occ.mean() / max(len(byte_seqs), 1)),
+        }
+
     def describe(self) -> dict:
         d = super().describe()
         d.update(char_dim=self.char_dim, pos_dim=self.pos_dim)
@@ -275,6 +300,35 @@ class FourierCodec(ByteCodec):
             scores = (self.atoms.value_atoms.conj() * q).sum(axis=1).real
             out.append(int(np.argmax(scores)))
         return bytes(out)
+
+    def decode_batch(self, codes: np.ndarray, lengths: np.ndarray) -> list[bytes]:
+        """Vectorised `decode` over many codes at once.
+
+        Same maths, but the per-position correlation becomes one (N, K) x (K, 256) matmul
+        instead of N separate ones, which is what makes sweeping dimensions and noise levels
+        over thousands of tokens tractable.
+        """
+        z = self._as_complex(codes)                      # (N, K)
+        n = z.shape[0]
+        lmax = int(lengths.max()) if n else 0
+        atoms_h = self.atoms.value_atoms.conj().T        # (K, 256)
+        out = [bytearray() for _ in range(n)]
+        for p in range(lmax):
+            q = z * np.conj(self.atoms.pos_atoms[p % self.max_pos])[None, :]
+            pred = np.argmax((q @ atoms_h).real, axis=1)  # (N,)
+            live = lengths > p
+            for i in np.nonzero(live)[0]:
+                out[i].append(int(pred[i]))
+        return [bytes(b) for b in out]
+
+    def complex_codes(self, seqs: list[bytes]) -> np.ndarray:
+        """Raw (pre-normalisation) complex codes for a batch, for decoding experiments."""
+        vals, mask, lengths = _pad_batch(seqs)
+        acc = np.zeros((len(seqs), self.n_freq), dtype=np.complex64)
+        for p in range(vals.shape[1]):
+            atom_p = self.atoms.pos_atoms[p % self.max_pos]
+            acc += self.atoms.value_atoms[vals[:, p]] * atom_p[None, :] * mask[:, p][:, None]
+        return acc / np.sqrt(np.maximum(lengths, 1))[:, None]
 
     def _as_complex(self, code: np.ndarray) -> np.ndarray:
         if np.iscomplexobj(code):

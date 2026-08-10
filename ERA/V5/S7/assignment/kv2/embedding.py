@@ -65,15 +65,46 @@ class CodecEmbedding(nn.Module):
         codes = self.codec_table[input_ids].to(self.projection.weight.dtype)
         return self.projection(codes)
 
-    def dead_input_rows(self) -> torch.Tensor:
-        """Which projection input rows never receive signal from any token in the vocabulary.
+    def constant_input_rows(self, rel_tol: float = 1e-6) -> torch.Tensor:
+        """Code coordinates that carry no information: (near-)zero variance across the vocab.
 
-        A row of `projection.weight` is dead if its corresponding code dimension is zero for
-        every token: no forward pass can ever activate it and no backward pass can ever reach
-        it, so its parameters are structurally untrainable. This is the census that shows the
-        one-hot grid wasting three-quarters of what it allocates.
+        Note this is deliberately *not* "the coordinate is zero". The released codec
+        z-normalises, which shifts never-activated cells to a non-zero value -- so testing
+        for zero finds nothing even when three quarters of the grid is unreachable. What
+        actually matters is whether a coordinate varies across tokens; one that does not
+        contributes a constant, and its column of the projection is only ever a bias.
+
+        `KroneckerCodec.unreachable_cells()` measures the same waste structurally, before
+        normalisation, and `effective_rank()` measures what survives it.
         """
-        return (self.codec_table.abs().max(dim=0).values == 0)
+        var = self.codec_table.float().var(dim=0)
+        return var <= rel_tol * float(var.median().clamp(min=1e-12))
+
+    def effective_rank(self, n_sample: int = 6000, seed: int = 0) -> dict:
+        """How many independent directions the code actually spans.
+
+        This is the fair way to compare codes of different widths: a codec that spends 8,192
+        coordinates to deliver 2,000 directions is buying nothing with the other 6,192,
+        whatever their individual variances look like.
+        """
+        g = torch.Generator().manual_seed(seed)
+        n = min(n_sample, self.vocab_size)
+        idx = torch.randperm(self.vocab_size, generator=g)[:n]
+        m = self.codec_table[idx].float()
+        m = m - m.mean(dim=0, keepdim=True)
+        s = torch.linalg.svdvals(m)
+        tol = s.max() * max(m.shape) * torch.finfo(torch.float32).eps
+        rank = int((s > tol).sum())
+        # 99% energy rank: how many directions hold essentially all the signal.
+        energy = torch.cumsum(s**2, 0) / (s**2).sum()
+        rank99 = int((energy < 0.99).sum()) + 1
+        return {
+            "code_dim": self.codec.code_dim,
+            "sampled": n,
+            "numerical_rank": rank,
+            "rank_99pct_energy": rank99,
+            "rank_per_dim": round(rank / self.codec.code_dim, 4),
+        }
 
     def extra_repr(self) -> str:
         return (

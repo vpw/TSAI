@@ -118,7 +118,20 @@ it means Problem 3, sold in the lesson as the urgent one, is attacking a defect 
 on a real vocabulary at 68k. (It would grow at 131k with heavier Indic coverage, but not by orders
 of magnitude — max observed token length is 36 bytes.)
 
-### 2.2 The real defect is waste — three-quarters of the projection is dead
+### 2.2 The real defect is waste — three-quarters of the grid is unreachable
+
+**Correction to an earlier draft of this document.** An initial version of this section claimed
+6,193 "dead rows" of the projection, on the reasoning that a code coordinate which is always zero
+can never receive gradient. That reasoning is right about the *unnormalised* code and wrong about
+the shipped one: the released codec **z-normalises**, which maps every never-activated cell to
+`-mean/std` rather than to zero. Testing for a zero coordinate therefore finds nothing at all — as
+the ablation harness immediately reported ("dead rows 0 of 8,192"), which is what caught the error.
+
+The structural fact survives; the right way to state it does not involve the word "dead". Two
+measurements are reported below: the cell census (a property of the codec and the vocabulary,
+before normalisation) and the **effective rank of the finished code**, which is normalisation-proof
+and is the number that actually bounds what the projection can distinguish.
+
 
 Because UTF-8 is highly structured, most (value, position) grid cells are unreachable: position 0
 of a Devanagari token is *always* `0xE0`, and so on.

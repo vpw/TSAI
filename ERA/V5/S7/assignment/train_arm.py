@@ -36,6 +36,11 @@ from kv2.vocab import load_vocab, token_bytes
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.join(HERE, "runs")
 
+# bf16 needs sm_80+; the box this runs on is a T4 (sm_75), so pick per-device rather than
+# assuming. Getting this wrong does not error, it just runs slowly in emulation.
+AMP_DTYPE = (torch.bfloat16 if torch.cuda.is_available()
+             and torch.cuda.get_device_capability()[0] >= 8 else torch.float16)
+
 # Every arm's input path, defined in one place so the ablation is auditable at a glance.
 ARMS = {
     "dense":         {"kind": "dense"},
@@ -105,7 +110,11 @@ def evaluate(model, device, cfg, bytes_per_id, max_tokens, long_ids, batch_seqs=
                 rows.append(seg)
             batch = torch.from_numpy(np.stack(rows)).to(device)
             x, y = batch[:, :-1], batch[:, 1:]
-            logits = model(x)
+            with torch.amp.autocast("cuda", dtype=AMP_DTYPE,
+                                    enabled=device.type == "cuda"):
+                logits = model(x)
+            # Loss in fp32 regardless: bits-per-byte differences between arms are small
+            # enough that half-precision accumulation would be a meaningful share of them.
             nll = F.cross_entropy(
                 logits.reshape(-1, logits.size(-1)).float(),
                 y.reshape(-1), reduction="none",
@@ -177,11 +186,14 @@ def main() -> None:
     print(f"output head    {pc['output_head']:,}")
     print(f"backbone       {pc['backbone']:,}")
     print(f"total          {pc['total_trainable']:,}")
+    rank_info = None
     if isinstance(embedding, CodecEmbedding):
-        dead = int(embedding.dead_input_rows().sum())
+        const = int(embedding.constant_input_rows().sum())
+        rank_info = embedding.effective_rank()
         print(f"codec          {embedding.codec.describe()}")
-        print(f"dead rows      {dead:,} of {embedding.codec.code_dim:,} "
-              f"({100*dead/embedding.codec.code_dim:.1f}%)")
+        print(f"constant rows  {const:,} of {embedding.codec.code_dim:,}")
+        print(f"effective rank {rank_info['numerical_rank']:,} of {embedding.codec.code_dim:,} "
+              f"(99% energy at {rank_info['rank_99pct_energy']:,})")
 
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, betas=(0.9, 0.95),
                             weight_decay=0.1, eps=1e-8)
@@ -210,7 +222,8 @@ def main() -> None:
         for _ in range(accum):
             batch = torch.from_numpy(sampler.batch(args.micro_seqs)).to(device)
             x, y = batch[:, :-1], batch[:, 1:]
-            with torch.amp.autocast("cuda", dtype=torch.bfloat16, enabled=use_amp):
+            # fp16 not bf16: this runs on a T4 (sm_75), which has no native bf16 support.
+            with torch.amp.autocast("cuda", dtype=AMP_DTYPE, enabled=use_amp):
                 logits = model(x)
                 loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(),
                                        y.reshape(-1))
@@ -243,8 +256,9 @@ def main() -> None:
         "config": vars(cfg) | {"d_ffn": cfg.d_ffn, "d_head": cfg.d_head},
         "param_counts": pc,
         "codec": embedding.codec.describe() if isinstance(embedding, CodecEmbedding) else None,
-        "dead_input_rows": (int(embedding.dead_input_rows().sum())
-                            if isinstance(embedding, CodecEmbedding) else None),
+        "constant_input_rows": (int(embedding.constant_input_rows().sum())
+                                if isinstance(embedding, CodecEmbedding) else None),
+        "effective_rank": rank_info,
         "tokens_trained": total_steps * tokens_per_step,
         "steps": total_steps,
         "declared_mixture": TRAIN_MIX,

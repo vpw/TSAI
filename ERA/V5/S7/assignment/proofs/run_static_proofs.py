@@ -27,7 +27,8 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from kv2.codecs import UTF8_IMPOSSIBLE_BYTES, FourierCodec, KroneckerCodec, NaiveSumCodec
+from kv2.codecs import (UTF8_IMPOSSIBLE_BYTES, FourierCodec, KroneckerCodec,
+                        NaiveSumCodec)
 from kv2.vocab import INDIC_SCRIPTS, load_vocab, script_of, token_bytes, tokenizer_path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -119,12 +120,50 @@ def proof_dead_parameters(byte_seqs, d_model=8096, char_dim=256, pos_dim=32) -> 
           f"  ({res['density_pct']:.3f}% dense)")
     print(f"  grid cells ever activated     {len(used_cells):,} of {code_dim:,}"
           f"  ({100*len(used_cells)/code_dim:.1f}%)")
-    print(f"  DEAD projection input rows    {dead:,}  ({res['dead_pct']:.1f}%)")
-    print(f"  dead params at d_model={d_model}  {res['dead_params_at_d_model']/1e6:.1f}M"
+    print(f"  UNREACHABLE grid cells        {dead:,}  ({res['dead_pct']:.1f}%)")
+    print(f"  their params at d_model={d_model}  {res['dead_params_at_d_model']/1e6:.1f}M"
           f" of {res['total_params_at_d_model']/1e6:.1f}M")
-    print("\n  Reading: three-quarters of the projection can never receive gradient, because")
-    print("  UTF-8 makes most (value, position) cells unreachable. The saving is real; so is")
-    print("  the waste inside what was kept. A dense code has no such rows -- see P4.")
+
+    # The structural count above is about the code *before* normalisation. The released codec
+    # z-normalises, which gives every unreachable cell a non-zero (but token-independent)
+    # value -- so the fair, normalisation-proof measure is how many independent directions
+    # the finished code actually spans. That is what the projection can distinguish.
+    n_rank = 10000
+    rng = np.random.default_rng(SEED)
+    idx = rng.choice(len(byte_seqs), n_rank, replace=False)   # random, not the frequent head
+    rank_sample = [byte_seqs[i] for i in idx]
+    print(f"\n  Effective rank of the finished (z-normalised) code, "
+          f"{n_rank:,} randomly sampled tokens:")
+    ranks = {}
+    for label, codec in (("kronecker_32", KroneckerCodec(pos_dim=pos_dim)),
+                         ("kronecker_48", KroneckerCodec(pos_dim=48)),
+                         ("fourier_2048", FourierCodec(n_freq=1024, seed=SEED)),
+                         ("fourier_8192", FourierCodec(n_freq=4096, seed=SEED))):
+        tbl = codec.encode_many(rank_sample, dtype=np.float32)
+        tbl -= tbl.mean(axis=0, keepdims=True)
+        sv = np.linalg.svd(tbl, compute_uv=False)
+        tol = sv.max() * max(tbl.shape) * np.finfo(np.float32).eps
+        rank = int((sv > tol).sum())
+        energy = np.cumsum(sv**2) / (sv**2).sum()
+        r99 = int((energy < 0.99).sum()) + 1
+        # A rank equal to the sample size means the sample, not the codec, was the limit.
+        censored = rank >= min(n_rank - 1, codec.code_dim)
+        ranks[label] = {"code_dim": codec.code_dim, "numerical_rank": rank,
+                        "rank_99pct_energy": r99,
+                        "rank_per_dim": round(rank / codec.code_dim, 4),
+                        "sample_limited": bool(censored)}
+        print(f"    {label:<14} code_dim {codec.code_dim:>5}   rank {rank:>5}"
+              f"{' (sample-limited)' if censored else '':<18}   "
+              f"99%-energy rank {r99:>5}   rank/dim {rank/codec.code_dim:.3f}")
+        del tbl
+    res["effective_rank"] = ranks
+
+    print("\n  Reading: this is the number that matters, and it is worse than the cell census.")
+    print("  The grid spends 8,192 coordinates but the finished code spans far fewer")
+    print("  independent directions, because UTF-8 makes most (value, position) pairs")
+    print("  impossible. Note z-normalisation means no coordinate is literally constant, so")
+    print("  'dead rows' is the wrong test -- rank is the right one. The dense phase code")
+    print("  spends 2,048 coordinates and uses essentially all of them.")
     return res
 
 
@@ -181,18 +220,16 @@ def proof_invertibility(byte_seqs, dims=(128, 256, 512, 1024, 2048, 4096), n_sam
     idx = rng.choice(len(byte_seqs), n_sample, replace=False)
     sample = [byte_seqs[i] for i in idx if len(byte_seqs[i]) > 0]
 
+    lengths = np.array([len(b) for b in sample])
     out = {}
     print(f"  {'code_dim':>9} {'byte-acc':>10} {'token-exact':>12}   (n={len(sample):,})")
     for real_dim in dims:
         codec = FourierCodec(n_freq=real_dim // 2, seed=SEED)
-        ok = tot = exact = 0
-        for bs in sample:
-            rec = codec.decode(codec._complex_code(bs), len(bs))
-            match = sum(1 for x, y in zip(rec, bs) if x == y)
-            ok += match
-            tot += len(bs)
-            exact += int(rec == bs)
-        out[real_dim] = {"byte_acc": ok / tot, "token_exact": exact / len(sample)}
+        rec = codec.decode_batch(codec.complex_codes(sample), lengths)
+        ok = sum(sum(1 for x, y in zip(r, b) if x == y) for r, b in zip(rec, sample))
+        exact = sum(int(r == b) for r, b in zip(rec, sample))
+        out[real_dim] = {"byte_acc": ok / int(lengths.sum()),
+                         "token_exact": exact / len(sample)}
         print(f"  {real_dim:>9} {out[real_dim]['byte_acc']:>10.4f} {out[real_dim]['token_exact']:>12.4f}")
     print("\n  Baseline for scale: the one-hot Kronecker grid is 8,192-dim and is exact only for")
     print("  tokens of <= 32 bytes; past that it is not merely inexact, it is silently identical")
@@ -211,25 +248,24 @@ def proof_noise(byte_seqs, dims=(1024, 2048, 4096, 8192),
     idx = rng.choice(len(byte_seqs), n_sample, replace=False)
     sample = [byte_seqs[i] for i in idx if len(byte_seqs[i]) > 0]
 
+    lengths = np.array([len(b) for b in sample])
     out = {}
     print("  exact-token decode rate, noise sigma relative to the code's own RMS")
     print("  " + f"{'dim':>6}" + "".join(f"{('s=%.2f' % s):>9}" for s in sigmas))
     for real_dim in dims:
         codec = FourierCodec(n_freq=real_dim // 2, seed=SEED)
-        codes = [(bs, codec._complex_code(bs)) for bs in sample]
+        z0 = codec.complex_codes(sample)                      # (N, K)
+        rms = np.sqrt((np.abs(z0) ** 2).mean(axis=1, keepdims=True))
         row = {}
         line = f"  {real_dim:>6}"
         for s in sigmas:
-            exact = 0
-            for bs, z in codes:
-                if s > 0:
-                    rms = np.sqrt((np.abs(z) ** 2).mean())
-                    noise = (rng.normal(0, 1, z.shape) + 1j * rng.normal(0, 1, z.shape)) * s * rms
-                    zz = z + noise
-                else:
-                    zz = z
-                exact += int(codec.decode(zz, len(bs)) == bs)
-            row[s] = exact / len(codes)
+            if s > 0:
+                noise = (rng.normal(0, 1, z0.shape) + 1j * rng.normal(0, 1, z0.shape))
+                z = z0 + noise.astype(np.complex64) * s * rms
+            else:
+                z = z0
+            rec = codec.decode_batch(z, lengths)
+            row[s] = sum(int(r == b) for r, b in zip(rec, sample)) / len(sample)
             line += f"{row[s]:>9.3f}"
         out[real_dim] = row
         print(line)
@@ -254,11 +290,10 @@ def proof_capacity(dims=(512, 1024, 2048, 4096), lengths=(4, 8, 16, 32, 64, 128)
         row = {}
         line = f"  {real_dim:>6}"
         for L in lengths:
-            exact = 0
-            for _ in range(n):
-                bs = bytes(rng.integers(0, 256, L).tolist())
-                exact += int(codec.decode(codec._complex_code(bs), L) == bs)
-            row[L] = exact / n
+            seqs = [bytes(rng.integers(0, 256, L).tolist()) for _ in range(n)]
+            lens = np.full(n, L)
+            rec = codec.decode_batch(codec.complex_codes(seqs), lens)
+            row[L] = sum(int(r == b) for r, b in zip(rec, seqs)) / n
             line += f"{row[L]:>9.3f}"
         out[real_dim] = row
         print(line)

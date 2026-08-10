@@ -17,9 +17,12 @@ import unicodedata
 # SentencePiece writes a leading word boundary as U+2581 LOWER ONE EIGHTH BLOCK.
 SP_SPACE = "▁"
 
-_DEFAULT_TOKENIZER = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "..", "..", "S4", "assignment", "models", "tokenizer-sarvam1.json",
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Local copy first (this is what ships to the GPU box), then S4's canonical artefact when
+# running on a workstation that has the whole course checked out.
+_TOKENIZER_CANDIDATES = (
+    os.path.join(_ROOT, "models", "tokenizer-sarvam1.json"),
+    os.path.join(_ROOT, "..", "..", "S4", "assignment", "models", "tokenizer-sarvam1.json"),
 )
 
 SCRIPT_PREFIXES = (
@@ -34,7 +37,25 @@ INDIC_SCRIPTS = frozenset(
 
 
 def tokenizer_path(path: str | None = None) -> str:
-    return os.path.normpath(path or _DEFAULT_TOKENIZER)
+    """Resolve the frozen tokenizer: explicit arg, then `$KV2_TOKENIZER`, then known locations.
+
+    The tokenizer is a Session 2 contract -- every codec table and every token id in the
+    corpus is meaningful only under this exact artefact -- so a missing one is a hard error
+    rather than a silent fallback to something else.
+    """
+    if path:
+        return os.path.normpath(path)
+    env = os.environ.get("KV2_TOKENIZER")
+    if env:
+        return os.path.normpath(env)
+    for cand in _TOKENIZER_CANDIDATES:
+        if os.path.exists(cand):
+            return os.path.normpath(cand)
+    raise FileNotFoundError(
+        "tokenizer-sarvam1.json not found. Looked in: "
+        + ", ".join(os.path.normpath(c) for c in _TOKENIZER_CANDIDATES)
+        + ". Set KV2_TOKENIZER to point at it."
+    )
 
 
 def load_vocab(path: str | None = None) -> list[str]:
