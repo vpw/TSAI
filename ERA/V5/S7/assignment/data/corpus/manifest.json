@@ -1,0 +1,66 @@
+{
+  "source": "/u/Vardhan/Courses/TSAI/ERA/V5/S5/assignment/proxy/data/tokens",
+  "tokenizer": "tokenizer-sarvam1.json",
+  "vocab_size": 68096,
+  "train_dtype": "uint32",
+  "tokens_per_arm": 30000000,
+  "headroom": 2.5,
+  "mixture": {
+    "general_web": 34,
+    "code": 16,
+    "stem": 10,
+    "indic_A_verified": 20,
+    "indic_B_unverified": 10,
+    "indic_C_translated": 10
+  },
+  "lanes": {
+    "code": {
+      "weight_pct": 16,
+      "tokens_drawn_per_arm": 4800000,
+      "tokens_kept": 12000000,
+      "source_tokens": 196107748,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    },
+    "general_web": {
+      "weight_pct": 34,
+      "tokens_drawn_per_arm": 10200000,
+      "tokens_kept": 25500000,
+      "source_tokens": 223816707,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    },
+    "indic_A_verified": {
+      "weight_pct": 20,
+      "tokens_drawn_per_arm": 6000000,
+      "tokens_kept": 15000000,
+      "source_tokens": 30745122,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    },
+    "indic_B_unverified": {
+      "weight_pct": 10,
+      "tokens_drawn_per_arm": 3000000,
+      "tokens_kept": 7500000,
+      "source_tokens": 12363214,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    },
+    "indic_C_translated": {
+      "weight_pct": 10,
+      "tokens_drawn_per_arm": 3000000,
+      "tokens_kept": 7500000,
+      "source_tokens": 19600433,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    },
+    "stem": {
+      "weight_pct": 10,
+      "tokens_drawn_per_arm": 3000000,
+      "tokens_kept": 7500000,
+      "source_tokens": 84832760,
+      "epochs_over_kept_slice": 0.4,
+      "truncated_by_supply": false
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+# Corpus slice cut by scripts/prep_subset.py -- 331 MB, regenerable in seconds from S5's
+# tokenized lanes. The manifest that describes the cut IS tracked, so the slice is
+# reproducible without shipping the bytes.
+data/corpus/*.bin
+data/corpus/*.npz
+logs/
+Session.vim
