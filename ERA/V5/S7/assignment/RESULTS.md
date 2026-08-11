@@ -13,6 +13,7 @@ Every arm shares architecture, optimiser, schedule, seed, sequence length, token
 |---|---|---|---|---|---|
 | `dense` | full V x d_model table (control, upper bound) | - | 34,865,152 | - | 94,642,688 |
 | `kronecker_32` | shipped byte-Kronecker grid, 32-byte window | 8192 | 4,194,304 | - | 63,971,840 |
+| `kronecker_48` | same grid, window widened to 48 (the session's own remedy) | 12288 | 6,291,456 | - | 66,068,992 |
 | `fourier_2048` | phase-bound Fourier code, 4x smaller than the grid | 2048 | 1,048,576 | - | 60,826,112 |
 | `fourier_8192` | phase-bound Fourier code at matched dimension | 8192 | 4,194,304 | - | 63,971,840 |
 | `naive_2048` | unbound wave sum (negative control, order-blind) | 2048 | 1,048,576 | - | 60,826,112 |
@@ -23,6 +24,7 @@ Every arm shares architecture, optimiser, schedule, seed, sequence length, token
 |---|---|---|---|---|---|---|---|
 | `dense` | 1.5958 | 1.4027 | 1.7745 | 1.0856 | 0.6794 | 0.9582 | **1.2494** |
 | `kronecker_32` | 1.6332 | 1.5367 | 1.8586 | 1.1142 | 0.6902 | 0.9762 | **1.3015** |
+| `kronecker_48` | 1.6389 | 1.5560 | 1.8734 | 1.1125 | 0.6934 | 0.9807 | **1.3092** |
 | `fourier_2048` | 1.6277 | 1.5324 | 1.8516 | 1.1216 | 0.6911 | 0.9750 | **1.2999** |
 | `fourier_8192` | 1.6765 | 1.6279 | 1.9225 | 1.1364 | 0.7081 | 1.0054 | **1.3461** |
 | `naive_2048` | 1.6684 | 1.5674 | 1.8835 | 1.1216 | 0.7081 | 1.0031 | **1.3254** |
@@ -35,6 +37,7 @@ These are exactly the tokens the 32-byte window truncates.
 |---|---|---|---|---|---|---|
 | `dense` | - | - | - | 0.3706 | 0.2869 | 0.2740 |
 | `kronecker_32` | - | - | - | 0.3731 | 0.2912 | 0.2862 |
+| `kronecker_48` | - | - | - | 0.3755 | 0.2934 | 0.2889 |
 | `fourier_2048` | - | - | - | 0.3758 | 0.2913 | 0.2854 |
 | `fourier_8192` | - | - | - | 0.3808 | 0.3002 | 0.2976 |
 | `naive_2048` | - | - | - | 0.3818 | 0.3012 | 0.2976 |
@@ -46,6 +49,7 @@ Support (scored positions per lane): {'general_web': None, 'code': None, 'stem':
 ## Change vs `kronecker_32` (macro bpb, negative = better)
 
 - `dense`: -0.0521 bpb (-4.01%)
+- `kronecker_48`: +0.0077 bpb (+0.59%)
 - `fourier_2048`: -0.0016 bpb (-0.12%)
 - `fourier_8192`: +0.0446 bpb (+3.43%)
 - `naive_2048`: +0.0239 bpb (+1.83%)
@@ -54,6 +58,7 @@ Support (scored positions per lane): {'general_web': None, 'code': None, 'stem':
 
 - `dense`: 30.92 min
 - `kronecker_32`: 29.42 min
+- `kronecker_48`: 30.2 min
 - `fourier_2048`: 28.81 min
 - `fourier_8192`: 29.51 min
 - `naive_2048`: 28.8 min

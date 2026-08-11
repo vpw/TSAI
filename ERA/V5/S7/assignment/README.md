@@ -223,6 +223,7 @@ loss is not.
 | `dense` (full table) | 34,865,152 | — | — | **1.2494** | −4.01% |
 | **`fourier_2048`** | **1,048,576** | 2,048 | 1,402 | **1.2999** | **−0.12%** |
 | `kronecker_32` (baseline) | 4,194,304 | 8,192 | 1,385 | **1.3015** | — |
+| `kronecker_48` (wider window) | 6,291,456 | 12,288 | 1,400 | **1.3092** | +0.59% |
 | `naive_2048` (order-blind) | 1,048,576 | 2,048 | **150** | **1.3254** | +1.83% |
 | `fourier_8192` | 4,194,304 | 8,192 | 1,404 | **1.3461** | +3.43% |
 
@@ -236,6 +237,14 @@ the table. `naive_2048` — the assignment's literal "just add them" — is 1.83
 has **rank 150 against the phase code's 1,402**. Order-blindness is not a small degradation; it
 collapses the representation by an order of magnitude, because a sum over bytes can only encode a
 bag-of-bytes histogram. The static anagram test and the trained result agree.
+
+**And widening the window makes things worse, not better.** `kronecker_48` eliminates every
+collision in the vocabulary (§2) and it is **0.59% worse** than `kronecker_32`, for 50% more
+input-path parameters. It is even marginally worse on the >32-byte tokens the wider window exists
+to serve. That is the session's own proposed remedy, and on this evidence it is not one: the
+collisions it fixes are too rare to matter, while the coordinates it adds are real and have to be
+trained. Two independent measurements agree — the rank table (+4,096 dimensions buys +25 rank) and
+this run.
 
 ### Two results that contradicted our hypotheses
 

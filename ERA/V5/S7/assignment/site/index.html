@@ -208,7 +208,7 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
 
 <section>
   <p class="eyebrow">03 — The trained ablation</p>
-  <h2>Five arms, 40M tokens each, one variable</h2>
+  <h2>Six arms, 40M tokens each, one variable</h2>
   <div class="measure">
     <p>A 512-wide, 8-layer decoder. Architecture, optimiser, schedule, seed and the token stream
     itself are pinned across arms; the embedding module is the only thing that differs. Metric is
@@ -239,6 +239,7 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
         <tr><td>dense (full table)</td><td class="n">34,865,152</td><td class="n">—</td><td class="n">—</td><td class="n">1.2494</td><td class="n">−4.01%</td></tr>
         <tr class="hi"><td><strong>fourier_2048</strong></td><td class="n">1,048,576</td><td class="n">2,048</td><td class="n">1,402</td><td class="n"><strong>1.2999</strong></td><td class="n"><strong>−0.12%</strong></td></tr>
         <tr><td>kronecker_32 (baseline)</td><td class="n">4,194,304</td><td class="n">8,192</td><td class="n">1,385</td><td class="n">1.3015</td><td class="n">—</td></tr>
+        <tr><td>kronecker_48 (wider window)</td><td class="n">6,291,456</td><td class="n">12,288</td><td class="n">1,400</td><td class="n">1.3092</td><td class="n">+0.59%</td></tr>
         <tr><td>naive_2048</td><td class="n">1,048,576</td><td class="n">2,048</td><td class="n">150</td><td class="n">1.3254</td><td class="n">+1.83%</td></tr>
         <tr><td>fourier_8192</td><td class="n">4,194,304</td><td class="n">8,192</td><td class="n">1,404</td><td class="n">1.3461</td><td class="n">+3.43%</td></tr>
       </tbody>
@@ -295,6 +296,14 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
     559 over-long tokens are 0.8% of the vocabulary — too rare to move a corpus-level metric.
   </div>
 
+  <div class="note warn">
+    <strong>Bonus: widening the window doesn't help either.</strong> <code>kronecker_48</code>
+    removes every collision in the vocabulary and trains <em>0.59% worse</em> than the 32-byte
+    version, for 50% more parameters — and it is marginally worse even on the long tokens the wider
+    window exists to serve. The session proposes this as the remedy; on this evidence the collisions
+    it fixes are too rare to matter while the coordinates it adds still have to be trained.
+  </div>
+
   <div class="measure">
     <p style="margin-top:26px">One more correction worth stating plainly: the session calls the
     32-byte window "the sovereign risk in the technique." Measured across the whole vocabulary it
@@ -306,8 +315,9 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
 
 <footer>
   <p>Measured on the frozen 68,096-token <code>sarvam1</code> vocabulary carried since Session 2.
-  Static claims reproduce on a CPU in ~25 minutes with no network; the ablation ran five arms on a
-  single T4. Code, proofs, tests and the full five-problem analysis are in the repository.</p>
+  Static claims reproduce on a CPU in ~25 minutes with no network; the ablation ran six arms on a
+  single T4 in about three GPU-hours. Code, proofs, tests and the full five-problem analysis are in
+  the repository.</p>
   <p style="margin-top:10px">Baseline: <em>Kronecker Embeddings: Byte-Level Structured Token
   Representations for Parameter-Efficient Language Models</em>, arXiv 2605.29459. The wave
   construction is Fourier Holographic Reduced Representation binding (Plate, 1995) applied to bytes.</p>
@@ -346,6 +356,7 @@ const arms=[
   {n:"dense",v:1.2494,c:"--dense"},
   {n:"fourier_2048",v:1.2999,c:"--four"},
   {n:"kronecker_32",v:1.3015,c:"--kron"},
+  {n:"kronecker_48",v:1.3092,c:"--kron"},
   {n:"naive_2048",v:1.3254,c:"--naive"},
   {n:"fourier_8192",v:1.3461,c:"--four"},
 ];
