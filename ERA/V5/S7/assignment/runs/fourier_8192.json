@@ -1,0 +1,240 @@
+{
+  "arm": "fourier_8192",
+  "arm_spec": {
+    "kind": "fourier",
+    "code_dim": 8192
+  },
+  "seed": 20260810,
+  "device": "cuda",
+  "config": {
+    "vocab_size": 68096,
+    "d_model": 512,
+    "n_layers": 8,
+    "n_heads": 8,
+    "seq_len": 512,
+    "ffn_mult": 2.6667,
+    "rope_theta": 10000.0,
+    "init_std": 0.02,
+    "d_ffn": 1344,
+    "d_head": 64
+  },
+  "param_counts": {
+    "total_trainable": 63971840,
+    "input_path": 4194304,
+    "output_head": 34865152,
+    "backbone": 24912384
+  },
+  "codec": {
+    "codec": "FourierCodec",
+    "code_dim": 8192,
+    "max_bytes": null,
+    "n_freq": 4096,
+    "max_pos": 64
+  },
+  "constant_input_rows": 0,
+  "effective_rank": {
+    "code_dim": 8192,
+    "sampled": 6000,
+    "numerical_rank": 1404,
+    "rank_99pct_energy": 905,
+    "rank_per_dim": 0.1714
+  },
+  "tokens_trained": 39993344,
+  "steps": 2441,
+  "declared_mixture": {
+    "general_web": 34,
+    "code": 16,
+    "stem": 10,
+    "indic_A_verified": 20,
+    "indic_B_unverified": 10,
+    "indic_C_translated": 10
+  },
+  "realised_mixture": {
+    "code": 15.86,
+    "general_web": 33.99,
+    "indic_A_verified": 19.81,
+    "indic_B_unverified": 10.0,
+    "indic_C_translated": 10.03,
+    "stem": 10.3
+  },
+  "history": [
+    {
+      "step": 610,
+      "eval": {
+        "general_web": {
+          "bpb": 1.910243457784298,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 2.0707545855201164,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.2715530922468443,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 1.0248414457503643,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.420640124934797,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.8268593634967157,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.35404790774905565,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.1839266914053523,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.36118290560002564,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.5480297727006151
+      }
+    },
+    {
+      "step": 1220,
+      "eval": {
+        "general_web": {
+          "bpb": 1.7720662438557944,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.8610849631447075,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.1071655518696573,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.9360872586534105,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3888966047916808,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7552744538364335,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.3295989181243933,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.0806316696498375,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.32185774349930163,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.4187183568349735
+      }
+    },
+    {
+      "step": 1830,
+      "eval": {
+        "general_web": {
+          "bpb": 1.7007224028203671,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.7238893044086712,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.0173549391849046,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.892464194282302,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3780183850244738,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7231535491910761,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.30127495079458044,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.027811980755008,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3033574190996566,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.3475660617737215
+      }
+    },
+    {
+      "step": 2440,
+      "eval": {
+        "general_web": {
+          "bpb": 1.6689292713351827,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.657063444576172,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 1.9741636641074658,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.8757923657979042,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3770913799559231,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7081390554240251,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.2998582083498787,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.0045419243364562,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.29763134476805686,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.3147716209295344
+      }
+    }
+  ],
+  "final_eval": {
+    "general_web": {
+      "bpb": 1.6765027848818785,
+      "tokens": 999936
+    },
+    "code": {
+      "bpb": 1.627941522579963,
+      "tokens": 999936
+    },
+    "stem": {
+      "bpb": 1.9225087590684296,
+      "tokens": 710144
+    },
+    "indic_A_verified": {
+      "bpb": 1.1363738514824533,
+      "tokens": 274944,
+      "bpb_long_tokens": 0.38081625707628763,
+      "long_token_positions": 382
+    },
+    "indic_B_unverified": {
+      "bpb": 0.7081032365687271,
+      "tokens": 125440,
+      "bpb_long_tokens": 0.30021882304022807,
+      "long_token_positions": 149
+    },
+    "indic_C_translated": {
+      "bpb": 1.0053595663736041,
+      "tokens": 204288,
+      "bpb_long_tokens": 0.2976409021467119,
+      "long_token_positions": 157
+    },
+    "macro_avg_bpb": 1.346131620159176
+  },
+  "elapsed_min": 29.51
+}

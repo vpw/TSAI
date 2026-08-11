@@ -1,0 +1,238 @@
+{
+  "arm": "naive_2048",
+  "arm_spec": {
+    "kind": "naive",
+    "code_dim": 2048
+  },
+  "seed": 20260810,
+  "device": "cuda",
+  "config": {
+    "vocab_size": 68096,
+    "d_model": 512,
+    "n_layers": 8,
+    "n_heads": 8,
+    "seq_len": 512,
+    "ffn_mult": 2.6667,
+    "rope_theta": 10000.0,
+    "init_std": 0.02,
+    "d_ffn": 1344,
+    "d_head": 64
+  },
+  "param_counts": {
+    "total_trainable": 60826112,
+    "input_path": 1048576,
+    "output_head": 34865152,
+    "backbone": 24912384
+  },
+  "codec": {
+    "codec": "NaiveSumCodec",
+    "code_dim": 2048,
+    "max_bytes": null
+  },
+  "constant_input_rows": 0,
+  "effective_rank": {
+    "code_dim": 2048,
+    "sampled": 6000,
+    "numerical_rank": 150,
+    "rank_99pct_energy": 102,
+    "rank_per_dim": 0.0732
+  },
+  "tokens_trained": 39993344,
+  "steps": 2441,
+  "declared_mixture": {
+    "general_web": 34,
+    "code": 16,
+    "stem": 10,
+    "indic_A_verified": 20,
+    "indic_B_unverified": 10,
+    "indic_C_translated": 10
+  },
+  "realised_mixture": {
+    "code": 15.86,
+    "general_web": 33.99,
+    "indic_A_verified": 19.81,
+    "indic_B_unverified": 10.0,
+    "indic_C_translated": 10.03,
+    "stem": 10.3
+  },
+  "history": [
+    {
+      "step": 610,
+      "eval": {
+        "general_web": {
+          "bpb": 1.926652323620667,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 2.0825374682723994,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.2783946146617997,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 1.0413580221013996,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.42088441049164516,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.837983789288993,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.35408244537228617,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.1943602914470408,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.364287478368014,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.5602144182320499
+      }
+    },
+    {
+      "step": 1220,
+      "eval": {
+        "general_web": {
+          "bpb": 1.7781064612567188,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.8599956486524478,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.1032191843696233,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.946990571590493,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.38874814240717914,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7587659732642683,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.32751089691156454,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.084739599291821,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.32520599163050834,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.4219695730708954
+      }
+    },
+    {
+      "step": 1830,
+      "eval": {
+        "general_web": {
+          "bpb": 1.7003200891624828,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.6857942841975861,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 1.993113110737443,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.8987961201969311,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3774421987173545,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7242717482633169,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.2990304269326362,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.0270156590943886,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.30412478912234203,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.338218501942025
+      }
+    },
+    {
+      "step": 2440,
+      "eval": {
+        "general_web": {
+          "bpb": 1.663286486435775,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.6042964340485653,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 1.9370222377628543,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.8798897151199654,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3788788268951951,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7081433079464711,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.3006009212555342,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.0024031349764884,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.2975899352154216,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.2991735527150199
+      }
+    }
+  ],
+  "final_eval": {
+    "general_web": {
+      "bpb": 1.668408719170472,
+      "tokens": 999936
+    },
+    "code": {
+      "bpb": 1.567397401576865,
+      "tokens": 999936
+    },
+    "stem": {
+      "bpb": 1.8835106850355887,
+      "tokens": 710144
+    },
+    "indic_A_verified": {
+      "bpb": 1.1216021547983,
+      "tokens": 274944,
+      "bpb_long_tokens": 0.38183627611030724,
+      "long_token_positions": 382
+    },
+    "indic_B_unverified": {
+      "bpb": 0.7080789416595645,
+      "tokens": 125440,
+      "bpb_long_tokens": 0.3011998066436375,
+      "long_token_positions": 149
+    },
+    "indic_C_translated": {
+      "bpb": 1.0031489586013673,
+      "tokens": 204288,
+      "bpb_long_tokens": 0.29762604551888244,
+      "long_token_positions": 157
+    },
+    "macro_avg_bpb": 1.3253578101403594
+  },
+  "elapsed_min": 28.8
+}

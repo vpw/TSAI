@@ -1,0 +1,240 @@
+{
+  "arm": "fourier_2048",
+  "arm_spec": {
+    "kind": "fourier",
+    "code_dim": 2048
+  },
+  "seed": 20260810,
+  "device": "cuda",
+  "config": {
+    "vocab_size": 68096,
+    "d_model": 512,
+    "n_layers": 8,
+    "n_heads": 8,
+    "seq_len": 512,
+    "ffn_mult": 2.6667,
+    "rope_theta": 10000.0,
+    "init_std": 0.02,
+    "d_ffn": 1344,
+    "d_head": 64
+  },
+  "param_counts": {
+    "total_trainable": 60826112,
+    "input_path": 1048576,
+    "output_head": 34865152,
+    "backbone": 24912384
+  },
+  "codec": {
+    "codec": "FourierCodec",
+    "code_dim": 2048,
+    "max_bytes": null,
+    "n_freq": 1024,
+    "max_pos": 64
+  },
+  "constant_input_rows": 0,
+  "effective_rank": {
+    "code_dim": 2048,
+    "sampled": 6000,
+    "numerical_rank": 1402,
+    "rank_99pct_energy": 795,
+    "rank_per_dim": 0.6846
+  },
+  "tokens_trained": 39993344,
+  "steps": 2441,
+  "declared_mixture": {
+    "general_web": 34,
+    "code": 16,
+    "stem": 10,
+    "indic_A_verified": 20,
+    "indic_B_unverified": 10,
+    "indic_C_translated": 10
+  },
+  "realised_mixture": {
+    "code": 15.86,
+    "general_web": 33.99,
+    "indic_A_verified": 19.81,
+    "indic_B_unverified": 10.0,
+    "indic_C_translated": 10.03,
+    "stem": 10.3
+  },
+  "history": [
+    {
+      "step": 610,
+      "eval": {
+        "general_web": {
+          "bpb": 1.8682652007646152,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 2.012515800528088,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.2262816746998295,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 1.0053364257486876,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.4186338601883692,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.8080562948034837,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.3480583435093323,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.1560187673808233,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3575285448163547,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.5127456939875878
+      }
+    },
+    {
+      "step": 1220,
+      "eval": {
+        "general_web": {
+          "bpb": 1.7302129530176091,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.8055127821046466,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 2.058012548906099,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.9145646657845221,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3813326480635536,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7380001365177506,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.32186206642601367,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 1.0523207550198388,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3136180032110013,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.383103973558411
+      }
+    },
+    {
+      "step": 1830,
+      "eval": {
+        "general_web": {
+          "bpb": 1.6572330015542907,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.644286493318343,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 1.957398778408012,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.8709228096724949,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3750792061596256,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.7054646328541376,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.2965994182826859,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 0.9978765877979777,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.2961325395218778,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.3055303839342094
+      }
+    },
+    {
+      "step": 2440,
+      "eval": {
+        "general_web": {
+          "bpb": 1.6230054941278402,
+          "tokens": 199680
+        },
+        "code": {
+          "bpb": 1.5652115482532143,
+          "tokens": 199680
+        },
+        "stem": {
+          "bpb": 1.9021074238381264,
+          "tokens": 199680
+        },
+        "indic_A_verified": {
+          "bpb": 0.8539949904154828,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.3723072033864718,
+          "long_token_positions": 378
+        },
+        "indic_B_unverified": {
+          "bpb": 0.6910917329310556,
+          "tokens": 125440,
+          "bpb_long_tokens": 0.2910369667886563,
+          "long_token_positions": 149
+        },
+        "indic_C_translated": {
+          "bpb": 0.9741905446960346,
+          "tokens": 199680,
+          "bpb_long_tokens": 0.28521646389572514,
+          "long_token_positions": 153
+        },
+        "macro_avg_bpb": 1.2682669557102926
+      }
+    }
+  ],
+  "final_eval": {
+    "general_web": {
+      "bpb": 1.627727923460872,
+      "tokens": 999936
+    },
+    "code": {
+      "bpb": 1.5323884430904597,
+      "tokens": 999936
+    },
+    "stem": {
+      "bpb": 1.85163665182981,
+      "tokens": 710144
+    },
+    "indic_A_verified": {
+      "bpb": 1.1215645767288374,
+      "tokens": 274944,
+      "bpb_long_tokens": 0.37578315217978725,
+      "long_token_positions": 382
+    },
+    "indic_B_unverified": {
+      "bpb": 0.6910890866735313,
+      "tokens": 125440,
+      "bpb_long_tokens": 0.29133402354200805,
+      "long_token_positions": 149
+    },
+    "indic_C_translated": {
+      "bpb": 0.9750296448945893,
+      "tokens": 204288,
+      "bpb_long_tokens": 0.285382388910653,
+      "long_token_positions": 157
+    },
+    "macro_avg_bpb": 1.2999060544463499
+  },
+  "elapsed_min": 28.81
+}

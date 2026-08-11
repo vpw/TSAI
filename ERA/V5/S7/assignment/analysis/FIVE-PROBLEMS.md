@@ -141,15 +141,29 @@ of a Devanagari token is *always* `0xE0`, and so on.
 | mean occupancy across the 32 columns | 0.407 → **59.3% of the 8,192-dim code is structurally always zero** |
 | non-zeros per code | 13.03 of 8,192 = **0.159% density** |
 | distinct (value, position) cells ever activated | **1,999 of 8,192 = 24.4%** |
-| **dead rows of the projection matrix** | **6,193 of 8,192** |
-| **dead parameters at d_model=8096** | **50.1M of 66.3M = 75.6%** |
+| **unreachable cells** | **6,193 of 8,192 = 75.6%** |
 
 Column occupancy decays fast: col 0 = 1.000, col 8 = 0.714, col 16 = 0.265, col 24 = 0.071,
 col 30 = 0.020.
 
-**So the honest headline is not "Kronecker saves 93.75%" but "Kronecker saves 93.75% and then
-wastes three-quarters of what it kept."** This is the strongest available motivation for replacing
-the one-hot grid with a dense code, and it is measured, not argued.
+**Effective rank** — the normalisation-proof measure, over 10,000 randomly sampled tokens:
+
+| codec | code dim | rank | 99%-energy rank | rank/dim |
+|---|---:|---:|---:|---:|
+| `kronecker_32` | 8,192 | 1,545 | 998 | 0.189 |
+| `kronecker_48` | 12,288 | 1,570 | 1,004 | 0.128 |
+| `fourier_2048` | 2,048 | 1,542 | 839 | **0.753** |
+| `fourier_8192` | 8,192 | 1,571 | 971 | 0.192 |
+
+**This was not the predicted result.** We expected the grid to be low-rank and the phase code
+full-rank. Instead all four land on ~1,550 — that number is a property of **the data** (the byte
+content of this vocabulary intrinsically spans about 1,550 dimensions) and both schemes saturate
+it. The difference is not what they carry but what they charge to carry it: Kronecker spends 8,192
+coordinates on 1,545 directions (19% efficient); the phase code spends 2,048 on 1,542 (75%). Same
+information, a quarter of the projection.
+
+It also prices the session's own proposed remedy: widening `pos_dim` from 32 to 48 costs 4,096
+extra coordinates (+33M parameters at `d_model = 8096`) and buys **+25 rank**.
 
 ### 2.3 A dense Fourier phase code is strictly better on every axis we tested
 
@@ -443,14 +457,26 @@ of the construction*, not as a second solved problem. Reversibility results (§2
 *properties of the codec*, with the head-replacement question explicitly deferred to a follow-up
 submission on Problem 5.
 
-Claims to be defended, in order:
-1. The one-hot Kronecker grid wastes **75.6%** of its projection parameters on a real vocabulary. *(measured, §2.2)*
-2. Naive "just add the waves" is permutation-invariant and **provably cannot distinguish anagrams**. *(proof + test)*
-3. Phase binding to position repairs this and yields **exact invertibility at 2,048 dims** vs Kronecker's 8,192, with **no length cap**. *(measured, §2.3)*
-4. The code degrades gracefully under noise, unlike a hard crop. *(measured, §2.3)*
-5. Inside a trained transformer, at matched parameters, the Fourier arm is **at least competitive** with the Kronecker arm on bits-per-byte, and **strictly better on long tokens** where Kronecker structurally cannot compete. *(to be run — and reported honestly if it fails)*
+Claims, and how they came out:
 
-Claim 5 is the one that is not yet in hand. If the ablation does not support it, the README says so.
+1. The one-hot grid leaves **75.6%** of its cells unreachable, and delivers only **1,545
+   independent directions for 8,192 coordinates** where the phase code delivers 1,542 for 2,048.
+   ✅ *measured, §2.2 — though the framing had to be corrected twice (see above).*
+2. Naive "just add the waves" is permutation-invariant and **cannot distinguish anagrams**.
+   ✅ *proved, tested, and confirmed in training: its code has rank 150 vs 1,402, and it trains
+   1.83% worse.*
+3. Phase binding yields **exact invertibility at 2,048 dims** vs Kronecker's 8,192, with **no
+   length cap**. ✅ *measured, §2.3.*
+4. The code degrades gracefully under noise, unlike a hard crop. ✅ *measured, §2.3.*
+5. In a trained transformer the Fourier arm is **at least competitive** with the Kronecker arm,
+   and **strictly better on long tokens**. ⚠️ *Half confirmed.* Competitive: yes — 1.2999 vs
+   1.3015 macro bpb at a quarter of the input-path parameters. Better on long tokens: **no**,
+   the >32-byte slice is a tie within a wide error bar. Reported as a failed prediction.
+
+Two further predictions were **wrong** and are reported as such in the README: `fourier_8192`
+was expected to be the strongest structured arm and is the weakest (+3.43%), and the dense table
+still beats every structured arm by 4%, so the seed paper's "Kronecker beats BPE-tied" result is
+**not** reproduced at this scale and setup.
 
 ---
 
