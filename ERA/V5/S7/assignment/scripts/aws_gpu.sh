@@ -7,18 +7,22 @@
 #   aws_gpu.sh stop          stop it, then VERIFY it reached "stopped"
 #
 # The instance bills by the second while running, so stop is verified rather than assumed.
+#
+# Point it at your own box before use -- the identifiers below are deliberately not filled in:
+#   export INSTANCE_ID=i-xxxxxxxxxxxxxxxxx
+#   export AWS_PROFILE=your-profile          # optional, defaults to the ambient one
+#   export AWS_REGION=ap-south-1             # optional
 set -uo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# awscli lives in S5's venv (this session reuses S5's GPU box rather than provisioning a new
-# one); fall back to a local venv or PATH so the script works if that ever moves.
+# awscli may live in a sibling session's venv rather than this one; fall back to PATH.
 for cand in "$REPO/.venv/bin/aws" "$REPO/../../S5/assignment/.venv/bin/aws" "$(command -v aws || true)"; do
   [ -x "$cand" ] && AWS="$cand" && break
 done
-: "${AWS:?aws CLI not found - checked S7 .venv, S5 .venv and PATH}"
-export AWS_PROFILE="${AWS_PROFILE:-AWS-ESS}"
+: "${AWS:?aws CLI not found - checked .venv, ../../S5/assignment/.venv and PATH}"
+[ -n "${AWS_PROFILE:-}" ] && export AWS_PROFILE
 REGION="${AWS_REGION:-ap-south-1}"
-INSTANCE_ID="${INSTANCE_ID:-i-025fb7b65d7e3460e}"
+: "${INSTANCE_ID:?set INSTANCE_ID to your own GPU instance, e.g. export INSTANCE_ID=i-0123456789abcdef0}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_rsa}"
 SSH_USER="${SSH_USER:-ubuntu}"
 

@@ -1,6 +1,6 @@
 {
   "seed": 20260810,
-  "tokenizer": "/u/Vardhan/Courses/TSAI/ERA/V5/S4/assignment/models/tokenizer-sarvam1.json",
+  "tokenizer": "tokenizer-sarvam1.json",
   "vocab_size": 68096,
   "byte_length": {
     "mean": 13.041441494360901,

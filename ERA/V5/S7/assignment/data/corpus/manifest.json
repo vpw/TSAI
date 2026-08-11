@@ -1,5 +1,5 @@
 {
-  "source": "/u/Vardhan/Courses/TSAI/ERA/V5/S5/assignment/proxy/data/tokens",
+  "source": "tokens",
   "tokenizer": "tokenizer-sarvam1.json",
   "vocab_size": 68096,
   "train_dtype": "uint32",

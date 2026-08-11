@@ -319,9 +319,11 @@ def main() -> None:
     print(f"byte len  : mean {lens.mean():.2f}  median {int(np.median(lens))}  max {lens.max()}"
           f"  (>32 bytes: {(lens > 32).sum()})")
 
+    # Record the tokenizer by basename, not by absolute path: the identity that matters is
+    # which artefact it is, and an absolute path just leaks whose machine produced the file.
     report = {
         "seed": SEED,
-        "tokenizer": tokenizer_path(),
+        "tokenizer": os.path.basename(tokenizer_path()),
         "vocab_size": len(tokens),
         "byte_length": {"mean": float(lens.mean()), "median": int(np.median(lens)),
                         "max": int(lens.max()), "over_32": int((lens > 32).sum())},

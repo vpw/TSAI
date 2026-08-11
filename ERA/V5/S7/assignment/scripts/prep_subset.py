@@ -47,7 +47,9 @@ def main() -> None:
     total_w = sum(TRAIN_MIX.values())
 
     manifest = {
-        "source": src,
+        # Basename only -- the manifest describes *what* was cut, and the absolute path it was
+        # cut from is specific to one machine.
+        "source": os.path.basename(src),
         "tokenizer": stats["tokenizer"],
         "vocab_size": stats["vocab_size"],
         "train_dtype": stats["train_dtype"],
