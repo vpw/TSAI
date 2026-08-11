@@ -5,16 +5,22 @@
 > *"What is a REAL Fourier alternative of Kronecker? Why can't I represent each character like
 > a fourier wave, and just add them to make a word!!"*
 
-**Short answer: you can't just add them — and the reason you can't is the whole result.**
-Plain summation of per-character waves is permutation-invariant, so `listen` and `silent`
-receive byte-identical embeddings. Binding each byte's wave to its *position* by a phase
-rotation before superposing is the minimal repair, and the repaired code turns out to beat the
-shipped Kronecker grid on every axis we could measure: **4× smaller, no length cap, exactly
-invertible, and robust to noise as large as the signal.**
+**Short answer: you can't just add them — and the reason you can't is half the result.**
+Plain summation of per-character waves is permutation-invariant, so `listen` and `silent` receive
+byte-identical embeddings. Binding each byte's wave to its *position* by a phase rotation before
+superposing is the minimal repair.
 
-Everything below is measured on the real 68,096-token `sarvam1` vocabulary this course has
-carried since Session 2, and on a trained transformer where the embedding module is the only
-thing that differs between arms.
+The other half is what the repaired code buys. It **matches** the shipped Kronecker grid in a
+trained model — 1.2999 against 1.3015 bits-per-byte, which is parity — while using **a quarter of
+the input-path parameters**, and it is **exactly invertible with no length cap** and robust to
+noise as large as the signal. The claim is *same quality, four times cheaper*, not *better*.
+
+Everything below is measured on the real 68,096-token `sarvam1` vocabulary this course has carried
+since Session 2, and on a trained transformer where the embedding module is the only thing that
+differs between arms. Two of our predictions failed; both are reported in §4.
+
+📊 **[Visual summary of the results](site/index.html)** — the same findings as charts, if you would
+rather look than read.
 
 ---
 
@@ -178,13 +184,13 @@ complex Gaussian noise at σ relative to the code's own RMS:
 
 | code dim | σ=0 | σ=0.25 | σ=0.5 | σ=1.0 | σ=2.0 | σ=4.0 |
 |---:|---:|---:|---:|---:|---:|---:|
-| 1024 | 0.997 | 0.991 | 0.956 | 0.688 | 0.203 | 0.025 |
-| 2048 | 1.000 | 1.000 | 1.000 | **0.953** | 0.477 | 0.070 |
-| 4096 | 1.000 | 1.000 | 1.000 | 1.000 | 0.797 | 0.229 |
-| 8192 | 1.000 | 1.000 | 1.000 | 1.000 | **0.989** | 0.532 |
+| 1024 | 0.997 | 0.993 | 0.950 | 0.695 | 0.215 | 0.021 |
+| 2048 | 1.000 | 1.000 | 1.000 | **0.969** | 0.484 | 0.081 |
+| 4096 | 1.000 | 1.000 | 1.000 | 1.000 | 0.799 | 0.236 |
+| 8192 | 1.000 | 1.000 | 1.000 | 1.000 | **0.987** | 0.510 |
 
 A redundant phase code is an error-correcting code. At the grid's own 8,192 dimensions it
-decodes 98.9% of tokens exactly with noise *twice the size of the signal*. A hard crop has no
+decodes 98.7% of tokens exactly with noise *twice the size of the signal*. A hard crop has no
 analogous margin: it is correct up to 32 bytes and catastrophically, silently wrong after.
 
 ### It has a capacity limit, and it is a slope rather than a cliff
@@ -272,22 +278,36 @@ input paths, which is what it was designed to isolate.
 
 ## 6. Reproducing
 
+Everything in §2–§4 that does not involve training runs on a CPU in about 25 minutes, with no
+GPU and no network:
+
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install numpy torch pytest
+.venv/bin/pip install numpy pytest
+.venv/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-.venv/bin/python -m pytest tests/ -q          # 23 invariant tests, seconds
-.venv/bin/python proofs/run_static_proofs.py  # all static claims, CPU only, no GPU
-
-# the trained ablation (needs a GPU and the S5 tokenized corpus)
-.venv/bin/python scripts/prep_subset.py
-.venv/bin/python train_arm.py --arm fourier_2048 --tokens 40000000
-.venv/bin/python scripts/make_report.py
+.venv/bin/python -m pytest tests/ -q            # 23 invariant tests, ~13 s
+.venv/bin/python proofs/run_static_proofs.py    # every static claim -> proofs/results/
 ```
 
-Static claims need no GPU and no network. The tokenizer
-(`tokenizer-sarvam1.json`, 68,096 entries) is the frozen Session 2 artefact; every claim is
-computed against it.
+The trained ablation additionally needs a GPU and a tokenized corpus. This repo reuses the one
+built in Session 5; `prep_subset.py` cuts a 331 MB slice from it (the slice itself is not
+committed, but `data/corpus/manifest.json` describes it exactly, so it is reproducible):
+
+```bash
+.venv/bin/python scripts/prep_subset.py --tokens-per-arm 40000000
+.venv/bin/python train_arm.py --arm fourier_2048 --tokens 40000000 \
+    --d-model 512 --n-layers 8 --n-heads 8 --seq-len 512
+.venv/bin/python scripts/make_report.py         # runs/*.json -> RESULTS.md
+```
+
+The tokenizer (`tokenizer-sarvam1.json`, 68,096 entries) is the frozen Session 2 artefact; every
+claim here is computed against it, and changing it would invalidate every code and every
+checkpoint trained on one.
+
+**A note on the T4.** `kronecker_48` OOMs at `--micro-seqs 16` on a 16 GB card: its 12,288-dim
+code table is 1.67 GB in fp16 before any activation memory. That is not a bug in the harness, it
+is a real cost of the widen-the-window remedy, and it is why that arm runs at `--micro-seqs 8`.
 
 ## 7. Layout
 
