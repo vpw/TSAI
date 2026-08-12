@@ -15,6 +15,12 @@ trained model — 1.2999 against 1.3015 bits-per-byte, which is parity — while
 the input-path parameters**, and it is **exactly invertible with no length cap** and robust to
 noise as large as the signal. The claim is *same quality, four times cheaper*, not *better*.
 
+**And the claim stops there, deliberately.** Held at *equal* code dimension and equal parameters
+— 8,192 dims, 4.19M params each — the Kronecker grid **beats** the phase code by 3.43%. Both
+comparisons are in §4, both are real, and *"Two ways to compare, two answers"* explains why they
+point in opposite directions.
+Anyone evaluating this work should read the matched-parameter row before the headline.
+
 Everything below is measured on the real 68,096-token `sarvam1` vocabulary this course has carried
 since Session 2, and on a trained transformer where the embedding module is the only thing that
 differs between arms. Two of our predictions failed; both are reported in §4.
@@ -227,10 +233,43 @@ loss is not.
 | `naive_2048` (order-blind) | 1,048,576 | 2,048 | **150** | **1.3254** | +1.83% |
 | `fourier_8192` | 4,194,304 | 8,192 | 1,404 | **1.3461** | +3.43% |
 
-**The main claim holds.** `fourier_2048` matches the shipped Kronecker grid — 1.2999 vs 1.3015,
-a 0.12% difference that is parity, not a win — while using **a quarter of the input-path
-parameters** (1.05M vs 4.19M). The honest headline is *same quality, four times cheaper*, and it
-is exactly what the rank table predicted.
+### Two ways to compare, two answers
+
+This table can be read along two different axes, and they disagree. Both readings are stated here
+because presenting only one of them would be cherry-picking.
+
+**Matched quality — Fourier is 4× cheaper.** `fourier_2048` matches the shipped Kronecker grid
+(1.2999 vs 1.3015, a 0.12% difference that is parity, not a win) while using **a quarter of the
+input-path parameters**, 1.05M against 4.19M.
+
+**Matched parameters — Kronecker wins by 3.43%.** `kronecker_32` and `fourier_8192` are the same
+code dimension (8,192) and the *same* parameter count (4,194,304), differing only in whether the
+code is a sparse one-hot grid or a dense phase superposition. At that matched point the grid
+scores 1.3015 against the phase code's 1.3461.
+
+**Why they disagree — the rank column.** The vocabulary spans ~1,400 independent directions, and
+every non-degenerate codec finds them. Fourier reaches that at 2,048 dims (68% efficient). Going
+to 8,192 adds **two** ranks — no new information, three million more parameters to fit from the
+same 40M tokens. So "equal parameters" compares Kronecker at its natural operating point against
+Fourier at four times past saturation; it is not a like-for-like test of the two binding schemes,
+and the efficiency claim is precisely the observation that Kronecker *has* no cheaper operating
+point.
+
+**But that is not the whole story, and the remainder cuts against us.** At identical parameter
+counts the *sparse* code still beat the *dense* one. Kronecker activates ≤ 32 of 8,192 rows per
+token, so each projection row receives gradient only from tokens containing that (byte, position)
+cell — it trains like a factored lookup table. The phase code is dense, so the projection must
+unmix a random dense mixture, a materially harder optimisation problem at the same parameter
+count and token budget. §2 characterises Kronecker's sparsity purely as *waste*; this run says
+sparsity also buys gradient locality, and that is a genuine advantage we did not anticipate. The
+experiment that would separate the two effects — a **sparsified** phase code at 8,192 dims, same
+dimension, same parameters, sparse activation — has not been run. Until it is, "Fourier is
+strictly the better primitive" is not supported. "Fourier is the better primitive *per
+parameter*" is.
+
+**One seed.** Every arm is a single seed at 40M tokens and we never measured seed variance, so
+the 0.12% parity gap is almost certainly inside noise. Parity is a defensible reading of it; a
+win would not be.
 
 **The negative control behaves as the theory says it must**, and this is the cleanest result in
 the table. `naive_2048` — the assignment's literal "just add them" — is 1.83% worse, and its code
@@ -251,11 +290,18 @@ this run.
 Reported because they are what the runs produced.
 
 1. **`fourier_8192` is the *worst* structured arm (+3.43%), not the best.** We expected the
-   matched-dimension control to be at least as good as `fourier_2048`. It is substantially worse.
-   The most likely reading: at 8,192 dimensions carrying ~1,400 directions the code is heavily
-   redundant, so the projection has 4× the parameters to fit from the same 40M tokens and is
-   simply undertrained. If that is right it is an argument *for* the compact code, not merely a
-   curiosity — but we have not run the seed-sweep that would establish it.
+   matched-dimension control to be at least as good as `fourier_2048`. It is substantially worse,
+   and it is the arm that loses the matched-parameter head-to-head against `kronecker_32`.
+
+   Redundancy explains part of it: 8,192 dimensions carrying ~1,400 directions means 4× the
+   projection parameters fitted from the same 40M tokens. **But redundancy alone cannot be the
+   explanation**, because `kronecker_32` carries ~1,385 directions in the same 8,192 dimensions
+   with the same parameter count and does 3.43% *better*. Whatever separates them is not
+   dimensionality and not parameter count — the remaining structural difference is sparse versus
+   dense activation, i.e. the gradient-locality argument above. A previous version of this section
+   stopped at "undertrained", which explains `fourier_8192` vs `fourier_2048` and quietly fails to
+   address the comparison that actually matters. Neither the seed sweep nor the sparsified-phase
+   arm that would settle it has been run.
 
 2. **No measurable advantage on long tokens.** We predicted the >32-byte slice would be where a
    crop structurally cannot compete. It isn't, at this scale: `fourier_2048` scores 0.3758 /
@@ -277,6 +323,14 @@ input paths, which is what it was designed to isolate.
 - The proxy is **small** — a 512-wide, 8-layer decoder on 40M tokens. It is a proxy, in exactly
   the sense Session 5 established: enough to rank arms that differ in one component, not enough
   to license a claim at 120B.
+- **Every arm is one seed, and seed variance was never measured.** The 0.12% parity gap is
+  therefore an ordering we cannot distinguish from noise. The 3.43% matched-parameter gap and the
+  1.83% naive-control gap are large enough to be safer, but none of them carries an error bar.
+- **The efficiency claim rests on two points, not a curve.** We ran Fourier at 2,048 and at
+  8,192. Where quality actually breaks below 2,048 is unmeasured, so "4× cheaper" is a lower
+  bound on a frontier we have not traced.
+- **Sparse versus dense is a confound we did not control.** The two schemes differ in binding
+  *and* in activation density; the matched-parameter result cannot attribute the gap to either.
 - The Fourier frequencies are **random**. No attempt was made to learn or optimise them; a
   learned frequency schedule is an obvious next experiment and might change the picture.
 - The capacity results use **uniform-random bytes** for the length sweep, which is the hardest
@@ -332,6 +386,24 @@ is a real cost of the widen-the-window remedy, and it is why that arm runs at `-
 | `resources/` | session writeup, transcript, extracted widget data |
 
 ## 8. Where this goes next
+
+### The three experiments this write-up is missing
+
+Named explicitly because §5's limits are not decoration — each one is a run that would either
+harden or break a claim above, and together they are about five T4-hours:
+
+1. **Three seeds on `fourier_2048` and `kronecker_32`.** Turns "parity" from an assertion into an
+   interval. Without it the headline number is not established.
+2. **`fourier_512` and `fourier_1024`.** Traces the quality-vs-parameters frontier instead of
+   comparing two points on it. If 1,024 dims still matches, the efficiency claim doubles to 8×
+   and stops depending on one lucky operating point.
+3. **A sparsified phase code at 8,192 dims** (top-k the code, hold dimension and parameters
+   fixed). This is the direct test of the sparse-versus-dense confound. If it closes the 3.43%
+   matched-parameter gap, that is a stronger result than anything currently in this repo — it
+   would show the grid's advantage is its sparsity, which phase binding can adopt, rather than
+   its structure, which it cannot.
+
+### The other four problems
 
 The instructor's own ranking was that *"problem number four solves 1, 2 and 3"*, and the
 construction bears that out — though this submission claims **only Problem 4**, as the assignment

@@ -131,14 +131,14 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
 
   <div class="stats">
     <div class="stat">
-      <div class="k">Trained parity</div>
-      <div class="v" style="color:var(--four)">1.2999</div>
-      <div class="s">macro bits/byte vs Kronecker's 1.3015 — a tie, at ¼ the input-path parameters</div>
+      <div class="k">Matched quality</div>
+      <div class="v" style="color:var(--four)">¼</div>
+      <div class="s">of the input-path parameters for the same 1.30 macro bits/byte — 1.05M vs 4.19M</div>
     </div>
     <div class="stat">
-      <div class="k">Code efficiency</div>
-      <div class="v" style="color:var(--four)">75%</div>
-      <div class="s">rank delivered per dimension spent, against the grid's 19%</div>
+      <div class="k">Matched parameters</div>
+      <div class="v" style="color:var(--kron)">+3.43%</div>
+      <div class="s">the phase code <em>loses</em> to the grid at equal dimension and equal params</div>
     </div>
     <div class="stat">
       <div class="k">Order-blind control</div>
@@ -150,6 +150,15 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
       <div class="v">2,048</div>
       <div class="s">dimensions for 100% token recovery, with no length cap</div>
     </div>
+  </div>
+
+  <div class="note warn" style="margin-top:26px">
+    <strong>Read both stats above, in that order.</strong> The two comparisons point opposite ways
+    and both are real. Matched on <em>quality</em>, phase binding is four times cheaper. Matched on
+    <em>parameters</em>, the sparse grid wins by 3.43%. The resolution is in section 03: the phase
+    code saturates the vocabulary's ~1,400 intrinsic directions at 2,048 dimensions, so an 8,192-dim
+    phase arm is four times past its own operating point — but that is not a complete excuse, because
+    at equal parameters the grid's sparsity still buys something we had characterised purely as waste.
   </div>
 </header>
 
@@ -244,8 +253,12 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
         <tr><td>fourier_8192</td><td class="n">4,194,304</td><td class="n">8,192</td><td class="n">1,404</td><td class="n">1.3461</td><td class="n">+3.43%</td></tr>
       </tbody>
     </table>
-    <figcaption>Ranks here are from each run's own 6,000-token sample, so they sit slightly below the
-      10,000-token figures in section 01. The ordering is unchanged.</figcaption>
+    <figcaption>The "vs baseline" column is <strong>not</strong> parameter-matched — it compares
+      every arm against <code>kronecker_32</code> regardless of cost. The two rows that <em>are</em>
+      matched to each other are <code>kronecker_32</code> and <code>fourier_8192</code>: identical
+      code dimension, identical 4,194,304 parameters, and the grid wins by 3.43%. Ranks are from each
+      run's own 6,000-token sample, so they sit slightly below the 10,000-token figures in section 01;
+      the ordering is unchanged.</figcaption>
   </figure>
 </section>
 
@@ -272,7 +285,7 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
 
 <section>
   <p class="eyebrow">05 — What we got wrong</p>
-  <h2>Three predictions that didn't survive contact</h2>
+  <h2>The predictions that didn't survive contact</h2>
 
   <div class="note warn">
     <strong>"Six thousand dead projection rows."</strong> An early draft claimed the unreachable grid
@@ -284,10 +297,24 @@ footer{margin-top:72px;padding-top:26px;border-top:1px solid var(--rule);font-si
 
   <div class="note warn">
     <strong>"More code dimensions will help."</strong> <code>fourier_8192</code> was meant to be the
-    strongest structured arm and is the weakest, at +3.43%. Most likely it is redundancy: 8,192
-    coordinates carrying ~1,400 directions means four times the projection parameters to fit from the
-    same 40M tokens. That reading argues <em>for</em> the compact code — but we have not run the
-    sweep that would establish it.
+    strongest structured arm and is the weakest, at +3.43% — and it is the arm that loses the
+    parameter-matched head-to-head. Redundancy explains part of it: 8,192 coordinates carrying ~1,400
+    directions means four times the projection parameters to fit from the same 40M tokens.
+    <strong>But redundancy cannot be the whole explanation</strong>, because <code>kronecker_32</code>
+    carries ~1,385 directions in the same 8,192 dimensions with the same parameter count and does
+    better. The remaining difference is sparse versus dense activation: the grid lights ≤32 of 8,192
+    rows per token, so each row trains like a lookup entry, while the phase projection must unmix a
+    dense random mixture. An earlier draft stopped at "redundancy", which explains the comparison
+    against <code>fourier_2048</code> and silently skips the one that matters.
+  </div>
+
+  <div class="note warn">
+    <strong>Every arm is one seed.</strong> Seed variance was never measured, so the 0.12%
+    <code>fourier_2048</code> / <code>kronecker_32</code> gap is almost certainly inside noise.
+    "Parity" is a defensible reading of it; a win would not be. Three runs that would settle the open
+    questions — a seed sweep, a 512/1024-dim sweep to trace the efficiency frontier rather than
+    sample two points on it, and a <em>sparsified</em> phase code at 8,192 dims to isolate the
+    sparsity confound — are about five GPU-hours and have not been run.
   </div>
 
   <div class="note warn">

@@ -469,14 +469,27 @@ Claims, and how they came out:
    length cap**. ✅ *measured, §2.3.*
 4. The code degrades gracefully under noise, unlike a hard crop. ✅ *measured, §2.3.*
 5. In a trained transformer the Fourier arm is **at least competitive** with the Kronecker arm,
-   and **strictly better on long tokens**. ⚠️ *Half confirmed.* Competitive: yes — 1.2999 vs
-   1.3015 macro bpb at a quarter of the input-path parameters. Better on long tokens: **no**,
-   the >32-byte slice is a tie within a wide error bar. Reported as a failed prediction.
+   and **strictly better on long tokens**. ⚠️ *Half confirmed, and only on one of the two axes.*
+   Competitive **per parameter**: yes — 1.2999 vs 1.3015 macro bpb at a quarter of the input-path
+   parameters. Competitive **at matched parameters**: **no** — `fourier_8192` and `kronecker_32`
+   have identical code dimension and identical 4,194,304 parameters, and the grid wins by 3.43%.
+   Better on long tokens: **no**, the >32-byte slice is a tie within a wide error bar. Two of the
+   three sub-claims failed.
 
 Two further predictions were **wrong** and are reported as such in the README: `fourier_8192`
 was expected to be the strongest structured arm and is the weakest (+3.43%), and the dense table
 still beats every structured arm by 4%, so the seed paper's "Kronecker beats BPE-tied" result is
 **not** reproduced at this scale and setup.
+
+**A framing error, recorded alongside the factual ones.** The first version of the write-up led
+with the unmatched comparison (`fourier_2048` vs `kronecker_32`, quarter the parameters) and did
+not surface that the only *parameter-matched* pair in the table runs the other way. Both numbers
+were in the results file; only one was in the headline. §2.2 of this document argues that the
+grid's sparsity is *waste* — the matched-parameter run says sparsity also buys gradient locality,
+since at equal parameters and equal dimension the sparse code trains better. That is a real
+advantage of the baseline that this analysis did not anticipate and initially did not report. The
+experiment that would separate binding-scheme from activation-density — a sparsified phase code at
+8,192 dims — has not been run.
 
 ---
 

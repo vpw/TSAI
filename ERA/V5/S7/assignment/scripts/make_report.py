@@ -107,9 +107,38 @@ def main() -> None:
                   "*A small support means a wide error bar. Read this slice as directional "
                   "unless the counts are large.*"]
 
+    # Arms are cheap to compare on the wrong axis. Grouping by input-path parameter count makes
+    # the like-for-like comparisons explicit, so a headline picked from the unmatched axis cannot
+    # be mistaken for one of these.
+    groups: dict[int, list[str]] = {}
+    for a in arms:
+        groups.setdefault(runs[a]["param_counts"]["input_path"], []).append(a)
+    matched = {p: g for p, g in groups.items() if len(g) > 1}
+    if matched:
+        lines += ["", "## Matched-parameter head-to-heads", "",
+                  "Arms sharing an input-path parameter count. These are the like-for-like "
+                  "comparisons; anything across groups trades parameters for quality and must "
+                  "say so.", ""]
+        for p in sorted(matched):
+            g = sorted(matched[p], key=lambda a: runs[a]["final_eval"].get("macro_avg_bpb", 9e9))
+            lines.append(f"**{p:,} input-path params** — "
+                         + ", ".join(f"`{a}` {fmt(runs[a]['final_eval'].get('macro_avg_bpb'))}"
+                                     for a in g))
+            best, worst = g[0], g[-1]
+            bv = runs[best]["final_eval"].get("macro_avg_bpb")
+            wv = runs[worst]["final_eval"].get("macro_avg_bpb")
+            if bv and wv and best != worst:
+                # Normalised by the better arm, so this reads on the same scale as the
+                # "change vs baseline" percentages below rather than a slightly smaller one.
+                lines.append(f"  → `{worst}` is {100*(wv-bv)/bv:.2f}% worse than `{best}`")
+            lines.append("")
+
     base = "kronecker_32"
     if base in runs:
-        lines += ["", f"## Change vs `{base}` (macro bpb, negative = better)", ""]
+        lines += ["", f"## Change vs `{base}` (macro bpb, negative = better)", "",
+                  "*Not parameter-matched — see the section above. `fourier_2048` uses a quarter "
+                  "of the baseline's input-path parameters, `kronecker_48` fifty percent more.*",
+                  ""]
         b = runs[base]["final_eval"].get("macro_avg_bpb")
         for a in arms:
             if a == base:

@@ -46,7 +46,20 @@ Support (scored positions per lane): {'general_web': None, 'code': None, 'stem':
 
 *A small support means a wide error bar. Read this slice as directional unless the counts are large.*
 
+## Matched-parameter head-to-heads
+
+Arms sharing an input-path parameter count. These are the like-for-like comparisons; anything across groups trades parameters for quality and must say so.
+
+**1,048,576 input-path params** — `fourier_2048` 1.2999, `naive_2048` 1.3254
+  → `naive_2048` is 1.96% worse than `fourier_2048`
+
+**4,194,304 input-path params** — `kronecker_32` 1.3015, `fourier_8192` 1.3461
+  → `fourier_8192` is 3.43% worse than `kronecker_32`
+
+
 ## Change vs `kronecker_32` (macro bpb, negative = better)
+
+*Not parameter-matched — see the section above. `fourier_2048` uses a quarter of the baseline's input-path parameters, `kronecker_48` fifty percent more.*
 
 - `dense`: -0.0521 bpb (-4.01%)
 - `kronecker_48`: +0.0077 bpb (+0.59%)
