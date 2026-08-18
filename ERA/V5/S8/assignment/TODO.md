@@ -83,6 +83,26 @@ live-class transcript.
       array is the seed for `data/mechanisms.js`.
 - [ ] Build the app: standard attention first (Q×K → scores → scale → mask → softmax → weighted
       sum of V), then each subsequent mechanism framed as a response to a specific prior limitation.
+  - [x] **Act 0 — attention, built once** (2026-08-19). `site/` scaffold + `site/assets/app.css`
+        (shared token system, lane colours, light/dark with a manual toggle) + `site/index.html` +
+        `site/assets/act0-pipeline.js`. Six tokens ("the cat sat on the mat"), `d_k = 4` so `√d_k = 2`
+        is mental arithmetic. **Q/K/V are authored, not random** — keys advertise grammatical role,
+        queries advertise what the token wants — so the attention pattern is readable instead of
+        noise; every displayed number is computed from those vectors at render time, none hard-coded.
+        Six steps (Inputs · Score · Scale · Mask · Softmax · Weighted sum), a running formula with the
+        active term lit, a clickable cell inspector showing the exact arithmetic per cell, output
+        vectors as stacked bars, and the causal-mask toggle.
+        **Verified numbers** (recomputed independently, not read off the widget): `sat` → `cat` =
+        69.1% and its output is 0.691 *animate*; masked row 0 attends 1.0000 to itself; all rows sum
+        to exactly 1; mask off → token 0 sends **89.4%** of its attention forward in time, **28.8%**
+        of it onto `cat`. Swept all 6 steps × both toggle states and clicked all 36 cells: no console
+        errors, no `undefined`/`NaN`, no horizontal overflow at 1440px or 390px.
+        Two things caught in review and fixed: the masked triangle lost its hatch after softmax (it
+        holds exact zeros, but it is still the same region — hatch restored, legend now reads
+        "exactly 0 — was −∞"), and the step-5/step-3 notes asserted mask-on numbers and instructions
+        regardless of the toggle — both bodies are now functions of state.
+  - [ ] Acts 1–5 (bill meter, timeline, dossiers, Q2 answer, sources) — Acts 2/3/5 are blocked on the
+        date audit being signed off, since they render from `data/mechanisms.js`.
 - [ ] Write pros/cons for every mechanism: what it buys, what it costs, when you'd choose it.
 - [ ] Answer Question 2 directly: what does the completed timeline show that a list wouldn't?
 - [ ] Deploy (Netlify/Vercel/equivalent); verify the live link opens in an incognito window.
