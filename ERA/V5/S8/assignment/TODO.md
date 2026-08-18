@@ -101,8 +101,25 @@ live-class transcript.
         holds exact zeros, but it is still the same region — hatch restored, legend now reads
         "exactly 0 — was −∞"), and the step-5/step-3 notes asserted mask-on numbers and instructions
         regardless of the toggle — both bodies are now functions of state.
-  - [ ] Acts 1–5 (bill meter, timeline, dossiers, Q2 answer, sources) — Acts 2/3/5 are blocked on the
-        date audit being signed off, since they render from `data/mechanisms.js`.
+  - [x] **Act 1 — the two bills / the bill meter** (2026-08-19). `site/assets/act1-bills.js`.
+        Context slider (1K–256K, powers of 2) + concurrency slider (1–64) + config (layers, head_dim,
+        precision) + KV-head presets MHA/GQA-16/GQA-8/GQA-2/MQA, driving both bills at once. Shows
+        the substituted formula with the byte total, a "double the context" line (compute ×4, cache
+        ×2), and how many users fit in 80 GB.
+        **Asserted against the lesson's published figures, not eyeballed:** yardstick = exactly
+        `6,442,450,944` bytes = **6.44 GB**; 8 users = **51.54 GB**; GQA-2 = **1.61 GB**; MQA =
+        **805 MB**. Swept all **326** control combinations — no NaN/undefined/Infinity anywhere, reset
+        returns to the yardstick, no overflow at 1440px or 390px, dark mode checked.
+        **Units are decimal GB throughout**, because that is what the lesson quotes — 6.44 GB is
+        exactly 6.00 GiB, and mixing the conventions would be a silent 7% error on every comparison
+        the app makes. The widget prints both so the difference is visible rather than hidden.
+        Two things caught in review: (1) the first chart was linear-x/log-y, where a linear-in-T
+        quantity *curves and appears to flatten* — it read as "growth is slowing", the opposite of the
+        lesson's claim. Switched to **log–log**, where linear growth is a straight line of slope 1 and
+        the four configs are visibly parallel climbs. (2) The GB formatter rounded 51.539… to "51.5",
+        disagreeing with the lesson's own 51.54 — now two decimals through the 1–100 GB band.
+  - [ ] Acts 2–5 (timeline, dossiers, Q2 answer, sources) — **blocked on the date audit being signed
+        off**, since all four render from `data/mechanisms.js`.
 - [ ] Write pros/cons for every mechanism: what it buys, what it costs, when you'd choose it.
 - [ ] Answer Question 2 directly: what does the completed timeline show that a list wouldn't?
 - [ ] Deploy (Netlify/Vercel/equivalent); verify the live link opens in an incognito window.
