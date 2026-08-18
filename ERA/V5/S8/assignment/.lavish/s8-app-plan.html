@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S8 — App Structure Plan</title>
+<style>
+/* ---------- tokens: inherited from ERA V5 S7's site/index.html ---------- */
+:root{
+  --ground:#FBFCFD; --surface:#FFFFFF; --surface-2:#F2F5F8; --rule:#DDE4EB;
+  --ink:#121A21; --ink-2:#3D4C59; --muted:#66757F;
+  --pos:#B4690E;      /* position / length lane */
+  --mem:#1668C4;      /* kv-cache memory lane */
+  --cmp:#2E7D46;      /* quadratic compute lane */
+  --sys:#8B46C0;      /* systems / kernels lane */
+  --origin:#C0392B;   /* the baseline itself */
+  --pos-soft:#F6EBD9; --mem-soft:#DCE8F8; --cmp-soft:#DEEEE4; --sys-soft:#EEE2F6;
+  --grid:#E7ECF1;
+  --shadow:0 1px 2px rgba(18,26,33,.05),0 8px 24px -12px rgba(18,26,33,.18);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1419; --surface:#151D24; --surface-2:#1B242C; --rule:#28333D;
+    --ink:#E6ECF1; --ink-2:#B4C1CC; --muted:#8494A0;
+    --pos:#D08B33; --mem:#4A90D9; --cmp:#43A971; --sys:#A66BD0; --origin:#E06C5B;
+    --pos-soft:#2E2417; --mem-soft:#16283C; --cmp-soft:#15291E; --sys-soft:#241833;
+    --grid:#222D36;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1419; --surface:#151D24; --surface-2:#1B242C; --rule:#28333D;
+  --ink:#E6ECF1; --ink-2:#B4C1CC; --muted:#8494A0;
+  --pos:#D08B33; --mem:#4A90D9; --cmp:#43A971; --sys:#A66BD0; --origin:#E06C5B;
+  --pos-soft:#2E2417; --mem-soft:#16283C; --cmp-soft:#15291E; --sys-soft:#241833;
+  --grid:#222D36;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+:where(.grid,.flex)>*{min-width:0}
+:where(p,h1,h2,h3,h4,li,dd,blockquote,figcaption,td,th,.badge){overflow-wrap:anywhere}
+:where(img,svg,canvas){max-width:100%}
+
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px 110px}
+.measure{max-width:70ch}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,4.4vw,2.95rem);letter-spacing:-.015em}
+h2{font-size:clamp(1.3rem,2.3vw,1.7rem);margin:0 0 .45rem}
+h3{font-size:1.06rem;margin:0 0 .3rem}
+h4{font-size:.95rem;margin:0 0 .25rem}
+p{margin:0 0 .95rem;color:var(--ink-2)}
+a{color:var(--mem);text-underline-offset:3px}
+code,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+code{font-size:.87em;background:var(--surface-2);padding:.12em .38em;border-radius:4px}
+strong{color:var(--ink);font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 .7rem}
+
+header{padding:64px 0 34px;border-bottom:1px solid var(--rule);margin-bottom:40px}
+.lede{font-size:1.08rem;color:var(--ink-2);margin-top:20px}
+.quote{font-family:var(--serif);font-style:italic;font-size:1.06rem;color:var(--ink-2);
+  border-left:2px solid var(--pos);padding-left:16px;margin:22px 0 0;max-width:62ch}
+.quote cite{display:block;font-style:normal;font-size:.8rem;color:var(--muted);margin-top:8px;font-family:var(--sans)}
+
+section{margin:60px 0 0;scroll-margin-top:20px}
+.hr{height:1px;background:var(--rule);border:0;margin:0}
+
+/* cards / figures */
+figure{margin:26px 0;background:var(--surface);border:1px solid var(--rule);border-radius:12px;
+  padding:20px 20px 14px;box-shadow:var(--shadow);overflow-x:auto}
+figcaption{font-size:.85rem;color:var(--muted);margin-top:14px;max-width:76ch}
+.fig-title{font-family:var(--serif);font-size:1.02rem;font-weight:600;margin-bottom:2px}
+.fig-sub{font-size:.82rem;color:var(--muted);margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:17px 19px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.06em;text-transform:uppercase;padding:.24em .6em;border-radius:5px;
+  border:1px solid var(--rule);background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.badge.pos{color:var(--pos);background:var(--pos-soft);border-color:transparent}
+.badge.mem{color:var(--mem);background:var(--mem-soft);border-color:transparent}
+.badge.cmp{color:var(--cmp);background:var(--cmp-soft);border-color:transparent}
+.badge.sys{color:var(--sys);background:var(--sys-soft);border-color:transparent}
+.badge.warn{color:var(--origin);background:transparent;border-color:var(--origin)}
+.sw{width:10px;height:10px;border-radius:3px;flex:none;display:inline-block}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:.82rem;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+
+/* timeline svg host */
+#tl{width:100%;display:block}
+.tl-scroll{overflow-x:auto;padding-bottom:6px}
+.tl-inner{min-width:820px}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:.87rem}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* wireframes */
+.wire{border:1px dashed var(--rule);border-radius:9px;background:var(--surface-2);padding:14px;font-size:.83rem}
+.wire .bar{height:8px;border-radius:3px;background:var(--grid)}
+.wire .row{display:flex;gap:6px;align-items:center;margin:7px 0}
+.chip{font-family:var(--mono);font-size:.66rem;padding:.2em .5em;border-radius:4px;background:var(--surface);border:1px solid var(--rule);color:var(--ink-2)}
+.dossier{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px 17px}
+.dossier h4{font-family:var(--sans);font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:14px 0 5px}
+.dossier h4:first-child{margin-top:0}
+.pcw{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:4px}
+.pcw>div{border-left:2px solid var(--rule);padding-left:11px}
+.pcw .buy{border-left-color:var(--cmp)}
+.pcw .cost{border-left-color:var(--origin)}
+.pcw .pick{border-left-color:var(--mem)}
+.pcw b{display:block;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:3px;font-family:var(--mono)}
+.pcw p{margin:0;font-size:.86rem}
+
+ul.tight{margin:0 0 .9rem;padding-left:1.15rem;color:var(--ink-2)}
+ul.tight li{margin-bottom:.4rem}
+ol.tight{margin:0 0 .9rem;padding-left:1.3rem;color:var(--ink-2)}
+ol.tight li{margin-bottom:.45rem}
+
+.callout{border-left:3px solid var(--pos);background:var(--surface-2);padding:13px 16px;border-radius:0 8px 8px 0;margin:20px 0;font-size:.92rem}
+.callout.risk{border-left-color:var(--origin)}
+.callout.ok{border-left-color:var(--cmp)}
+.callout p:last-child{margin-bottom:0}
+
+/* insight rows */
+.ins{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--rule)}
+.ins:last-child{border-bottom:0}
+.ins .k{font-family:var(--mono);font-size:.72rem;color:var(--muted);white-space:nowrap;padding-top:3px}
+.ins p{margin:0;font-size:.92rem}
+.ins h3{font-size:.98rem;margin-bottom:.2rem}
+
+/* decisions */
+.q{background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:16px}
+.q h3{margin-bottom:.15rem}
+.q .qs{font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1px solid var(--rule);
+  border-radius:8px;margin-bottom:7px;cursor:pointer;background:var(--ground);font-size:.9rem}
+.q label:hover{border-color:var(--mem)}
+.q label input{margin-top:4px;flex:none;accent-color:var(--mem)}
+.q label b{color:var(--ink);font-weight:600}
+.q label em{font-style:normal;color:var(--muted);display:block;font-size:.83rem;margin-top:2px}
+.q .rec{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cmp);margin-left:6px}
+.q button{font-family:var(--sans);font-size:.86rem;font-weight:600;padding:.55em 1.1em;border-radius:7px;
+  border:1px solid var(--mem);background:var(--mem);color:#fff;cursor:pointer;margin-top:6px}
+.q button:hover{filter:brightness(1.08)}
+.q .sent{font-size:.82rem;color:var(--cmp);margin-left:10px}
+
+.mermaid{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px;overflow-x:auto}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-size:.84rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">ERA V5 · Session 8 · Structure decision (TODO #5)</p>
+  <h1>The timeline is the argument, not the decoration</h1>
+  <p class="lede measure">Chronology research is done and verified — 20 rows, primary sources, arXiv v1 dates.
+  This is the plan for what gets built on top of it: <strong>one page, five acts, five widgets, one data file</strong>.
+  Review and annotate anything; four open decisions are at the bottom with controls to send answers back.</p>
+  <blockquote class="quote">
+    Here is the part I actually care about, and it is not the animations… When you lay them out on a
+    timeline you can watch the field change its mind.
+    <cite>— S8 assignment brief</cite>
+  </blockquote>
+</header>
+
+<!-- ============================================ -->
+<section id="spine">
+  <p class="eyebrow">The one idea</p>
+  <h2>Every mechanism is scored against the same two bills, on a real time axis</h2>
+  <p class="measure">The failure mode for this assignment is 20 pretty cards in date order. That's still a list —
+  it just happens to be sorted. The fix is two structural commitments:</p>
+  <div class="grid g2" style="margin:20px 0 6px">
+    <div class="card">
+      <span class="badge">Commitment 1</span>
+      <h3 style="margin-top:10px">Proportional time, not evenly-spaced cards</h3>
+      <p style="font-size:.9rem;margin-bottom:0">Markers sit at their true position on a continuous axis. Clusters look
+      like clusters and gaps look like gaps — including the empty stretch through all of 2018, and the 21-month
+      quiet between ALiBi and GQA. <strong>The gaps carry as much of the answer to Q2 as the entries do</strong>, and
+      even spacing destroys them.</p>
+    </div>
+    <div class="card">
+      <span class="badge">Commitment 2</span>
+      <h3 style="margin-top:10px">Four lanes = which bill it pays</h3>
+      <p style="font-size:.9rem;margin-bottom:0">Every marker sits in the lane for the problem it attacks. The field
+      "changing its mind" then becomes something you literally <em>see</em> — activity jumping lane to lane over the
+      years — rather than something the copy has to assert.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="timeline">
+  <p class="eyebrow">Act 2 · the spine, rendered from the verified data</p>
+  <h2>What the timeline actually looks like</h2>
+  <p class="measure">This is not a sketch — it is drawn from the 20 verified rows in
+  <code>resources/chronology-research.md</code>, positioned by real date. If the shape below is right, the app is
+  mostly a matter of making it clickable.</p>
+
+  <figure>
+    <div class="fig-title">Modern attention, May 2017 → Dec 2025, by which bill each mechanism pays</div>
+    <div class="fig-sub">Hover a marker for its date and source. Every marker is now a verified exact date —
+      the last approximate one was pinned on 2026-08-18.</div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--origin)"></i> the baseline itself</span>
+      <span><i class="sw" style="background:var(--pos)"></i> position &amp; length reach</span>
+      <span><i class="sw" style="background:var(--mem)"></i> KV-cache memory</span>
+      <span><i class="sw" style="background:var(--cmp)"></i> quadratic compute</span>
+      <span><i class="sw" style="background:var(--sys)"></i> systems / kernels</span>
+    </div>
+    <div class="tl-scroll"><div class="tl-inner"><svg id="tl" viewBox="0 0 1000 372" role="img"
+      aria-label="Proportional timeline of attention mechanisms from 2017 to 2025, grouped into four lanes"></svg></div></div>
+    <figcaption>Rendered client-side from the same array that will drive the real app. Every marker's x-position is
+    <code>(date − 2017-05-08) / (2025-12-13 − 2017-05-08)</code>, so nothing is nudged for looks.</figcaption>
+  </figure>
+
+  <div class="callout ok">
+    <p><strong>Why this drawing is in the plan at all:</strong> it is a check on the research, not just a mock. Four
+    claims the app will make in prose are visible in it before a line of app code exists — the 2018 void, the
+    bimodal position lane, the 2019→2023 memory gap, and FlashAttention alone in the 2022 stretch.</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="architecture">
+  <p class="eyebrow">Page architecture</p>
+  <h2>Five acts, one scrolling page, no router</h2>
+  <p class="measure">Single page keeps the deploy trivial and the incognito check unbreakable. Deep links
+  (<code>#rope</code>) still work by scrolling and opening the matching dossier.</p>
+
+  <div class="grid" style="gap:12px;margin-top:22px">
+    <div class="card" style="border-left:3px solid var(--origin)">
+      <div class="row" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 0 · Attention, built once</h3><span class="badge">widget 1 · required by brief</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">Six tokens walked through <strong>Score → Scale → Mask → Softmax →
+      Weighted sum</strong>, with a causal-mask toggle that visibly leaks attention onto future tokens when off.
+      The brief mandates starting here: "nothing after it makes sense without it."</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--mem)">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 1 · The two bills</h3><span class="badge">widget 2 · the scoring device</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">A context slider driving both bills at once: <code>T²</code>
+      comparisons, and the real cache formula
+      <code>2 × layers × kv_heads × head_dim × T × batch × bytes</code> at the lesson's yardstick (48 layers,
+      8 KV heads, head_dim 128, bf16) → <strong>6.44 GB for one user at 32K, 51.54 GB for eight</strong>.</p>
+      <p style="font-size:.9rem;margin:8px 0 0"><strong>This meter is what makes the app one argument instead of 20
+      essays.</strong> Every later mechanism re-scores on it: GQA drops 8 KV heads to 2 and the same slider reads
+      1.61 GB; MQA reads 0.81 GB; sequence compression divides the <code>T</code> term instead.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pos)">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 2 · The timeline</h3><span class="badge">the spine</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">The figure above, made interactive. Click a marker → its dossier opens
+      in place below the axis. No dashed markers any more — every date is exact — but two deliberate visual states
+      remain: a <strong>non-arXiv marker</strong> for NTK-aware scaling (a Reddit post, dated via Wayback), and a
+      <strong>priority arc</strong> linking delta rule 2021 → DeltaNet 2024.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--cmp)">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 3 · Twenty dossiers</h3><span class="badge">uniform template</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">One template for all 20 so they stay comparable — template mocked
+      below. Honest pros/cons is a grading criterion, so the template makes "Costs" and "Don't pick it when"
+      structurally impossible to skip.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--sys)">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 4 · What the timeline shows</h3><span class="badge">bonus 1000 pts</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">The Q2 answer, written as claims that each <em>point back</em> at a
+      visible feature of the axis — a "show me" link scrolls up and highlights the exact region. Draft observations
+      are in the next section.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+        <h3>Act 5 · Sources</h3><span class="badge">README mirror</span>
+      </div>
+      <p style="font-size:.9rem;margin:8px 0 0">All 20 rows: mechanism, date, arXiv link, title, <strong>how the date
+      was verified</strong>, and caveats. Generated from the same data file as everything above, and the README's
+      source table is generated from it too — so the three copies can never drift apart.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="dossier">
+  <p class="eyebrow">Act 3 · the repeated unit</p>
+  <h2>The dossier template, mocked in the real design system</h2>
+  <p class="measure">Filled with real content for one entry so the shape can be judged rather than imagined.</p>
+
+  <figure>
+    <div class="fig-title">Mechanism dossier — worked example</div>
+    <div class="fig-sub">Same six blocks for all 20 entries; only the content changes.</div>
+    <div class="dossier">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+        <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">
+          <span class="num" style="color:var(--muted);font-size:.8rem">09</span>
+          <h3 style="font-size:1.25rem">RoPE — Rotary Position Embedding</h3>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="badge pos">position</span>
+          <span class="badge">arXiv 2104.09864 · v1 2021-04-20</span>
+        </div>
+      </div>
+
+      <h4>The bill on the table in April 2021</h4>
+      <p style="font-size:.9rem">A learned absolute position table has a hard wall: it has as many rows as the longest
+      sequence you trained on, and row 8,193 does not exist. Sinusoidal encoding removes the table but still labels
+      each token with where it is in absolute terms, which extrapolates poorly.</p>
+
+      <h4>What it does</h4>
+      <p style="font-size:.9rem">Treats dimension pairs as 2D arrows and rotates them by <code>position × θ</code>.
+      Both absolute rotations cancel in the dot product — <code>R(iθ)q · R(jθ)k = q · R((j−i)θ)k</code> — so the
+      positional part of the score depends only on the distance <code>i − j</code>.</p>
+
+      <div class="pcw">
+        <div class="buy"><b>Buys</b><p>Relative distance for free inside the score; computed from a function, so there
+        is no finite table and no length wall.</p></div>
+        <div class="cost"><b>Costs</b><p>"Defined at any length" is not "competent at any length" — quality still
+        degrades past the trained range, which is why NTK-aware, YaRN and DroPE exist at all.</p></div>
+        <div class="pick"><b>Pick it when</b><p>Essentially any decoder trained today. <em>Don't</em> lean on it alone
+        when you need reach far past your training length — pair it with an extension method.</p></div>
+      </div>
+
+      <h4>Effect on the two bills</h4>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px">
+        <span class="badge cmp">compute · unchanged</span>
+        <span class="badge mem">cache · unchanged</span>
+        <span class="badge pos">reach · removes the table wall</span>
+      </div>
+
+      <h4>How this date was checked</h4>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:0">arXiv v1 submission metadata, pulled via the
+      <code>arxiv-library</code> skill; PDF downloaded to the local library and tagged <code>era-v5-s8</code>.</p>
+    </div>
+    <figcaption>Six blocks: identity + lane badges, the problem <em>at that moment</em>, the mechanism, buys/costs/pick,
+    bill deltas, and the verification line. The last block is the one most submissions won't have.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p><strong>The honesty layer is a feature, not an appendix.</strong> The brief's one explicit warning is about
+    invented dates, and it says the sources are "the part that is easiest to check." Putting <em>how each date was
+    verified</em> on the face of every dossier — including the two entries where the honest answer is uncomfortable —
+    is the cheapest way to be visibly right. The two uncomfortable ones:</p>
+    <ul class="tight" style="margin-top:8px;margin-bottom:0">
+      <li><strong>NTK-aware scaling has no paper</strong> — but as of your annotation it now has an exact date.
+      It is a Reddit post by u/bloc97. Following the permalink you supplied: reddit.com itself is bot-walled (both
+      <code>curl</code> and a real browser get "Prove your humanity"), so the date came from the Wayback Machine two
+      ways — a snapshot of the post carries Reddit's own
+      <code>created-timestamp="2023-06-29T08:21:29Z"</code> with <code>author="bloc97"</code>, and Wayback's earliest
+      capture of that URL is 08:21:50 UTC the same day, 21 seconds later, which independently bounds it because an
+      archive cannot predate what it archived. <strong>2023-06-29, no longer approximate</strong> — the marker above
+      is now solid. Still worth flagging in the app that the primary source is a forum post, not a paper.</li>
+      <li><strong>There are two bloc97 methods, not one.</strong> Found while chasing that date: arXiv 2401.07004's
+      reference list carries both "NTK-Aware Scaled RoPE" and "Add NTK-Aware interpolation <em>by parts</em>
+      correction" (NTK-By-Parts) as separate entries — and YaRN builds on <em>NTK-By-Parts</em>, not on plain
+      NTK-Aware. Open question for the build: one marker or two? I lean one marker with the distinction stated in the
+      dossier, since the brief's minimum list names only "NTK-aware scaling."</li>
+      <li><strong>The delta rule's priority is disputed.</strong> Schlag et al. 2021 (2102.11174) predates the paper
+      usually cited as "the DeltaNet paper" (Yang et al. 2024) by over three years; the 2024 contribution is the
+      parallel-scan <em>training algorithm</em>, not the rule. Both get markers, joined by an arc.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="insights">
+  <p class="eyebrow">Act 4 · draft answer to the bonus question</p>
+  <h2>Seven things visible on the axis that a list cannot show</h2>
+  <p class="measure">These are the claims the app will make and let you verify by pointing at the timeline. Annotate any
+  you disagree with — this is the 1000-point answer, so it is worth arguing about now.</p>
+
+  <div style="margin-top:18px">
+    <div class="ins"><div class="k">2017–2019</div><div>
+      <h3>The field used attention for two years before it started paying for it</h3>
+      <p>All of 2018 is empty. The first mechanism aimed at attention's <em>cost</em> rather than its capability is
+      Sparse Transformers in April 2019 — nearly two years after the Transformer. 2018 was spent scaling the vanilla
+      thing, not fixing it. A list has no way to show a year in which nothing happened.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">position lane</div><div>
+      <h3>Position was solved twice, and the second time was retroactive</h3>
+      <p>The position lane is bimodal: 2017 and 2021 solve it <em>for models you are about to train</em>; 2023 and 2025
+      (NTK-aware, YaRN, DroPE) solve it <em>for models already trained</em>. An entire sub-field exists only because
+      RoPE made position a function instead of a table — you can't retrofit a lookup table, but you can rescale a
+      rotation. The second cluster is a consequence of the first, four years later.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">2019 → 2023</div><div>
+      <h3>Invention date and adoption date are different dates</h3>
+      <p>MQA lands in November 2019 and then nothing in the memory lane for three and a half years. It wasn't a bad
+      idea in 2019 — it was an idea whose bill nobody was paying yet. GQA in 2023 is essentially MQA with the quality
+      loss softened, arriving exactly when serving cost started to dominate. The gap <em>is</em> the finding.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">2021 → 2024</div><div>
+      <h3>Ideas can arrive before the hardware that makes them trainable</h3>
+      <p>The delta rule sat in the literature from February 2021 and became practical in June 2024, when someone
+      worked out how to parallelize it across sequence length. Three years of dormancy, then two papers in seven
+      months. A chronological view makes the lag legible; a taxonomy would file both under "linear attention" and
+      lose it entirely.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">2022</div><div>
+      <h3>The quiet stretch is only quiet if you ignore the kernels</h3>
+      <p>Between ALiBi (Aug 2021) and GQA (May 2023) the minimum-coverage list is empty for 21 months. FlashAttention
+      (May 2022) fills it — and it is the one mechanism here that changes <em>nothing</em> about what attention
+      computes, only how many times the matrix crosses the memory bus. The field alternates between "what should we
+      compute" and "how fast can we compute what we have," and buying headroom the second way is part of why exact
+      attention survived as long as it did.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">whole axis</div><div>
+      <h3>The oscillation the brief predicted is real, and it is accelerating</h3>
+      <p>Exactness (2017) → decode memory (2019) → length (2020–21) → systems (2022) → memory again (2023) → length
+      again (2023) → memory <em>and</em> compute jointly (2024–25). The early swings take years; by 2023 four
+      mechanisms land in four months. The later entries also stop picking one bill: MLA and NSA attack cache and
+      compute at once, which is what "guess what comes next" should be read off — the next mechanisms are unlikely
+      to be single-bill.</p>
+    </div></div>
+
+    <div class="ins"><div class="k">2017-05 vs 2017-06</div><div>
+      <h3>The Transformer adopted position, it didn't invent it</h3>
+      <p>Learned absolute positional embeddings are five weeks older than "Attention Is All You Need," which cites
+      them. The very first row of the timeline is already a correction to the way the story is usually told — and it
+      is exactly the kind of thing you only notice when you are forced to put a date on everything.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="widgets">
+  <p class="eyebrow">Interactivity budget</p>
+  <h2>Five widgets, each shared across several mechanisms</h2>
+  <p class="measure">"A clear static page beats a broken clever one." So the budget is capped at five, chosen for
+  coverage per widget rather than one toy per mechanism — and each one is governed by a hard rule below.</p>
+
+  <figure style="padding-bottom:20px">
+    <table>
+      <thead><tr><th>#</th><th>Widget</th><th>Covers</th><th>Why it earns a slot</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><strong>Attention pipeline</strong></td><td>standard attention</td>
+          <td>Mandated by the brief; also establishes the vocabulary every later card reuses.</td></tr>
+        <tr><td class="n">2</td><td><strong>The bill meter</strong></td><td>all 20, as the scoring device</td>
+          <td>Turns 20 dossiers into one continuous argument. Highest value per line of code in the whole app.</td></tr>
+        <tr><td class="n">3</td><td><strong>Position lab</strong></td><td>learned-abs · sinusoidal · RoPE · ALiBi<br>(+ NTK / YaRN / DroPE as presets)</td>
+          <td>RoPE's <code>i−j</code> invariance is a thing you have to <em>move</em> to believe: drag both tokens, the score doesn't change.</td></tr>
+        <tr><td class="n">4</td><td><strong>KV-head sharing</strong></td><td>MHA · MQA · GQA · MLA</td>
+          <td>The lesson's own point — sharing lowers the slope, the line still climbs — is a two-line chart, not a paragraph.</td></tr>
+        <tr><td class="n">5</td><td><strong>Read-pattern gallery</strong></td><td>full · sliding window · sinks · top-k · NSA blocks</td>
+          <td>One <code>T×T</code> grid, five patterns, live count of cells read. Five mechanisms for the price of one widget.</td></tr>
+      </tbody>
+    </table>
+    <figcaption>Five widgets cover 13 of the 20 entries. The remaining seven get a static SVG figure and prose —
+    which is the right call, not a shortfall.</figcaption>
+  </figure>
+
+  <div class="callout risk">
+    <p><strong>The caption rule (non-negotiable):</strong> every widget's conclusion is written into its static caption.
+    If JavaScript fails, the reader still learns the point and the page still reads as a finished explainer. This is
+    the insurance policy against "broken clever."</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="tech">
+  <p class="eyebrow">Implementation</p>
+  <h2>One data file, three consumers, no build step</h2>
+
+  <div class="grid g2" style="align-items:start">
+    <div>
+      <p>Vanilla HTML/CSS/JS. No framework, no bundler, no dependency that can rot between now and the deadline.
+      Design tokens inherited from S7's <code>site/index.html</code>, so the two submissions read as one body of work.</p>
+      <p><strong>The single-source-of-truth rule matters more than the stack.</strong> Each date appears in three places
+      — timeline marker, dossier header, sources table — plus a fourth in the README. All four read from
+      <code>data/mechanisms.js</code>. Nothing is retyped, so nothing can drift.</p>
+      <ul class="tight">
+        <li><code>index.html</code> — structure and all static prose</li>
+        <li><code>app.css</code> — tokens, light/dark, layout</li>
+        <li><code>app.js</code> — timeline renderer + the five widgets</li>
+        <li><code>data/mechanisms.js</code> — the 20 rows, verbatim from the research doc</li>
+        <li><code>tools/gen-readme.mjs</code> — regenerates the README source table</li>
+      </ul>
+      <p style="margin-bottom:0"><strong>Deploy:</strong> host is deliberately left open — static folder, no env
+      vars, no server, so Netlify, Vercel and ht-ml.app are all one command apart and the incognito check passes by
+      construction on any of them. Repo goes out by subtree split to <code>github.com/vpw/era-v5-s8</code>, per the
+      standing convention.</p>
+    </div>
+    <div>
+      <div class="mermaid">
+flowchart TD
+    R["resources/chronology-research.md<br/>20 verified rows"] --> D["data/mechanisms.js<br/>single source of truth"]
+    D --> T["timeline markers<br/>(position, lane, dashed-if-approximate)"]
+    D --> C["20 dossiers<br/>(date, source, verification line)"]
+    D --> S["Act 5 sources table"]
+    D --> G["tools/gen-readme.mjs"]
+    G --> M["README.md<br/>chronology sources"]
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="skills">
+  <p class="eyebrow">Tooling · asked about explicitly</p>
+  <h2>Where <code>/lavish</code> and the Chrome skill fit</h2>
+
+  <div class="callout">
+    <p style="margin-bottom:6px"><strong>One correction first.</strong> <code>/lavish</code> is a real slash command —
+    that's what produced this page. <strong><code>/chrome</code> is not.</strong> The installed skill is
+    <code>chrome-devtools-axi</code> and it is marked <code>user-invocable: false</code>, so it has no slash command;
+    it activates automatically whenever a task needs a real browser. (There is also a separate
+    <code>claude-in-chrome</code> skill with MCP tools, but chrome-devtools-axi's own guidance says to prefer it, and
+    that's what I'd use.) Nothing to change on your side — just don't expect <code>/chrome</code> to autocomplete.</p>
+  </div>
+
+  <figure style="padding-bottom:20px">
+    <table>
+      <thead><tr><th>Phase</th><th>Tool</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><strong>0 · now</strong></td><td class="n">lavish</td>
+          <td>This artifact — plan review with inline annotation and the four decisions below.</td></tr>
+        <tr><td><strong>1 · date audit</strong></td><td class="n">lavish</td>
+          <td>Before any UI: a 20-row table artifact, one row per mechanism, so you can annotate any date you doubt
+          and I re-verify it against the PDF. Cheapest possible place to catch the error the brief warns about.</td></tr>
+        <tr><td><strong>2 · build acts 0–1</strong></td><td class="n">chrome-devtools-axi</td>
+          <td><code>open localhost</code> → <code>console</code> to catch JS errors, <code>screenshot</code> for the
+          record, and <code>eval</code> to <strong>assert the widget's arithmetic against the lesson's own worked
+          example</strong> — see the note below the table.</td></tr>
+        <tr><td><strong>3 · timeline + dossiers</strong></td><td class="n">both</td>
+          <td><code>resize 1440 900</code> and <code>resize 390 844</code> for the desktop/mobile passes; screenshots
+          go back into a lavish progress artifact so you review pixels, not descriptions.</td></tr>
+        <tr><td><strong>4 · pre-deploy</strong></td><td class="n">chrome-devtools-axi</td>
+          <td><code>lighthouse</code> for performance and accessibility, plus a clean-console check across both themes.</td></tr>
+        <tr><td><strong>5 · post-deploy</strong></td><td class="n">chrome-devtools-axi</td>
+          <td><code>open &lt;netlify-url&gt;</code> and <code>network</code> to confirm every asset returns 200 on the
+          live host.</td></tr>
+      </tbody>
+    </table>
+    <figcaption>One honest limit: chrome-devtools-axi drives a normal profile — I can verify the live URL loads with
+    no auth and no local state, but the assignment's literal <em>incognito window</em> check is yours to click.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p style="margin-bottom:6px"><strong>Answering your question — what "assert the bill meter at the yardstick"
+    means.</strong> "The yardstick" is the lesson's own fixed reference configuration from §10: <strong>48 layers,
+    8 KV heads, head_dim 128, bf16, T = 32,768, one user</strong>. Put those into the cache formula and the lesson
+    states the answer: <strong>6.44 GB</strong> for one user, <strong>51.54 GB</strong> for eight.</p>
+    <p style="margin-bottom:6px">So the check is: drive the widget's slider to T = 32,768, read the number it
+    displays via <code>eval</code>, and confirm it says 6.44 GB. If it says anything else, the widget's arithmetic
+    is wrong — and since every mechanism in the app is scored on that same meter, a quiet off-by-one there would
+    corrupt <em>every</em> comparison the app makes. It's a regression test against a number the lesson already
+    published, which is what makes it worth automating rather than eyeballing.</p>
+    <p style="margin-bottom:0">Confirming the arithmetic:
+    <code>2 × 48 × 8 × 128 × 32,768 × 2 bytes = 6,442,450,944 bytes = 6.44 GB</code>.</p>
+  </div>
+
+  <div class="callout ok">
+    <p style="margin-bottom:6px"><strong>Hosting — updated per your note.</strong> Agreed, and I've dropped the
+    "Netlify is the submission link" claim: the brief says "Netlify or Vercel or wherever you like," so the real
+    requirements are just <em>shareable</em>, <em>works in incognito</em>, and <em>renders correctly</em>.
+    <strong>ht-ml.app via <code>lavish-axi share</code> qualifies</strong> — shares are public by default, which is
+    exactly what the incognito check wants.</p>
+    <p style="margin-bottom:0">Since the app is a static folder with no build step, all three hosts are one command
+    apart and nothing in the plan depends on the choice. Suggestion: build first, then publish to whichever is least
+    friction on the day — with <code>share</code> as a zero-setup fallback if a Netlify/Vercel login gets in the way
+    near the deadline. Worth noting ht-ml.app is a third-party host and the plan's multi-file layout would need
+    inlining, which <code>share</code> does automatically for local assets.</p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="risks">
+  <p class="eyebrow">Risks</p>
+  <h2>What could go wrong, and what absorbs it</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Date drift across copies</h3>
+      <p style="font-size:.89rem;margin-bottom:0">The exact failure the brief warns about, arriving by accident rather
+      than by hallucination. <strong>Absorbed by:</strong> one data file feeding all four surfaces, plus the phase-1
+      audit artifact.</p></div>
+    <div class="card"><h3>Widget scope creep eats the deadline</h3>
+      <p style="font-size:.89rem;margin-bottom:0">Twenty mechanisms is a lot of surface to animate.
+      <strong>Absorbed by:</strong> the five-widget cap and the caption rule — prose first, widget as enhancement,
+      so the page is submittable at any point after Act 3 lands.</p></div>
+    <div class="card"><h3>Proportional axis crushes 2017–2019</h3>
+      <p style="font-size:.89rem;margin-bottom:0">True spacing means early labels collide and late ones pile up.
+      <strong>Absorbed by:</strong> lanes separate vertically, labels alternate above/below, and a zoom/scrub control
+      if collisions survive that. Mobile flips to vertical with proportional gaps kept.</p></div>
+    <div class="card" style="border-left:3px solid var(--cmp)"><h3>The approximate NTK date gets laundered
+      <span class="badge cmp" style="vertical-align:middle;margin-left:6px">closed</span></h3>
+      <p style="font-size:.89rem;margin-bottom:0">Was the one date I couldn't make exact. <strong>Resolved</strong>
+      by your annotation: pinned to <strong>2023-06-29</strong> via the post's own embedded timestamp in a Wayback
+      snapshot, corroborated by the earliest capture 21 seconds later. All 20 rows now carry exact, sourced dates and
+      the risk is retired.</p></div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="decisions">
+  <p class="eyebrow">Decided · 2026-08-18</p>
+  <h2>All four settled — the plan is locked</h2>
+  <p class="measure">You took the recommended option on all four, so nothing in the plan above changes. Recorded here
+  so the reasoning survives into the build, and so a later session doesn't reopen a closed question.</p>
+
+  <figure style="padding-bottom:20px">
+    <table>
+      <thead><tr><th>Decision</th><th>Chosen</th><th>What it commits us to</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Timeline orientation</strong></td><td>Horizontal axis, four lane bands</td>
+          <td>The figure in Act 2 is the real design. Costs the most responsive work — mobile flips to vertical with
+          proportional gaps preserved. Label-collision handling is now a build task, not a maybe.</td></tr>
+        <tr><td><strong>Interactivity budget</strong></td><td>Five shared widgets</td>
+          <td>Pipeline, bill meter, position lab, KV-head sharing, read-pattern gallery. 13 of 20 entries covered;
+          the other seven get static figures. The caption rule applies to all five.</td></tr>
+        <tr><td><strong>Verification layer</strong></td><td>Every dossier + the sources table</td>
+          <td>All 20 dossiers carry a "how this date was checked" block. Now materially stronger than when you
+          picked it — every row is an exact date, and the NTK row gets to show its Wayback working.</td></tr>
+        <tr><td><strong>LightningLM / V4 row</strong></td><td>Include as a context marker</td>
+          <td>Visually distinct from the 20 mechanisms. Every V4-specific number the app quotes (DDDGDDDG, the
+          Memory Stream injection scale, 8K→256K) gets a citation instead of being folklore.</td></tr>
+      </tbody>
+    </table>
+    <figcaption>Two questions the build raised that aren't blocking: whether NTK-Aware and NTK-By-Parts get one
+    marker or two (I lean one, distinction stated in the dossier), and which host to publish to (deferred to
+    deployment day — see above).</figcaption>
+  </figure>
+</section>
+
+
+<footer>
+  <p>Sources for every date: <code>resources/chronology-research.md</code> (20 rows, arXiv v1 metadata, PDFs in the
+  local library tagged <code>era-v5-s8</code>). Design tokens inherited from
+  <code>ERA/V5/S7/assignment/site/index.html</code>. Timeline above rendered from the same array that will ship in
+  <code>data/mechanisms.js</code>.</p>
+</footer>
+
+</div>
+
+<script>
+/* ---------- the verified chronology, drawn proportionally ---------- */
+const LANES = [
+  {id:'origin', label:'the baseline',            color:'var(--origin)'},
+  {id:'pos',    label:'position & length',       color:'var(--pos)'},
+  {id:'mem',    label:'KV-cache memory',         color:'var(--mem)'},
+  {id:'cmp',    label:'quadratic compute',       color:'var(--cmp)'},
+  {id:'sys',    label:'systems / kernels',       color:'var(--sys)'},
+];
+
+const M = [
+  {d:'2017-05-08', lane:'pos',    name:'Learned abs. positions', src:'1705.03122'},
+  {d:'2017-06-12', lane:'origin', name:'Scaled dot-product attention', src:'1706.03762'},
+  {d:'2017-06-12', lane:'pos',    name:'Sinusoidal encoding', src:'1706.03762', below:true},
+  {d:'2019-04-23', lane:'cmp',    name:'Sparse / top-k attention', src:'1904.10509'},
+  {d:'2019-11-06', lane:'mem',    name:'MQA', src:'1911.02150'},
+  {d:'2020-04-10', lane:'cmp',    name:'Sliding window', src:'2004.05150', below:true},
+  {d:'2020-06-29', lane:'cmp',    name:'Linear attention', src:'2006.16236'},
+  {d:'2021-02-22', lane:'cmp',    name:'Delta rule (origin)', src:'2102.11174', below:true},
+  {d:'2021-04-20', lane:'pos',    name:'RoPE', src:'2104.09864'},
+  {d:'2021-08-27', lane:'pos',    name:'ALiBi', src:'2108.12409', below:true},
+  {d:'2022-05-27', lane:'sys',    name:'FlashAttention', src:'2205.14135', bonus:true},
+  {d:'2023-05-22', lane:'mem',    name:'GQA', src:'2305.13245'},
+  {d:'2023-06-29', lane:'pos',    name:'NTK-aware scaling', src:'reddit', below:true},
+  {d:'2023-08-31', lane:'pos',    name:'YaRN', src:'2309.00071'},
+  {d:'2023-09-29', lane:'mem',    name:'Attention sinks', src:'2309.17453', below:true},
+  {d:'2024-05-07', lane:'mem',    name:'MLA', src:'2405.04434'},
+  {d:'2024-06-10', lane:'cmp',    name:'DeltaNet (parallel)', src:'2406.06484', below:true},
+  {d:'2024-12-09', lane:'cmp',    name:'Gated DeltaNet', src:'2412.06464'},
+  {d:'2025-02-16', lane:'cmp',    name:'DeepSeek NSA', src:'2502.11089', below:true, dy:13},
+  {d:'2025-12-13', lane:'pos',    name:'DroPE', src:'2512.12167'},
+];
+
+(function drawTimeline(){
+  const svg = document.getElementById('tl');
+  if (!svg) return;
+  const W = 1000, PADL = 128, PADR = 26, TOP = 34, LANE_H = 56;
+  const t0 = Date.parse('2017-05-08'), t1 = Date.parse('2025-12-13');
+  const x = d => PADL + (Date.parse(d) - t0) / (t1 - t0) * (W - PADL - PADR);
+  const laneY = id => TOP + LANES.findIndex(l => l.id === id) * LANE_H + LANE_H / 2;
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a, txt) => {
+    const e = document.createElementNS(NS, n);
+    for (const k in a) e.setAttribute(k, a[k]);
+    if (txt != null) e.textContent = txt;
+    return e;
+  };
+  const frag = document.createDocumentFragment();
+  const AXIS_Y = TOP + LANES.length * LANE_H + 16;
+
+  // lane bands + labels
+  LANES.forEach((l, i) => {
+    const y = TOP + i * LANE_H;
+    frag.appendChild(el('rect', {x: PADL - 8, y, width: W - PADL - PADR + 8, height: LANE_H,
+      fill: i % 2 ? 'var(--surface-2)' : 'transparent', opacity: .55}));
+    frag.appendChild(el('text', {x: PADL - 16, y: y + LANE_H / 2 + 4, 'text-anchor': 'end',
+      'font-size': 11, fill: l.color, 'font-family': 'var(--mono)'}, l.label));
+  });
+
+  // year gridlines
+  for (let yr = 2017; yr <= 2026; yr++) {
+    const d = yr + '-01-01';
+    if (Date.parse(d) < t0 || Date.parse(d) > t1) continue;
+    const gx = x(d);
+    frag.appendChild(el('line', {x1: gx, y1: TOP - 8, x2: gx, y2: AXIS_Y,
+      stroke: 'var(--grid)', 'stroke-width': 1}));
+    frag.appendChild(el('text', {x: gx, y: AXIS_Y + 16, 'text-anchor': 'middle', 'font-size': 11,
+      fill: 'var(--muted)', 'font-family': 'var(--mono)'}, yr));
+  }
+  frag.appendChild(el('line', {x1: PADL - 8, y1: AXIS_Y, x2: W - PADR, y2: AXIS_Y,
+    stroke: 'var(--rule)', 'stroke-width': 1}));
+
+  // the 2018 void
+  const v0 = x('2017-06-12'), v1 = x('2019-04-23');
+  frag.appendChild(el('rect', {x: v0, y: TOP - 8, width: v1 - v0, height: AXIS_Y - TOP + 8,
+    fill: 'var(--origin)', opacity: .05}));
+  frag.appendChild(el('text', {x: (v0 + v1) / 2, y: TOP - 14, 'text-anchor': 'middle', 'font-size': 10.5,
+    fill: 'var(--muted)', 'font-family': 'var(--mono)'}, '23 months, nothing'));
+
+  // priority arc: delta rule 2021 -> DeltaNet 2024
+  const ax = x('2021-02-22'), bx = x('2024-06-10'), ay = laneY('cmp');
+  frag.appendChild(el('path', {d: `M ${ax} ${ay} Q ${(ax + bx) / 2} ${ay + 34} ${bx} ${ay}`,
+    fill: 'none', stroke: 'var(--cmp)', 'stroke-width': 1.2, 'stroke-dasharray': '3 3', opacity: .75}));
+  frag.appendChild(el('text', {x: ax + (bx - ax) * 0.74, y: ay + 30, 'text-anchor': 'middle', 'font-size': 10,
+    fill: 'var(--cmp)', 'font-family': 'var(--mono)'}, '3 yr dormant'));
+
+  // markers
+  const lane = LANES.reduce((a, l) => (a[l.id] = l.color, a), {});
+  M.forEach(m => {
+    const mx = x(m.d), my = laneY(m.lane), c = lane[m.lane];
+    const g = el('g', {});
+    g.appendChild(el('title', {}, `${m.name} — ${m.approx ? '~' : ''}${m.d}${m.src === 'reddit' ? ' (Reddit post by u/bloc97, no paper; date from Wayback)' : ' — arXiv ' + m.src}`));
+    g.appendChild(el('circle', {cx: mx, cy: my, r: m.bonus ? 6.5 : 5, fill: m.approx ? 'var(--ground)' : c,
+      stroke: c, 'stroke-width': m.approx ? 1.6 : (m.bonus ? 2.4 : 1), 'stroke-dasharray': m.approx ? '2.5 2' : 'none'}));
+    const ly = (m.below ? my + 17 : my - 11) + (m.dy || 0);
+    // keep the first/last labels from spilling past the lane-label column or the right edge
+    let anchor = 'middle', lx = mx;
+    if (mx < PADL + 46) { anchor = 'start'; lx = mx + 9; }
+    else if (mx > W - PADR - 46) { anchor = 'end'; lx = mx - 9; }
+    g.appendChild(el('text', {x: lx, y: ly, 'text-anchor': anchor, 'font-size': 10.5,
+      fill: 'var(--ink-2)', 'font-family': 'var(--sans)'}, (m.approx ? '~' : '') + m.name));
+    frag.appendChild(g);
+  });
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${AXIS_Y + 28}`);
+  svg.appendChild(frag);
+})();
+</script>
+
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.esm.min.mjs";
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const paint = document.createElement("canvas").getContext("2d");
+  function toRgba(color){paint.clearRect(0,0,1,1);paint.fillStyle="#000";paint.fillStyle=color;paint.fillRect(0,0,1,1);return paint.getImageData(0,0,1,1).data;}
+  function compositeRgba(f,b){const fa=f[3]/255,ba=b[3]/255,a=fa+ba*(1-fa);if(a===0)return[0,0,0,0];
+    return [(f[0]*fa+b[0]*ba*(1-fa))/a,(f[1]*fa+b[1]*ba*(1-fa))/a,(f[2]*fa+b[2]*ba*(1-fa))/a,a*255];}
+  function pageIsDark(){
+    const root=document.documentElement;
+    const rb=toRgba(getComputedStyle(root).backgroundColor);
+    const bb=document.body?toRgba(getComputedStyle(document.body).backgroundColor):[0,0,0,0];
+    const [r,g,b,a]=compositeRgba(bb,rb);
+    if(a>0) return (0.2126*r+0.7152*g+0.0722*b)/255<0.5;
+    const cs=getComputedStyle(root).colorScheme;
+    if(cs.includes("dark")&&!cs.includes("light"))return true;
+    if(cs.includes("light")&&!cs.includes("dark"))return false;
+    return darkQuery.matches;
+  }
+  const diagrams=[...document.querySelectorAll(".mermaid")].map(el=>({el,src:el.textContent}));
+  let applied,rendering=false,queued=false;
+  function queueRender(){queued=true;if(rendering)return;void render();}
+  async function render(){
+    rendering=true;
+    try{
+      while(queued){
+        queued=false;
+        const theme=pageIsDark()?"dark":"default";
+        if(theme===applied)continue;
+        mermaid.initialize({startOnLoad:false,theme,securityLevel:"strict"});
+        for(const {el,src} of diagrams){el.removeAttribute("data-processed");el.textContent=src;}
+        try{ await mermaid.run({nodes:diagrams.map(d=>d.el)}); }
+        catch(error){ console.error("Mermaid diagram render failed:",error); return; }
+        applied=theme;
+      }
+    } finally { rendering=false; if(queued) queueRender(); }
+  }
+  if(document.readyState==="complete")queueRender();
+  else window.addEventListener("load",queueRender,{once:true});
+  const themeObserver=new MutationObserver(queueRender);
+  for(const el of [document.documentElement,document.body]){
+    if(!el)continue;
+    themeObserver.observe(el,{attributes:true,attributeFilter:["data-theme","class","style"]});
+  }
+  document.addEventListener("change",queueRender,true);
+  document.addEventListener("transitionend",({propertyName})=>{if(propertyName==="background-color")queueRender();},true);
+  darkQuery.addEventListener("change",queueRender);
+</script>
+</body>
+</html>

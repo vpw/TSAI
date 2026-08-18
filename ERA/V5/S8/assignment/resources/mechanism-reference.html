@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S8 — Attention Mechanism Reference</title>
+<style>
+:root{
+  --ground:#FBFCFD; --surface:#FFFFFF; --surface-2:#F2F5F8; --rule:#DDE4EB;
+  --ink:#121A21; --ink-2:#3D4C59; --muted:#66757F;
+  --pos:#B4690E; --mem:#1668C4; --cmp:#2E7D46; --sys:#8B46C0; --origin:#C0392B;
+  --pos-soft:#F6EBD9; --mem-soft:#DCE8F8; --cmp-soft:#DEEEE4; --sys-soft:#EEE2F6;
+  --origin-soft:#F9E4E1; --grid:#E7ECF1;
+  --shadow:0 1px 2px rgba(18,26,33,.05),0 8px 24px -12px rgba(18,26,33,.18);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1419; --surface:#151D24; --surface-2:#1B242C; --rule:#28333D;
+    --ink:#E6ECF1; --ink-2:#B4C1CC; --muted:#8494A0;
+    --pos:#D08B33; --mem:#4A90D9; --cmp:#43A971; --sys:#A66BD0; --origin:#E06C5B;
+    --pos-soft:#2E2417; --mem-soft:#16283C; --cmp-soft:#15291E; --sys-soft:#241833;
+    --origin-soft:#331915; --grid:#222D36;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1419; --surface:#151D24; --surface-2:#1B242C; --rule:#28333D;
+  --ink:#E6ECF1; --ink-2:#B4C1CC; --muted:#8494A0;
+  --pos:#D08B33; --mem:#4A90D9; --cmp:#43A971; --sys:#A66BD0; --origin:#E06C5B;
+  --pos-soft:#2E2417; --mem-soft:#16283C; --cmp-soft:#15291E; --sys-soft:#241833;
+  --origin-soft:#331915; --grid:#222D36;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+:where(.grid)>*{min-width:0}
+:where(p,h1,h2,h3,h4,li,td,th,.badge){overflow-wrap:anywhere}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px 110px}
+.measure{max-width:70ch}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,4.4vw,2.9rem);letter-spacing:-.015em}
+h2{font-size:clamp(1.3rem,2.3vw,1.7rem);margin:0 0 .45rem}
+h3{font-size:1.1rem;margin:0}
+p{margin:0 0 .95rem;color:var(--ink-2)}
+a{color:var(--mem);text-underline-offset:3px}
+code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);padding:.12em .38em;border-radius:4px}
+strong{color:var(--ink);font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 .7rem}
+header{padding:60px 0 32px;border-bottom:1px solid var(--rule);margin-bottom:34px}
+.lede{font-size:1.07rem;color:var(--ink-2);margin-top:18px}
+section{margin:56px 0 0;scroll-margin-top:16px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.64rem;
+  letter-spacing:.06em;text-transform:uppercase;padding:.22em .55em;border-radius:5px;
+  border:1px solid var(--rule);background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.badge.pos{color:var(--pos);background:var(--pos-soft);border-color:transparent}
+.badge.mem{color:var(--mem);background:var(--mem-soft);border-color:transparent}
+.badge.cmp{color:var(--cmp);background:var(--cmp-soft);border-color:transparent}
+.badge.sys{color:var(--sys);background:var(--sys-soft);border-color:transparent}
+.badge.origin{color:var(--origin);background:var(--origin-soft);border-color:transparent}
+
+/* the two bills */
+.bills{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:20px}
+.bill{background:var(--surface);border:1px solid var(--rule);border-radius:11px;padding:17px 19px;box-shadow:var(--shadow)}
+.bill.c1{border-top:3px solid var(--cmp)} .bill.c2{border-top:3px solid var(--mem)}
+.bill h3{font-size:1rem;margin-bottom:.3rem}
+.bill p{font-size:.89rem;margin-bottom:0}
+.bill .f{font-family:var(--mono);font-size:.78rem;background:var(--surface-2);padding:8px 10px;
+  border-radius:6px;margin:10px 0 8px;color:var(--ink);display:block;overflow-x:auto;white-space:nowrap}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+
+/* at-a-glance table */
+.tscroll{overflow-x:auto;border:1px solid var(--rule);border-radius:12px;background:var(--surface);
+  box-shadow:var(--shadow);margin-top:18px}
+table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:720px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:.65rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:400;background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.d{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+td.m{font-weight:600;color:var(--ink);white-space:nowrap}
+td.m a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--muted)}
+td.m a:hover{color:var(--mem);border-bottom-color:var(--mem)}
+td.g{color:var(--ink-2)}
+
+/* mechanism cards */
+.mech{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:20px 22px;
+  box-shadow:var(--shadow);margin-bottom:16px;scroll-margin-top:16px;border-left:3px solid var(--rule)}
+.mech.pos{border-left-color:var(--pos)} .mech.mem{border-left-color:var(--mem)}
+.mech.cmp{border-left-color:var(--cmp)} .mech.sys{border-left-color:var(--sys)}
+.mech.origin{border-left-color:var(--origin)}
+.mech .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:2px}
+.mech .num{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-right:8px}
+.mech .meta{font-family:var(--mono);font-size:.76rem;color:var(--muted);margin-bottom:12px}
+.mech .meta a{color:var(--muted)}
+.mech .idea{font-size:.95rem;margin-bottom:14px}
+.pcw{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.pcw>div{border-left:2px solid var(--rule);padding-left:12px}
+.pcw .buy{border-left-color:var(--cmp)}
+.pcw .cost{border-left-color:var(--origin)}
+.pcw .pick{border-left-color:var(--mem)}
+.pcw b{display:block;font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:500;margin-bottom:4px;font-family:var(--mono)}
+.pcw p{margin:0;font-size:.86rem}
+.note{font-size:.83rem;color:var(--muted);margin:14px 0 0;padding-top:11px;border-top:1px dashed var(--rule)}
+
+.callout{border-left:3px solid var(--pos);background:var(--surface-2);padding:13px 16px;
+  border-radius:0 8px 8px 0;margin:20px 0;font-size:.92rem}
+.callout p:last-child{margin-bottom:0}
+footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-size:.84rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">ERA V5 · Session 8 · personal reference</p>
+  <h1>Twenty attention mechanisms, in the order they actually appeared</h1>
+  <p class="lede measure">One card each: what it does, what it buys, what it costs, when you would
+  reach for it. Chronological, because that ordering is the assignment's whole point — the field's
+  priorities shift visibly when you stop grouping these by family.</p>
+  <p class="measure" style="margin-top:14px">This is a reference sheet, not the deliverable. Dates come
+  from <code>resources/chronology-research.md</code>, where each one is traced to a primary source.</p>
+</header>
+
+<!-- ============================================ -->
+<section id="bills" style="margin-top:0">
+  <p class="eyebrow">The frame</p>
+  <h2>Nearly every mechanism here is paying down one of two bills</h2>
+  <p class="measure">Standard attention works. It is also the most expensive thing in the model, in two
+  independent ways — and almost every entry below is someone deciding which of the two to attack, and
+  what accuracy they are willing to trade for it.</p>
+
+  <div class="bills">
+    <div class="bill c1">
+      <h3>Bill 1 — quadratic compute</h3>
+      <span class="f">~T² score comparisons</span>
+      <p>Every token scores against every other. Double the context, quadruple the work. Paid at
+      training and at prefill, and it is <em>compute</em>, so it can be bought with more hardware.</p>
+    </div>
+    <div class="bill c2">
+      <h3>Bill 2 — linear KV-cache memory</h3>
+      <span class="f">2 × layers × kv_heads × head_dim × T × batch × bytes</span>
+      <p>At decode time every past key and value must stay resident. Only linear in T — but it is
+      <strong>per user and unshared</strong>, so it multiplies by your concurrency. At the lesson's
+      yardstick (48 layers, 8 KV heads, head_dim 128, bf16, T=32,768) that is <strong>6.44 GB for one
+      user, 51.54 GB for eight</strong>.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p style="margin-bottom:0"><strong>A third bill nobody named in class:</strong> memory
+    <em>bandwidth</em> — how many times the score matrix crosses between slow HBM and fast on-chip
+    SRAM. FlashAttention (#11) attacks only that one, which is why it is the single entry here that
+    costs no accuracy at all. It is the bonus mechanism for exactly that reason.</p>
+  </div>
+
+  <div class="legend">
+    <span class="badge origin">the baseline</span>
+    <span class="badge pos">position &amp; length</span>
+    <span class="badge mem">KV-cache memory</span>
+    <span class="badge cmp">quadratic compute</span>
+    <span class="badge sys">systems &amp; kernels</span>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="glance">
+  <p class="eyebrow">At a glance</p>
+  <h2>All twenty on one screen</h2>
+  <div class="tscroll">
+    <table>
+      <thead><tr><th>Date</th><th>Mechanism</th><th>Bill</th><th>In one line</th></tr></thead>
+      <tbody id="tbl"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<section id="cards">
+  <p class="eyebrow">The reference</p>
+  <h2>One card each</h2>
+  <div id="deck" style="margin-top:20px"></div>
+</section>
+
+<!-- ============================================ -->
+<section id="threads">
+  <p class="eyebrow">Patterns worth noticing</p>
+  <h2>Four threads that only show up in date order</h2>
+  <div class="grid" style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:20px">
+    <div class="mech mem" style="margin-bottom:0">
+      <h3>The memory question was asked twice, four years apart</h3>
+      <p class="idea" style="margin-bottom:0">MQA lands in <strong>2019</strong> and then essentially
+      nothing happens on the KV cache until GQA in <strong>2023</strong>. The answer was available the
+      whole time; the field only cared once serving cost, not training cost, became the binding
+      constraint. MLA (2024) and attention sinks (2023) cluster in that same late wave.</p>
+    </div>
+    <div class="mech cmp" style="margin-bottom:0">
+      <h3>The delta rule sat unused for three years</h3>
+      <p class="idea" style="margin-bottom:0">Schlag et al. publish it in <strong>Feb 2021</strong> —
+      before RoPE. It goes quiet until Yang et al. make it trainable in parallel in <strong>2024</strong>,
+      and only then does it become an architecture. The gap is not about the idea; it is about the
+      training algorithm. Good ideas wait for their hardware-shaped implementation.</p>
+    </div>
+    <div class="mech pos" style="margin-bottom:0">
+      <h3>Position keeps getting re-solved, never solved</h3>
+      <p class="idea" style="margin-bottom:0">Learned table (2017) → sinusoidal (2017) → RoPE (2021)
+      → ALiBi (2021) → NTK (2023) → YaRN (2023) → DroPE (2025). Seven attempts across eight years,
+      and the most recent answer is to <em>remove</em> positional embeddings entirely. That trajectory
+      — add, refine, refine, delete — is the single most legible arc on the timeline.</p>
+    </div>
+    <div class="mech sys" style="margin-bottom:0">
+      <h3>The quiet stretch was not quiet</h3>
+      <p class="idea" style="margin-bottom:0">Between ALiBi (Aug 2021) and GQA (May 2023) the
+      minimum-coverage list shows almost nothing. FlashAttention (May 2022) sits right in that gap.
+      The field was working on the <em>systems</em> half — how fast can you compute the thing you
+      already have — while the architectural half paused. Exactness stayed affordable longer than it
+      otherwise would have.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Generated 2026-08-18 for ERA V5 Session 8. Dates and sources:
+  <code>resources/chronology-research.md</code>. The data array in this file's source is the seed for
+  the app's <code>data/mechanisms.js</code> — one record per mechanism, so the timeline, the dossiers,
+  the sources table and the README can never drift apart.</p>
+  <p style="margin-bottom:0">All arXiv dates are <strong>v1 submission</strong> timestamps, not latest
+  revision.</p>
+</footer>
+
+</div>
+
+<script>
+const M = [
+{n:1, id:'learned-abs', name:'Learned absolute positions', date:'2017-05-08', lane:'pos',
+ src:'1705.03122', paper:'Convolutional Sequence to Sequence Learning',
+ one:'A trainable lookup table with one vector per position, added to the token embedding.',
+ idea:'Attention on its own is a bag of vectors — permute the tokens and the output is identical. The first fix is the most literal one available: keep a trainable table with one row per position index, look up row <code>i</code> for the token at position <code>i</code>, and add it to that token\'s embedding. The model learns whatever notion of position the data rewards.',
+ buy:'Dead simple, and fully learned — no assumption imposed about what position <em>means</em>, the data decides.',
+ cost:'The table has a fixed number of rows. Position 4,097 in a 4,096-trained model does not have an embedding — it does not exist. There is no principled way to extrapolate a learned lookup, and it spends parameters on positions rather than on content.',
+ pick:'Fixed, known, short context. This is exactly the wall Session 7 ran into, and the reason everything below exists.'},
+
+{n:2, id:'sdpa', name:'Scaled dot-product attention', date:'2017-06-12', lane:'origin',
+ src:'1706.03762', paper:'Attention Is All You Need',
+ one:'The baseline: score, scale, mask, softmax, weighted sum.',
+ idea:'Every token emits three vectors — a <strong>query</strong> (what am I looking for), a <strong>key</strong> (what do I offer), a <strong>value</strong> (what I actually pass on). Score each query against every key with a dot product, divide by <code>√d_k</code> to keep the numbers out of softmax\'s saturated region, add <code>-∞</code> to future positions, softmax into weights, and take the weighted sum of values. The <code>-∞</code> matters more than it looks: <code>softmax(-∞)=0</code> is what lets every position in the sequence train in parallel while still being causally honest.',
+ buy:'Exact, content-based routing with a single hop between any two tokens — no distance penalty, no information bottleneck, and fully parallel at training time.',
+ cost:'Both bills at once. <code>T²</code> score comparisons, and a KV cache that grows linearly in <code>T</code> for every concurrent user.',
+ pick:'Always the starting point, and still the quality bar every mechanism below is measured against.'},
+
+{n:3, id:'sinusoidal', name:'Sinusoidal encoding', date:'2017-06-12', lane:'pos',
+ src:'1706.03762', paper:'Attention Is All You Need',
+ one:'Fixed sin/cos waves at geometrically spaced frequencies instead of a learned table.',
+ idea:'Same paper as the baseline, offered as the alternative to the learned table. Each position gets a fixed vector built from sine and cosine at a range of frequencies — fast-oscillating dimensions distinguish neighbours, slow ones separate distant regions. Nothing is trained.',
+ buy:'Zero parameters, and — the important part — the function is <em>defined at every integer</em>, so nothing structurally breaks past training length. Offsets are also expressible as a linear transform of the encoding, which puts relative position within reach.',
+ cost:'Defined is not competent. The model still never saw those positions during training, and quality degrades when you push past what it trained on. It also still acts on the input embedding rather than on the query–key interaction itself.',
+ pick:'A zero-parameter baseline. Mostly of historical interest now — RoPE does the relative-position job properly.'},
+
+{n:4, id:'sparse', name:'Sparse / top-k attention', date:'2019-04-23', lane:'cmp',
+ src:'1904.10509', paper:'Generating Long Sequences with Sparse Transformers',
+ one:'Keep softmax, but let each query read a subset of keys instead of all of them.',
+ idea:'The first serious attack on Bill 1 that keeps attention itself intact. Rather than every query reading every key, restrict each query to a structured subset — strided and factorized patterns that still compose to full coverage across a couple of layers — or to the <code>top-k</code> highest-scoring keys.',
+ buy:'Cuts the <code>T²</code> term toward something like <code>T√T</code> while keeping softmax\'s sharp, selective retrieval. Sparsity is also empirically justified: real attention maps are already close to sparse.',
+ cost:'A fixed pattern is a <em>guess</em> about where the information lives, made before you see the data. And genuine top-k has a chicken-and-egg problem: to know which scores are highest you have to compute all the scores, so naive top-k saves memory traffic but not the scoring cost. You need a cheap proposal step to actually win — which is what #19 supplies, six years later.',
+ pick:'When context is long and the access pattern really is local or structured. As a bolt-on at inference it disappoints; trained in, it works.'},
+
+{n:5, id:'mqa', name:'MQA — Multi-Query Attention', date:'2019-11-06', lane:'mem',
+ src:'1911.02150', paper:'Fast Transformer Decoding: One Write-Head is All You Need',
+ one:'All query heads share one single K/V head.',
+ idea:'The first attack on Bill 2, and a blunt one: keep all the query heads, but give the whole layer a <em>single</em> key head and a single value head that every query head reads from. The <code>kv_heads</code> term in the cache formula becomes 1.',
+ buy:'Enormous cache reduction — at the yardstick, 6.44 GB collapses to <strong>0.81 GB</strong>, an 8× cut. Decoding is memory-bandwidth-bound, so this translates directly into faster generation.',
+ cost:'Quality drops. Heads lose their independent views of the sequence — they can still ask different questions, but they all read the same answer sheet. Training instability was also reported.',
+ pick:'When decode memory dominates everything and you can absorb the quality hit. Mostly superseded by GQA, which found the middle.'},
+
+{n:6, id:'swa', name:'Sliding window attention', date:'2020-04-10', lane:'cmp',
+ src:'2004.05150', paper:'Longformer: The Long-Document Transformer',
+ one:'Each token attends only to the w tokens immediately before it.',
+ idea:'The simplest possible sparsity pattern, and the one with the cleanest justification: language is mostly local. Fix a window <code>w</code> and let each token see only that far back. Information still travels further than <code>w</code> because layers stack — <code>L</code> layers give an effective receptive field around <code>L × w</code>, the same way a CNN grows its field with depth.',
+ buy:'Compute becomes linear in <code>T</code>, and — the underrated part — the KV cache becomes <strong>bounded</strong> at <code>w</code> rather than growing. It is one of very few entries that flattens Bill 2 rather than just lowering its slope.',
+ cost:'Anything outside the window is reachable only indirectly, through layers, which is lossy and indirect. Exact long-range lookup — "what was the name in paragraph one" — is gone.',
+ pick:'When local structure dominates, or paired with a global path for the few tokens that need reach. Note: Mistral 7B made this famous in 2023, but Longformer is the origin.'},
+
+{n:7, id:'linear', name:'Linear attention', date:'2020-06-29', lane:'cmp',
+ src:'2006.16236', paper:'Transformers are RNNs',
+ one:'Remove softmax so the matrix products can be reassociated into a fixed-size recurrent state.',
+ idea:'Softmax is what forces the <code>T×T</code> matrix to exist: it couples every score in a row through the normaliser, so you cannot factor it away. Drop it, replace it with a kernel feature map <code>φ</code>, and the associativity of matrix multiplication becomes available — <code>(φ(Q)φ(K)ᵀ)V</code> can be computed as <code>φ(Q)(φ(K)ᵀV)</code>. The bracketed term is a fixed <code>d×d</code> state that does not depend on <code>T</code> at all.',
+ buy:'<code>O(T)</code> compute, and a <strong>constant-size</strong> state instead of a growing cache. Bill 2 stops growing entirely — not a lower slope, a flat line. Generation becomes RNN-like: one fixed state, updated per token.',
+ cost:'Softmax was doing real work. Its sharp, near-winner-take-all selection is what makes exact retrieval possible; a smooth kernel blurs it. Worse, a state that only <em>accumulates</em> writes new information on top of old and smears the two together, so recall degrades as the sequence grows. Fixed capacity is fixed capacity.',
+ pick:'When throughput and memory dominate and perfect recall does not — and in practice, hybridised with real attention layers rather than used alone.'},
+
+{n:8, id:'delta', name:'Delta rule (origin)', date:'2021-02-22', lane:'cmp',
+ src:'2102.11174', paper:'Linear Transformers Are Secretly Fast Weight Programmers',
+ one:'Before writing to the fixed state, read what it already says and write only the difference.',
+ idea:'The fix for linear attention\'s smearing problem, and it is an old idea from associative memory. Instead of blindly adding the new key–value pair into the state, first <em>query the state with the incoming key</em> to see what it currently associates with it, then write only the correction — the delta between what you wanted stored and what is already there. Updating a key now <strong>replaces</strong> its old association rather than stacking on top of it.',
+ buy:'Turns a fixed-size state from an accumulator into usable memory. This is the difference between a state that degrades with every write and one that can be maintained.',
+ cost:'Read-then-write is inherently sequential, which is exactly what a GPU hates — so it stayed impractical to train at scale for three years, until #17. And capacity is still fixed: correction manages the budget well, it does not enlarge it.',
+ pick:'Any time you are running a fixed-size recurrent state and need it to survive long sequences. In modern practice you would use the gated version (#18).',
+ note:'Priority note: this predates the paper everyone calls "the DeltaNet paper" (#17) by over three years, and even predates RoPE. Worth citing correctly.'},
+
+{n:9, id:'rope', name:'RoPE — Rotary Position Embedding', date:'2021-04-20', lane:'pos',
+ src:'2104.09864', paper:'RoFormer',
+ one:'Rotate queries and keys by an angle proportional to position; the dot product then depends only on i−j.',
+ idea:'The insight that made everything else about position tractable. Treat each pair of dimensions as a 2D plane and rotate the query and key vectors by an angle proportional to their position. Because rotating two vectors and taking their dot product leaves only the <em>difference</em> of the angles, the attention score between positions <code>i</code> and <code>j</code> becomes a function of <code>i−j</code> alone. Relative position falls out of the geometry rather than being added on.',
+ buy:'Relative position for free, inside the score itself. No table, no extra parameters, no added input vector, and mathematically defined at any position. It is the default in essentially every modern open model.',
+ cost:'The rotation frequencies are fixed at training time. Push past the trained length and the low-frequency dimensions produce rotation angles the model has literally never seen — so it is defined everywhere but competent only where it trained. That single limitation is what generates #13, #14, and arguably #20.',
+ pick:'Default choice for any new decoder. The question is not whether to use RoPE, it is what you do about extension.'},
+
+{n:10, id:'alibi', name:'ALiBi — Attention with Linear Biases', date:'2021-08-27', lane:'pos',
+ src:'2108.12409', paper:'Train Short, Test Long',
+ one:'Skip positional embeddings entirely; subtract a penalty proportional to distance from each score.',
+ idea:'The contrarian answer, four months after RoPE. Add no positional information to the vectors at all. Instead, after scoring, subtract a penalty proportional to the distance <code>i−j</code>, with a different fixed slope per head — so some heads look sharply local and others tolerate distance.',
+ buy:'Startlingly simple: no embeddings, no parameters, a few lines of code. And it extrapolates — train at 1K, run at 2K+, with graceful rather than catastrophic degradation, which was the paper\'s whole point.',
+ cost:'It bakes in a <strong>recency prior as a structural fact</strong>. A distant token is penalised for being distant regardless of how relevant it is, so the model cannot learn to override it. That is fine for language modelling perplexity and bad for long-range retrieval — which is precisely the workload long context is supposed to serve.',
+ pick:'When cheap length extrapolation matters more than distant recall. Increasingly rare as a primary choice, but the idea recurs.'},
+
+{n:11, id:'flash', name:'FlashAttention', date:'2022-05-27', lane:'sys',
+ src:'2205.14135', paper:'FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness',
+ one:'Identical math, rescheduled so the T×T matrix never touches slow memory.',
+ idea:'The bonus mechanism, and the odd one out. Every other entry here changes <em>what</em> attention computes. FlashAttention changes only <em>where the numbers live while it computes them</em>. Standard implementations materialise the full <code>T×T</code> score matrix in slow HBM, write it, read it back for softmax, write again. FlashAttention tiles Q, K and V into blocks small enough to sit in fast on-chip SRAM and fuses score → softmax → weighted-sum into one pass, using <strong>online softmax</strong> — a running max and running sum — so it never needs the whole row at once and never materialises the matrix at all.',
+ buy:'Exact attention, bit-for-bit. <strong>Zero accuracy cost</strong> — the only entry in this table that gives something up for nothing. Large wall-clock speedup, and memory drops from <code>O(T²)</code> to <code>O(T)</code>. It is a drop-in kernel swap; the architecture does not change.',
+ cost:'It does not reduce FLOPs — Bill 1\'s arithmetic is untouched, only the memory traffic around it. It does nothing at all for the inference KV cache, so Bill 2 is exactly as bad as before. And it is hardware-specific: tile sizes are tuned to particular SRAM capacities, which is why there is a FlashAttention-2 and -3 rather than one portable idea.',
+ pick:'Essentially always, on supported hardware. The interesting question is not when you would choose it but why you would ever not — which is what makes it a useful contrast against every other row here.',
+ note:'Bonus mechanism, not covered in class. Chosen because it answers a third bill — memory bandwidth — that neither of the two named bills covers.'},
+
+{n:12, id:'gqa', name:'GQA — Grouped-Query Attention', date:'2023-05-22', lane:'mem',
+ src:'2305.13245', paper:'GQA: Training Generalized Multi-Query Transformer Models',
+ one:'Query heads are split into G groups; each group shares one K/V head.',
+ idea:'The middle ground between full multi-head (every query head has its own K/V) and MQA (one for all), arriving three and a half years after MQA. Pick a group count — 8 query heads per KV head is typical — and let each group share. MHA and MQA are just the two endpoints of the same dial.',
+ buy:'Most of MQA\'s savings at most of MHA\'s quality: at the yardstick, dropping 8 KV heads to 2 takes 6.44 GB to <strong>1.61 GB</strong>. It can also be <em>uptrained</em> from an existing MHA checkpoint with a small fraction of original training compute — you do not have to start over. That practicality is why it is everywhere.',
+ cost:'It lowers the slope of the cache line; it does not flatten it. Double the context and you still double the cache. It buys you a constant factor, not a different asymptotic — which is the honest thing the lesson insists on saying about it.',
+ pick:'The default for production decoders today. If you are shipping a model and have not chosen otherwise, this is the answer.'},
+
+{n:13, id:'ntk', name:'NTK-aware scaling', date:'2023-06-29', lane:'pos',
+ src:'reddit', paper:'r/LocalLLaMA post by u/bloc97 — no paper',
+ one:'Extend a RoPE model by stretching low frequencies while leaving high ones nearly intact.',
+ idea:'Naive position interpolation squeezes all positions into the trained range by scaling every RoPE frequency equally — which works, but crushes the high-frequency dimensions that distinguish adjacent tokens, so the model loses local precision. The NTK-aware fix scales the RoPE <em>base</em> instead, which stretches the slow dimensions a lot and the fast ones almost not at all: long-range reach is added without destroying short-range detail.',
+ buy:'Real context extension with <strong>no fine-tuning at all</strong> and a few lines of code. It went from a forum post to production practice in weeks, which tells you how badly the problem needed solving.',
+ cost:'A heuristic, not a derivation — quality decays as you push the scale factor, and there is no principled stopping point. It also arrived with no paper, no ablations, and no independent evaluation.',
+ pick:'When you need more context out of a model you already have, today, without a training run.',
+ note:'No arXiv paper exists — this is a community post, dated via the Wayback Machine. bloc97 published <em>two</em> methods; YaRN builds on the later <strong>NTK-By-Parts</strong> refinement, not on plain NTK-aware.'},
+
+{n:14, id:'yarn', name:'YaRN', date:'2023-08-31', lane:'pos',
+ src:'2309.00071', paper:'YaRN: Efficient Context Window Extension of Large Language Models',
+ one:'The NTK family, formalised: interpolate by wavelength band, plus a temperature correction.',
+ idea:'Takes the community\'s NTK heuristics and turns them into a method. The core move is to stop treating all RoPE dimensions the same: dimensions whose wavelength is short relative to the context get left alone, dimensions whose wavelength exceeds the trained context get fully interpolated, and a band in between is blended. On top of that it scales attention temperature, correcting a distribution shift that interpolation alone introduces.',
+ buy:'The best quality-per-effort in the extension family. It works with no fine-tuning, and works better with a small one — the paper reports needing roughly 10× less data and fewer steps than earlier extension methods to reach a given quality.',
+ cost:'It is still extension of a model that was pretrained short. The weights never saw a genuine 100K-token dependency during training, so you are widening the aperture on a model that was never taught to use it. This is exactly the "two roads" tension — extend a short-trained model, or train long natively.',
+ pick:'The strongest option when you must extend an existing checkpoint rather than train a new one.'},
+
+{n:15, id:'sinks', name:'Attention sinks', date:'2023-09-29', lane:'mem',
+ src:'2309.17453', paper:'Efficient Streaming Language Models with Attention Sinks (StreamingLLM)',
+ one:'Keep the first few tokens pinned in the cache forever; evicting them is what breaks streaming.',
+ idea:'Starts from a strange observation: models dump enormous attention mass onto the first few tokens of a sequence regardless of what those tokens actually say. The explanation is mechanical — softmax must sum to 1, so when a head has nothing it wants to attend to it still has to put its probability <em>somewhere</em>, and the earliest tokens are the ones every position can see. They become a no-op drain. The practical consequence: in a rolling-window cache, the moment token 0 gets evicted, quality collapses — not because that token mattered semantically, but because the drain is gone.',
+ buy:'Pin four or so sink tokens plus a rolling window and you get <strong>effectively unbounded streaming on a bounded cache</strong>, with no fine-tuning and no architecture change. The failure it prevents is dramatic — perplexity explodes without it.',
+ cost:'It enables streaming, not long-context <em>recall</em>. Evicted content is genuinely gone; the model stays fluent forever but cannot answer questions about what scrolled off. Easy to mistake one for the other.',
+ pick:'Long-running conversational or streaming deployments where the recent window is what matters.'},
+
+{n:16, id:'mla', name:'MLA — Multi-head Latent Attention', date:'2024-05-07', lane:'mem',
+ src:'2405.04434', paper:'DeepSeek-V2',
+ one:'Cache one small low-rank latent per token; reconstruct K and V from it at use time.',
+ idea:'Rather than sharing K/V heads, compress them. Project keys and values down into a single low-dimensional latent vector per token, cache <em>that</em>, and project back up to per-head K and V inside the attention computation. The up-projection matrices can be folded into the neighbouring weight matrices, so much of the reconstruction is free at inference.',
+ buy:'A far larger cache reduction than GQA, at <em>better</em> reported quality than full multi-head — which is the surprising part. It attacks the <code>kv_heads × head_dim</code> product directly instead of just the head count.',
+ cost:'Considerably more complex, and it does not compose cleanly with RoPE — rotation does not survive the compression, so a decoupled rotary component has to be carried alongside the latent. It also has to be designed in from pretraining; you cannot uptrain into it as easily as GQA.',
+ pick:'When you control the architecture from scratch and serving cache is the binding constraint.'},
+
+{n:17, id:'deltanet', name:'DeltaNet (parallel training)', date:'2024-06-10', lane:'cmp',
+ src:'2406.06484', paper:'Parallelizing Linear Transformers with the Delta Rule over Sequence Length',
+ one:'Reformulates the delta rule\'s sequential update so it can be trained with a chunked parallel scan.',
+ idea:'The delta rule (#8) was sound but sequential — each step needs the state the previous step produced, which leaves the GPU idle. This paper rewrites the chain of rank-one corrective updates into a matrix-product form that can be evaluated in chunks, so the sequence dimension parallelises. Same rule, tractable at scale.',
+ buy:'Makes the 2021 idea actually trainable on modern hardware. This is what moved the delta rule from an interesting result to a viable architecture — and it is the reason "DeltaNet" is dated 2024 in most people\'s heads.',
+ cost:'A chunked scan is still more machinery than a plain matmul, and the state capacity limit is untouched — you have made the update efficient, not the memory bigger.',
+ pick:'Any fixed-state architecture you intend to actually train.',
+ note:'Commonly cited as the origin of the delta rule. It is not — see #8. The contribution here is the training algorithm.'},
+
+{n:18, id:'gated-delta', name:'Gated DeltaNet', date:'2024-12-09', lane:'cmp',
+ src:'2412.06464', paper:'Gated Delta Networks: Improving Mamba2 with Delta Rule',
+ one:'Delta-rule correction plus a data-dependent forgetting gate — precise edits and bulk clearing.',
+ idea:'Combines the two ways a fixed-size state can be managed, which turn out to be complementary rather than redundant. A <strong>gate</strong> decides how much of the whole state to decay — good for "the topic changed, clear the slate". The <strong>delta rule</strong> makes a targeted correction to one association — good for "this specific fact was updated". Gating alone is too blunt; delta alone cannot forget in bulk.',
+ buy:'Meaningfully better recall and in-context retrieval than either Mamba2-style gating or plain DeltaNet on their own, at the same constant memory.',
+ cost:'Still a fixed-size state, so it still has a capacity ceiling that real attention does not. In practice it is deployed <em>hybridised</em> — interleaved with genuine attention layers rather than replacing them — which is an honest admission that the fixed state cannot do everything.',
+ pick:'The current best-in-class fixed-state layer, used as the cheap layers in a hybrid depth schedule.'},
+
+{n:19, id:'nsa', name:'DeepSeek NSA — Native Sparse Attention', date:'2025-02-16', lane:'cmp',
+ src:'2502.11089', paper:'Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention',
+ one:'Three gated branches — compressed blocks, top-k selected blocks, sliding window — trained in from scratch.',
+ idea:'The answer to top-k attention\'s chicken-and-egg problem (#4). Each query reads through three parallel paths that get combined by a learned gate: a <strong>compressed</strong> branch that summarises whole blocks of tokens into single representatives, giving a cheap global view; a <strong>selection</strong> branch that uses those cheap block-level scores to pick the top-k blocks worth reading at full fidelity; and a <strong>sliding window</strong> for local detail. The compressed branch is the cheap proposal step that makes selection affordable — you never score all keys at full resolution.',
+ buy:'Sparsity that is <em>trained in</em> rather than bolted on, so the model learns to use it instead of being degraded by it. Kernels are written to match GPU memory access patterns, so the theoretical savings show up as real measured speedups — the thing most sparse-attention papers cannot claim.',
+ cost:'Substantially more machinery than anything above it, and selection is block-granular, so it is coarse — you retrieve a neighbourhood, not a token. It also has to be present from pretraining; you cannot convert a dense checkpoint into it.',
+ pick:'Training a long-context model from scratch where prefill and decode cost both matter.'},
+
+{n:20, id:'drope', name:'DroPE', date:'2025-12-13', lane:'pos',
+ src:'2512.12167', paper:'Extending the Context of Pretrained LLMs by Dropping Their Positional Embeddings',
+ one:'Extend context by removing the positional embeddings rather than rescaling them.',
+ idea:'The most recent answer, and it inverts the question. Every method from #13 and #14 tries to <em>rescale</em> RoPE so its frequencies survive past the trained length. DroPE removes the positional embedding instead, on the grounds that a causal decoder already carries order information implicitly — a token can only see its past, so depth and masking encode sequence structure without any explicit signal. Take away the thing that breaks past its trained range, and there is nothing left to break.',
+ buy:'Sidesteps the entire frequency-heuristic ladder. Reported at 8K → 256K, a 32× extension, on the LightningLM run.',
+ cost:'That 32× number needs reading carefully: it was applied <em>before</em> annealing, so it describes the range at which the model is <strong>defined</strong>, not the range at which it is demonstrably <strong>competent</strong>. Those are different claims and the lesson is emphatic about not conflating them. It is also very recent, with limited independent replication.',
+ pick:'Worth watching rather than defaulting to. The interesting part is the direction of travel: after eight years of increasingly elaborate positional machinery, the newest idea is to delete it.'},
+];
+
+const LANE = {pos:'position', mem:'kv memory', cmp:'compute', sys:'systems', origin:'baseline'};
+
+/* at-a-glance table */
+const tbl = document.getElementById('tbl');
+M.forEach(m => {
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td class="d">' + m.date + '</td>' +
+    '<td class="m"><span style="color:var(--muted);font-family:var(--mono);font-size:.78rem">' + m.n + '</span> ' +
+      '<a href="#' + m.id + '">' + m.name + '</a></td>' +
+    '<td><span class="badge ' + m.lane + '">' + LANE[m.lane] + '</span></td>' +
+    '<td class="g">' + m.one + '</td>';
+  tbl.appendChild(tr);
+});
+
+/* full cards */
+const deck = document.getElementById('deck');
+M.forEach(m => {
+  const d = document.createElement('article');
+  d.className = 'mech ' + m.lane;
+  d.id = m.id;
+  const srcHtml = m.src === 'reddit'
+    ? 'reddit r/LocalLLaMA'
+    : '<a href="https://arxiv.org/abs/' + m.src + '" target="_blank" rel="noopener">arXiv ' + m.src + '</a>';
+  d.innerHTML =
+    '<div class="top"><h3><span class="num">' + m.n + '</span>' + m.name + '</h3>' +
+      '<span class="badge ' + m.lane + '">' + LANE[m.lane] + '</span></div>' +
+    '<p class="meta">' + m.date + ' · ' + srcHtml + ' · ' + m.paper + '</p>' +
+    '<p class="idea">' + m.idea + '</p>' +
+    '<div class="pcw">' +
+      '<div class="buy"><b>Buys</b><p>' + m.buy + '</p></div>' +
+      '<div class="cost"><b>Costs</b><p>' + m.cost + '</p></div>' +
+      '<div class="pick"><b>Pick it when</b><p>' + m.pick + '</p></div>' +
+    '</div>' +
+    (m.note ? '<p class="note">' + m.note + '</p>' : '');
+  deck.appendChild(d);
+});
+</script>
+</body>
+</html>

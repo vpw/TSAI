@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attention, in the order it happened</title>
+<meta name="description" content="Every modern attention mechanism, ordered by the date it actually appeared — with honest pros and cons for each. ERA V5, Session 8.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⧗</text></svg>">
+</head>
+<body>
+<a class="skip" href="#act0">Skip to the pipeline</a>
+<div class="wrap">
+
+<div class="topbar">
+  <span class="brand">ERA V5 · Session 8</span>
+  <button class="btn icon" id="theme" type="button" aria-label="Switch colour theme">◑ theme</button>
+</div>
+
+<header class="hero">
+  <p class="eyebrow" style="margin-top:30px">Attention mechanisms, chronologically</p>
+  <h1>Attention, in the order it happened</h1>
+  <p class="lede">Twenty mechanisms, arranged by the date they actually appeared rather than by family
+  or by teaching order. Ordered this way the field stops looking like a catalogue of tricks and starts
+  looking like an argument — one where you can see what people were worried about, and when they
+  stopped worrying about it.</p>
+  <p class="lede" style="font-size:1rem;margin-top:14px">It starts with the thing every one of them is
+  responding to.</p>
+</header>
+
+<!-- ============================================================
+     ACT 0 — Attention, built once
+     ============================================================ -->
+<section id="act0">
+  <p class="eyebrow"><span class="badge origin">act 0 · the baseline</span></p>
+  <h2>Attention, built once</h2>
+  <p class="measure">Nothing after this makes sense without it. Six tokens, four dimensions, and five
+  steps — small enough that every number on screen is one line of arithmetic you can check by hand.
+  Click any cell to see that line.</p>
+
+  <figure>
+    <div class="fig-title">The attention pipeline</div>
+    <div class="fig-sub">Score → Scale → Mask → Softmax → Weighted sum, on the sentence
+      <em>“the cat sat on the mat”</em></div>
+
+    <div class="stepbar">
+      <div class="steps" id="steps" role="tablist" aria-label="Pipeline steps"></div>
+      <div class="stepnav">
+        <label class="switch" title="Toggle the causal mask">
+          <input type="checkbox" id="causal" checked>
+          <span class="track"></span>
+          <span>causal mask</span>
+        </label>
+        <button class="btn icon" id="prev" type="button" aria-label="Previous step">←</button>
+        <button class="btn icon primary" id="next" type="button" aria-label="Next step">→</button>
+      </div>
+    </div>
+
+    <div class="formula" aria-hidden="true">
+      Attention(Q,K,V) = <span class="t" id="f-sm">softmax</span>(
+        <span class="t" id="f-qk">QKᵀ</span>
+        <span class="t" id="f-sq">/ √d<sub>k</sub></span>
+        <span class="t" id="f-m">+ M</span>
+      ) <span class="t" id="f-v">V</span>
+    </div>
+
+    <div class="stepbody split">
+      <div>
+        <div id="m-host"></div>
+        <div id="outputs" style="margin-top:22px" hidden></div>
+      </div>
+      <div>
+        <div class="stepnote" style="margin-bottom:16px">
+          <h3 id="s-title"></h3>
+          <div id="s-body"></div>
+        </div>
+        <div class="inspect" id="inspect"></div>
+      </div>
+    </div>
+
+    <div class="callout risk" id="leak" hidden></div>
+
+    <figcaption>
+      <p style="margin-bottom:.6rem"><strong>What this shows.</strong> Attention is content-based routing:
+      every token compares what it wants against what every other token offers, turns those comparisons
+      into a budget that sums to 1, and mixes the others' values by that budget. In this sentence, with
+      the mask on, <em>sat</em> spends 69% of its budget on <em>cat</em> and its output becomes dominated by
+      <em>animate</em> — the verb has pulled in its own subject, with nothing in the model that
+      mentions subjects.</p>
+      <p style="margin-bottom:.6rem"><strong>The mask is not an optimisation.</strong> Adding −∞ above
+      the diagonal works because <code>softmax(−∞) = 0</code> exactly, which lets all six positions train
+      in one parallel pass while staying causally honest. Switch it off and token 0 sends 89% of its
+      attention forward in time — 29% of it onto <em>cat</em>, the word it exists to predict. It would
+      score beautifully in training and produce nothing at generation, because those tokens have not
+      been written yet.</p>
+      <p style="margin-bottom:0"><strong>And here are the two bills.</strong> The grid is
+      <code>T×T</code>: six tokens cost 36 comparisons, a thousand cost a million — that is the
+      <strong>quadratic compute</strong> bill. Generating the next token means keeping every earlier
+      K and V resident in memory, per user, unshareable — that is the <strong>KV-cache</strong> bill.
+      Everything that follows on this page is someone deciding which of the two to pay down, and what
+      accuracy they are willing to trade for it.</p>
+    </figcaption>
+  </figure>
+</section>
+
+<footer>
+  <p>ERA V5 · Session 8 — attention mechanisms in chronological order. Built for the S8 assignment;
+  dates are traced to primary sources in the repository's chronology research.</p>
+  <p style="margin-bottom:0"><em>Act 0 of 5. The timeline, the twenty dossiers, and the sources table
+  follow.</em></p>
+</footer>
+
+</div>
+
+<script>
+/* theme toggle — cycles system → light → dark, remembered per browser */
+(function(){
+  var b = document.getElementById('theme'), r = document.documentElement;
+  var saved = null;
+  try { saved = localStorage.getItem('s8-theme'); } catch(e) {}
+  if (saved) r.setAttribute('data-theme', saved);
+  b.addEventListener('click', function(){
+    var cur = r.getAttribute('data-theme');
+    var next = cur === 'light' ? 'dark' : cur === 'dark' ? null : 'light';
+    if (next) { r.setAttribute('data-theme', next); }
+    else { r.removeAttribute('data-theme'); }
+    try { next ? localStorage.setItem('s8-theme', next) : localStorage.removeItem('s8-theme'); } catch(e) {}
+  });
+})();
+</script>
+<script src="assets/act0-pipeline.js"></script>
+</body>
+</html>
