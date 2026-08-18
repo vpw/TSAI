@@ -104,11 +104,115 @@
   </figure>
 </section>
 
+<!-- ============================================================
+     ACT 1 — The two bills
+     ============================================================ -->
+<section id="act1">
+  <p class="eyebrow"><span class="badge cmp">act 1 · compute</span>&nbsp;
+    <span class="badge mem">act 1 · memory</span></p>
+  <h2>The two bills</h2>
+  <p class="measure">Act 0 ended with two costs and no sense of scale. This is the scale. One slider
+  drives both, at the reference configuration the lesson uses throughout — and every mechanism further
+  down this page gets re-scored on this same meter, which is what makes the page one argument rather
+  than twenty essays.</p>
+
+  <figure>
+    <div class="fig-title">The bill meter</div>
+    <div class="fig-sub">Drag the context length and watch both bills move — they do not move together</div>
+
+    <div class="meter">
+      <div class="sliders">
+        <div class="sl">
+          <label for="t-sl">context length T <b id="t-val"></b></label>
+          <input type="range" id="t-sl" min="0" max="8" step="1" value="5">
+          <div class="ticks"><span>1K</span><span>8K</span><span>32K</span><span>128K</span><span>256K</span></div>
+        </div>
+        <div class="sl">
+          <label for="u-sl">concurrent users <b id="u-val"></b></label>
+          <input type="range" id="u-sl" min="0" max="6" step="1" value="0">
+          <div class="ticks"><span>1</span><span>4</span><span>8</span><span>32</span><span>64</span></div>
+        </div>
+      </div>
+
+      <div class="cfg">
+        <div class="f" style="grid-column:1/-1">
+          <span>kv heads — how many query heads share one key/value head</span>
+          <div class="kvrow" id="kvrow"></div>
+        </div>
+        <label class="f"><span>layers</span>
+          <select id="c-layers">
+            <option>24</option><option>32</option><option selected>48</option>
+            <option>64</option><option>80</option>
+          </select></label>
+        <label class="f"><span>head dim</span>
+          <select id="c-hd"><option>64</option><option selected>128</option><option>256</option></select></label>
+        <label class="f"><span>precision</span>
+          <select id="c-bytes">
+            <option value="4">fp32 — 4 bytes</option>
+            <option value="2" selected>bf16 — 2 bytes</option>
+            <option value="1">fp8 — 1 byte</option>
+          </select></label>
+        <div class="f" style="justify-content:flex-end">
+          <button class="btn" id="yard" type="button" hidden>↺ back to the yardstick</button>
+        </div>
+      </div>
+
+      <div class="billcards">
+        <div class="billcard b1">
+          <div class="cap">Bill 1 · quadratic compute</div>
+          <div class="big" id="b1-big"></div>
+          <div class="sub" id="b1-sub"></div>
+          <div class="tag" id="b1-tag"></div>
+        </div>
+        <div class="billcard b2">
+          <div class="cap">Bill 2 · KV-cache memory</div>
+          <div class="big" id="b2-big"></div>
+          <div class="sub" id="b2-sub"></div>
+          <div class="tag" id="b2-tag"></div>
+        </div>
+      </div>
+
+      <div class="fsub">
+        <span class="lbl">2 × layers × kv_heads × head_dim × T × batch × bytes</span>
+        <div id="fsub-body"></div>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--ink-2);margin:0" id="dbl"></p>
+
+      <div>
+        <div id="chart"></div>
+        <p style="font-size:.83rem;color:var(--muted);margin:12px 0 0;text-align:center" id="crossings"></p>
+      </div>
+    </div>
+
+    <figcaption>
+      <p style="margin-bottom:.6rem"><strong>The yardstick.</strong> 48 layers, 8 KV heads, head_dim 128,
+      bf16, T = 32,768, one user → <strong>6.44 GB</strong>. Eight users → <strong>51.54 GB</strong>.
+      An 80 GB accelerator holds twelve such caches and nothing else — the model weights still need
+      somewhere to live. This is why serving long context is expensive in a way that training it is not.</p>
+      <p style="margin-bottom:.6rem"><strong>The two bills behave differently, and that is the whole
+      point.</strong> Double the context and compute goes up <em>four times</em> while the cache goes up
+      only <em>twice</em> — so on paper compute looks like the worse problem. It is not. Compute is
+      arithmetic: it parallelises across devices, and you can buy more of it. The cache is <em>state</em>
+      that must stay resident for the entire generation, it is <strong>per user</strong>, and nothing in
+      it can be shared between concurrent requests. Linear growth you cannot share beats quadratic
+      growth you can.</p>
+      <p style="margin-bottom:0"><strong>Sharing KV heads moves the line down, not flat.</strong> From the
+      yardstick's 8 heads, GQA-2 reads 1.61 GB and MQA reads 805 MB — real cuts, 4× and 8×. But the
+      chart is log–log, where a line growing linearly in T is straight: all four configurations come out
+      as <em>parallel</em> straight climbs, separated by a constant factor and nothing else. MHA runs out
+      of an 80 GB card at about 50K tokens and MQA at about 3.2M, and both <em>do</em> run out. That
+      distinction — lowering the slope versus flattening it — is what separates
+      GQA and MLA from linear attention and sliding windows further down the timeline.</p>
+    </figcaption>
+  </figure>
+</section>
+
 <footer>
   <p>ERA V5 · Session 8 — attention mechanisms in chronological order. Built for the S8 assignment;
   dates are traced to primary sources in the repository's chronology research.</p>
-  <p style="margin-bottom:0"><em>Act 0 of 5. The timeline, the twenty dossiers, and the sources table
-  follow.</em></p>
+  <p style="margin-bottom:0"><em>Acts 0–1 of 5. The timeline, the twenty dossiers, and the sources
+  table follow.</em></p>
 </footer>
 
 </div>
@@ -130,5 +234,6 @@
 })();
 </script>
 <script src="assets/act0-pipeline.js"></script>
+<script src="assets/act1-bills.js"></script>
 </body>
 </html>
