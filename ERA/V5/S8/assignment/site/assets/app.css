@@ -363,7 +363,14 @@ footer a{color:var(--mem)}
 .tl-note p + p{margin-top:7px}
 
 /* ---------- the dossier ---------- */
-.dossier{margin-top:22px;border:1px solid var(--rule);border-radius:12px;
+/* Act 3 lives inside Act 2's figure — a dossier opens in place under the axis rather than
+   as a section of its own. It still gets an act header, so the page's structure is legible
+   and Act 3 is not the one act that never announces itself. */
+.act3h{margin-top:30px;padding-top:22px;border-top:1px dashed var(--rule)}
+.act3h .eyebrow{margin:0 0 6px}
+.act3h h3{font-size:1.15rem;margin:0 0 6px;letter-spacing:-.01em}
+.act3h p{margin:0;font-size:.9rem;color:var(--ink-2);max-width:64ch}
+.dossier{margin-top:16px;border:1px solid var(--rule);border-radius:12px;
   background:var(--surface);padding:0;overflow:hidden}
 .dossier[hidden]{display:none}
 .dsh{padding:17px 20px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
