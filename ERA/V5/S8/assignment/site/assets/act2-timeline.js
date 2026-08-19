@@ -354,7 +354,16 @@
       document.getElementById('act2').scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
     clear: function () { st.hi = null; renderTimeline(); },
-    isHighlighted: function () { return !!st.hi; }
+    isHighlighted: function () { return !!st.hi; },
+    /* Act 5's mechanism links call this. A dossier opens in place under the axis,
+       so "go to RoPE" means select it and scroll the axis into view — there is no
+       #rope element to jump to. */
+    open: function (id) {
+      st.sel = id;
+      renderTimeline();
+      renderDossier();
+      document.getElementById('act2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

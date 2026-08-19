@@ -310,11 +310,63 @@
   <div id="insights"></div>
 </section>
 
+<!-- ============================================================
+     ACT 5 — sources
+     ============================================================ -->
+<section id="act5">
+  <p class="eyebrow"><span class="badge">act 5 · sources</span></p>
+  <h2>Every date, and how it was checked</h2>
+  <p class="measure">The hard part of this assignment was never the code — it was the dates. What
+  follows is the working, row by row: the primary source, the exact record the date came from, and
+  the caveats. Where a first draft was wrong, the row says so rather than quietly showing the
+  corrected value.</p>
+
+  <div class="statstrip" id="srcstats"></div>
+
+  <div class="tierkey">
+    <div><span class="badge tA">tier A</span> Read straight off the source's own submission
+      record. Nothing to dispute.</div>
+    <div><span class="badge tB">tier B</span> The link from mechanism to paper came out of a
+      <em>different</em> paper's bibliography, then the paper was re-checked against arXiv directly.</div>
+    <div><span class="badge tC">tier C</span> No paper exists; the date comes from an archive.
+      The weakest class here — and still pinned to a specific minute.</div>
+  </div>
+
+  <div class="srcwrap" id="sources"></div>
+
+  <div class="repro">
+    <h4>Check it yourself</h4>
+    <p>Every arXiv date above is the <strong>v1 submission timestamp</strong>, never the latest
+    revision — several of these papers are on v5 or v7, and using the revision date would silently
+    reorder the timeline. One request returns all nineteen records; <code>published</code> is v1,
+    <code>updated</code> is the newest revision.</p>
+    <pre>curl -s "https://export.arxiv.org/api/query?max_results=40&amp;id_list=\
+1611.02344,1706.03762,1904.10509,1911.02150,2004.05150,2006.16236,2102.11174,\
+2104.09864,2108.12409,2205.14135,2305.13245,2309.00071,2309.17453,2405.04434,\
+2406.06484,2412.06464,2502.11089,2512.12167,2606.07404" \
+  | grep -E "&lt;(id|published)&gt;"</pre>
+  </div>
+
+  <figcaption style="max-width:78ch;border-top:1px solid var(--rule);padding-top:14px;margin-top:26px;
+    font-size:.87rem;color:var(--muted)">
+    <p style="margin-bottom:.6rem"><strong>What this table cost.</strong> Two dates in this set were
+    wrong on the first pass, and both were wrong in the same way — they looked right. Learned absolute
+    positions is normally credited to ConvS2S (May 2017) because that is the paper
+    <em>Attention Is All You Need</em> cites; but AIAYN cites the <em>later</em> of two papers by the
+    same group, and the earlier one already states the mechanism outright. That moved the row six
+    months and changed which mechanism opens the timeline.</p>
+    <p style="margin-bottom:0"><strong>The heuristic that keeps failing.</strong> "The paper the
+    famous paper cites" is a good starting point and not a proof. Three separate rows here turned out
+    to have precursors named in the credited paper's own related-work section. The general lesson, and
+    the reason for the tier column: an agent's confident recall of a date is not evidence, and neither
+    is a citation — only the source's own record is.</p>
+  </figcaption>
+</section>
+
 <footer>
   <p>ERA V5 · Session 8 — attention mechanisms in chronological order. Built for the S8 assignment;
   dates are traced to primary sources in the repository's chronology research.</p>
-  <p style="margin-bottom:0"><em>Acts 0–4 are above; Act 3 opens inside the timeline. The sources
-  table (Act 5) follows.</em></p>
+  <p style="margin-bottom:0"><em>Acts 0–5. Act 3 opens inside the timeline — click any marker.</em></p>
 </footer>
 
 </div>
@@ -340,5 +392,6 @@
 <script src="data/mechanisms.js"></script>
 <script src="assets/act2-timeline.js"></script>
 <script src="assets/act4-insights.js"></script>
+<script src="assets/act5-sources.js"></script>
 </body>
 </html>

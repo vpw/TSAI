@@ -22,6 +22,19 @@ cosmetic; it produced one corrected date, one new row, and three sourced caveats
 The last approximate date (row 12, NTK-Aware) was pinned to 2023-06-29 on 2026-08-18 via Wayback,
 after the user supplied the original Reddit permalink.
 
+**Act 5 re-check, 2026-08-19.** Before generating the sources table, all 19 arXiv IDs were re-queried
+in one batch against `export.arxiv.org/api/query` and compared field-by-field against the signed-off
+data. **All 21 mechanism dates confirmed exactly**; the exact v1 timestamps are now stored per row
+(`v1` field in `site/data/mechanisms.js`) rather than being re-derived, so the table asserts a
+checkable record instead of a claim. One error surfaced:
+
+- **Context marker CORRECTED — 2026-06-08 → 2026-06-05** (LightningLM / "V4", 2606.07404). Recorded
+  three days late, from the listing page rather than the submission timestamp. Not one of the graded
+  mechanisms and it does not reorder anything, but it was wrong on the page and is now right.
+
+Worth noting *how* it survived the audit: it is the one row nobody scrutinised, precisely because it
+is not a mechanism. The audit's attention went where the grading was.
+
 Method: every date below was pulled from arXiv's own submission metadata (v1 timestamp) via the
 `arxiv-library` skill — not from memory. Papers are downloaded into the local library at
 `/u/references/papers/arxiv/` (tagged `era-v5-s8`) so every row is a checkable artifact. Three rows
@@ -65,7 +78,7 @@ answer" is the entire point of this research pass.
 | 17 | Gated DeltaNet | 2412.06464 | 2024-12-09 | Gated Delta Networks: Improving Mamba2 with Delta Rule (Yang, Kautz, Hatamizadeh) | A "Gated DeltaNet-2" follow-up exists (2605.22791, 2026-05-21, Hatamizadeh/Choi/Kautz) — not the one meant by the assignment's minimum-coverage list, noted here so it isn't confused with the original. |
 | 18 | DeepSeek's compressed + sparse attention | 2502.11089 | 2025-02-16 | Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention (Yuan, Gao, Dai, ... Ruan, Liang [DeepSeek-AI]) | This is the real DeepSeek paper behind the compression + top-k block selection + sliding-window branch design described in the lesson (§12) — authors include Chong Ruan and Wenfeng Liang (DeepSeek-AI leadership), confirming DeepSeek-AI authorship. |
 | 19 | DroPE | 2512.12167 | 2025-12-13 | Extending the Context of Pretrained LLMs by Dropping Their Positional Embeddings (Gelberg, Eguchi, Akiba, Cetin — Sakana AI) | **Correction (2026-08-18): my first pass on this row was wrong.** I initially concluded DroPE had no findable primary source and was internal to the ERA course. That was an error from stopping the search too early — I should have checked `../../resources/lightninglm.md` (the course's own documentation of "LightningLM," the model `resources/s8-session.md` calls "V4" — see next row) before concluding "not found." That doc names the real paper: `arxiv 2606.07404`, "Reversible Foundations" (Rohan Shravan). I downloaded that paper and RAG-searched it directly for "DroPE," which surfaced §5.3 ("Positional recalibration: DroPE, applied before annealing") crediting the procedure to "Gelberg et al., 2025." I then cross-checked the exact bibliography entry two ways — a RAG hybrid-search hit *and* an independent raw `pdftotext` dump of pages 55-57 (bypassing RAG chunking entirely, since this is the row that most needs certainty) — both returned the identical entry: "Y. Gelberg, R. Eguchi, T. Akiba, and E. Cetin. Extending the context of pretrained LLMs by dropping their positional embeddings, 2025. URL https://arxiv.org/abs/2512.12167. Code: https://github.com/SakanaAI/DroPE." Downloaded 2512.12167 and confirmed title/authors/date directly against arXiv's own metadata (not just the citing paper's text) — matches. The lesson's "defined at 256K ≠ competent at 256K" framing is about the *reported LightningLM run* (V4 applied DroPE at 8K→256K), which is a separate, narrower evidence-boundary point from "does DroPE itself have a primary source" — it does. |
-| 20 | *(context, not a separate mechanism)* "V4" / LightningLM | 2606.07404 | 2026-06-08 | Reversible Foundations: Training a 120B Sparse MoE through State-Preserving Scaling (Rohan Shravan, The School of AI) | Not one of the assignment's minimum-coverage mechanisms — listed here because `resources/s8-session.md`'s "V4" is this real, published model (the ERA course's own capstone from its prior cohort — transcript line 464's "the model we trained in V4" confirms this), not a hypothetical. Its `DDDGDDDG` motif, KV-cache numbers, Memory Stream, and DroPE application are all grounded in this paper, not invented for the lesson. Cite it directly if the app reproduces any V4-specific number (the 8K→256K/32× claim, the injection-scale figures, etc.) rather than treating them as course-internal folklore. |
+| 20 | *(context, not a separate mechanism)* "V4" / LightningLM | 2606.07404 | 2026-06-05 | Reversible Foundations: Training a 120B Sparse MoE through State-Preserving Scaling (Rohan Shravan, The School of AI) | Not one of the assignment's minimum-coverage mechanisms — listed here because `resources/s8-session.md`'s "V4" is this real, published model (the ERA course's own capstone from its prior cohort — transcript line 464's "the model we trained in V4" confirms this), not a hypothetical. Its `DDDGDDDG` motif, KV-cache numbers, Memory Stream, and DroPE application are all grounded in this paper, not invented for the lesson. Cite it directly if the app reproduces any V4-specific number (the 8K→256K/32× claim, the injection-scale figures, etc.) rather than treating them as course-internal folklore. |
 
 ## Bonus mechanism (not covered in class) — FlashAttention, chosen
 

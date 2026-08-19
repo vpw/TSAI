@@ -27,6 +27,10 @@
      one      one-line summary, used on the timeline hover
      idea     what it actually does
      buys / costs / pick     the honest-tradeoffs block
+     v1       exact arXiv v1 submission timestamp, straight from the API
+              (absent on the two rows that have no paper)
+     tier     evidence class, carried over from the signed-off audit:
+              A direct metadata · B citation chain · C archival
      verified how this date was checked  (shown on EVERY dossier)
      note     optional lineage / priority caveat
    =========================================================== */
@@ -42,6 +46,8 @@ window.MECHANISMS = [
  buys:'Dead simple, and fully learned — no assumption is imposed about what position <em>means</em>, the data decides.',
  costs:'The table has a fixed number of rows. Position 4,097 in a 4,096-trained model does not have an embedding — it does not exist. There is no principled way to extrapolate a learned lookup, and it spends parameters on positions rather than on content.',
  pick:'Fixed, known, short context. This is exactly the wall Session 7 ran into, and the reason everything below exists.',
+ v1:'2016-11-07T23:46:45Z',
+ tier:'B',
  verified:'arXiv v1 metadata (2016-11-07T23:46:45Z). <strong>This date was corrected during the audit.</strong> The mechanism is usually credited to ConvS2S (2017-05-08) because that is what <em>Attention Is All You Need</em> cites — but AIAYN cites the later of two papers by the same group. This one states it outright: <em>"we add position embeddings to encode the absolute position of each source word within a sentence"</em>, form <code>e_j = w_j + l_j</code>.',
  note:'Antecedent, stated rather than buried: this paper credits Sukhbaatar et al. 2015 (End-To-End Memory Networks). That paper\'s "position encoding" is <em>fixed</em>, but its separate "Temporal Encoding" matrix is explicitly <em>"learned during training"</em> — a learned position embedding, except it indexes <strong>memory slots, not token positions</strong>. Different granularity, so the marker sits here.'},
 
@@ -54,6 +60,8 @@ window.MECHANISMS = [
  buys:'Exact, content-based routing with a single hop between any two tokens — no distance penalty, no information bottleneck, and fully parallel at training time.',
  costs:'Both bills at once. <code>T²</code> score comparisons, and a KV cache that grows linearly in <code>T</code> for every concurrent user.',
  pick:'Always the starting point, and still the quality bar every mechanism below is measured against.',
+ v1:'2017-06-12T17:57:34Z',
+ tier:'A',
  verified:'arXiv v1 metadata. The baseline the whole app is built around; nothing in dispute.'},
 
 {n:3, id:'sinusoidal', date:'2017-06-12', lane:'pos', src:'1706.03762',
@@ -65,6 +73,8 @@ window.MECHANISMS = [
  buys:'Zero parameters, and — the important part — the function is <em>defined at every integer</em>, so nothing structurally breaks past training length. Offsets are also expressible as a linear transform of the encoding, which puts relative position within reach.',
  costs:'Defined is not competent. The model still never saw those positions during training, and quality degrades when you push past what it trained on. It also acts on the input embedding rather than on the query–key interaction itself.',
  pick:'A zero-parameter baseline. Mostly of historical interest now — RoPE does the relative-position job properly.',
+ v1:'2017-06-12T17:57:34Z',
+ tier:'A',
  verified:'Same paper and same submission as #2 — deliberately listed as its own entry, since the app treats them as two mechanisms that happen to share an origin.'},
 
 {n:4, id:'sparse', date:'2019-04-23', lane:'cmp', src:'1904.10509',
@@ -77,6 +87,8 @@ window.MECHANISMS = [
  buys:'Cuts the <code>T²</code> term toward roughly <code>T√T</code> while keeping softmax\'s sharp, selective retrieval. Sparsity is also empirically justified: real attention maps are already close to sparse.',
  costs:'A fixed pattern is a <em>guess</em> about where information lives, made before seeing the data. And genuine top-k has a chicken-and-egg problem: to know which scores are highest you must compute all the scores, so naive top-k saves memory traffic but not the scoring cost. You need a cheap proposal step to actually win — which #19 supplies, six years later.',
  pick:'When context is long and the access pattern really is local or structured. As a bolt-on at inference it disappoints; trained in, it works.',
+ v1:'2019-04-23T19:29:47Z',
+ tier:'A',
  verified:'arXiv v1 metadata.',
  note:'Priority, from the paper\'s own §2 Related Work — it names precursors rather than claiming to be first: <em>"(Parmar et al., 2018) uses blocks of local attention to apply Transformers to images"</em> (Image Transformer, 2018-02-15, ~14 months earlier), plus Transformer-XL for state reuse. Its own claim is breadth, not primacy: <em>"Our work is simpler than many of the techniques above and can be applied equally across images, text, and audio."</em> Credited here for <strong>factorized sparse attention at scale</strong>.'},
 
@@ -89,6 +101,8 @@ window.MECHANISMS = [
  buys:'Enormous cache reduction — at the lesson\'s yardstick, 6.44 GB collapses to <strong>805 MB</strong>, an 8× cut. Decoding is memory-bandwidth-bound, so this translates directly into faster generation.',
  costs:'Quality drops. Heads lose their independent views of the sequence — they can still ask different questions, but they all read the same answer sheet. Training instability was also reported.',
  pick:'When decode memory dominates everything and you can absorb the quality hit. Mostly superseded by GQA, which found the middle.',
+ v1:'2019-11-06T00:19:05Z',
+ tier:'A',
  verified:'arXiv v1 metadata. Single-author Google paper — and the timeline\'s best surprise, landing ~3.5 years before GQA.'},
 
 {n:6, id:'swa', date:'2020-04-10', lane:'cmp', src:'2004.05150',
@@ -100,6 +114,8 @@ window.MECHANISMS = [
  buys:'Compute becomes linear in <code>T</code>, and — the underrated part — the KV cache becomes <strong>bounded</strong> at <code>w</code> rather than growing. One of very few entries that flattens the memory bill rather than just lowering its slope.',
  costs:'Anything outside the window is reachable only indirectly, through layers, which is lossy. Exact long-range lookup — "what was the name in paragraph one" — is gone.',
  pick:'When local structure dominates, or paired with a global path for the few tokens that need reach.',
+ v1:'2020-04-10T17:54:09Z',
+ tier:'A',
  verified:'arXiv v1 metadata.',
  note:'Longformer does not claim the pattern. Its own words: <em>"The model with the most similar attention pattern to ours is Sparse Transformer (Child et al., 2019), which uses a form of dilated sliding window"</em>. Its stated novelty is a more flexible CUDA kernel plus <em>"task motivated <strong>global attention</strong> patterns… essential for good performance in the transfer learning setting"</em>. So the honest credit is sliding window <strong>+ global tokens</strong> as a named NLP mechanism. Mistral 7B (2023-10-10) is the famous deployment, not the origin.'},
 
@@ -113,6 +129,8 @@ window.MECHANISMS = [
  buys:'<code>O(T)</code> compute, and a <strong>constant-size</strong> state instead of a growing cache. The memory bill stops growing entirely — not a lower slope, a flat line. Generation becomes RNN-like: one fixed state, updated per token.',
  costs:'Softmax was doing real work. Its sharp, near-winner-take-all selection is what makes exact retrieval possible; a smooth kernel blurs it. Worse, a state that only <em>accumulates</em> writes new information on top of old and smears the two, so recall degrades as the sequence grows.',
  pick:'When throughput and memory dominate and perfect recall does not — and in practice, hybridised with real attention layers rather than used alone.',
+ v1:'2020-06-29T17:55:38Z',
+ tier:'A',
  verified:'arXiv v1 metadata.',
  note:'Priority — the audit\'s closest call. Shen et al., <em>"Efficient Attention: Attention with Linear Complexities"</em> (arXiv 1812.01243, v1 <strong>2018-12-04</strong>) already reassociates the product for linear complexity, <strong>19 months earlier</strong>; Katharopoulos et al. cite it and call it <em>"concurrent"</em>, which holds for venues but not for arXiv v1 dates. The marker stays here because the lesson\'s argument needs the <em>causal</em> fixed-state recurrence — and Efficient Attention is a vision paper that never builds it. A full-text scan of that PDF finds exactly <strong>one</strong> occurrence of "causal"/"autoregressive", inside a bibliography entry.'},
 
@@ -126,6 +144,8 @@ window.MECHANISMS = [
  buys:'Turns a fixed-size state from an accumulator into usable memory — the difference between a state that degrades with every write and one that can be maintained.',
  costs:'Read-then-write is inherently sequential, which is what a GPU hates — so it stayed impractical to train at scale for three years, until #17. And capacity is still fixed: correction manages the budget well, it does not enlarge it.',
  pick:'Any time you run a fixed-size recurrent state and need it to survive long sequences. In modern practice you would use the gated version (#18).',
+ v1:'2021-02-22T16:51:38Z',
+ tier:'A',
  verified:'arXiv v1 metadata.',
  note:'<strong>Disputed priority, kept visible on the timeline as an arc.</strong> This is the actual origin of the delta-rule correction — it predates the paper everyone calls "the DeltaNet paper" (#17) by over three years, and even predates RoPE.'},
 
@@ -138,6 +158,8 @@ window.MECHANISMS = [
  buys:'Relative position for free, inside the score itself. No table, no extra parameters, no added input vector, and mathematically defined at any position. It is the default in essentially every modern open model.',
  costs:'Rotation frequencies are fixed at training time. Push past the trained length and the low-frequency dimensions produce angles the model has never seen — defined everywhere, competent only where it trained. That single limitation generates #13, #13b, #14 and arguably #20.',
  pick:'Default for any new decoder. The question is not whether to use RoPE, it is what you do about extension.',
+ v1:'2021-04-20T09:54:06Z',
+ tier:'A',
  verified:'arXiv v1 metadata.'},
 
 {n:10, id:'alibi', date:'2021-08-27', lane:'pos', src:'2108.12409',
@@ -150,6 +172,8 @@ window.MECHANISMS = [
  buys:'Startlingly simple: no embeddings, no parameters, a few lines of code. And it extrapolates — train at 1K, run at 2K+, with graceful rather than catastrophic degradation, which was the paper\'s whole point.',
  costs:'It bakes in a <strong>recency prior as a structural fact</strong>. A distant token is penalised for being distant regardless of relevance, and the model cannot learn to override it. Fine for perplexity, bad for long-range retrieval — which is precisely the workload long context is supposed to serve.',
  pick:'When cheap length extrapolation matters more than distant recall.',
+ v1:'2021-08-27T17:35:06Z',
+ tier:'A',
  verified:'arXiv v1 metadata.'},
 
 {n:11, id:'flash', date:'2022-05-27', lane:'sys', src:'2205.14135', bonus:true,
@@ -162,6 +186,8 @@ window.MECHANISMS = [
  buys:'Exact attention, bit-for-bit. <strong>Zero accuracy cost</strong> — the only entry here that gives something up for nothing. Large wall-clock speedup, and memory drops from <code>O(T²)</code> to <code>O(T)</code>. A drop-in kernel swap; the architecture does not change.',
  costs:'It does not reduce FLOPs — the compute bill\'s arithmetic is untouched, only the memory traffic around it. It does nothing for the inference KV cache, so the memory bill is exactly as bad as before. And it is hardware-specific: tile sizes are tuned to particular SRAM capacities, which is why there is a FlashAttention-2 and -3 rather than one portable idea.',
  pick:'Essentially always, on supported hardware. The interesting question is not when you would choose it but why you would ever not.',
+ v1:'2022-05-27T17:53:09Z',
+ tier:'A',
  verified:'arXiv v1 metadata, <strong>plus</strong> an independent <code>pdftotext</code> read of the PDF title page — checked twice because this is the bonus row and carries extra scrutiny.',
  note:'<strong>Bonus mechanism, not covered in class.</strong> Chosen because it answers a third cost the lesson never names — memory <em>bandwidth</em> — rather than either of the two bills, and because it lands in the 2021–2023 gap where the minimum-coverage list looks empty.'},
 
@@ -175,6 +201,8 @@ window.MECHANISMS = [
  buys:'Most of MQA\'s savings at most of MHA\'s quality: at the yardstick, dropping 8 KV heads to 2 takes 6.44 GB to <strong>1.61 GB</strong>. It can also be <em>uptrained</em> from an existing MHA checkpoint for a small fraction of original training compute — you do not start over. That practicality is why it is everywhere.',
  costs:'It lowers the slope of the cache line; it does not flatten it. Double the context and you still double the cache. A constant factor, not a different asymptotic.',
  pick:'The default for production decoders today. If you are shipping a model and have not chosen otherwise, this is the answer.',
+ v1:'2023-05-22T17:16:38Z',
+ tier:'A',
  verified:'arXiv v1 metadata.'},
 
 {n:13, id:'ntk', date:'2023-06-29', lane:'pos', src:'reddit',
@@ -187,6 +215,7 @@ window.MECHANISMS = [
  buys:'Real context extension with <strong>no fine-tuning at all</strong> and a few lines of code. It went from a forum post to production practice in weeks, which tells you how badly the problem needed solving.',
  costs:'A heuristic, not a derivation — quality decays as you push the scale factor, with no principled stopping point. It arrived with no paper, no ablations and no independent evaluation.',
  pick:'When you need more context out of a model you already have, today, without a training run.',
+ tier:'C',
  verified:'<strong>No paper exists — the weakest evidence class in the set, and still pinned to the minute.</strong> reddit.com is bot-walled to both <code>curl</code> and a real browser, so the date came from the Wayback Machine two independent ways: a snapshot carries Reddit\'s own <code>created-timestamp="2023-06-29T08:21:29.413+0000"</code> with <code>author="bloc97"</code>, and the CDX index\'s earliest capture of the URL is 08:21:50 UTC the same day — an archive cannot predate what it archived.',
  note:'A third community method also exists — <strong>"Dynamic NTK"</strong> by emozilla, a different author, which YaRN cites as the other improvement on NTK-Aware. It is deliberately not given its own entry: it is outside the assignment\'s coverage list, and its date could not be pinned to the standard every other entry here meets.'},
 
@@ -200,6 +229,7 @@ window.MECHANISMS = [
  buys:'Better quality than both position interpolation and plain NTK-Aware, with or without fine-tuning — and it is what YaRN is built on, so it sits directly on the main line of descent.',
  costs:'Introduces two tuning parameters that must be set per model family, and like everything in this group it remains a heuristic correction to a frequency scheme rather than a model trained long.',
  pick:'Over plain NTK-Aware, essentially always — it is strictly the better-studied of the two.',
+ tier:'B',
  verified:'<strong>Not a paper and not a Reddit post — a GitHub pull request</strong>, which makes this the best-evidenced non-paper row here. Dated from GitHub\'s own API, two independent timestamps: the PR was opened by <code>bloc97</code> at <code>2023-07-07T20:40:33Z</code> and its first commit is authored <code>2023-07-07T20:24:12Z</code>, 16 minutes earlier the same day. Merged 2023-07-09. Platform record, not archival inference. The repo was later renamed, so YaRN\'s cited URL now resolves to <code>jquesnelle/yarn/pull/1</code>.',
  note:'Split out from #13 during the date audit. <strong>YaRN builds on this, not on plain NTK-Aware</strong> — 2309.00071 §3.2 says <em>"a variant of the resulting method was released under the name \'NTK-by-parts\' interpolation"</em>. The lineage arrow points here.'},
 
@@ -213,6 +243,8 @@ window.MECHANISMS = [
  buys:'The best quality-per-effort in the extension family. It works with no fine-tuning and better with a small one — the paper reports needing roughly 10× less data and fewer steps than earlier extension methods to reach a given quality.',
  costs:'Still extension of a model pretrained short. The weights never saw a genuine 100K-token dependency during training, so you are widening the aperture on a model never taught to use it. Exactly the "two roads" tension: extend a short-trained model, or train long natively.',
  pick:'The strongest option when you must extend an existing checkpoint rather than train a new one.',
+ v1:'2023-08-31T18:18:07Z',
+ tier:'A',
  verified:'arXiv v1 metadata. Its own bibliography is also what established that #13 and #13b have no papers, and what separated the two.'},
 
 {n:15, id:'sinks', date:'2023-09-29', lane:'mem', src:'2309.17453',
@@ -225,6 +257,8 @@ window.MECHANISMS = [
  buys:'Pin four or so sink tokens plus a rolling window and you get <strong>effectively unbounded streaming on a bounded cache</strong>, with no fine-tuning and no architecture change. The failure it prevents is dramatic.',
  costs:'It enables streaming, not long-context <em>recall</em>. Evicted content is genuinely gone; the model stays fluent forever but cannot answer questions about what scrolled off. Easy to mistake one for the other.',
  pick:'Long-running conversational or streaming deployments where the recent window is what matters.',
+ v1:'2023-09-29T17:59:56Z',
+ tier:'A',
  verified:'arXiv v1 metadata.'},
 
 {n:16, id:'mla', date:'2024-05-07', lane:'mem', src:'2405.04434',
@@ -237,6 +271,8 @@ window.MECHANISMS = [
  buys:'A far larger cache reduction than GQA at <em>better</em> reported quality than full multi-head — the surprising part. It attacks the <code>kv_heads × head_dim</code> product directly instead of just the head count.',
  costs:'Considerably more complex, and it does not compose cleanly with RoPE — rotation does not survive the compression, so a decoupled rotary component must be carried alongside the latent. It also has to be designed in from pretraining; you cannot uptrain into it as easily as GQA.',
  pick:'When you control the architecture from scratch and serving cache is the binding constraint.',
+ v1:'2024-05-07T15:56:43Z',
+ tier:'A',
  verified:'arXiv v1 metadata. The mechanism is introduced inside a model paper rather than one of its own — normal for DeepSeek.'},
 
 {n:17, id:'deltanet', date:'2024-06-10', lane:'cmp', src:'2406.06484',
@@ -249,6 +285,8 @@ window.MECHANISMS = [
  buys:'Makes the 2021 idea actually trainable on modern hardware. This is what moved the delta rule from an interesting result to a viable architecture — and why "DeltaNet" is dated 2024 in most people\'s heads.',
  costs:'A chunked scan is still more machinery than a plain matmul, and the state capacity limit is untouched — you have made the update efficient, not the memory bigger.',
  pick:'Any fixed-state architecture you intend to actually train.',
+ v1:'2024-06-10T17:24:42Z',
+ tier:'A',
  verified:'arXiv v1 metadata.',
  note:'Commonly cited as the origin of the delta rule. It is not — see #8. The contribution here is the training algorithm, and the three-year gap between the two is one of the timeline\'s clearest findings.'},
 
@@ -262,6 +300,8 @@ window.MECHANISMS = [
  buys:'Meaningfully better recall and in-context retrieval than either Mamba2-style gating or plain DeltaNet alone, at the same constant memory.',
  costs:'Still a fixed-size state, so it still has a capacity ceiling real attention does not. In practice it is deployed <em>hybridised</em> — interleaved with genuine attention layers — which is an honest admission that the fixed state cannot do everything.',
  pick:'The current best-in-class fixed-state layer, used as the cheap layers in a hybrid depth schedule.',
+ v1:'2024-12-09T13:09:04Z',
+ tier:'A',
  verified:'arXiv v1 metadata. A "Gated DeltaNet-2" follow-up exists (2605.22791, 2026-05-21) — <strong>not</strong> the one the brief means; noted so the two are not swapped.'},
 
 {n:19, id:'nsa', date:'2025-02-16', lane:'cmp', src:'2502.11089',
@@ -274,6 +314,8 @@ window.MECHANISMS = [
  buys:'Sparsity that is <em>trained in</em> rather than bolted on, so the model learns to use it instead of being degraded by it. Kernels are written to match GPU memory access patterns, so theoretical savings show up as real measured speedups — the thing most sparse-attention papers cannot claim.',
  costs:'Substantially more machinery than anything above it, and selection is block-granular, so it is coarse — you retrieve a neighbourhood, not a token. It must also be present from pretraining; you cannot convert a dense checkpoint into it.',
  pick:'Training a long-context model from scratch where prefill and decode cost both matter.',
+ v1:'2025-02-16T11:53:44Z',
+ tier:'A',
  verified:'arXiv v1 metadata. Author list includes DeepSeek-AI leadership, confirming this is the paper behind the lesson\'s §12 compression + top-k block selection design.'},
 
 {n:20, id:'drope', date:'2025-12-13', lane:'pos', src:'2512.12167',
@@ -286,6 +328,8 @@ window.MECHANISMS = [
  buys:'Sidesteps the entire frequency-heuristic ladder. Reported at 8K → 256K, a 32× extension, on the LightningLM run.',
  costs:'That 32× needs reading carefully: it was applied <em>before</em> annealing, so it describes the range at which the model is <strong>defined</strong>, not the range at which it is demonstrably <strong>competent</strong>. Those are different claims and the lesson is emphatic about not conflating them. It is also very recent, with limited independent replication.',
  pick:'Worth watching rather than defaulting to. The interesting part is the direction of travel: after nine years of increasingly elaborate positional machinery, the newest idea is to delete it.',
+ v1:'2025-12-13T04:23:47Z',
+ tier:'B',
  verified:'arXiv v1 metadata — <strong>but this is the row I got wrong first.</strong> My initial search concluded DroPE had no public source, which was simply stopping too early. Found via LightningLM\'s bibliography, extracted two independent ways (a RAG hit <em>and</em> a raw <code>pdftotext</code> dump of the reference pages, bypassing chunking entirely), then title/authors/date re-confirmed against arXiv directly.'}
 
 ];
@@ -294,13 +338,15 @@ window.MECHANISMS = [
    Included because the app quotes its numbers, and those numbers should be
    traceable to a real published model rather than to course folklore. */
 window.CONTEXT_MARKER = {
-  id:'lightninglm', date:'2026-06-08', src:'2606.07404',
+  id:'lightninglm', date:'2026-06-05', src:'2606.07404',
   url:'https://arxiv.org/abs/2606.07404',
   name:'LightningLM ("V4")',
   paper:'Reversible Foundations: Training a 120B Sparse MoE through State-Preserving Scaling',
   who:'Rohan Shravan, The School of AI',
   one:'The lesson\'s "V4" is a real published model, not a hypothetical.',
-  verified:'arXiv v1 metadata. Every V4-specific number the app quotes — the DDDGDDDG depth schedule, the KV-cache figures, the Memory Stream, the 8K→256K DroPE application — is grounded here.'
+  v1:'2026-06-05T15:48:42Z',
+  tier:'A',
+  verified:'arXiv v1 metadata. <strong>This date was corrected during the Act 5 re-check</strong> — it had been recorded as 2026-06-08, three days late, from the listing page rather than the submission timestamp. Every V4-specific number the app quotes — the DDDGDDDG depth schedule, the KV-cache figures, the Memory Stream, the 8K→256K DroPE application — is grounded here.'
 };
 
 window.LANES = {

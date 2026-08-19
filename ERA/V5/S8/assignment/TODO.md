@@ -129,7 +129,7 @@ live-class transcript.
         signed-off audit artifact by parsing it directly — **zero mismatches**.
   - [x] **Act 2 — the timeline** (2026-08-19). `site/assets/act2-timeline.js`. Five lane bands
         (baseline / position / memory / compute / systems), markers at their **true proportional**
-        position from 2016-11-07 to 2026-06-08, year gridlines, two lineage arcs (delta rule→DeltaNet
+        position from 2016-11-07 to 2026-06-05, year gridlines, two lineage arcs (delta rule→DeltaNet
         "3 years dormant"; NTK-By-Parts→YaRN "YaRN builds on this one"). Circles = papers, diamonds =
         no paper (the Reddit post and the GitHub PR), dashed = the bonus mechanism, hollow = the
         context model. Deep links (`#rope`) open a dossier.
@@ -161,6 +161,31 @@ live-class transcript.
         shape is that the idea arrives years before the cost that makes anyone adopt it (MQA waits
         1,293 days for serving cost to bite; the delta rule waits 1,204 days for a training algorithm),
         and a list flattens both waits to zero.
+  - [x] **Act 3 labelled in place** (2026-08-19). The dossiers were built and working, but Act 3 was
+        the one act with no header — it lives inside Act 2's figure, since a dossier opens under the
+        axis rather than as its own section. Added the act header and stated the template contract
+        out loud (same six blocks every time; **costs** and **when you would pick it** structural,
+        not optional). Found by the user reading the page rather than the code.
+  - [x] **Act 5 — the sources table** (2026-08-19). `site/assets/act5-sources.js` +
+        `tools/gen-readme-table.js`. 22 rows generated from `data/mechanisms.js`: #, date, mechanism,
+        lane, primary source, **evidence tier**, and the full "how this date was checked" prose as a
+        detail row under each. The stat strip is computed too, so the table is the page auditing
+        itself. Mechanism names link into Act 3 via a new `window.__timeline.open(id)` hook rather
+        than a dead `#anchor`.
+        **A real re-verification, not decoration:** all 19 arXiv IDs were re-queried in one batch
+        against the API and compared field-by-field against the signed-off data. All 21 mechanism
+        dates confirmed exactly, and the exact **v1 timestamps are now stored per row** (`v1` field)
+        so the table asserts a checkable record instead of a claim. The `tier` field was likewise
+        carried into the data rather than re-typed — tiers render A 18 / B 3 / C 1, matching the
+        signed-off audit exactly.
+        **One error surfaced: the context marker was three days late** (LightningLM 2026-06-08 →
+        **2026-06-05**), taken from the listing page rather than the submission timestamp. Fixed in
+        the data, the research record and TODO; the signed-off audit artifact carries a post-sign-off
+        note instead of a silent edit. Worth naming *why* it survived a row-by-row audit: it is the
+        one row that is not a graded mechanism, so it is the row nobody scrutinised.
+        The `curl` reproduction command printed on the page was run verbatim and returns 19 records.
+        Two layout bugs caught by screenshot rather than assertion: the tier key collapsed into
+        narrow columns as flex items (now a grid), and the "18 / 3 / 1" stat wrapped mid-figure.
   - [ ] Act 5 — the sources table, generated from `data/mechanisms.js` (and the README's table from
         the same place).
 - [x] **Date audit round 1 applied** (2026-08-19). The user flagged rows and asked for two specific
