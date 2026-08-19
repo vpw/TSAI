@@ -1,5 +1,48 @@
 # S8 TODO — Modern Attention Variants
 
+
+## ▶ NEXT SESSION — start here (all six acts are built; nothing left but shipping)
+
+**State as of 2026-08-19:** Acts 0–5 are complete, verified and committed (`573dda1`). The app is
+`site/index.html`, fully static, no build step — open it with `file://` and it works. All 21
+mechanism dates re-confirmed against arXiv v1 records; data lives only in `site/data/mechanisms.js`.
+
+Three things remain, in this order. **Deploy first** — the live URL goes into the README, so
+writing the README first means writing it twice.
+
+- [ ] **1. Deploy `site/` and check it in incognito.** Any static host works (no build, no
+      dependencies). Options: Netlify or Vercel (needs the user to authenticate first — no CLI
+      credentials on this machine), or `npx -y lavish-axi share site/index.html` for an ht-ml.app
+      link, which needs no login. The assignment's submission form explicitly requires the link to
+      open in an incognito window, so **verify that before submitting**, not after.
+
+- [ ] **2. Write `README.md`** (does not exist yet). Follow S7's shape — title, the short answer up
+      front, a link to the live app near the top, numbered sections. Must contain:
+      - the live link + the GitHub repo link (both required for the 1000-pt submission)
+      - what the app is and how to run it locally (`open site/index.html` — say that it needs no
+        server, since a grader will try it)
+      - the six acts in one line each
+      - **the chronology sources section** — add these two marker lines where the table belongs:
+        `<!-- CHRONOLOGY-TABLE:START -->` / `<!-- CHRONOLOGY-TABLE:END -->`
+        then run `node tools/gen-readme-table.js --write` to fill in all 22 rows from the data file.
+        Never hand-edit that table; rerun the generator.
+      - **the method, because that is what is actually graded**: every date is an arXiv *v1*
+        submission timestamp (never the latest revision — several papers are on v5/v7); the two
+        non-paper rows and how they were dated (Wayback CDX for NTK-Aware, GitHub API for
+        NTK-By-Parts); the evidence tiers A 18 / B 3 / C 1; and the three corrected dates with the
+        lesson that produced them — ***"the paper the famous paper cites" is a good heuristic and
+        not a proof.*** Three rows turned out to have precursors named in the credited paper's own
+        related-work section.
+
+- [ ] **3. Push, then submit.** Subtree split per the convention at the bottom of this file. Hand the
+      push command to the user — the PAT prompt needs them. Then the assignment form:
+      **Q1** live link + repo link · **Q2** the timeline-insight writeup (Act 4's headline answer is
+      already written: *ordering tells you the sequence, spacing tells you the pressure* — the idea
+      arrives years before the pressure that makes anyone adopt it; MQA waits 1,293 days, the delta
+      rule 1,204) · **Q3** optional public share, 250 pts.
+
+Resubmission is allowed until **Sat Aug 22, 2026**, so an initial pass can be extended later.
+
 Build a chronologically-ordered, visually interactive web app explaining every attention
 mechanism from the session, with honest pros/cons and dated primary sources.
 
