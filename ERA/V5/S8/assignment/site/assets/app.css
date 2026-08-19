@@ -395,3 +395,39 @@ footer a{color:var(--mem)}
   border-top:1px solid var(--rule);background:var(--surface-2);flex-wrap:wrap}
 .dsnav .btn{font-size:.8rem;padding:.42em .8em}
 .dshint{text-align:center;color:var(--muted);font-size:.88rem;padding:26px 20px;font-style:italic}
+
+/* ===========================================================
+   Act 4 — what the timeline shows
+   =========================================================== */
+
+#tl .hiband{fill:var(--pos);opacity:.11}
+#tl .hiedge{stroke:var(--pos);stroke-width:1.2;stroke-dasharray:4 3;opacity:.75}
+#tl .hilab{font-family:var(--mono);font-size:10px;fill:var(--pos);font-weight:600;
+  letter-spacing:.05em}
+#tl g.mk.dim{opacity:.22}
+
+.ins{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:start;
+  padding:20px 0;border-bottom:1px solid var(--rule)}
+.ins:last-of-type{border-bottom:0}
+.ins .k{font-family:var(--mono);font-size:1.5rem;color:var(--rule);font-weight:700;
+  line-height:1;padding-top:2px;font-variant-numeric:tabular-nums}
+.ins h3{font-size:1.05rem;margin-bottom:.4rem}
+.ins p{font-size:.93rem;margin-bottom:.7rem}
+.ins p:last-of-type{margin-bottom:.55rem}
+.ins .fact{font-family:var(--mono);font-size:.78rem;color:var(--muted);
+  display:inline-flex;align-items:center;gap:7px;margin-right:14px}
+.ins .fact b{color:var(--ink);font-weight:600}
+.showme{font-family:var(--mono);font-size:.74rem;letter-spacing:.05em;padding:.38em .75em;
+  border-radius:6px;border:1px solid var(--pos);background:transparent;color:var(--pos);
+  cursor:pointer;white-space:nowrap}
+.showme:hover{background:var(--pos);color:var(--surface)}
+:root[data-theme="dark"] .showme:hover,
+:root:not([data-theme="light"]) .showme:hover{color:var(--ground)}
+
+.answer{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--ink);
+  border-radius:0 12px 12px 0;padding:22px 24px;box-shadow:var(--shadow);margin:26px 0 34px}
+.answer .q{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px}
+.answer p{font-size:1.02rem;color:var(--ink-2);margin-bottom:.8rem;max-width:68ch}
+.answer p:last-child{margin-bottom:0}
+.answer strong{color:var(--ink)}

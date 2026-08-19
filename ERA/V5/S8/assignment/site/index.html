@@ -248,7 +248,8 @@
       then waits until <em>June 2024</em> for a training algorithm that suits the hardware. Neither gap
       is visible in a list.</p>
       <p style="margin-bottom:.6rem"><strong>And where the field bunches up.</strong> Five entries land
-      between May and September 2023, four of them about length — two of those nine days apart. That
+      between May and September 2023 — three about length, two about memory, and two of them eight
+      days apart. That
       cluster is what a field looks like when a single constraint suddenly binds for everyone at once.
       Meanwhile the <span style="color:var(--pos)">position lane</span> runs the whole span: eight
       attempts across nine years, ending with a proposal to <em>delete</em> positional embeddings
@@ -263,10 +264,46 @@
   </figure>
 </section>
 
+<!-- ============================================================
+     ACT 4 — What the timeline shows
+     ============================================================ -->
+<section id="act4">
+  <p class="eyebrow"><span class="badge sys">act 4 · the bonus question</span></p>
+  <h2>What the timeline shows that a list would not</h2>
+
+  <div class="answer">
+    <p class="q">The short answer</p>
+    <p>A list of attention mechanisms answers <em>what exists</em>. Put the same mechanisms on a real
+    time axis and they answer something better: <strong>which cost was hurting, and when.</strong>
+    The lanes make that legible — early work attacks compute, the recent wave attacks memory and
+    length — but the ordering alone is not the finding.</p>
+    <p><strong>The finding is in the gaps.</strong> Again and again the idea arrives years before the
+    pressure that makes anyone adopt it. MQA solves the KV-cache problem in 2019 and is ignored until
+    serving costs bite in 2023. The delta rule is published before RoPE and then waits three years for
+    an algorithm that suits a GPU. Nothing was missing technically in either case; what was missing was
+    a reason to care. A list flattens those waits to zero and turns a story about
+    <em>economic pressure</em> into a story about <em>invention</em>.</p>
+    <p>And the density says the rest. Nothing for two years after the Transformer, a long quiet
+    stretch that turns out to be systems work, then five mechanisms inside four months in 2023 — two of
+    them eight days apart, neither with a paper. <strong>Ordering tells you the sequence; spacing tells
+    you the pressure.</strong></p>
+  </div>
+
+  <p class="measure">Each claim below is checkable against the axis above. Every supporting number is
+  computed from the same data the timeline is drawn from, so a claim cannot outlive a correction to
+  its dates.</p>
+
+  <div style="display:flex;justify-content:flex-end;margin-bottom:4px">
+    <button class="btn" id="ins-clear" type="button">clear highlight</button>
+  </div>
+
+  <div id="insights"></div>
+</section>
+
 <footer>
   <p>ERA V5 · Session 8 — attention mechanisms in chronological order. Built for the S8 assignment;
   dates are traced to primary sources in the repository's chronology research.</p>
-  <p style="margin-bottom:0"><em>Acts 0–3 of 5. The bonus-question answer and the sources table follow.</em></p>
+  <p style="margin-bottom:0"><em>Acts 0–4 of 5. The sources table follows.</em></p>
 </footer>
 
 </div>
@@ -291,5 +328,6 @@
 <script src="assets/act1-bills.js"></script>
 <script src="data/mechanisms.js"></script>
 <script src="assets/act2-timeline.js"></script>
+<script src="assets/act4-insights.js"></script>
 </body>
 </html>

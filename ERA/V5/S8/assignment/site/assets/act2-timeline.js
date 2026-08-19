@@ -31,7 +31,7 @@
   var W = 1000, PADL = 146, PADR = 34, TOP = 46, LANE_H = 64, AXIS_H = 46;
   var H = TOP + LANE_ORDER.length * LANE_H + AXIS_H;
 
-  var st = { sel: null, even: false };
+  var st = { sel: null, even: false, hi: null };
 
   var ALL = M.concat([CTX]);
   var t0 = Date.parse(M[0].date);
@@ -96,6 +96,25 @@
     }
     svg.appendChild(el('line', { class: 'axis', x1: PADL - 14, y1: axisY, x2: W - PADR, y2: axisY }));
 
+    /* Act 4's "show me" band — a date range plus the markers that make the point.
+       Drawn before everything else so markers and labels stay on top. */
+    if (st.hi && !st.even) {
+      var hx0 = PADL + (Date.parse(st.hi.from) - t0) / (t1 - t0) * (W - PADL - PADR);
+      var hx1 = PADL + (Date.parse(st.hi.to) - t0) / (t1 - t0) * (W - PADL - PADR);
+      svg.appendChild(el('rect', {
+        class: 'hiband', x: Math.min(hx0, hx1), y: TOP - 10,
+        width: Math.max(Math.abs(hx1 - hx0), 3), height: axisY - TOP + 10, rx: 4
+      }));
+      [hx0, hx1].forEach(function (hx) {
+        svg.appendChild(el('line', { class: 'hiedge', x1: hx, y1: TOP - 10, x2: hx, y2: axisY }));
+      });
+      if (st.hi.label) {
+        svg.appendChild(el('text', {
+          class: 'hilab', x: (hx0 + hx1) / 2, y: TOP - 16, 'text-anchor': 'middle'
+        }, st.hi.label));
+      }
+    }
+
     // positions for every entry
     var pos = {};
     ALL.forEach(function (m, i) { pos[m.id] = { x: xOf(m, i), y: laneY(m.lane || 'sys') }; });
@@ -146,8 +165,9 @@
       var p = pos[m.id], pl = placed[m.id];
       var isCtx = (m.id === CTX.id);
       var col = isCtx ? 'var(--muted)' : LANES[m.lane].color;
+      var dim = st.hi && !st.even && st.hi.ids && st.hi.ids.indexOf(m.id) < 0;
       var g = el('g', {
-        class: 'mk', tabindex: '0', role: 'button',
+        class: 'mk' + (dim ? ' dim' : ''), tabindex: '0', role: 'button',
         'aria-label': m.name + ', ' + fmtDate(m.date) + (isCtx ? ', context marker' : '')
       });
 
@@ -235,7 +255,8 @@
         'care, and that arrived with serving cost. Between the <b>delta rule (Feb 2021)</b> and ' +
         '<b>DeltaNet (Jun 2024)</b> a good idea waits three years for a training algorithm that suits ' +
         'the hardware.</p>' +
-        '<p>Then look at <b>2023</b>: five entries in nine months, four of them about length. And look ' +
+        '<p>Then look at <b>2023</b>: five entries in <b>four months</b> — three about length, two about ' +
+        'memory, and two of them eight days apart. And look ' +
         'at the <span style="color:var(--pos)">position lane</span> across the whole span — eight ' +
         'attempts in nine years, ending with a method whose proposal is to <em>delete</em> positional ' +
         'embeddings entirely.</p>';
@@ -310,7 +331,7 @@
       st.even = e.target.checked; renderTimeline();
     });
     document.getElementById('tl-clear').addEventListener('click', function () {
-      st.sel = null; renderTimeline(); renderDossier();
+      st.sel = null; st.hi = null; renderTimeline(); renderDossier();
     });
     renderTimeline();
     renderDossier();
@@ -321,6 +342,20 @@
       st.sel = hash; renderTimeline(); renderDossier();
     }
   }
+
+  /* Act 4 talks to the timeline through this, so the claims and the picture
+     can never disagree about which region they mean. */
+  window.__timeline = {
+    highlight: function (spec) {
+      st.hi = spec;
+      var t = document.getElementById('tl-even');
+      if (t && t.checked) { t.checked = false; st.even = false; }
+      renderTimeline();
+      document.getElementById('act2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    },
+    clear: function () { st.hi = null; renderTimeline(); },
+    isHighlighted: function () { return !!st.hi; }
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
