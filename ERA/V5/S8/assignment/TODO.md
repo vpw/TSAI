@@ -145,8 +145,22 @@ live-class transcript.
         place below the axis). Uniform six blocks; the last is **"how this date was checked", present
         on every one** — asserted by opening all 22 dossiers and checking for the block. Prev/next
         walk the chronology.
-  - [ ] Act 4 — the Q2 bonus answer written out, each claim linking back to a visible feature of the
-        axis.
+  - [x] **Act 4 — the Q2 bonus answer** (2026-08-19). `site/assets/act4-insights.js`. A headline answer
+        plus **eight observations**, each with a *"show me on the timeline"* button that highlights the
+        exact date range it refers to — band across the span, relevant markers lit, everything else
+        dimmed, measured label. Act 4 drives Act 2 through a `window.__timeline.highlight()` hook, so
+        the claims and the picture **cannot disagree**; the button also forces even-spacing off, since
+        a date range is meaningless in that mode.
+        **Every supporting number is computed from `window.MECHANISMS` at render time, not typed in** —
+        gaps, spans, counts, lane breakdowns. A claim therefore cannot outlive a correction to its
+        dates. That policy paid for itself immediately: computing the figures first **caught two wrong
+        claims I had already written into Act 2** — the 2023 cluster is five entries in *four* months
+        (not nine), and *three* of them are about length (not four); NTK-Aware→NTK-By-Parts is *eight*
+        days (not nine). All corrected.
+        Headline: *ordering tells you the sequence, spacing tells you the pressure* — the recurring
+        shape is that the idea arrives years before the cost that makes anyone adopt it (MQA waits
+        1,293 days for serving cost to bite; the delta rule waits 1,204 days for a training algorithm),
+        and a list flattens both waits to zero.
   - [ ] Act 5 — the sources table, generated from `data/mechanisms.js` (and the README's table from
         the same place).
 - [x] **Date audit round 1 applied** (2026-08-19). The user flagged rows and asked for two specific
