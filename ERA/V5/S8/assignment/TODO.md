@@ -118,8 +118,37 @@ live-class transcript.
         lesson's claim. Switched to **log–log**, where linear growth is a straight line of slope 1 and
         the four configs are visibly parallel climbs. (2) The GB formatter rounded 51.539… to "51.5",
         disagreeing with the lesson's own 51.54 — now two decimals through the 1–100 GB band.
-  - [ ] Acts 2–5 (timeline, dossiers, Q2 answer, sources) — **blocked on the date audit being signed
-        off**, since all four render from `data/mechanisms.js`.
+  - [x] **Date audit SIGNED OFF** (2026-08-19, via the artifact's sign-off button): all 21 mechanism
+        dates accepted as verified.
+  - [x] **`site/data/mechanisms.js` — the single source of truth** (2026-08-19). 21 mechanisms + the
+        LightningLM context marker, each with date/lane/source/url/paper/authors, the one-liner, the
+        idea, buys/costs/pick, `verified` (how the date was checked) and an optional lineage `note`.
+        Plain `window.MECHANISMS` — no modules, so the site still opens from `file://` with no build
+        step. **Validated by script, not by eye:** chronological order, required fields on every
+        entry, unique ids, valid lanes, and a cross-check of all 21 dates *and* sources against the
+        signed-off audit artifact by parsing it directly — **zero mismatches**.
+  - [x] **Act 2 — the timeline** (2026-08-19). `site/assets/act2-timeline.js`. Five lane bands
+        (baseline / position / memory / compute / systems), markers at their **true proportional**
+        position from 2016-11-07 to 2026-06-08, year gridlines, two lineage arcs (delta rule→DeltaNet
+        "3 years dormant"; NTK-By-Parts→YaRN "YaRN builds on this one"). Circles = papers, diamonds =
+        no paper (the Reddit post and the GitHub PR), dashed = the bonus mechanism, hollow = the
+        context model. Deep links (`#rope`) open a dossier.
+        **Labels move, markers never do:** a de-overlap pass pushes colliding labels apart and draws a
+        leader line back to the dot — necessary because NTK-Aware and NTK-By-Parts are 9 days apart,
+        roughly 2px at this scale. Readability must not be bought with positional dishonesty.
+        **The "even spacing" toggle is the bonus question made interactive** — it collapses the
+        timeline into what a plain ordered list shows, and the note underneath rewrites itself to name
+        exactly what was lost. This is the strongest single asset for answering Q2.
+        Two bugs caught: context marker stroked **white on white** (the `.dot` class rule beats an SVG
+        presentation attribute), and a lane sublabel rendering at `x=-15`, off-canvas.
+  - [x] **Act 3 — the dossier template** (2026-08-19, delivered with Act 2 since dossiers open in
+        place below the axis). Uniform six blocks; the last is **"how this date was checked", present
+        on every one** — asserted by opening all 22 dossiers and checking for the block. Prev/next
+        walk the chronology.
+  - [ ] Act 4 — the Q2 bonus answer written out, each claim linking back to a visible feature of the
+        axis.
+  - [ ] Act 5 — the sources table, generated from `data/mechanisms.js` (and the README's table from
+        the same place).
 - [x] **Date audit round 1 applied** (2026-08-19). The user flagged rows and asked for two specific
       things; the flags were not cosmetic. **The count is now 21 mechanisms, not 20.**
   - **Row 1 date CORRECTED: 2017-05-08 → 2016-11-07.** Was credited to ConvS2S (`1705.03122`) because
