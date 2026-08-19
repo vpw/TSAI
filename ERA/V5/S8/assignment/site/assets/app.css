@@ -316,3 +316,82 @@ footer a{color:var(--mem)}
   font-family:var(--mono);font-size:.72rem;color:var(--muted)}
 .chartlegend i{display:inline-block;width:14px;height:3px;border-radius:2px;
   vertical-align:3px;margin-right:6px}
+
+/* ===========================================================
+   Act 2 — the timeline
+   =========================================================== */
+
+.tl-controls{display:flex;justify-content:space-between;align-items:center;gap:16px;
+  flex-wrap:wrap;margin-bottom:16px}
+.tl-scroll{overflow-x:auto;padding-bottom:4px}
+.tl-inner{min-width:880px}
+#tl{width:100%;display:block;overflow:visible}
+
+#tl .band{fill:var(--surface-2);opacity:.55}
+#tl .band.alt{opacity:0}
+#tl .lanelab{font-family:var(--mono);font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;fill:var(--muted)}
+#tl .lanesub{font-family:var(--mono);font-size:8.5px;fill:var(--muted);opacity:.7}
+#tl .yr{stroke:var(--grid);stroke-width:1}
+#tl .yrlab{font-family:var(--mono);font-size:10px;fill:var(--muted);text-anchor:middle}
+#tl .axis{stroke:var(--rule);stroke-width:1}
+#tl .leader{stroke:var(--rule);stroke-width:1;fill:none}
+#tl .mlab{font-family:var(--sans);font-size:10.5px;fill:var(--ink-2);cursor:pointer}
+#tl .mlab.on{fill:var(--ink);font-weight:600}
+#tl .dot{cursor:pointer;stroke:var(--surface);stroke-width:1.5;transition:r .12s ease}
+#tl g.mk:hover .dot{stroke:var(--ink)}
+#tl g.mk:focus{outline:none}
+#tl g.mk:focus-visible .dot{stroke:var(--ink);stroke-width:2.5}
+#tl .dot.sel{stroke:var(--ink);stroke-width:2.5}
+#tl .arc{fill:none;stroke-width:1.4;stroke-dasharray:4 3;opacity:.85}
+#tl .arclab{font-family:var(--mono);font-size:9px;text-anchor:middle}
+/* higher specificity than `#tl .dot`, which otherwise paints this white on white */
+#tl .dot.ctxmk{fill:none;stroke:var(--muted);stroke-dasharray:3 2;stroke-width:1.5}
+
+.tl-legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:14px;
+  font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.tl-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;
+  vertical-align:-1px;margin-right:6px}
+.tl-legend i.sq{border-radius:2px;transform:rotate(45deg)}
+.tl-legend i.ring{background:transparent !important;border:1.5px dashed var(--muted)}
+
+/* the gap callout that changes with the mode toggle */
+.tl-note{background:var(--surface-2);border-radius:9px;padding:13px 16px;margin-top:16px;
+  font-size:.88rem;color:var(--ink-2)}
+.tl-note b{color:var(--ink)}
+.tl-note p{margin:0}
+.tl-note p + p{margin-top:7px}
+
+/* ---------- the dossier ---------- */
+.dossier{margin-top:22px;border:1px solid var(--rule);border-radius:12px;
+  background:var(--surface);padding:0;overflow:hidden}
+.dossier[hidden]{display:none}
+.dsh{padding:17px 20px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.dsh .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.dsh h3{font-size:1.25rem;margin:0}
+.dsh .n{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-right:9px}
+.dsh .meta{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-top:7px}
+.dsh .meta a{color:var(--mem)}
+.dsh .one{font-size:.95rem;color:var(--ink-2);margin:11px 0 0;max-width:72ch}
+.dsb{padding:19px 20px}
+.dsb h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-weight:400;margin:0 0 6px}
+.dsb .blk{margin-bottom:19px}
+.dsb .blk:last-child{margin-bottom:0}
+.dsb p{margin:0;font-size:.92rem}
+.dsb .pcw{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));margin-bottom:19px}
+.dsb .pcw>div{border-left:2px solid var(--rule);padding-left:13px}
+.dsb .pcw .buy{border-left-color:var(--cmp)}
+.dsb .pcw .cost{border-left-color:var(--origin)}
+.dsb .pcw .pick{border-left-color:var(--mem)}
+.dsb .pcw p{font-size:.88rem}
+.dsb .verif{background:var(--surface-2);border-radius:9px;padding:14px 16px;
+  border-left:3px solid var(--cmp)}
+.dsb .verif p{font-size:.87rem}
+.dsb .lineage{border-left:3px solid var(--pos);background:var(--surface-2);
+  border-radius:0 9px 9px 0;padding:13px 16px}
+.dsb .lineage p{font-size:.88rem}
+.dsnav{display:flex;justify-content:space-between;gap:10px;padding:13px 20px;
+  border-top:1px solid var(--rule);background:var(--surface-2);flex-wrap:wrap}
+.dsnav .btn{font-size:.8rem;padding:.42em .8em}
+.dshint{text-align:center;color:var(--muted);font-size:.88rem;padding:26px 20px;font-style:italic}

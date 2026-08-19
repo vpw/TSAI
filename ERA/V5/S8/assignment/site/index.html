@@ -21,7 +21,7 @@
 <header class="hero">
   <p class="eyebrow" style="margin-top:30px">Attention mechanisms, chronologically</p>
   <h1>Attention, in the order it happened</h1>
-  <p class="lede">Twenty mechanisms, arranged by the date they actually appeared rather than by family
+  <p class="lede">Twenty-one mechanisms, arranged by the date they actually appeared rather than by family
   or by teaching order. Ordered this way the field stops looking like a catalogue of tricks and starts
   looking like an argument — one where you can see what people were worried about, and when they
   stopped worrying about it.</p>
@@ -208,11 +208,65 @@
   </figure>
 </section>
 
+<!-- ============================================================
+     ACT 2 — The timeline
+     ============================================================ -->
+<section id="act2">
+  <p class="eyebrow"><span class="badge">act 2 · the spine</span></p>
+  <h2>Twenty-one mechanisms, in the order they actually happened</h2>
+  <p class="measure">Every marker sits at its true position in time, and every date was checked
+  against its primary source. The lanes say which of the two bills a mechanism is paying down —
+  or, for one entry, neither.</p>
+  <p class="measure"><strong>The gaps are not empty space.</strong> They are the part of this picture
+  a list cannot show you, which is why the toggle below exists: it collapses the timeline into a plain
+  ordered list so you can watch the information disappear.</p>
+
+  <figure>
+    <div class="fig-title">The timeline</div>
+    <div class="fig-sub">November 2016 → December 2025, proportionally spaced. Click any marker for
+      its dossier.</div>
+
+    <div class="tl-controls">
+      <label class="switch" title="Collapse the timeline to even spacing">
+        <input type="checkbox" id="tl-even">
+        <span class="track"></span>
+        <span>even spacing — show me what a list would show</span>
+      </label>
+      <button class="btn" id="tl-clear" type="button">clear selection</button>
+    </div>
+
+    <div id="tl-host"></div>
+    <div class="tl-note" id="tl-note"></div>
+    <div class="dossier" id="dossier"></div>
+
+    <figcaption>
+      <p style="margin-bottom:.6rem"><strong>What the ordering shows.</strong> Two long silences
+      dominate. The KV-cache problem is posed and answered in <em>November 2019</em> by MQA, and then
+      essentially nothing happens to it until GQA in <em>May 2023</em> — three and a half years in
+      which the answer already existed and nobody needed it, because serving cost had not yet become
+      the binding constraint. The delta rule is published in <em>February 2021</em>, before RoPE, and
+      then waits until <em>June 2024</em> for a training algorithm that suits the hardware. Neither gap
+      is visible in a list.</p>
+      <p style="margin-bottom:.6rem"><strong>And where the field bunches up.</strong> Five entries land
+      between May and September 2023, four of them about length — two of those nine days apart. That
+      cluster is what a field looks like when a single constraint suddenly binds for everyone at once.
+      Meanwhile the <span style="color:var(--pos)">position lane</span> runs the whole span: eight
+      attempts across nine years, ending with a proposal to <em>delete</em> positional embeddings
+      altogether.</p>
+      <p style="margin-bottom:0"><strong>Reading the marks.</strong> Circles are papers; diamonds are
+      mechanisms with no paper at all — a Reddit post and a GitHub pull request, both of which went
+      into production anyway. The dashed circle is FlashAttention, the bonus mechanism, which answers
+      neither bill. The hollow marker is a model rather than a mechanism. Every dossier ends with
+      <em>how this date was checked</em>, because on this assignment that is the part most likely to
+      be wrong.</p>
+    </figcaption>
+  </figure>
+</section>
+
 <footer>
   <p>ERA V5 · Session 8 — attention mechanisms in chronological order. Built for the S8 assignment;
   dates are traced to primary sources in the repository's chronology research.</p>
-  <p style="margin-bottom:0"><em>Acts 0–1 of 5. The timeline, the twenty dossiers, and the sources
-  table follow.</em></p>
+  <p style="margin-bottom:0"><em>Acts 0–3 of 5. The bonus-question answer and the sources table follow.</em></p>
 </footer>
 
 </div>
@@ -235,5 +289,7 @@
 </script>
 <script src="assets/act0-pipeline.js"></script>
 <script src="assets/act1-bills.js"></script>
+<script src="data/mechanisms.js"></script>
+<script src="assets/act2-timeline.js"></script>
 </body>
 </html>
