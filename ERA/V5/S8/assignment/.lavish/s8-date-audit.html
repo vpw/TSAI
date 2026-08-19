@@ -69,6 +69,9 @@ section{margin:54px 0 0;scroll-margin-top:20px}
 .badge.c{color:var(--pos);background:var(--pos-soft);border-color:transparent}
 .badge.attr{color:var(--origin);background:var(--origin-soft);border-color:transparent}
 .badge.bonus{color:var(--sys);background:var(--sys-soft);border-color:transparent}
+.badge.fixed{color:var(--cmp);background:var(--cmp-soft);border-color:transparent}
+tr.changed{background:var(--cmp-soft)}
+tr.changed:hover{background:var(--cmp-soft)}
 
 .tscroll{overflow-x:auto;border:1px solid var(--rule);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:900px}
@@ -123,13 +126,15 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 
 <header>
   <p class="eyebrow">ERA V5 · Session 8 · phase 1 of the build</p>
-  <h1>Date audit — 20 mechanisms, one row each</h1>
-  <p class="lede measure">Every date below is already sourced and exact. This page exists so that a
-  wrong one gets caught <em>here</em>, before it hardens into <code>data/mechanisms.js</code> and
-  propagates to the timeline, twenty dossiers, the sources table and the README at once.</p>
-  <p class="measure" style="margin-top:14px">Read the <strong>How the date was fixed</strong> column
-  first — it is the column that can actually be wrong. Tick the flag on any row you want re-verified,
-  add a note, and send. Nothing gets hard-coded until you do.</p>
+  <h1>Date audit — 21 mechanisms, one row each</h1>
+  <p class="lede measure"><strong>Updated 2026-08-19 with the results of your review.</strong> Your
+  flags were not cosmetic — they produced <strong>one corrected date</strong>, <strong>one new
+  row</strong>, and three caveats that are now quotations from the papers themselves rather than my
+  characterisations.</p>
+  <p class="measure" style="margin-top:14px">Rows highlighted in green changed. The
+  <strong>How the date was fixed</strong> column carries the evidence for each. Everything is still
+  reviewable — flag anything else and it goes back through the same process before it reaches
+  <code>data/mechanisms.js</code>.</p>
 </header>
 
 <!-- ============================================ -->
@@ -145,20 +150,20 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
   <div class="grid g3" style="margin-top:20px">
     <div class="card tier a">
       <h3><span class="badge a">tier A</span> Direct metadata</h3>
-      <p class="cnt">18 of 21 rows</p>
+      <p class="cnt">18 of 22 rows</p>
       <p>Date read straight off the paper's own arXiv v1 submission record. The mechanism has its own
       paper and that paper's own timestamp is the date. Nothing to dispute.</p>
     </div>
     <div class="card tier b">
       <h3><span class="badge b">tier B</span> Citation chain</h3>
-      <p class="cnt">2 rows — #1 and #20</p>
+      <p class="cnt">3 rows — #1, #13b and #20</p>
       <p>The link from mechanism to paper came out of a <em>different</em> paper's bibliography. Each
       was extracted two independent ways (RAG hit + raw <code>pdftotext</code> dump) and the cited
       paper was then re-checked against arXiv directly.</p>
     </div>
     <div class="card tier c">
       <h3><span class="badge c">tier C</span> Archival</h3>
-      <p class="cnt">1 row — #13, NTK-aware scaling</p>
+      <p class="cnt">1 row — #13, NTK-Aware</p>
       <p>No paper exists. The date comes from the Wayback Machine, two independent ways. This is the
       weakest evidence class in the table and still lands on a specific minute.</p>
     </div>
@@ -168,9 +173,10 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 <!-- ============================================ -->
 <section id="table">
   <p class="eyebrow">The audit</p>
-  <h2>Twenty mechanisms, chronological</h2>
-  <p class="measure">Ordered exactly as the app's timeline will order them. Row 21 is the LightningLM /
-  V4 context marker — not one of the twenty, included because the app quotes its numbers.</p>
+  <h2>Twenty-one mechanisms, chronological</h2>
+  <p class="measure">Ordered exactly as the app's timeline will order them. The last row is the LightningLM /
+  V4 context marker — not one of the twenty-one, included because the app quotes its numbers.
+  <strong>Green rows changed as a result of your review.</strong></p>
 
   <div class="tscroll" style="margin-top:18px">
   <table>
@@ -191,82 +197,117 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 
 <!-- ============================================ -->
 <section id="soft">
-  <p class="eyebrow">Where I would push back if I were reviewing this</p>
-  <h2>The five attribution calls, plus one open build detail</h2>
-  <p class="measure">On each of these the date is not in question — the paper we point at really was
-  published on the day we say. What is in question is whether that paper is the right one to point at.
-  I have taken a position on each; flag the row if you disagree and I will go verify the challenger
-  properly before anything is written into the data file.</p>
+  <p class="eyebrow">Resolved · 2026-08-19</p>
+  <h2>What your flags turned up</h2>
+  <p class="measure">Each of these was a case where the <em>date</em> was solid but "who was first" was
+  my judgment. I went to the primary sources. One row moved, one row split into two, and three stand —
+  but they now stand on the papers' own words rather than on my summary of them.</p>
 
   <div class="grid g2" style="margin-top:20px">
-    <div class="card">
-      <h3>1 · Learned absolute positions → ConvS2S</h3>
-      <p style="font-size:.88rem"><strong>The call:</strong> credit the paper <em>Attention Is All You
-      Need itself credits</em>. Its text says "We also experimented with using learned positional
-      embeddings [9]", and [9] is ConvS2S.</p>
-      <p style="font-size:.88rem;margin-bottom:0"><strong>The challenge:</strong> the same group used
-      position embeddings in an earlier convolutional NMT paper (2016). Flag this row and I will check
-      whether that earlier paper introduces them or merely uses them — I have <em>not</em> verified it,
-      and I would rather say so than let a guess into the table.</p>
-    </div>
-    <div class="card">
-      <h3>4 · Sparse / top-k → Sparse Transformers</h3>
-      <p style="font-size:.88rem"><strong>The call:</strong> 2019-04-23 is the earliest
-      <em>widely-credited</em> source for factorized sparse attention patterns cutting full
-      <code>O(T²)</code>.</p>
-      <p style="font-size:.88rem;margin-bottom:0"><strong>The challenge:</strong> restricted/local
-      attention patterns appear in 2018 image-transformer work. Whether that counts as "sparse
-      attention" or as a precursor is a definitional call, not a factual one — worth a sentence in the
-      dossier either way.</p>
-    </div>
-    <div class="card">
-      <h3>6 · Sliding window → Longformer</h3>
-      <p style="font-size:.88rem"><strong>The call:</strong> Longformer, 2020-04-10.</p>
-      <p style="font-size:.88rem;margin-bottom:0"><strong>Two challenges, opposite directions:</strong>
-      Sparse Transformers (2019) already had local patterns, so Longformer may be late; and Mistral 7B
-      (2023) is what most people associate the mechanism with, so Longformer may look early. The app
-      should say explicitly that Mistral is the famous <em>deployment</em>, not the origin — that
-      misattribution is common enough to be worth correcting on the page.</p>
-    </div>
-    <div class="card">
-      <h3>7 · Linear attention → Transformers are RNNs</h3>
-      <p style="font-size:.88rem"><strong>The call:</strong> 2020-06-29, the standard credited source
-      for the kernel-feature-map reformulation that turns attention into a fixed-size recurrent state.</p>
-      <p style="font-size:.88rem;margin-bottom:0"><strong>The challenge:</strong> earlier softmax-free
-      linear-complexity attention work exists (2018–2019). This row's framing matters because the
-      lesson builds its whole no-softmax argument on it — flag it and I will check the earlier
-      candidates rather than leaning on "standard credited source".</p>
-    </div>
     <div class="card" style="border-left:3px solid var(--origin)">
-      <h3>8 vs 17 · Delta rule priority <span class="badge attr">already flagged</span></h3>
-      <p style="font-size:.88rem"><strong>The call:</strong> two separate rows, three years apart.
-      Schlag et al. 2021-02-22 originate the delta-rule correction on a linear-attention fast-weight
-      state; Yang et al. 2024-06-10 contribute the <em>parallel-scan training algorithm</em>, and are
-      what everyone means by "the DeltaNet paper".</p>
-      <p style="font-size:.88rem;margin-bottom:0">This is the table's best find and I want to keep it
-      visible rather than resolve it: the 2021 origin even predates RoPE. The timeline draws a priority
-      arc between the two, which is the whole point.</p>
+      <h3>#1 · Learned positions <span class="badge fixed">date corrected</span></h3>
+      <p style="font-size:.88rem"><strong>2017-05-08 → 2016-11-07.</strong> You were right to flag it.
+      I had credited the paper <em>Attention Is All You Need</em> cites — but AIAYN cites the
+      <em>later</em> of two papers by the same group.</p>
+      <p style="font-size:.88rem"><strong>The earlier one settles it.</strong> 1611.02344 says outright:
+      <em>"we add position embeddings to encode the absolute position of each source word within a
+      sentence"</em>, with the form <code>e_j = w_j + l_j</code>. That is the mechanism, six months
+      before ConvS2S.</p>
+      <p style="font-size:.88rem;margin-bottom:0"><strong>And it points further back.</strong> The same
+      passage credits Sukhbaatar et al. 2015 (memory networks). Checking 1503.08895: its "position
+      encoding" is <em>fixed</em>, but its separate "Temporal Encoding" matrix is explicitly
+      <em>"learned during training"</em> — a learned position embedding, except it indexes
+      <strong>memory slots, not token positions</strong>. Different granularity, so the marker stays at
+      1611.02344 and the dossier states the antecedent.</p>
     </div>
+
+    <div class="card" style="border-left:3px solid var(--cmp)">
+      <h3>#13 → #13 + #13b · NTK <span class="badge fixed">split, as you asked</span></h3>
+      <p style="font-size:.88rem"><strong>NTK-By-Parts is now its own marker, dated 2023-07-07.</strong>
+      It turned out not to be a Reddit post at all — YaRN's bibliography points at a <strong>GitHub
+      pull request</strong>, <code>jquesnelle/scaled-rope#1</code>.</p>
+      <p style="font-size:.88rem"><strong>Which makes it the best-evidenced non-paper row in the table.</strong>
+      GitHub's own API gives two independent timestamps: the PR opened at
+      <code>2023-07-07T20:40:33Z</code> by <code>bloc97</code>, and its first commit authored
+      <code>2023-07-07T20:24:12Z</code>. Platform record, not archival inference.</p>
+      <p style="font-size:.88rem;margin-bottom:0"><strong>One thing you should know before this is
+      final:</strong> there is a <em>third</em> community method. YaRN cites "Dynamic NTK" by
+      <strong>emozilla</strong> — a different author — as the other improvement on NTK-Aware. I have
+      not plotted it: you said two, and I could not date it to the standard used everywhere else here
+      (Wayback's earliest capture is months late). Say the word if you want it chased and added.</p>
+    </div>
+
     <div class="card">
-      <h3>13 · NTK-Aware vs NTK-By-Parts <span class="badge c">open build detail</span></h3>
-      <p style="font-size:.88rem"><strong>The call, provisionally:</strong> one marker, dated
-      2023-06-29, with the distinction written into the dossier.</p>
-      <p style="font-size:.88rem;margin-bottom:0">bloc97 published two methods, and YaRN builds on
-      <strong>NTK-By-Parts</strong>, not on plain NTK-Aware. The brief's minimum list names only
-      "NTK-aware scaling", so one marker satisfies it — but two markers would make the YaRN lineage
-      arrow point at the right thing. <strong>This is the one place I would take a different answer.</strong>
-      Flag the row if you want two.</p>
+      <h3>#7 · Linear attention <span class="badge attr">stands — challenger verified</span></h3>
+      <p style="font-size:.88rem"><strong>This was your strongest flag, and the challenger is real.</strong>
+      Shen et al., <em>"Efficient Attention: Attention with Linear Complexities"</em>, arXiv 1812.01243,
+      v1 <strong>2018-12-04</strong> — linear-complexity attention <strong>19 months earlier</strong>.
+      Katharopoulos et al. cite it and call it <em>"concurrent"</em>, which is fair for publication
+      venues and not for arXiv v1 dates.</p>
+      <p style="font-size:.88rem;margin-bottom:0"><strong>What keeps the row where it is:</strong> the
+      lesson's argument is about attention becoming an RNN with a <em>fixed-size recurrent state</em> —
+      and that needs the causal formulation. Efficient Attention is a vision paper. A full-text scan
+      finds exactly <strong>one</strong> occurrence of "causal" or "autoregressive" in the entire PDF,
+      and it is inside a bibliography entry. It never builds the recurrence. So: marker stays at
+      2020-06-29, dossier names Shen et al. as the earlier linear-complexity attention.</p>
     </div>
+
+    <div class="card">
+      <h3>#4 · Sparse attention <span class="badge attr">stands — related work summarised</span></h3>
+      <p style="font-size:.88rem">You asked for a synopsis of the paper's Related Work. It is short and
+      it does the opposite of claiming primacy — it <em>names</em> what came before:
+      <em>"(Parmar et al., 2018) uses blocks of local attention to apply Transformers to images"</em>
+      (Image Transformer, v1 <strong>2018-02-15</strong>, ~14 months earlier), Transformer-XL for state
+      reuse, plus Reed, Menick &amp; Kalchbrenner and Huang for parallel, multi-scale and
+      relative-attention work.</p>
+      <p style="font-size:.88rem;margin-bottom:0">Its own positioning is breadth and simplicity:
+      <em>"Our work is simpler than many of the techniques above and can be applied equally across
+      images, text, and audio. Many of the above techniques are orthogonal to ours."</em> So the app
+      credits it for <strong>factorized sparse attention at scale</strong>, and names Parmar et al. for
+      local-block attention.</p>
+    </div>
+
+    <div class="card">
+      <h3>#6 · Sliding window <span class="badge attr">stands — with Longformer's own caveat</span></h3>
+      <p style="font-size:.88rem">Longformer does not claim the pattern either. Its own words:
+      <em>"The model with the most similar attention pattern to ours is Sparse Transformer (Child et
+      al., 2019), which uses a form of <strong>dilated sliding window</strong> of blocks of size
+      8x8"</em>.</p>
+      <p style="font-size:.88rem;margin-bottom:0">Its stated contributions are a more flexible CUDA
+      kernel and <em>"additional task motivated <strong>global attention</strong> patterns… essential
+      for good performance in the transfer learning setting"</em>. So the honest credit is
+      <strong>sliding window + global tokens as a named NLP mechanism</strong> — not the window itself,
+      which is already in row #4's paper.</p>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--mem)">
+      <h3>#8 vs #17 · Delta rule priority <span class="badge">unchanged</span></h3>
+      <p style="font-size:.88rem;margin-bottom:0">Left exactly as it was, because it is already the
+      table's best find and it is already visible: Schlag et al. <strong>2021-02-22</strong> originate
+      the delta-rule correction (before RoPE); Yang et al. <strong>2024-06-10</strong> contribute the
+      parallel-scan training algorithm and are what everyone means by "the DeltaNet paper". Two rows,
+      three years apart, with a priority arc drawn between them on the timeline.</p>
+    </div>
+  </div>
+
+  <div class="callout ok">
+    <p style="margin-bottom:0"><strong>The general lesson, worth carrying into the README.</strong>
+    "The paper the famous paper cites" is a good heuristic and not a proof — it tells you what those
+    authors reached for, not what came first. Row #1 was wrong for exactly that reason, and rows #4,
+    #6 and #7 all turned out to have precursors that the credited papers <em>themselves</em> name in
+    their related-work sections. Reading those sections is the cheapest possible check, and it is the
+    one I should have run before calling any of these settled.</p>
   </div>
 </section>
 
-<!-- ============================================ -->
 <section id="send">
   <p class="eyebrow">Send it back</p>
-  <h2>What you flag, I re-verify</h2>
-  <p class="measure">Ticking a flag changes nothing on its own — it just builds a list. Press the
-  button and Lavish queues one prompt naming every flagged row plus your note. If nothing is flagged,
-  the second button signs the table off as-is and unblocks the data file.</p>
+  <h2>Another round, or sign off</h2>
+  <p class="measure">Your first round is applied. Flag anything in the updated table that still looks
+  wrong and it goes through the same process again — or sign off and the table becomes
+  <code>data/mechanisms.js</code>, which unblocks Acts 2, 3 and 5 (timeline, dossiers, sources).
+  <strong>One open question worth an answer either way:</strong> the third NTK method, "Dynamic NTK"
+  by emozilla — chase it and add a #13c, or leave it in the dossier text only?</p>
 
   <div class="sub">
     <label for="note" style="font-size:.9rem;font-weight:600;color:var(--ink);display:block;margin-bottom:8px">
@@ -275,13 +316,13 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
     <textarea id="note" placeholder="e.g. row 7 — check 'Efficient Attention' 1812.01243, I think it predates this"></textarea>
     <div class="sel" id="sel">Flagged: <b>none yet</b></div>
     <button type="button" data-lavish-action id="btn-flag">Send flagged rows for re-verification</button>
-    <button type="button" data-lavish-action class="ghost" id="btn-ok">Sign off — all dates good, proceed to Act 0</button>
+    <button type="button" data-lavish-action class="ghost" id="btn-ok">Sign off — build data/mechanisms.js from this</button>
     <div class="sent" id="sent"></div>
   </div>
 </section>
 
 <footer>
-  <p style="margin-bottom:0">S8 date audit · generated 2026-08-18 from
+  <p style="margin-bottom:0">S8 date audit · generated 2026-08-18, revised 2026-08-19 after review, from
   <code>resources/chronology-research.md</code>, which stays the canonical record. Every arXiv date is
   the <strong>v1 submission</strong> timestamp, never the latest revision — a v3 from 2024 on a paper
   first posted in 2021 would silently reorder the timeline.</p>
@@ -293,10 +334,10 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 /* Single source of truth for this audit — mirrors resources/chronology-research.md.
    The app's data/mechanisms.js gets generated from the signed-off version of this. */
 const ROWS = [
-  {n:1, mech:'Absolute learned positions', date:'2017-05-08', src:'1705.03122',
-   title:'Convolutional Sequence to Sequence Learning',
-   how:'arXiv v1 metadata, plus the citation chain: <em>Attention Is All You Need</em> itself says "we also experimented with using learned positional embeddings [9]", and [9] resolves to this paper.',
-   tier:'B', attr:true},
+  {n:1, mech:'Absolute learned positions', date:'2016-11-07', src:'1611.02344',
+   title:'A Convolutional Encoder Model for Neural Machine Translation',
+   how:'<strong style="color:var(--origin)">CORRECTED by your flag — was 2017-05-08 / ConvS2S.</strong> The old date followed <em>Attention Is All You Need</em>\'s own citation, but AIAYN cites the <em>later</em> of two papers by the same group. The earlier one states the mechanism outright: <em>"we add position embeddings to encode the absolute position of each source word"</em>, with the form <code>e_j = w_j + l_j</code> — six months earlier. arXiv v1 metadata confirms 2016-11-07.',
+   tier:'B', fixed:true},
   {n:2, mech:'Scaled dot-product attention', date:'2017-06-12', src:'1706.03762',
    title:'Attention Is All You Need',
    how:'arXiv v1 metadata. The baseline the entire app is built around; nothing to dispute.', tier:'A'},
@@ -305,18 +346,18 @@ const ROWS = [
    how:'Same paper and same submission as row 2 — deliberately listed separately, since the app treats them as two mechanisms that happen to share an origin.', tier:'A'},
   {n:4, mech:'Sparse / top-k attention', date:'2019-04-23', src:'1904.10509',
    title:'Generating Long Sequences with Sparse Transformers',
-   how:'arXiv v1 metadata. Earliest <em>widely-credited</em> source for factorized sparse patterns replacing full O(T²) attention.',
+   how:'arXiv v1 metadata. <strong>Its §2 Related Work (you asked for this synopsis) names its precursors rather than claiming primacy:</strong> <em>"(Parmar et al., 2018) uses blocks of local attention to apply Transformers to images"</em> — Image Transformer, arXiv 1802.05751, v1 <strong>2018-02-15</strong>, ~14 months earlier — plus Transformer-XL for state reuse, and Reed/Menick/Huang for parallel, multi-scale and relative-attention work. Its own claim is breadth, not priority: <em>"Our work is simpler than many of the techniques above and can be applied equally across images, text, and audio."</em>',
    tier:'A', attr:true},
   {n:5, mech:'MQA — Multi-Query Attention', date:'2019-11-06', src:'1911.02150',
    title:'Fast Transformer Decoding: One Write-Head is All You Need',
    how:'arXiv v1 metadata. Single-author Google paper; lands ~3.5 years before GQA, which is one of the timeline’s better surprises.', tier:'A'},
   {n:6, mech:'Sliding window attention', date:'2020-04-10', src:'2004.05150',
    title:'Longformer: The Long-Document Transformer',
-   how:'arXiv v1 metadata. Mistral 7B (2310.06825, 2023-10-10) is the mechanism’s famous production deployment but <strong>not</strong> its origin — flagged so the app does not misattribute it.',
+   how:'arXiv v1 metadata. <strong>Longformer does not claim the pattern.</strong> Its own text: <em>"The model with the most similar attention pattern to ours is Sparse Transformer (Child et al., 2019), which uses a form of dilated sliding window"</em>. Its stated novelty is a better CUDA kernel plus <em>"task motivated global attention patterns… essential for good performance in the transfer learning setting"</em>. So: credited for <strong>sliding window + global tokens</strong>, not the window itself. Mistral 7B (2023-10-10) is the famous deployment, not the origin.',
    tier:'A', attr:true},
   {n:7, mech:'Linear attention (softmax removed)', date:'2020-06-29', src:'2006.16236',
    title:'Transformers are RNNs',
-   how:'arXiv v1 metadata. Standard credited source for the kernel-feature-map reformulation that turns attention into a fixed-size recurrent state.',
+   how:'arXiv v1 metadata. <strong style="color:var(--origin)">Your strongest flag — the challenger is real.</strong> Shen et al., <em>"Efficient Attention: Attention with Linear Complexities"</em>, arXiv <strong>1812.01243</strong>, v1 <strong>2018-12-04</strong>, already reassociates the product for linear complexity — <strong>19 months earlier</strong>. Katharopoulos et al. call it <em>"concurrent"</em>, which holds for venues but not for arXiv v1. <strong>What keeps the row here:</strong> the lesson\'s argument needs the <em>causal</em> fixed-state recurrence, and Efficient Attention is a vision paper — a full-text scan finds exactly <strong>one</strong> hit for "causal"/"autoregressive" in the whole PDF, inside a bibliography entry.',
    tier:'A', attr:true},
   {n:8, mech:'Delta rule (origin)', date:'2021-02-22', src:'2102.11174',
    title:'Linear Transformers Are Secretly Fast Weight Programmers',
@@ -335,10 +376,14 @@ const ROWS = [
   {n:12, mech:'GQA — Grouped-Query Attention', date:'2023-05-22', src:'2305.13245',
    title:'GQA: Training Generalized Multi-Query Transformer Models',
    how:'arXiv v1 metadata. Clean.', tier:'A'},
-  {n:13, mech:'NTK-aware scaling', date:'2023-06-29', src:'reddit',
+  {n:13, mech:'NTK-Aware scaling', date:'2023-06-29', src:'reddit',
    title:'r/LocalLLaMA post 14lz7j5 by u/bloc97 — no paper exists',
    how:'<strong>Wayback Machine, two independent ways</strong> (reddit.com is bot-walled to both curl and a real browser): a snapshot carries Reddit’s own <code>created-timestamp="2023-06-29T08:21:29.413+0000"</code>, and the CDX index’s earliest capture of the URL is 08:21:50 the same day — an archive cannot predate what it archived.',
    tier:'C'},
+  {n:'13b', mech:'NTK-By-Parts', date:'2023-07-07', src:'github',
+   title:'"Add NTK-Aware interpolation \'by parts\' correction" — bloc97, PR #1 to jquesnelle/scaled-rope',
+   how:'<strong style="color:var(--cmp)">NEW ROW — you said "use two".</strong> Dated from <strong>GitHub\'s own API</strong>, two independent timestamps: PR opened by <code>bloc97</code> at <code>2023-07-07T20:40:33Z</code>, its first commit authored <code>2023-07-07T20:24:12Z</code> (16 min earlier, same day), merged 2023-07-09. Stronger evidence than row 13\'s Wayback route — the platform\'s own record, not an archival inference. <strong>This is what YaRN actually builds on</strong>, per 2309.00071 §3.2. Repo was later renamed, so the cited URL now resolves to <code>jquesnelle/yarn/pull/1</code>.',
+   tier:'B', fixed:true},
   {n:14, mech:'YaRN', date:'2023-08-31', src:'2309.00071',
    title:'YaRN: Efficient Context Window Extension of Large Language Models',
    how:'arXiv v1 metadata. Its own bibliography is also what confirmed row 13 has no paper.', tier:'A'},
@@ -372,12 +417,16 @@ const tb = document.getElementById('rows');
 ROWS.forEach(r => {
   const tr = document.createElement('tr');
   if (r.ctx) tr.className = 'ctx';
+  else if (r.fixed) tr.className = 'changed';
   tr.dataset.n = r.n;
   const srcHtml = r.src === 'reddit'
     ? '<span style="color:var(--pos)">reddit&nbsp;14lz7j5</span>'
+    : r.src === 'github'
+    ? '<a href="https://github.com/jquesnelle/yarn/pull/1" target="_blank" rel="noopener">jquesnelle/yarn#1</a>'
     : '<a href="https://arxiv.org/abs/' + r.src + '" target="_blank" rel="noopener">' + r.src + '</a>';
   const badges = '<span class="badge ' + r.tier.toLowerCase() + '">' + r.tier + '</span>'
     + (r.attr ? ' <span class="badge attr">attribution</span>' : '')
+    + (r.fixed ? ' <span class="badge fixed">resolved</span>' : '')
     + (r.bonus ? ' <span class="badge bonus">bonus</span>' : '');
   tr.innerHTML =
     '<td class="n">' + (r.ctx ? '—' : r.n) + '</td>' +
@@ -429,9 +478,9 @@ document.getElementById('btn-flag').addEventListener('click', () => {
 document.getElementById('btn-ok').addEventListener('click', () => {
   const note = document.getElementById('note').value.trim();
   window.lavish.queuePrompt(
-    'Date audit signed off — all 20 dates accepted as verified. Write data/mechanisms.js from this table and start Act 0 (the attention pipeline widget).'
+    'Date audit signed off — all 21 mechanism dates accepted as verified. Write data/mechanisms.js from this table and start Act 2 (the timeline).'
     + (note ? ' || Note from me: ' + note : ''),
-    { tag: 'date-audit', text: 'Signed off — proceed to Act 0', data: { signedOff: true, note } });
+    { tag: 'date-audit', text: 'Signed off — build the data file', data: { signedOff: true, note } });
   sent('Sign-off queued. Press Send to Agent in the Lavish panel to deliver it.');
 });
 </script>

@@ -122,7 +122,7 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 
 <header>
   <p class="eyebrow">ERA V5 · Session 8 · personal reference</p>
-  <h1>Twenty attention mechanisms, in the order they actually appeared</h1>
+  <h1>Twenty-one attention mechanisms, in the order they actually appeared</h1>
   <p class="lede measure">One card each: what it does, what it buys, what it costs, when you would
   reach for it. Chronological, because that ordering is the assignment's whole point — the field's
   priorities shift visibly when you stop grouping these by family.</p>
@@ -174,7 +174,7 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 <!-- ============================================ -->
 <section id="glance">
   <p class="eyebrow">At a glance</p>
-  <h2>All twenty on one screen</h2>
+  <h2>All twenty-one on one screen</h2>
   <div class="tscroll">
     <table>
       <thead><tr><th>Date</th><th>Mechanism</th><th>Bill</th><th>In one line</th></tr></thead>
@@ -211,8 +211,8 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
     </div>
     <div class="mech pos" style="margin-bottom:0">
       <h3>Position keeps getting re-solved, never solved</h3>
-      <p class="idea" style="margin-bottom:0">Learned table (2017) → sinusoidal (2017) → RoPE (2021)
-      → ALiBi (2021) → NTK (2023) → YaRN (2023) → DroPE (2025). Seven attempts across eight years,
+      <p class="idea" style="margin-bottom:0">Learned table (2016) → sinusoidal (2017) → RoPE (2021)
+      → ALiBi (2021) → NTK-Aware and NTK-By-Parts (2023) → YaRN (2023) → DroPE (2025). Eight attempts across nine years,
       and the most recent answer is to <em>remove</em> positional embeddings entirely. That trajectory
       — add, refine, refine, delete — is the single most legible arc on the timeline.</p>
     </div>
@@ -240,11 +240,12 @@ footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);font-si
 
 <script>
 const M = [
-{n:1, id:'learned-abs', name:'Learned absolute positions', date:'2017-05-08', lane:'pos',
- src:'1705.03122', paper:'Convolutional Sequence to Sequence Learning',
+{n:1, id:'learned-abs', name:'Learned absolute positions', date:'2016-11-07', lane:'pos',
+ src:'1611.02344', paper:'A Convolutional Encoder Model for Neural Machine Translation',
  one:'A trainable lookup table with one vector per position, added to the token embedding.',
  idea:'Attention on its own is a bag of vectors — permute the tokens and the output is identical. The first fix is the most literal one available: keep a trainable table with one row per position index, look up row <code>i</code> for the token at position <code>i</code>, and add it to that token\'s embedding. The model learns whatever notion of position the data rewards.',
  buy:'Dead simple, and fully learned — no assumption imposed about what position <em>means</em>, the data decides.',
+ note:'Date corrected 2026-08-19. Commonly credited to ConvS2S (2017-05-08) because that is what <em>Attention Is All You Need</em> cites — but AIAYN cites the later of two papers by the same group. This one states it outright six months earlier: <code>e_j = w_j + l_j</code>. It in turn credits Sukhbaatar et al. 2015, whose learned "Temporal Encoding" indexes memory slots rather than token positions.',
  cost:'The table has a fixed number of rows. Position 4,097 in a 4,096-trained model does not have an embedding — it does not exist. There is no principled way to extrapolate a learned lookup, and it spends parameters on positions rather than on content.',
  pick:'Fixed, known, short context. This is exactly the wall Session 7 ran into, and the reason everything below exists.'},
 
@@ -270,7 +271,8 @@ const M = [
  idea:'The first serious attack on Bill 1 that keeps attention itself intact. Rather than every query reading every key, restrict each query to a structured subset — strided and factorized patterns that still compose to full coverage across a couple of layers — or to the <code>top-k</code> highest-scoring keys.',
  buy:'Cuts the <code>T²</code> term toward something like <code>T√T</code> while keeping softmax\'s sharp, selective retrieval. Sparsity is also empirically justified: real attention maps are already close to sparse.',
  cost:'A fixed pattern is a <em>guess</em> about where the information lives, made before you see the data. And genuine top-k has a chicken-and-egg problem: to know which scores are highest you have to compute all the scores, so naive top-k saves memory traffic but not the scoring cost. You need a cheap proposal step to actually win — which is what #19 supplies, six years later.',
- pick:'When context is long and the access pattern really is local or structured. As a bolt-on at inference it disappoints; trained in, it works.'},
+ pick:'When context is long and the access pattern really is local or structured. As a bolt-on at inference it disappoints; trained in, it works.',
+ note:'Its own Related Work names its precursors rather than claiming primacy — notably Image Transformer (Parmar et al., 2018-02-15) for "blocks of local attention". Credited here for factorized sparse attention <em>at scale</em>.'},
 
 {n:5, id:'mqa', name:'MQA — Multi-Query Attention', date:'2019-11-06', lane:'mem',
  src:'1911.02150', paper:'Fast Transformer Decoding: One Write-Head is All You Need',
@@ -286,7 +288,8 @@ const M = [
  idea:'The simplest possible sparsity pattern, and the one with the cleanest justification: language is mostly local. Fix a window <code>w</code> and let each token see only that far back. Information still travels further than <code>w</code> because layers stack — <code>L</code> layers give an effective receptive field around <code>L × w</code>, the same way a CNN grows its field with depth.',
  buy:'Compute becomes linear in <code>T</code>, and — the underrated part — the KV cache becomes <strong>bounded</strong> at <code>w</code> rather than growing. It is one of very few entries that flattens Bill 2 rather than just lowering its slope.',
  cost:'Anything outside the window is reachable only indirectly, through layers, which is lossy and indirect. Exact long-range lookup — "what was the name in paragraph one" — is gone.',
- pick:'When local structure dominates, or paired with a global path for the few tokens that need reach. Note: Mistral 7B made this famous in 2023, but Longformer is the origin.'},
+ pick:'When local structure dominates, or paired with a global path for the few tokens that need reach.',
+ note:'Longformer does not claim the pattern: it says Sparse Transformer (2019) already "uses a form of dilated sliding window". Its actual novelty is the <em>global attention</em> tokens alongside the window. Mistral 7B (2023) is the famous deployment, not the origin.'},
 
 {n:7, id:'linear', name:'Linear attention', date:'2020-06-29', lane:'cmp',
  src:'2006.16236', paper:'Transformers are RNNs',
@@ -294,7 +297,8 @@ const M = [
  idea:'Softmax is what forces the <code>T×T</code> matrix to exist: it couples every score in a row through the normaliser, so you cannot factor it away. Drop it, replace it with a kernel feature map <code>φ</code>, and the associativity of matrix multiplication becomes available — <code>(φ(Q)φ(K)ᵀ)V</code> can be computed as <code>φ(Q)(φ(K)ᵀV)</code>. The bracketed term is a fixed <code>d×d</code> state that does not depend on <code>T</code> at all.',
  buy:'<code>O(T)</code> compute, and a <strong>constant-size</strong> state instead of a growing cache. Bill 2 stops growing entirely — not a lower slope, a flat line. Generation becomes RNN-like: one fixed state, updated per token.',
  cost:'Softmax was doing real work. Its sharp, near-winner-take-all selection is what makes exact retrieval possible; a smooth kernel blurs it. Worse, a state that only <em>accumulates</em> writes new information on top of old and smears the two together, so recall degrades as the sequence grows. Fixed capacity is fixed capacity.',
- pick:'When throughput and memory dominate and perfect recall does not — and in practice, hybridised with real attention layers rather than used alone.'},
+ pick:'When throughput and memory dominate and perfect recall does not — and in practice, hybridised with real attention layers rather than used alone.',
+ note:'Priority note: Shen et al., "Efficient Attention" (arXiv 1812.01243, 2018-12-04) reached linear complexity 19 months earlier, and Katharopoulos et al. call it "concurrent". What distinguishes this paper is the <em>causal</em> formulation — the fixed-size recurrent state the delta rule later corrects. Efficient Attention is a vision paper and never builds that recurrence.'},
 
 {n:8, id:'delta', name:'Delta rule (origin)', date:'2021-02-22', lane:'cmp',
  src:'2102.11174', paper:'Linear Transformers Are Secretly Fast Weight Programmers',
@@ -338,14 +342,23 @@ const M = [
  cost:'It lowers the slope of the cache line; it does not flatten it. Double the context and you still double the cache. It buys you a constant factor, not a different asymptotic — which is the honest thing the lesson insists on saying about it.',
  pick:'The default for production decoders today. If you are shipping a model and have not chosen otherwise, this is the answer.'},
 
-{n:13, id:'ntk', name:'NTK-aware scaling', date:'2023-06-29', lane:'pos',
+{n:13, id:'ntk', name:'NTK-Aware scaling', date:'2023-06-29', lane:'pos',
  src:'reddit', paper:'r/LocalLLaMA post by u/bloc97 — no paper',
  one:'Extend a RoPE model by stretching low frequencies while leaving high ones nearly intact.',
  idea:'Naive position interpolation squeezes all positions into the trained range by scaling every RoPE frequency equally — which works, but crushes the high-frequency dimensions that distinguish adjacent tokens, so the model loses local precision. The NTK-aware fix scales the RoPE <em>base</em> instead, which stretches the slow dimensions a lot and the fast ones almost not at all: long-range reach is added without destroying short-range detail.',
  buy:'Real context extension with <strong>no fine-tuning at all</strong> and a few lines of code. It went from a forum post to production practice in weeks, which tells you how badly the problem needed solving.',
  cost:'A heuristic, not a derivation — quality decays as you push the scale factor, and there is no principled stopping point. It also arrived with no paper, no ablations, and no independent evaluation.',
  pick:'When you need more context out of a model you already have, today, without a training run.',
- note:'No arXiv paper exists — this is a community post, dated via the Wayback Machine. bloc97 published <em>two</em> methods; YaRN builds on the later <strong>NTK-By-Parts</strong> refinement, not on plain NTK-aware.'},
+ note:'No arXiv paper exists — this is a community post, dated via the Wayback Machine. bloc97 published <em>two</em> methods; the next card is the one YaRN actually builds on.'},
+
+{n:'13b', id:'ntk-parts', name:'NTK-By-Parts', date:'2023-07-07', lane:'pos',
+ src:'github', paper:'PR #1 to jquesnelle/scaled-rope — bloc97',
+ one:'Refines NTK-Aware by treating RoPE dimensions differently according to their wavelength.',
+ idea:'The correction that made the NTK family actually work. Rather than applying one global base change, it splits the RoPE dimensions into groups by wavelength: dimensions whose period is short relative to the trained context are left <em>untouched</em>, dimensions whose period exceeds it are fully interpolated, and a band in between is blended. Local precision is preserved exactly where plain NTK-Aware was still degrading it.',
+ buy:'Better quality than both position interpolation and plain NTK-Aware, with or without fine-tuning — and it is the method YaRN is built on top of, so it sits directly on the main line of descent.',
+ cost:'Introduces two tuning parameters that have to be set per model family, and like everything in this group it is still a heuristic correction to a frequency scheme rather than a model that was trained long.',
+ pick:'Over plain NTK-Aware, essentially always — it is strictly the better-studied of the two.',
+ note:'Not a Reddit post and not a paper: a <strong>GitHub pull request</strong>, dated from GitHub\'s own API (opened 2023-07-07T20:40:33Z, first commit 20:24:12Z the same day). A third community method exists — "Dynamic NTK" by emozilla — which YaRN also cites; it is not plotted here because its date could not be pinned to the same standard.'},
 
 {n:14, id:'yarn', name:'YaRN', date:'2023-08-31', lane:'pos',
  src:'2309.00071', paper:'YaRN: Efficient Context Window Extension of Large Language Models',
@@ -428,6 +441,8 @@ M.forEach(m => {
   d.id = m.id;
   const srcHtml = m.src === 'reddit'
     ? 'reddit r/LocalLLaMA'
+    : m.src === 'github'
+    ? '<a href="https://github.com/jquesnelle/yarn/pull/1" target="_blank" rel="noopener">jquesnelle/yarn#1</a>'
     : '<a href="https://arxiv.org/abs/' + m.src + '" target="_blank" rel="noopener">arXiv ' + m.src + '</a>';
   d.innerHTML =
     '<div class="top"><h3><span class="num">' + m.n + '</span>' + m.name + '</h3>' +

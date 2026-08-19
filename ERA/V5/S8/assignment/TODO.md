@@ -120,6 +120,36 @@ live-class transcript.
         disagreeing with the lesson's own 51.54 — now two decimals through the 1–100 GB band.
   - [ ] Acts 2–5 (timeline, dossiers, Q2 answer, sources) — **blocked on the date audit being signed
         off**, since all four render from `data/mechanisms.js`.
+- [x] **Date audit round 1 applied** (2026-08-19). The user flagged rows and asked for two specific
+      things; the flags were not cosmetic. **The count is now 21 mechanisms, not 20.**
+  - **Row 1 date CORRECTED: 2017-05-08 → 2016-11-07.** Was credited to ConvS2S (`1705.03122`) because
+    that is what *Attention Is All You Need* cites — but AIAYN cites the **later** of two papers by the
+    same group. The earlier one (`1611.02344`, Gehring/Auli/Grangier/Dauphin) states the mechanism
+    outright: *"we add position embeddings to encode the absolute position of each source word"*, form
+    `e_j = w_j + l_j`. Also chased its own antecedent, Sukhbaatar et al. 2015 (`1503.08895`): its
+    "position encoding" is *fixed*, but its separate "Temporal Encoding" matrix is *"learned during
+    training"* — a learned position embedding that indexes **memory slots, not token positions**.
+    Different granularity, so the marker stays at `1611.02344` with the antecedent stated.
+    **General lesson for the README: "the paper the famous paper cites" is a heuristic, not a proof.**
+  - **Row 13 SPLIT into 13 + 13b** (user: "Use two"). NTK-By-Parts = **2023-07-07**, and it is not a
+    Reddit post — YaRN's bibliography points at a **GitHub PR** (`jquesnelle/scaled-rope#1`, now
+    `jquesnelle/yarn#1`). Dated from GitHub's own API, two independent timestamps: PR opened
+    `2023-07-07T20:40:33Z` by `bloc97`, first commit authored `2023-07-07T20:24:12Z`, merged 07-09.
+    Stronger evidence than row 13's Wayback route. **YaRN builds on 13b, not 13** (2309.00071 §3.2).
+  - **Rows 4, 6, 7 stand — caveats are now quotations from the papers, not my characterisations.**
+    (4) Sparse Transformers' §2 Related Work credits Image Transformer (`1802.05751`, **2018-02-15**)
+    for "blocks of local attention" and claims breadth, not primacy — this was the user's explicit
+    "synopsis of Related Work" request. (6) Longformer says Sparse Transformer "uses a form of dilated
+    sliding window"; its real novelty is **global attention tokens**. (7) **Strongest flag** — Shen et
+    al. `1812.01243` (**2018-12-04**) reached linear complexity **19 months earlier** and Katharopoulos
+    et al. call it "concurrent". Row holds only because the lesson's argument needs the *causal*
+    fixed-state recurrence, and a full-text scan of `1812.01243` finds exactly **one** hit for
+    "causal"/"autoregressive" in the whole PDF — inside a bibliography entry.
+  - **Open question put back to the user:** a *third* community method exists, "Dynamic NTK" by
+    **emozilla** (different author), cited separately in YaRN. Not plotted — the instruction was "use
+    two", and Wayback's earliest capture of its URL is 2023-10-11, months late, so it cannot be dated
+    to the standard used everywhere else here. Chase it and add 13c, or leave it in dossier text only?
+  - New papers pulled into the library this pass: `1611.02344`, `1812.01243`, `1503.08895`.
 - [ ] Write pros/cons for every mechanism: what it buys, what it costs, when you'd choose it.
 - [ ] Answer Question 2 directly: what does the completed timeline show that a list wouldn't?
 - [ ] Deploy (Netlify/Vercel/equivalent); verify the live link opens in an incognito window.
