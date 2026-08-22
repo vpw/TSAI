@@ -16,8 +16,12 @@
       comments intact — rerun the generator, never hand-edit), the three corrected-date stories
       (#1 ConvS2S-vs-precursor, #13/#13b NTK split, #20 DroPE-via-bibliography), and the Act 4 Q2
       answer reproduced as §5 for the submission form.
-- [ ] **Push, then submit** — the only remaining step. See "Push destination" section below for the
-      exact subtree-split commands; hand the push to the user for the PAT prompt.
+- [x] **Pushed** (2026-08-22): `github.com/vpw/era-v5-s8`, `s8-standalone` branch as `main`. User
+      created the repo and ran the push themselves (PAT at the password prompt). Confirmed live
+      (HTTP 200).
+
+**S8 is complete and submitted.** Live app: https://cfc9f13c.ht-ml.app/ · Repo:
+https://github.com/vpw/era-v5-s8
 
 ## ▶ NEXT SESSION — start here (all six acts are built; nothing left but shipping)
 
