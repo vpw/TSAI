@@ -1,6 +1,24 @@
 # S8 TODO — Modern Attention Variants
 
 
+## ▶ STATUS (2026-08-22): deployed + README written, one step left — push and submit
+
+- [x] **Branch renamed** `s7-embeddings` → `s8-attention-variants` (2026-08-22) — a scaffolding slip
+      from 2026-08-17 that had S8 continuing directly on the S7 branch name. Cosmetic only (neither
+      name was ever pushed to `origin`, and the subtree split below keys off the folder path, not the
+      branch name), fixed for clarity before submission.
+- [x] **Deployed** (2026-08-22): `npx -y lavish-axi share site/index.html` → live at
+      **https://cfc9f13c.ht-ml.app/** (no login needed, public by default). Verified in a fresh
+      browser tab (equivalent to incognito — no session cookies, no local storage): loads clean, no
+      console errors, renders identically to `file://`.
+- [x] **`README.md` written** (2026-08-22). Live link + repo link up front, six acts one-liner each,
+      the chronology table generated via `node tools/gen-readme-table.js --write` (22 rows, marker
+      comments intact — rerun the generator, never hand-edit), the three corrected-date stories
+      (#1 ConvS2S-vs-precursor, #13/#13b NTK split, #20 DroPE-via-bibliography), and the Act 4 Q2
+      answer reproduced as §5 for the submission form.
+- [ ] **Push, then submit** — the only remaining step. See "Push destination" section below for the
+      exact subtree-split commands; hand the push to the user for the PAT prompt.
+
 ## ▶ NEXT SESSION — start here (all six acts are built; nothing left but shipping)
 
 **State as of 2026-08-19:** Acts 0–5 are complete, verified and committed (`573dda1`). The app is
