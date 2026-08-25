@@ -25,7 +25,7 @@
     pos:    'how far can it reach',
     mem:    'what must stay resident',
     cmp:    'what must be computed',
-    sys:    'how fast can it run'
+    sys:    'does it attend to the right thing'
   };
 
   var W = 1000, PADL = 146, PADR = 34, TOP = 46, LANE_H = 64, AXIS_H = 46;

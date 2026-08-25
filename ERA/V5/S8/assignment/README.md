@@ -21,8 +21,8 @@ observations the app surfaces.
 Twenty-one mechanisms, plus one model (LightningLM, the lesson's "V4") quoted only for the numbers
 it grounds — laid out on a single proportional timeline from 2016-11-07 to 2025-12-13, split into
 four "lanes" for which of attention's costs each mechanism is trying to pay down: **position**,
-**memory** (the KV-cache), **compute** (the quadratic score matrix), and **systems** (bandwidth,
-not FLOPs — the bonus mechanism's lane). Every mechanism gets a uniform dossier: what it is, what
+**memory** (the KV-cache), **compute** (the quadratic score matrix), and **signal quality** (not a
+cost at all — the bonus mechanism's lane). Every mechanism gets a uniform dossier: what it is, what
 it buys, what it costs, when you'd actually pick it, and — on every single one — exactly how its
 launch date was checked.
 
@@ -65,13 +65,21 @@ attention sinks, NTK-aware scaling, YaRN, linear attention, the delta rule, Gate
 sparse/top-k attention, DeepSeek's compressed sparse attention (NSA), and DroPE — all present.
 Plus the bonus, not-covered-in-class pick:
 
-**FlashAttention** (Dao et al., [arXiv:2205.14135](https://arxiv.org/abs/2205.14135), 2022-05-27).
-Chosen over Multi-Token Prediction or Mamba because it answers a genuinely distinct *third*
-question the other seventeen mechanisms don't touch: it changes no math at all, computes
-bit-identical attention, and attacks memory **bandwidth** via IO-aware kernel fusion rather than
-FLOPs or KV-cache size. It also fills a real chronological gap in the data — the quietest stretch
-on the whole timeline, between ALiBi (2021-08) and GQA (2023-05) — which is itself one of the
-eight observations in Act 4.
+**Differential Transformer** (Ye, Dong, Xia, Sun, Zhu, Huang, Wei — Microsoft Research / Tsinghua,
+[arXiv:2410.05258](https://arxiv.org/abs/2410.05258), 2024-10-07). It runs two ordinary softmax
+attention maps per head in parallel and subtracts one from the other (with a small learned scalar
+λ) so that whatever both maps attend to alike — noise — cancels, leaving a sharper map. That is a
+genuinely distinct axis from the other twenty mechanisms in this table: none of them touches
+*output faithfulness*, only cost.
+
+**This slot originally held FlashAttention.** Instructor feedback on the first submission correctly
+flagged that as a miscategorisation: FlashAttention is an IO-aware *kernel* — it reschedules memory
+traffic between HBM and SRAM and returns bit-identical attention, so it changes where the numbers
+live, never what attention computes. It doesn't earn the "uncovered attention variant" bonus on a
+technicality. Differential Transformer replaces it because it is an actual attention mechanism, and
+because it makes an interesting contrast with its neighbours: it lands inside the field's busiest
+2024 efficiency cluster (MLA, DeltaNet, Gated DeltaNet, NSA) and is the only one of them spending
+*more* compute for *better* quality rather than less compute for a cheaper bill — see §5.4.
 
 ## 4. Chronology and sources
 
@@ -100,14 +108,14 @@ behind. **Do not hand-edit the table; rerun the generator.**
 | 8 | 2021-02-22 | **Delta rule (origin)** | compute | [arXiv:2102.11174](https://arxiv.org/abs/2102.11174)<br>`v1 2021-02-22T16:51:38Z` | A | arXiv v1 metadata. |
 | 9 | 2021-04-20 | **RoPE** | position | [arXiv:2104.09864](https://arxiv.org/abs/2104.09864)<br>`v1 2021-04-20T09:54:06Z` | A | arXiv v1 metadata. |
 | 10 | 2021-08-27 | **ALiBi** | position | [arXiv:2108.12409](https://arxiv.org/abs/2108.12409)<br>`v1 2021-08-27T17:35:06Z` | A | arXiv v1 metadata. |
-| 11 | 2022-05-27 | **FlashAttention** | systems | [arXiv:2205.14135](https://arxiv.org/abs/2205.14135)<br>`v1 2022-05-27T17:53:09Z` | A | arXiv v1 metadata, **plus** an independent `pdftotext` read of the PDF title page — checked twice because this is the bonus row and carries extra scrutiny. |
-| 12 | 2023-05-22 | **GQA — Grouped-Query Attention** | memory | [arXiv:2305.13245](https://arxiv.org/abs/2305.13245)<br>`v1 2023-05-22T17:16:38Z` | A | arXiv v1 metadata. |
-| 13 | 2023-06-29 | **NTK-Aware scaling** | position | [r/LocalLLaMA post](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/) | C | **No paper exists — the weakest evidence class in the set, and still pinned to the minute.** reddit.com is bot-walled to both `curl` and a real browser, so the date came from the Wayback Machine two independent ways: a snapshot carries Reddit's own `created-timestamp="2023-06-29T08:21:29.413+0000"` with `author="bloc97"`, and the CDX index's earliest capture of the URL is 08:21:50 UTC the same day — an archive cannot predate what it archived. |
-| 13b | 2023-07-07 | **NTK-By-Parts** | position | [GitHub PR](https://github.com/jquesnelle/yarn/pull/1) | B | **Not a paper and not a Reddit post — a GitHub pull request**, which makes this the best-evidenced non-paper row here. Dated from GitHub's own API, two independent timestamps: the PR was opened by `bloc97` at `2023-07-07T20:40:33Z` and its first commit is authored `2023-07-07T20:24:12Z`, 16 minutes earlier the same day. Merged 2023-07-09. Platform record, not archival inference. The repo was later renamed, so YaRN's cited URL now resolves to `jquesnelle/yarn/pull/1`. |
-| 14 | 2023-08-31 | **YaRN** | position | [arXiv:2309.00071](https://arxiv.org/abs/2309.00071)<br>`v1 2023-08-31T18:18:07Z` | A | arXiv v1 metadata. Its own bibliography is also what established that #13 and #13b have no papers, and what separated the two. |
-| 15 | 2023-09-29 | **Attention sinks** | memory | [arXiv:2309.17453](https://arxiv.org/abs/2309.17453)<br>`v1 2023-09-29T17:59:56Z` | A | arXiv v1 metadata. |
-| 16 | 2024-05-07 | **MLA — Multi-head Latent Attention** | memory | [arXiv:2405.04434](https://arxiv.org/abs/2405.04434)<br>`v1 2024-05-07T15:56:43Z` | A | arXiv v1 metadata. The mechanism is introduced inside a model paper rather than one of its own — normal for DeepSeek. |
-| 17 | 2024-06-10 | **DeltaNet (parallel training)** | compute | [arXiv:2406.06484](https://arxiv.org/abs/2406.06484)<br>`v1 2024-06-10T17:24:42Z` | A | arXiv v1 metadata. |
+| 11 | 2023-05-22 | **GQA — Grouped-Query Attention** | memory | [arXiv:2305.13245](https://arxiv.org/abs/2305.13245)<br>`v1 2023-05-22T17:16:38Z` | A | arXiv v1 metadata. |
+| 12 | 2023-06-29 | **NTK-Aware scaling** | position | [r/LocalLLaMA post](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/ntkaware_scaled_rope_allows_llama_models_to_have/) | C | **No paper exists — the weakest evidence class in the set, and still pinned to the minute.** reddit.com is bot-walled to both `curl` and a real browser, so the date came from the Wayback Machine two independent ways: a snapshot carries Reddit's own `created-timestamp="2023-06-29T08:21:29.413+0000"` with `author="bloc97"`, and the CDX index's earliest capture of the URL is 08:21:50 UTC the same day — an archive cannot predate what it archived. |
+| 12b | 2023-07-07 | **NTK-By-Parts** | position | [GitHub PR](https://github.com/jquesnelle/yarn/pull/1) | B | **Not a paper and not a Reddit post — a GitHub pull request**, which makes this the best-evidenced non-paper row here. Dated from GitHub's own API, two independent timestamps: the PR was opened by `bloc97` at `2023-07-07T20:40:33Z` and its first commit is authored `2023-07-07T20:24:12Z`, 16 minutes earlier the same day. Merged 2023-07-09. Platform record, not archival inference. The repo was later renamed, so YaRN's cited URL now resolves to `jquesnelle/yarn/pull/1`. |
+| 13 | 2023-08-31 | **YaRN** | position | [arXiv:2309.00071](https://arxiv.org/abs/2309.00071)<br>`v1 2023-08-31T18:18:07Z` | A | arXiv v1 metadata. Its own bibliography is also what established that #12 and #12b have no papers, and what separated the two. |
+| 14 | 2023-09-29 | **Attention sinks** | memory | [arXiv:2309.17453](https://arxiv.org/abs/2309.17453)<br>`v1 2023-09-29T17:59:56Z` | A | arXiv v1 metadata. |
+| 15 | 2024-05-07 | **MLA — Multi-head Latent Attention** | memory | [arXiv:2405.04434](https://arxiv.org/abs/2405.04434)<br>`v1 2024-05-07T15:56:43Z` | A | arXiv v1 metadata. The mechanism is introduced inside a model paper rather than one of its own — normal for DeepSeek. |
+| 16 | 2024-06-10 | **DeltaNet (parallel training)** | compute | [arXiv:2406.06484](https://arxiv.org/abs/2406.06484)<br>`v1 2024-06-10T17:24:42Z` | A | arXiv v1 metadata. |
+| 17 | 2024-10-07 | **Differential Transformer (DIFF)** | quality | [arXiv:2410.05258](https://arxiv.org/abs/2410.05258)<br>`v1 2024-10-07T17:57:38Z` | A | arXiv v1 metadata (2024-10-07T17:57:38Z) from export.arxiv.org's own Atom feed, **plus** an independent `pdftotext` read of the downloaded PDF's title page — checked twice because this is the bonus row and carries extra scrutiny. The PDF header itself reads "Published as a conference paper at ICLR 2025" above the arXiv stamp, confirming the same work under later peer review. |
 | 18 | 2024-12-09 | **Gated DeltaNet** | compute | [arXiv:2412.06464](https://arxiv.org/abs/2412.06464)<br>`v1 2024-12-09T13:09:04Z` | A | arXiv v1 metadata. A "Gated DeltaNet-2" follow-up exists (2605.22791, 2026-05-21) — **not** the one the brief means; noted so the two are not swapped. |
 | 19 | 2025-02-16 | **DeepSeek NSA** | compute | [arXiv:2502.11089](https://arxiv.org/abs/2502.11089)<br>`v1 2025-02-16T11:53:44Z` | A | arXiv v1 metadata. Author list includes DeepSeek-AI leadership, confirming this is the paper behind the lesson's §12 compression + top-k block selection design. |
 | 20 | 2025-12-13 | **DroPE** | position | [arXiv:2512.12167](https://arxiv.org/abs/2512.12167)<br>`v1 2025-12-13T04:23:47Z` | B | arXiv v1 metadata — **but this is the row I got wrong first.** My initial search concluded DroPE had no public source, which was simply stopping too early. Found via LightningLM's bibliography, extracted two independent ways (a RAG hit *and* a raw `pdftotext` dump of the reference pages, bypassing chunking entirely), then title/authors/date re-confirmed against arXiv directly. |
@@ -160,9 +168,12 @@ Every number below is computed from `site/data/mechanisms.js` at render time in 
    never the idea (correct the state instead of accumulating into it) — it was that read-then-write
    is sequential and GPUs hate sequential. DeltaNet's 2024 contribution is a parallel training
    algorithm, not the rule itself.
-4. **The "quiet" stretch between ALiBi and GQA wasn't quiet — it was systems work.** The one entry
-   inside that ~21-month gap is FlashAttention, which kept exact attention affordable for years
-   longer than it otherwise would have.
+4. **One entry in the field's busiest cluster spends more, not less.** Differential Transformer
+   (Oct 2024) lands between DeltaNet's parallel-training paper (Jun 2024) and Gated DeltaNet
+   (Dec 2024) — the field's densest efficiency stretch (MLA, DeltaNet, Gated DeltaNet, NSA all
+   within nine months) — and is the one mechanism there paying *more* arithmetic for a cleaner
+   signal instead of less arithmetic for a cheaper bill. Not everything shipped in that window was
+   about cost.
 5. **2023 happens all at once.** Five mechanisms land inside a four-month window — a pile-up a
    plain list renders as five ordinary rows.
 6. **Position is the problem that never stayed solved.** Eight attempts across the full nine-year

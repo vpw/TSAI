@@ -21,6 +21,7 @@
   function yearsMonths(a, b) {
     var d = days(a, b), y = Math.floor(d / 365.25), mo = Math.round((d - y * 365.25) / 30.4375);
     if (mo === 12) { y += 1; mo = 0; }
+    if (y === 0) return mo + ' month' + (mo === 1 ? '' : 's');
     return y + (y === 1 ? ' year' : ' years') + (mo ? ' ' + mo + ' month' + (mo === 1 ? '' : 's') : '');
   }
   function between(a, b) {
@@ -83,22 +84,25 @@
       };
     } },
 
-  { id: 'quiet-systems',
-    title: 'The stretch that looks empty is where the systems people were working',
+  { id: 'quality-outlier',
+    title: 'One entry on this timeline spends more, not less',
     build: function () {
-      var a = get('alibi'), b = get('gqa'), mid = between(a.date, b.date);
+      var a = get('deltanet'), b = get('difftransformer'), c = get('gated-delta');
       return {
-        facts: [['ALiBi → GQA', yearsMonths(a.date, b.date)], ['entries in between', String(mid.length)]],
-        html: '<p>Between ALiBi (August 2021) and GQA (May 2023) the assignment\'s required list shows ' +
-          'almost nothing — ' + yearsMonths(a.date, b.date) + ' of apparent quiet. Exactly one entry ' +
-          'sits inside it, and it is the one nobody assigned: <strong>FlashAttention</strong>.</p>' +
-          '<p>That is the whole reason it earns a slot. It answers neither of the two bills — it changes ' +
-          'no maths at all, computes bit-identical attention, and attacks a third cost the lesson never ' +
-          'names: <em>memory bandwidth</em>. The field was not idle in this window; it was solving the ' +
-          '<strong>systems</strong> half of the problem while the architectural half paused. Exact ' +
-          'attention stayed affordable for years longer than it otherwise would have — which is part of ' +
-          'why the pressure to approximate it only becomes urgent afterwards.</p>',
-        hi: { from: a.date, to: b.date, ids: ['flash'], label: 'one entry in ' + yearsMonths(a.date, b.date) }
+        facts: [['DeltaNet → DIFF', yearsMonths(a.date, b.date)], ['DIFF → Gated DeltaNet', yearsMonths(b.date, c.date)]],
+        html: '<p>Land inside the field\'s densest cost-cutting stretch — MLA in May 2024, DeltaNet\'s ' +
+          'parallel-training paper in June, Gated DeltaNet in December, NSA the following February — ' +
+          'and one entry does not belong: <strong>Differential Transformer</strong>, October 2024, the ' +
+          'bonus mechanism, sitting ' + yearsMonths(a.date, b.date) + ' after DeltaNet and ' +
+          yearsMonths(b.date, c.date) + ' before Gated DeltaNet.</p>' +
+          '<p>Every neighbour in that cluster is paying one of the two bills down. Differential ' +
+          'Transformer pays neither — it runs <em>two</em> softmax attention maps per head and ' +
+          'subtracts one from the other to cancel noise, spending more arithmetic for a cleaner signal ' +
+          'instead of less arithmetic for a cheaper one. That it was published in the middle of the ' +
+          'field\'s busiest efficiency stretch, doing the opposite, is the point: not everything shipped ' +
+          'in this window was about cost.</p>',
+        hi: { from: a.date, to: c.date, ids: ['deltanet', 'difftransformer', 'gated-delta'],
+              label: 'the one entry here that spends more' }
       };
     } },
 

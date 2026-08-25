@@ -1,7 +1,36 @@
 # S8 TODO — Modern Attention Variants
 
 
-## ▶ STATUS (2026-08-22): deployed + README written, one step left — push and submit
+## ▶ STATUS (2026-08-25): correction applied post-feedback — bonus mechanism swapped, redeploy/repush pending
+
+- [x] **Instructor feedback (2026-08-25):** sourcing praised as excellent, but the bonus pick was
+      wrong — *"flash attention is an IO kernel not a new attention variant, so it does not earn the
+      uncovered bonus."* Correct: FlashAttention reschedules HBM↔SRAM memory traffic and returns
+      bit-identical attention, so it never changes what attention computes.
+- [x] **Replaced FlashAttention with Differential Transformer** (Ye, Dong, Xia, Sun, Zhu, Huang, Wei
+      — Microsoft Research/Tsinghua, arXiv `2410.05258`, v1 2024-10-07T17:57:38Z, verified via
+      arxiv-library skill: `export.arxiv.org` Atom feed + independent `pdftotext` read of the
+      downloaded PDF title page). It runs two softmax attention maps per head and subtracts one from
+      the other — a genuine change to the computation, unlike the kernel it replaces. Renumbered
+      `site/data/mechanisms.js` n:12→20 (was n:12→n:11 after removing flash at n:11, then inserted
+      the new entry at n:17 in its true chronological slot between DeltaNet (Jun 2024) and Gated
+      DeltaNet (Dec 2024) — total mechanism count unchanged at 21). Renamed the `sys` lane
+      "Systems & kernels" → "Signal quality" (short label `quality`) since the bonus mechanism no
+      longer sits on a bandwidth/kernel axis. Rewrote the Act 4 insight that was built around
+      FlashAttention filling the ALiBi→GQA gap (that gap is now genuinely empty) into a new insight
+      about Differential Transformer being the one entry in the 2024 efficiency cluster that spends
+      *more* compute for quality instead of less for cost. Updated `README.md` (§1 lane list, §3
+      bonus paragraph, §5 point 4, table regenerated via `node tools/gen-readme-table.js --write`),
+      `resources/chronology-research.md` (table renumbered, bonus section rewritten with the
+      correction left visible per this repo's own convention), and `resources/mechanism-reference.html`
+      (marked stale with a pointer to the corrected files, not fully resynced — it was already an
+      unlinked draft predating the final app). Verified end-to-end in a browser against a local
+      static server: timeline marker, dossier, and the new Act 4 insight all render correctly with
+      no console errors.
+- [ ] **Redeploy `site/` and repush to `github.com/vpw/era-v5-s8`** so the live link and repo reflect
+      the fix — ask the user before doing either, since both are visible/shared-state actions.
+
+## ▶ PRIOR STATUS (2026-08-22): deployed + README written, one step left — push and submit
 
 - [x] **Branch renamed** `s7-embeddings` → `s8-attention-variants` (2026-08-22) — a scaffolding slip
       from 2026-08-17 that had S8 continuing directly on the S7 branch name. Cosmetic only (neither
