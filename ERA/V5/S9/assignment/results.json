@@ -1,0 +1,165 @@
+{
+  "config": {
+    "V": 10000,
+    "D": 256,
+    "n_layer": 4,
+    "n_head": 4,
+    "T": 256,
+    "B": 8,
+    "tokenizer": "ERA V5 Session 2 BPE (mr variant, en/hi/te/mr)",
+    "device": "cpu",
+    "torch": "2.13.0+cpu",
+    "real_V": 131072,
+    "real_D": 4096
+  },
+  "1a_shapes": {
+    "tokens": [
+      8,
+      256
+    ],
+    "hidden": [
+      8,
+      256,
+      256
+    ],
+    "head_weight": [
+      10000,
+      256
+    ],
+    "logits": [
+      8,
+      256,
+      10000
+    ],
+    "logits_shifted": [
+      8,
+      255,
+      10000
+    ],
+    "targets_shifted": [
+      8,
+      255
+    ],
+    "flat_logits": [
+      2040,
+      10000
+    ],
+    "flat_targets": [
+      2040
+    ]
+  },
+  "1a_logits_MiB": 78.125,
+  "1b_shift": {
+    "final_loss": {
+      "correct": 7.414966583251953,
+      "no_shift": 3.150946617126465,
+      "reversed": 6.234457015991211
+    },
+    "final_ppl": {
+      "correct": 1660.653673824135,
+      "no_shift": 23.358165358176095,
+      "reversed": 510.02360858556784
+    },
+    "steps": 120,
+    "no_shift_echo_rate": 0.8046875,
+    "ppl_ratio_no_shift": 71.09521010573948,
+    "ppl_ratio_reversed": 3.2560329480228822
+  },
+  "1c_padding": {
+    "positions": 1016,
+    "contributing_masked": 696,
+    "contributing_unmasked": 1016,
+    "pad_positions": 320,
+    "pad_fraction": 0.31496062992125984,
+    "denominator_recovered": 696.0,
+    "untrained": {
+      "loss_unmasked": 9.14847183227539,
+      "loss_masked": 9.235121726989746,
+      "delta": 0.08664989471435547
+    },
+    "trained_clean": {
+      "loss_unmasked": 8.84831714630127,
+      "loss_masked": 7.38157844543457,
+      "delta": -1.4667387008666992
+    },
+    "trained_on_padding_unmasked": {
+      "loss_unmasked": 5.24901008605957,
+      "loss_masked": 7.60520076751709,
+      "delta": 2.3561906814575195
+    }
+  },
+  "1d_packing": {
+    "positions": 255,
+    "trained": {
+      "loss_unmasked": 9.95163345336914,
+      "loss_masked": 9.942498207092285,
+      "boundary_token_loss": 12.272161483764648,
+      "mean_other_positions": 9.942497193343996,
+      "boundary_excess": 2.329664290420652,
+      "delta": -0.009135246276855469
+    },
+    "untrained": {
+      "loss_unmasked": 9.297855377197266,
+      "loss_masked": 9.298612594604492,
+      "boundary_token_loss": 9.105452537536621,
+      "mean_other_positions": 9.298612819881889,
+      "boundary_excess": -0.19316028234526783,
+      "delta": 0.0007572174072265625
+    }
+  },
+  "1e_perplexity": {
+    "untrained_loss": 9.256662406173406,
+    "untrained_ppl": 10474.11659024094,
+    "ln_V": 9.210340371976184,
+    "deviation_nats": 0.046322034197222806,
+    "tokens_measured": 16320,
+    "trained_loss": 7.414966583251953,
+    "trained_ppl": 1660.653673824135,
+    "real_config_ln_V": 11.78350206951907
+  },
+  "1f_tying": {
+    "proxy": {
+      "embed": 2560000,
+      "head": 2560000,
+      "untied": 5120000,
+      "tied": 2560000
+    },
+    "real": {
+      "embed": 536870912,
+      "head": 536870912,
+      "untied": 1073741824,
+      "tied": 536870912
+    },
+    "trunk_params": 5773568
+  },
+  "1g_memory": {
+    "N_rows": 4088,
+    "chunk": 512,
+    "retained_ordinary_MiB": 169.73382949829102,
+    "retained_chunked_MiB": 4.023384094238281,
+    "retained_ratio": 42.18683215986256,
+    "V_over_D": 39.0625,
+    "full_logits_MiB": 155.94482421875,
+    "peak_rss_ordinary_MiB": 467.203125,
+    "peak_rss_chunked_MiB": 38.375,
+    "peak_ratio": 12.174674267100977,
+    "loss_ordinary": 9.26039981842041,
+    "loss_chunked": 9.260400772094727,
+    "grad_max_delta": 7.450580596923828e-09,
+    "real_config_GiB_at_64k": 16.0,
+    "real_config_GiB_at_256k": 64.0
+  },
+  "part2": {
+    "steps": 300,
+    "head1_loss": 6.394892692565918,
+    "head2_loss": 6.652772903442383,
+    "sum": 13.0476655960083,
+    "gap": 0.25788021087646484,
+    "head1_ppl": 598.7790663301647,
+    "head2_ppl": 774.9301555664466,
+    "head1_loss_step0": 9.262955665588379,
+    "head2_loss_step0": 9.2732515335083,
+    "gap_first_25": 0.01929531097412074,
+    "gap_last_25": 0.22280700683593757
+  }
+}
