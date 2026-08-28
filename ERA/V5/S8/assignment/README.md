@@ -3,7 +3,7 @@
 **ERA V5, Session 8 — every attention mechanism covered in class, arranged by the date it actually
 launched, not the order it was taught.**
 
-🔗 **Live app:** [cfc9f13c.ht-ml.app](https://cfc9f13c.ht-ml.app/)
+🔗 **Live app:** [f6546f88.ht-ml.app](https://f6546f88.ht-ml.app/)
 📦 **Repo:** [github.com/vpw/era-v5-s8](https://github.com/vpw/era-v5-s8)
 
 **Short answer to the bonus question:** ordering tells you the sequence, spacing tells you the

@@ -27,8 +27,17 @@
       unlinked draft predating the final app). Verified end-to-end in a browser against a local
       static server: timeline marker, dossier, and the new Act 4 insight all render correctly with
       no console errors.
-- [ ] **Redeploy `site/` and repush to `github.com/vpw/era-v5-s8`** so the live link and repo reflect
-      the fix — ask the user before doing either, since both are visible/shared-state actions.
+- [x] **Redeployed `site/`** (2026-08-28) via `npx -y lavish-axi share site/index.html`. The old
+      deploy's `update_key` was never saved anywhere in the repo, so the same `cfc9f13c.ht-ml.app`
+      link could not be updated in place — a new link was created instead:
+      **https://f6546f88.ht-ml.app/**. `README.md` updated to point at it. The old link is now
+      stale (still shows the FlashAttention version) and cannot be recovered or redirected.
+      **Lesson: save the `update_key` next time**, in a local-only file, not in README/TODO.
+- [ ] **Repush to `github.com/vpw/era-v5-s8`** via the subtree-split convention below, so the repo
+      reflects the fix too. Push command handed to the user (PAT needed at the prompt).
+- [ ] **Flag to the user:** TODO said the resubmission deadline was Sat Aug 22, 2026 — today
+      (2026-08-28) is past that. Confirm with the instructor whether this post-feedback correction
+      still counts, since the new push happens after the stated deadline.
 
 ## ▶ PRIOR STATUS (2026-08-22): deployed + README written, one step left — push and submit
 
