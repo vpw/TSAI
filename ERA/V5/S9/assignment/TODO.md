@@ -1,6 +1,11 @@
 # S9 TODO — Loss Functions & Output Heads
 
-## ▶ STATUS (2026-08-28): notebook built and executed; README + push remaining
+## ▶ STATUS (2026-08-29): DONE — pushed and submitted
+
+Submitted URL: **https://github.com/vpw/era-v5-s9** (repo root; GitHub renders `README.md` there,
+which is the graded artifact). Public — verified anonymously readable. Submission repo `main` is
+`6afaf0f`, the subtree split of `s9-loss-functions` @ `ad470a5`; the split tree hash matches the
+`ERA/V5/S9/assignment` subtree exactly, so nothing was left behind.
 
 Due **Sat, Aug 29, 2026, 7:00 AM** · 1000 pts · resubmission allowed. Deliverable is a **GitHub
 README.md link** (incognito-accessible) with the notebook and/or training logs in the same repo.
@@ -108,12 +113,18 @@ is exactly the failure this assignment is testing for.
 - [x] **S1. Run the notebook top to bottom in a fresh runtime.** "Runs top to bottom" is stated in
       the brief, so a notebook that only works with out-of-order cell execution fails the spec.
       Keep the executed outputs in the committed `.ipynb`.
-- [ ] **S2. Write `README.md`** — the seven numbers from Part 1 and the two losses from Part 2, each
+- [x] **S2. Write `README.md`** — the seven numbers from Part 1 and the two losses from Part 2, each
       next to the explanation the brief asks for, plus the configuration and tokenizer they were
-      measured on. This is the graded artifact; the notebook is its evidence.
-- [ ] **S3. Push** via subtree split (below), with the `.ipynb` and/or training logs included.
-- [ ] **S4. Verify the README link in an incognito window**, then tick the form's checkbox honestly.
-- [ ] **S5. Submit** the GitHub README.md link and record it back in this file.
+      measured on. This is the graded artifact; the notebook is its evidence. Generated from
+      `README.tmpl.md` + `results.json` by `tools/build_readme.py`, so every number traces to a cell
+      that ran.
+- [x] **S3. Push** via subtree split (below), with the `.ipynb` and/or training logs included.
+      Pushed to `github.com/vpw/era-v5-s9` `main` = `6afaf0f`. The split carries the notebook (with
+      outputs), `logs/run.log`, `results.json`, `notebook_src.py`, `tools/`, and `assets/`.
+- [x] **S4. Verify the README link in an incognito window**, then tick the form's checkbox honestly.
+- [x] **S5. Submit** the GitHub README.md link and record it back in this file.
+      Submitted **2026-08-29** (due 2026-08-29 07:00): https://github.com/vpw/era-v5-s9
+      Resubmission stays open, so a later pass can extend Parts 1-2 without penalty.
 
 ## Standing conventions (carried from S6-S8, don't re-decide)
 
