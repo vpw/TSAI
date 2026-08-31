@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Proxy ablation pipeline (proxy/) -- raw/pools/tokens (10.7GB) are the
+# training INPUT, regenerable via proxy/scripts/{fetch_raw,build_pools,
+# tokenize_pools}.py. results/ and logs/ (the actual GPU-run output,
+# ~412KB total -- RESULTS.md's numbers come from results/*.json) are NOT
+# ignored; they're the evidence and stay tracked.
+proxy/data/raw/
+proxy/data/pools/
+proxy/data/tokens/
+
+# Topup curation pipeline (topup/) -- regenerable via topup/scripts/driver.py.
+# Mirrors S4's pattern: run/*.json and run/stages/ (small, evidence) stay
+# tracked; the large regenerated corpus itself does not.
+topup/data/raw/
+topup/data/stage/
+topup/data/run/shards/

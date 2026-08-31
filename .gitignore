@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+
+# Claude Code session-resume checkpoints (session IDs, checkpoint refs) --
+# tooling exhaust, not course content, and this repo is public.
+.claude/
