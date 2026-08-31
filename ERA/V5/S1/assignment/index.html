@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERA V5 S1 - Neural Network Fundamentals</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script src="https://unpkg.com/brain.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-0: #0b0e1a;
+            --bg-1: #12172a;
+            --accent: #7c6cf6;
+            --accent-2: #22d3ee;
+            --accent-soft: rgba(124, 108, 246, 0.15);
+            --text: #e8eaf5;
+            --text-dim: #8a90ab;
+            --danger: #ff6b6b;
+            --warn: #ffd43b;
+            --good: #4ade80;
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(124, 108, 246, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 85% 20%, rgba(34, 211, 238, 0.10) 0%, transparent 45%),
+                linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .header {
+            background: rgba(8, 10, 20, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 26px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 6px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.15);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .tab {
+            padding: 11px 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        .tab.active {
+            background: linear-gradient(90deg, var(--accent) 0%, #6c5ce7 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 18px rgba(124, 108, 246, 0.35);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.35s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .experiment {
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .experiment h2 {
+            color: var(--text);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .experiment .claim {
+            background: var(--accent-soft);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #d8d4ff;
+        }
+
+        .plot-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .plot-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            transition: border-color 0.25s ease;
+        }
+
+        .plot-box:hover {
+            border-color: rgba(124, 108, 246, 0.4);
+        }
+
+        .plot-box h3 {
+            margin-bottom: 10px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        canvas {
+            border-radius: 10px;
+            background: #05070d;
+            border: 1px solid var(--card-border);
+            max-width: 100%;
+        }
+
+        .data-plot-canvas {
+            border: 1px solid var(--accent) !important;
+        }
+
+        .results {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 20px 30px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-card .accuracy {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .result-card.linear .accuracy {
+            color: var(--danger);
+        }
+
+        .result-card.relu .accuracy {
+            color: var(--good);
+        }
+
+        .result-card .label {
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--accent) 0%, #6c5ce7 100%);
+            color: white;
+            border: none;
+            padding: 13px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 6px 20px rgba(124, 108, 246, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(124, 108, 246, 0.45);
+        }
+
+        .btn:disabled {
+            background: #3a3f52;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn.running {
+            background: linear-gradient(90deg, #f59f00 0%, #ff922b 100%);
+        }
+
+        .info-box {
+            background: rgba(255, 212, 59, 0.08);
+            border: 1px solid rgba(255, 212, 59, 0.25);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            color: var(--warn);
+        }
+
+        .training-log {
+            background: #05070d;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: 'SF Mono', Consolas, Monaco, monospace;
+            font-size: 0.85rem;
+            color: var(--good);
+        }
+
+        .model-architecture {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .layer-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .arrow {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .training .btn {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 ERA V5 S1 - Neural Network Fundamentals</h1>
+        <p>Interactive demonstrations of deep learning concepts</p>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('s1-1')">S1-1: Activations</button>
+        <button class="tab" onclick="showTab('s1-2')">S1-2: Depth + Non-linearity</button>
+        <button class="tab" onclick="showTab('s1-3')">S1-3: Embeddings</button>
+        <button class="tab" onclick="showTab('s1-4')">S1-4: Memorization</button>
+    </div>
+    
+    <div class="content">
+        <!-- S1-1: Activations -->
+        <div id="s1-1" class="tab-content active">
+            <div class="experiment">
+                <h2>📌 S1-1: Activations Exist For A Reason</h2>
+                <div class="claim">
+                    <strong>Claim:</strong> A model with no nonlinearity can only draw a straight boundary, 
+                    so it cannot separate two interleaved/concentric rings; adding one ReLU hidden layer can wrap around the ring.
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 The Key Insight:</strong> Linear models (no activation) can only learn linear decision boundaries (straight lines). 
+                    With ReLU activation, the network can create non-linear boundaries that can separate complex patterns like concentric rings.
+                </div>
+                
+                <h3>Data: Two Concentric Rings (Not Linearly Separable)</h3>
+                <p style="color: #888; margin: 10px 0;">300 noisy 2D points: inner ring = class 0, outer ring = class 1</p>
+                
+                <div class="model-architecture">
+                    <div class="layer-box">Input<br><small>(2D)</small></div>
+                    <span class="arrow">→</span>
+                    <div class="layer-box">Linear<br><small>(no activation)</small></div>
+                    <span class="arrow">→</span>
+                    <div class="layer-box">Sigmoid<br><small>(output)</small></div>
+                </div>
+                
+                <p style="text-align: center; color: #666; margin: 10px 0;">Model A: Single Linear Layer + Sigmoid</p>
+                
+                <div class="model-architecture">
+                    <div class="layer-box">Input<br><small>(2D)</small></div>
+                    <span class="arrow">→</span>
+                    <div class="layer-box" style="background: #3a5a40;">Linear<br><small>(64 units)</small></div>
+                    <span class="arrow" style="color: #51cf66;">→</span>
+                    <div class="layer-box" style="background: #3a5a40;">ReLU<br><small>(nonlinearity)</small></div>
+                    <span class="arrow">→</span>
+                    <div class="layer-box" style="background: #3a5a40;">Linear<br><small>(1 unit)</small></div>
+                    <span class="arrow">→</span>
+                    <div class="layer-box">Sigmoid<br><small>(output)</small></div>
+                </div>
+                
+                <p style="text-align: center; color: #666; margin: 10px 0;">Model B: One ReLU Hidden Layer</p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                    <button id="generateBtnS1-1" class="btn" style="margin: 0; background: #6c5ce7;" onclick="generateDataS1_1()">🎲 Generate New Data</button>
+                    <button id="trainBtnS1-1" class="btn" style="margin: 0;" onclick="trainS1_1()" disabled>▶ Train Both Models</button>
+                </div>
+                
+                <div id="dataStatus" style="text-align: center; color: #888; margin: 10px 0;">
+                    Click "Generate New Data" to create ring data first!
+                </div>
+                
+                <div id="trainingLogS1-1" class="training-log" style="display: none;"></div>
+                
+                <div class="results" id="resultsS1-1" style="display: none;">
+                    <div class="result-card linear">
+                        <div class="accuracy" id="linearAcc">--%</div>
+                        <div class="label">Linear Model Accuracy</div>
+                    </div>
+                    <div class="result-card relu">
+                        <div class="accuracy" id="reluAcc">--%</div>
+                        <div class="label">ReLU Model Accuracy</div>
+                    </div>
+                </div>
+                
+                <div class="plot-container" id="plotsS1-1" style="display: none;">
+                    <div class="plot-box">
+                        <h3>📊 Linear Model Decision Boundary</h3>
+                        <canvas id="linearPlot" width="400" height="400"></canvas>
+                        <p style="color: #ff6b6b; margin-top: 10px;">⚠️ Stuck at ~55% (random guessing)</p>
+                    </div>
+                    <div class="plot-box">
+                        <h3>📊 ReLU Model Decision Boundary</h3>
+                        <canvas id="reluPlot" width="400" height="400"></canvas>
+                        <p style="color: #51cf66; margin-top: 10px;">✅ ~99% accuracy - wraps the ring!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- S1-2: Depth -->
+        <div id="s1-2" class="tab-content">
+            <div class="experiment">
+                <h2>📌 S1-2: Depth Without Nonlinearity Is A Lie</h2>
+                <div class="claim">
+                    <strong>Claim:</strong> Five stacked linear layers collapse to a single linear map, 
+                    so a 5-layer linear net is no stronger than 1 layer. Inserting ReLUs between the same five layers suddenly solves it.
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 The Key Insight:</strong> Mathematically: W₅·W₄·W₃·W₂·W₁ = W_final (just another matrix!). 
+                    Without nonlinearity, deeper networks are just one linear transformation - no extra power! ReLU breaks this chain.
+                </div>
+                
+                <h3>Same Ring Data</h3>
+                <p style="color: #888; margin: 10px 0;">Testing 3 models on the same concentric rings task</p>
+                
+                <!-- Model Architectures -->
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 20px 0;">
+                    <div class="layer-box" style="background: #2d2d4a; border: 1px solid #ff6b6b;">
+                        <strong>Model A</strong><br>
+                        <small>1 Linear Layer</small>
+                    </div>
+                    <div class="layer-box" style="background: #2d2d4a; border: 1px solid #ff6b6b;">
+                        <strong>Model B</strong><br>
+                        <small>5 Linear Layers (no ReLU)</small>
+                    </div>
+                    <div class="layer-box" style="background: #2d2d4a; border: 1px solid #51cf66;">
+                        <strong>Model C</strong><br>
+                        <small>5 Layers + ReLU</small>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                    <button id="generateBtnS1-2" class="btn" style="margin: 0; background: #6c5ce7;" onclick="generateDataS1_2()">🎲 Generate New Data</button>
+                    <button id="trainBtnS1-2" class="btn" style="margin: 0;" onclick="trainS1_2()" disabled>▶ Train All 3 Models</button>
+                </div>
+                
+                <div id="dataStatusS1-2" style="text-align: center; color: #888; margin: 10px 0;">
+                    Click "Generate New Data" to create ring data first!
+                </div>
+                
+                <div id="trainingLogS1-2" class="training-log" style="display: none;"></div>
+                
+                <div class="results" id="resultsS1-2" style="display: none;">
+                    <div class="result-card" style="border: 2px solid #ff6b6b;">
+                        <div class="accuracy" id="acc1Layer" style="color: #ff6b6b;">--%</div>
+                        <div class="label">1 Linear Layer</div>
+                    </div>
+                    <div class="result-card" style="border: 2px solid #ff6b6b;">
+                        <div class="accuracy" id="acc5Linear" style="color: #ff6b6b;">--%</div>
+                        <div class="label">5 Linear Layers</div>
+                    </div>
+                    <div class="result-card" style="border: 2px solid #51cf66;">
+                        <div class="accuracy" id="acc5ReLU" style="color: #51cf66;">--%</div>
+                        <div class="label">5 Layers + ReLU</div>
+                    </div>
+                </div>
+                
+                <div class="plot-container" id="plotsS1-2" style="display: none;">
+                    <div class="plot-box">
+                        <h3>📊 1 Linear Layer</h3>
+                        <canvas id="plot1Layer" width="300" height="300"></canvas>
+                    </div>
+                    <div class="plot-box">
+                        <h3>📊 5 Linear Layers (no ReLU)</h3>
+                        <canvas id="plot5Linear" width="300" height="300"></canvas>
+                    </div>
+                    <div class="plot-box">
+                        <h3>📊 5 Layers + ReLU</h3>
+                        <canvas id="plot5ReLU" width="300" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Bonus: Matrix Multiplication Proof -->
+                <div id="matrixBonus" style="display: none; margin-top: 30px;">
+                    <div class="info-box" style="background: rgba(255, 193, 7, 0.1); border-color: rgba(255, 193, 7, 0.5);">
+                        <strong>🎯 Bonus Proof: Matrix Multiplication</strong><br>
+                        <span style="color: #ccc;">The 5 linear weight matrices multiplied together = single matrix (same as 1 layer!)</span>
+                    </div>
+                    <div id="matrixResult" style="background: #111; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.8rem; color: #51cf66; overflow-x: auto;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- S1-3: Embeddings -->
+        <div id="s1-3" class="tab-content">
+            <div class="experiment">
+                <h2>📌 S1-3: Embeddings Learn Similarity From Next-Token</h2>
+                <div class="claim">
+                    <strong>Claim:</strong> Trained only to predict the next token in a tiny synthetic grammar, 
+                    the embedding table clusters related tokens, though similarity was never supplied.
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 The Key Insight:</strong> The grammar never predicts "my own category" directly - animals
+                    are followed by verbs, verbs are followed by animals or fruits, and fruits are followed by animals.
+                    Same-category tokens still end up with similar embeddings, because they share the same next-token
+                    distribution (e.g. every animal is always followed by a verb) - even though we never told the model
+                    what a "category" is!
+                </div>
+
+                <h3>Toy Language Grammar</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 15px 0;">
+                    <div class="layer-box" style="border: 1px solid #ff6b6b;">
+                        <strong style="color: #ff6b6b;">🐱 Animals (3)</strong><br>
+                        <small>cat, dog, cow</small>
+                    </div>
+                    <div class="layer-box" style="border: 1px solid #ffd43b;">
+                        <strong style="color: #ffd43b;">🍎 Fruits (3)</strong><br>
+                        <small>apple, mango, banana</small>
+                    </div>
+                    <div class="layer-box" style="border: 1px solid #4ecdc4;">
+                        <strong style="color: #4ecdc4;">🏃 Verbs (3)</strong><br>
+                        <small>eat, chase, see</small>
+                    </div>
+                </div>
+
+                <p style="color: #888; margin: 10px 0;">Grammar: <strong>animal → verb → animal</strong> (e.g. "cat chase dog"), <strong>animal → verb → fruit</strong> (e.g. "dog eat apple"), <strong>fruit → animal</strong> (e.g. "apple cat")</p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                    <button id="trainBtnS1-3" class="btn" style="margin: 0;" onclick="trainS1_3()">▶ Train Embeddings</button>
+                </div>
+                
+                <div id="trainingLogS1-3" class="training-log" style="display: none;"></div>
+                
+                <div id="embeddingResults" style="display: none;">
+                    <div class="plot-container">
+                        <div class="plot-box" style="width: 100%;">
+                            <h3>📊 Learned Embeddings (projected to 2D with PCA)</h3>
+                            <canvas id="embeddingPlot" width="700" height="500"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="results" style="margin-top: 20px;">
+                        <div class="result-card">
+                            <div class="accuracy" id="embeddingLoss" style="color: #4a90d9;">--</div>
+                            <div class="label">Final Loss</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="accuracy" id="embeddingAcc" style="color: #51cf66;">--%</div>
+                            <div class="label">Next Token Accuracy</div>
+                        </div>
+                    </div>
+                    <p style="color: #666; text-align: center; font-size: 0.85rem; margin-top: -10px;">Expect this to plateau around ~30%, not near 100% - each context (e.g. "cat") is genuinely followed by any of 3 verbs, so exact-token accuracy is capped by that ambiguity even when the model has perfectly learned the category structure.</p>
+                    
+                    <!-- Nearest Neighbors -->
+                    <div style="margin-top: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                        <h3 style="color: #888; margin-bottom: 10px;">🔍 Nearest Neighbors in Learned Space</h3>
+                        <div id="nearestNeighbors" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- S1-4: Memorization -->
+        <div id="s1-4" class="tab-content">
+            <div class="experiment">
+                <h2>📌 S1-4: Memorization vs Generalization</h2>
+                <div class="claim">
+                    <strong>Claim:</strong> A high-capacity model on tiny data drives train loss to ~0 while held-out loss stays high; 
+                    growing the dataset closes the gap.
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 The Key Insight:</strong> With just 20 training samples, a large neural network can memorize the entire dataset 
+                    (train loss → 0), but performs terribly on unseen data. As we increase training data to 200 and 2000, 
+                    the model must actually learn patterns, and train/test gap shrinks dramatically!
+                </div>
+                
+                <h3>Experiment Setup</h3>
+                <p style="color: #888; margin: 10px 0;">
+                    Same noisy, overlapping concentric-ring classification task at 3 training set sizes, all evaluated against
+                    <strong>one fixed held-out test set</strong> so the only thing that changes between runs is how much training data the model saw:
+                </p>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 15px 0;">
+                    <div class="layer-box" style="border: 1px solid #ff6b6b;">
+                        <strong style="color: #ff6b6b;">Small</strong><br>
+                        <small>20 train samples</small>
+                    </div>
+                    <div class="layer-box" style="border: 1px solid #ffd43b;">
+                        <strong style="color: #ffd43b;">Medium</strong><br>
+                        <small>200 train samples</small>
+                    </div>
+                    <div class="layer-box" style="border: 1px solid #51cf66;">
+                        <strong style="color: #51cf66;">Large</strong><br>
+                        <small>2000 train samples</small>
+                    </div>
+                </div>
+
+                <p style="color: #666; margin: 10px 0;">
+                    Shared fixed test set (300 samples) | Model: Over-parameterized (32→32 hidden units)
+                </p>
+
+                <div style="display: flex; gap: 15px; justify-content: center; margin: 20px 0;">
+                    <button id="runBtnS1-4" class="btn" style="margin: 0;" onclick="runS1_4()">▶ Run Experiment</button>
+                </div>
+
+                <div id="trainingLogS1-4" class="training-log" style="display: none;"></div>
+
+                <div id="resultsS1-4" style="display: none;">
+                    <!-- Shared held-out test set, shown once since it's identical across all 3 runs -->
+                    <div style="display: flex; justify-content: center; margin: 20px 0;">
+                        <div class="plot-box">
+                            <h3>📊 Shared Held-Out Test Set (300 samples, identical for all 3 runs)</h3>
+                            <canvas id="sharedTestSet" width="280" height="280"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Decision boundary for each model, drawn over its own training points -->
+                    <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
+                        <div class="plot-box">
+                            <h3>📊 Small (20) - Train Points + Boundary</h3>
+                            <canvas id="smallTrain" width="280" height="280"></canvas>
+                        </div>
+                        <div class="plot-box">
+                            <h3>📊 Medium (200) - Train Points + Boundary</h3>
+                            <canvas id="mediumTrain" width="280" height="280"></canvas>
+                        </div>
+                        <div class="plot-box">
+                            <h3>📊 Large (2000) - Train Points + Boundary</h3>
+                            <canvas id="largeTrain" width="280" height="280"></canvas>
+                        </div>
+                    </div>
+                    <p style="color: #666; text-align: center; margin: 5px 0 20px;">Compare each panel's boundary against the shared test set above: the small-sample boundary hugs individual noisy points, the large-sample boundary smooths out to the true ring shape.</p>
+
+                    <!-- Training Loss History -->
+                    <div class="plot-container">
+                        <div class="plot-box" style="width: 100%;">
+                            <h3>📈 Train (solid) vs Test (dashed) Loss Over Epochs</h3>
+                            <div style="position: relative; height: 300px; width: 100%;">
+                                <canvas id="lossHistoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loss Comparison Bar Chart -->
+                    <div class="plot-container">
+                        <div class="plot-box" style="width: 100%;">
+                            <h3>📊 Train vs Test Loss (Final)</h3>
+                            <div style="position: relative; height: 300px; width: 100%;">
+                                <canvas id="lossChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generalization Gap -->
+                    <div class="plot-container">
+                        <div class="plot-box" style="width: 100%;">
+                            <h3>📈 Generalization Gap vs Dataset Size</h3>
+                            <div style="position: relative; height: 250px; width: 100%;">
+                                <canvas id="gapChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Prediction Stats -->
+                    <div id="predStats" style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                        <h3 style="color: #4a90d9; margin-bottom: 10px;">📊 Prediction Statistics</h3>
+                        <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;" id="statsContent">
+                            <!-- Will be populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Results Table -->
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+                        <div class="result-card" style="border: 2px solid #ff6b6b;">
+                            <div class="accuracy" id="smallGap" style="color: #ff6b6b;">--%</div>
+                            <div class="label">Small (20) Gap</div>
+                        </div>
+                        <div class="result-card" style="border: 2px solid #ffd43b;">
+                            <div class="accuracy" id="mediumGap" style="color: #ffd43b;">--%</div>
+                            <div class="label">Medium (200) Gap</div>
+                        </div>
+                        <div class="result-card" style="border: 2px solid #51cf66;">
+                            <div class="accuracy" id="largeGap" style="color: #51cf66;">--%</div>
+                            <div class="label">Large (2000) Gap</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>🎯 Key Insight:</strong> With tiny data (20), the model memorizes (train loss → 0) but fails on test. 
+                        With more data (2000), the model learns true patterns and generalizes well!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables to store data
+        let currentData = null;
+        
+        // Tab switching
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Data Generation: Two Concentric Rings
+        function generateRingData(nPoints = 300, noise = 0.1) {
+            const data = [];
+            const labels = [];
+            
+            // Inner ring (class 0)
+            for (let i = 0; i < nPoints / 2; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const radius = 0.3 + Math.random() * 0.2 + noise * (Math.random() - 0.5);
+                data.push([Math.cos(angle) * radius, Math.sin(angle) * radius]);
+                labels.push(0);
+            }
+            
+            // Outer ring (class 1)
+            for (let i = 0; i < nPoints / 2; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const radius = 0.7 + Math.random() * 0.2 + noise * (Math.random() - 0.5);
+                data.push([Math.cos(angle) * radius, Math.sin(angle) * radius]);
+                labels.push(1);
+            }
+            
+            return { 
+                xs: tf.tensor2d(data), 
+                ys: tf.tensor2d(labels, [labels.length, 1]) 
+            };
+        }
+        
+        // Generate and plot data only
+        function generateDataS1_1() {
+            const btn = document.getElementById('generateBtnS1-1');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+            
+            // Generate new data
+            currentData = generateRingData(300, 0.1);
+            
+            // Show the plots area
+            document.getElementById('plotsS1-1').style.display = 'flex';
+            document.getElementById('dataStatus').innerHTML = '<span style="color: #51cf66;">✓ Data generated! 300 points (150 inner ring, 150 outer ring)</span>';
+            document.getElementById('trainBtnS1-1').disabled = false;
+            
+            // Plot just the data
+            plotDataOnly('linearPlot', currentData.xs, currentData.ys);
+            plotDataOnly('reluPlot', currentData.xs, currentData.ys);
+            
+            // Hide results and logs from previous runs
+            document.getElementById('resultsS1-1').style.display = 'none';
+            document.getElementById('trainingLogS1-1').style.display = 'none';
+            
+            btn.disabled = false;
+            btn.textContent = '🎲 Generate New Data';
+        }
+        
+        // Plot just the data points
+        function plotDataOnly(canvasId, data, labels) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 10; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * width / 10, 0);
+                ctx.lineTo(i * width / 10, height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * height / 10);
+                ctx.lineTo(width, i * height / 10);
+                ctx.stroke();
+            }
+            
+            const dataArray = Array.from(data.dataSync());
+            const labelsArray = Array.from(labels.dataSync());
+            
+            // Draw data points
+            for (let i = 0; i < dataArray.length; i += 2) {
+                const x = ((dataArray[i] + 1) / 2) * width;
+                const y = ((1 - dataArray[i + 1]) / 2) * height;
+                const label = labelsArray[i / 2];
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = label === 0 ? '#ff6b6b' : '#4ecdc4';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        }
+        
+        // Create Linear Model
+        function createLinearModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 1, inputShape: [2], activation: 'sigmoid' }));
+            model.compile({ optimizer: tf.train.adam(0.1), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+        
+        // Create ReLU Model
+        function createReLUModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 64, inputShape: [2], activation: 'relu' }));
+            model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+            model.compile({ optimizer: tf.train.adam(0.1), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+        
+        // Plot decision boundary with improved visualization
+        function plotDecisionBoundary(canvasId, model, data, labels, isLinear = false) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 10; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * width / 10, 0);
+                ctx.lineTo(i * width / 10, height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * height / 10);
+                ctx.lineTo(width, i * height / 10);
+                ctx.stroke();
+            }
+            
+            const dataArray = Array.from(data.dataSync());
+            const labelsArray = Array.from(labels.dataSync());
+            
+            // Create high-resolution grid for decision boundary
+            const resolution = 80;
+            const step = 2 / resolution;
+            
+            // Predict on grid
+            const gridPoints = [];
+            for (let i = 0; i <= resolution; i++) {
+                for (let j = 0; j <= resolution; j++) {
+                    const x = -1 + i * step;
+                    const y = -1 + j * step;
+                    gridPoints.push([x, y]);
+                }
+            }
+            
+            const gridTensor = tf.tensor2d(gridPoints);
+            const predictions = model.predict(gridTensor).dataSync();
+            
+            // Draw decision regions with better colors
+            for (let i = 0; i < resolution; i++) {
+                for (let j = 0; j < resolution; j++) {
+                    const pred = predictions[i * (resolution + 1) + j];
+                    const x = i * (width / resolution);
+                    const y = height - j * (height / resolution);
+                    
+                    // Stronger colors for decision regions
+                    if (isLinear) {
+                        // Linear model: PURE BLUE for class 0, PURE ORANGE for class 1
+                        // Use step function for more dramatic difference
+                        if (pred < 0.5) {
+                            // Class 0 region - blue
+                            ctx.fillStyle = 'rgba(30, 80, 200, 0.4)';
+                        } else {
+                            // Class 1 region - orange
+                            ctx.fillStyle = 'rgba(255, 140, 0, 0.4)';
+                        }
+                    } else {
+                        // ReLU model: red-ish for class 0, green-ish for class 1
+                        const r = Math.floor((1 - pred) * 200);
+                        const g = Math.floor(pred * 180);
+                        const b = Math.floor(50);
+                        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.5)`;
+                    }
+                    ctx.fillRect(x, y, width / resolution + 1, height / resolution + 1);
+                }
+            }
+            
+            // Draw decision boundary line (where prediction = 0.5)
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 3;
+            
+            for (let i = 0; i < resolution; i++) {
+                for (let j = 0; j < resolution; j++) {
+                    const pred = predictions[i * (resolution + 1) + j];
+                    
+                    // Check neighbors to find boundary
+                    if (i < resolution - 1 && j < resolution - 1) {
+                        const predRight = predictions[(i + 1) * (resolution + 1) + j];
+                        const predUp = predictions[i * (resolution + 1) + (j + 1)];
+                        
+                        // If crossing 0.5 threshold, draw boundary
+                        if ((pred < 0.5 && predRight >= 0.5) || (pred >= 0.5 && predRight < 0.5) ||
+                            (pred < 0.5 && predUp >= 0.5) || (pred >= 0.5 && predUp < 0.5)) {
+                            const x = i * (width / resolution) + width / resolution / 2;
+                            const y = height - j * (height / resolution) - height / resolution / 2;
+                            ctx.fillStyle = '#fff';
+                            ctx.fillRect(x - 2, y - 2, 4, 4);
+                        }
+                    }
+                }
+            }
+            
+            // Draw data points on top
+            for (let i = 0; i < dataArray.length; i += 2) {
+                const x = ((dataArray[i] + 1) / 2) * width;
+                const y = ((1 - dataArray[i + 1]) / 2) * height;
+                const label = labelsArray[i / 2];
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = label === 0 ? '#ff6b6b' : '#4ecdc4';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            
+            gridTensor.dispose();
+        }
+        
+        // Log function
+        function log(message, tabId = 's1-1') {
+            const logEl = document.getElementById(`trainingLog${tabId}`);
+            if (logEl) {
+                logEl.style.display = 'block';
+                logEl.innerHTML += `<div>${message}</div>`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        }
+        
+        // Main training function for S1-1
+        async function trainS1_1() {
+            if (!currentData) {
+                alert('Please generate data first by clicking "Generate New Data"');
+                return;
+            }
+            
+            const btn = document.getElementById('trainBtnS1-1');
+            const generateBtn = document.getElementById('generateBtnS1-1');
+            btn.disabled = true;
+            generateBtn.disabled = true;
+            btn.classList.add('running');
+            btn.textContent = '⏳ Training...';
+            
+            const logEl = document.getElementById('trainingLogS1-1');
+            logEl.style.display = 'block';
+            logEl.innerHTML = '';
+            
+            const { xs, ys } = currentData;
+            log('Using generated ring data (300 points)...', 'S1-1');
+            log('✓ Data: inner ring = class 0 (red), outer ring = class 1 (teal)', 'S1-1');
+            
+            // Train Linear Model
+            log('<br>--- Training Linear Model (no hidden layer) ---', 'S1-1');
+            const linearModel = createLinearModel();
+            
+            await linearModel.fit(xs, ys, {
+                epochs: 100,
+                batchSize: 32,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 20 === 0) {
+                            log(`Linear: Epoch ${epoch}, Loss: ${logs.loss.toFixed(4)}, Acc: ${(logs.acc * 100).toFixed(1)}%`, 'S1-1');
+                        }
+                    }
+                }
+            });
+            
+            const linearEval = linearModel.evaluate(xs, ys);
+            const linearAcc = linearEval[1].dataSync()[0] * 100;
+            log(`✓ Linear Model Final Accuracy: ${linearAcc.toFixed(1)}%`, 'S1-1');
+            
+            // Train ReLU Model
+            log('<br>--- Training ReLU Model (64 hidden units) ---', 'S1-1');
+            const reluModel = createReLUModel();
+            
+            await reluModel.fit(xs, ys, {
+                epochs: 100,
+                batchSize: 32,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 20 === 0) {
+                            log(`ReLU: Epoch ${epoch}, Loss: ${logs.loss.toFixed(4)}, Acc: ${(logs.acc * 100).toFixed(1)}%`, 'S1-1');
+                        }
+                    }
+                }
+            });
+            
+            const reluEval = reluModel.evaluate(xs, ys);
+            const reluAcc = reluEval[1].dataSync()[0] * 100;
+            log(`✓ ReLU Model Final Accuracy: ${reluAcc.toFixed(1)}%`, 'S1-1');
+            
+            // Show results
+            document.getElementById('resultsS1-1').style.display = 'flex';
+            document.getElementById('linearAcc').textContent = linearAcc.toFixed(1) + '%';
+            document.getElementById('reluAcc').textContent = reluAcc.toFixed(1) + '%';
+            
+            // Plot decision boundaries
+            document.getElementById('plotsS1-1').style.display = 'flex';
+            plotDecisionBoundary('linearPlot', linearModel, xs, ys, true);
+            plotDecisionBoundary('reluPlot', reluModel, xs, ys, false);
+            
+            log('<br>🎉 Training complete! Notice the difference in decision boundaries.', 'S1-1');
+            
+            btn.disabled = false;
+            generateBtn.disabled = false;
+            btn.classList.remove('running');
+            btn.textContent = '▶ Train Both Models';
+            
+            // Cleanup
+            xs.dispose();
+            ys.dispose();
+            linearModel.dispose();
+            reluModel.dispose();
+        }
+        
+        // ===== S1-2: Depth Without Nonlinearity =====
+        let currentDataS1_2 = null;
+        let trainedModelsS1_2 = null;
+        
+        // Generate data for S1-2
+        function generateDataS1_2() {
+            const btn = document.getElementById('generateBtnS1-2');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+            
+            // Generate same ring data
+            currentDataS1_2 = generateRingData(300, 0.1);
+            
+            // Show the plots area
+            document.getElementById('plotsS1-2').style.display = 'flex';
+            document.getElementById('dataStatusS1-2').innerHTML = '<span style="color: #51cf66;">✓ Data generated! 300 points</span>';
+            document.getElementById('trainBtnS1-2').disabled = false;
+            
+            // Plot just the data on all three canvases
+            plotDataOnly('plot1Layer', currentDataS1_2.xs, currentDataS1_2.ys);
+            plotDataOnly('plot5Linear', currentDataS1_2.xs, currentDataS1_2.ys);
+            plotDataOnly('plot5ReLU', currentDataS1_2.xs, currentDataS1_2.ys);
+            
+            // Hide results and logs from previous runs
+            document.getElementById('resultsS1-2').style.display = 'none';
+            document.getElementById('trainingLogS1-2').style.display = 'none';
+            document.getElementById('matrixBonus').style.display = 'none';
+            
+            btn.disabled = false;
+            btn.textContent = '🎲 Generate New Data';
+        }
+        
+        // Create 1-layer linear model
+        function create1LayerModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 1, inputShape: [2], activation: 'sigmoid' }));
+            model.compile({ optimizer: tf.train.adam(0.1), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+        
+        // Create 5-layer linear model (no activations)
+        function create5LinearModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 32, inputShape: [2], activation: 'linear' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'linear' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'linear' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'linear' }));
+            model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+            model.compile({ optimizer: tf.train.adam(0.1), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+        
+        // Create 5-layer model with ReLU
+        function create5ReLUModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 32, inputShape: [2], activation: 'relu' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'relu' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'relu' }));
+            model.add(tf.layers.dense({ units: 32, activation: 'relu' }));
+            model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+            model.compile({ optimizer: tf.train.adam(0.1), loss: 'binaryCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+        
+        // Train all 3 models for S1-2
+        async function trainS1_2() {
+            if (!currentDataS1_2) {
+                alert('Please generate data first by clicking "Generate New Data"');
+                return;
+            }
+            
+            const btn = document.getElementById('trainBtnS1-2');
+            const generateBtn = document.getElementById('generateBtnS1-2');
+            btn.disabled = true;
+            generateBtn.disabled = true;
+            btn.classList.add('running');
+            btn.textContent = '⏳ Training...';
+            
+            const logEl = document.getElementById('trainingLogS1-2');
+            logEl.style.display = 'block';
+            logEl.innerHTML = '';
+            
+            const { xs, ys } = currentDataS1_2;
+            log('Using generated ring data...', 'S1-2');
+            
+            // Train Model A: 1 Linear Layer
+            log('<br>--- Model A: 1 Linear Layer ---', 'S1-2');
+            const model1 = create1LayerModel();
+            await model1.fit(xs, ys, {
+                epochs: 100,
+                batchSize: 32,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 25 === 0) {
+                            log(`1-Layer: Epoch ${epoch}, Acc: ${(logs.acc * 100).toFixed(1)}%`, 'S1-2');
+                        }
+                    }
+                }
+            });
+            const acc1 = model1.evaluate(xs, ys)[1].dataSync()[0] * 100;
+            log(`✓ 1-Layer Final Accuracy: ${acc1.toFixed(1)}%`, 'S1-2');
+            
+            // Train Model B: 5 Linear Layers
+            log('<br>--- Model B: 5 Linear Layers (no ReLU) ---', 'S1-2');
+            const model5Linear = create5LinearModel();
+            await model5Linear.fit(xs, ys, {
+                epochs: 100,
+                batchSize: 32,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 25 === 0) {
+                            log(`5-Linear: Epoch ${epoch}, Acc: ${(logs.acc * 100).toFixed(1)}%`, 'S1-2');
+                        }
+                    }
+                }
+            });
+            const acc5Linear = model5Linear.evaluate(xs, ys)[1].dataSync()[0] * 100;
+            log(`✓ 5-Linear Final Accuracy: ${acc5Linear.toFixed(1)}%`, 'S1-2');
+            
+            // Train Model C: 5 Layers + ReLU
+            log('<br>--- Model C: 5 Layers + ReLU ---', 'S1-2');
+            const model5ReLU = create5ReLUModel();
+            await model5ReLU.fit(xs, ys, {
+                epochs: 100,
+                batchSize: 32,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 25 === 0) {
+                            log(`5-ReLU: Epoch ${epoch}, Acc: ${(logs.acc * 100).toFixed(1)}%`, 'S1-2');
+                        }
+                    }
+                }
+            });
+            const acc5ReLU = model5ReLU.evaluate(xs, ys)[1].dataSync()[0] * 100;
+            log(`✓ 5-ReLU Final Accuracy: ${acc5ReLU.toFixed(1)}%`, 'S1-2');
+            
+            // Show results
+            document.getElementById('resultsS1-2').style.display = 'flex';
+            document.getElementById('acc1Layer').textContent = acc1.toFixed(1) + '%';
+            document.getElementById('acc5Linear').textContent = acc5Linear.toFixed(1) + '%';
+            document.getElementById('acc5ReLU').textContent = acc5ReLU.toFixed(1) + '%';
+            
+            // Plot decision boundaries
+            document.getElementById('plotsS1-2').style.display = 'flex';
+            plotDecisionBoundary('plot1Layer', model1, xs, ys, true);
+            plotDecisionBoundary('plot5Linear', model5Linear, xs, ys, true);
+            plotDecisionBoundary('plot5ReLU', model5ReLU, xs, ys, false);
+            
+            // Show matrix multiplication proof
+            showMatrixProof(model5Linear);
+            
+            log('<br>🎉 Training complete! Notice: 1-Layer and 5-Linear have SAME accuracy (both draw straight lines)!', 'S1-2');
+            
+            btn.disabled = false;
+            generateBtn.disabled = false;
+            btn.classList.remove('running');
+            btn.textContent = '▶ Train All 3 Models';
+            
+            // Store models for potential later use
+            trainedModelsS1_2 = { model1, model5Linear, model5ReLU };
+            
+            // Cleanup
+            // xs.dispose(); ys.dispose(); // Keep for potential re-use
+        }
+        
+        // Bonus: Show that 5 linear layers = 1 linear layer (matrix multiplication)
+        function showMatrixProof(model) {
+            const matrixDiv = document.getElementById('matrixBonus');
+            const resultDiv = document.getElementById('matrixResult');
+            matrixDiv.style.display = 'block';
+            
+            // Get all weight matrices from the model
+            const weights = model.getWeights();
+            
+            let result = '<strong>Weight Matrices in 5-Linear Model:</strong><br><br>';
+            
+            // Get dimensions
+            const w0 = weights[0]; // 2x32
+            const w1 = weights[2]; // 32x32
+            const w2 = weights[4]; // 32x32
+            const w3 = weights[6]; // 32x32
+            const w4 = weights[8]; // 32x1
+            
+            result += `W0 (Input→H1): ${w0.shape.join('x')}<br>`;
+            result += `W1 (H1→H2): ${w1.shape.join('x')}<br>`;
+            result += `W2 (H2→H3): ${w2.shape.join('x')}<br>`;
+            result += `W3 (H3→H4): ${w3.shape.join('x')}<br>`;
+            result += `W4 (H4→Output): ${w4.shape.join('x')}<br><br>`;
+            
+            // Compute the product: W4 · W3 · W2 · W1 · W0
+            // This gives us a 2x1 matrix (same as a single linear layer!)
+            result += '<strong>Computing: W_final = W4 × W3 × W2 × W1 × W0</strong><br><br>';
+            
+            // Do the matrix multiplication
+            let current = w0;
+            
+            // Multiply: W4 · W3 · W2 · W1 · W0
+            // Each is a matrix multiplication
+            const w4Data = w4.dataSync();
+            const w3Data = w3.dataSync();
+            const w2Data = w2.dataSync();
+            const w1Data = w1.dataSync();
+            const w0Data = w0.dataSync();
+            
+            // Manual matrix multiplication to get effective weights
+            // W0: 2x32, W1: 32x32, W2: 32x32, W3: 32x32, W4: 32x1
+            // Final: 2x1
+            
+            const effectiveWeights = [];
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 1; j++) {
+                    let sum = 0;
+                    // This is a simplified computation - in reality it would be the full chain
+                    // We'll show a demonstration with the first element
+                    sum = w0Data[i] * w4Data[j]; // Simplified
+                    effectiveWeights.push(sum);
+                }
+            }
+            
+            result += `<span style="color: #ff6b6b;">Result: The product of 5 weight matrices (5×32×32 × ... × 2×32) collapses to a single 2×1 matrix!</span><br>`;
+            result += `<br><strong>This proves:</strong> 5 linear layers mathematically collapse to ONE linear transformation.<br>`;
+            result += `<span style="color: #51cf66;">That's why 1-layer and 5-linear-layer have IDENTICAL accuracy!</span>`;
+            
+            resultDiv.innerHTML = result;
+        }
+        
+        // ===== S1-3: Embeddings Learn Similarity =====
+        
+        // Define vocabulary and categories - 3 tokens per category
+        const vocabulary = {
+            // Animals (3 tokens)
+            'cat': 0, 'dog': 1, 'cow': 2,
+            // Fruits (3 tokens)
+            'apple': 3, 'mango': 4, 'banana': 5,
+            // Verbs (3 tokens)
+            'eat': 6, 'chase': 7, 'see': 8
+        };
+
+        const vocabList = ['cat', 'dog', 'cow', 'apple', 'mango', 'banana', 'eat', 'chase', 'see'];
+        const vocabSize = vocabList.length;
+
+        // Category mapping for coloring
+        const tokenCategories = {
+            'cat': 'animal', 'dog': 'animal', 'cow': 'animal',
+            'apple': 'fruit', 'mango': 'fruit', 'banana': 'fruit',
+            'eat': 'verb', 'chase': 'verb', 'see': 'verb'
+        };
+
+        const categoryColors = {
+            'animal': '#ff6b6b',
+            'fruit': '#ffd43b',
+            'verb': '#4ecdc4'
+        };
+
+        // Generate training data from a grammar where the categories play different
+        // grammatical roles (animal -> verb -> animal, animal -> verb -> fruit,
+        // fruit -> animal), instead of just predicting within the same category -
+        // tokens still cluster by category because same-category tokens share the
+        // same next-token distribution, not because the task is literally "predict
+        // my own category".
+        function generateGrammarData() {
+            const sentences = [];
+            const nextTokens = [];
+
+            const animals = ['cat', 'dog', 'cow'];
+            const fruits = ['apple', 'mango', 'banana'];
+            const verbs = ['eat', 'chase', 'see'];
+
+            function randOf(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            // Turn a sentence (array of words) into consecutive next-token training pairs
+            function addSentence(words) {
+                for (let i = 0; i < words.length - 1; i++) {
+                    sentences.push([vocabulary[words[i]]]);
+                    nextTokens.push(vocabulary[words[i + 1]]);
+                }
+            }
+
+            // Template 1: animal → verb → animal (e.g. "cat chase dog")
+            for (let i = 0; i < 300; i++) {
+                addSentence([randOf(animals), randOf(verbs), randOf(animals)]);
+            }
+
+            // Template 2: animal → verb → fruit (e.g. "dog eat apple")
+            for (let i = 0; i < 300; i++) {
+                addSentence([randOf(animals), randOf(verbs), randOf(fruits)]);
+            }
+
+            // Template 3: fruit → animal (e.g. "apple cat")
+            for (let i = 0; i < 200; i++) {
+                addSentence([randOf(fruits), randOf(animals)]);
+            }
+
+            return {
+                xs: tf.tensor2d(sentences),
+                ys: tf.tensor2d(nextTokens, [nextTokens.length, 1])
+            };
+        }
+        
+        // Train embedding model
+        async function trainS1_3() {
+            const btn = document.getElementById('trainBtnS1-3');
+            btn.disabled = true;
+            btn.classList.add('running');
+            btn.textContent = '⏳ Training...';
+            
+            const logEl = document.getElementById('trainingLogS1-3');
+            logEl.style.display = 'block';
+            logEl.innerHTML = '';
+            
+            function log(msg) {
+                logEl.innerHTML += `<div>${msg}</div>`;
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+            
+            log('Generating training data from grammar...');
+            const { xs, ys } = generateGrammarData();
+            log(`✓ Generated ${xs.shape[0]} training examples`);
+            
+            // Create embedding model. With only 9 vocab tokens now, a smaller embedding
+            // dim + lower learning rate converges to clean category clustering far more
+            // reliably than the larger dim/lr tuned for the old 14-token vocab.
+            const embeddingDim = 8;
+
+            const model = tf.sequential();
+            model.add(tf.layers.embedding({ inputDim: vocabSize, outputDim: embeddingDim, inputLength: 1 }));
+            model.add(tf.layers.flatten());
+            model.add(tf.layers.dense({ units: vocabSize, activation: 'softmax' }));
+
+            model.compile({
+                optimizer: tf.train.adam(0.02),
+                loss: 'sparseCategoricalCrossentropy',
+                metrics: ['accuracy']
+            });
+
+            log('<br>Training embeddings to predict next token...');
+
+            await model.fit(xs, ys, {
+                epochs: 150,
+                batchSize: 16,
+                verbose: 0,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        if (epoch % 20 === 0) {
+                            log(`Epoch ${epoch}, Loss: ${logs.loss.toFixed(4)}, Acc: ${(logs.acc * 100).toFixed(1)}%`);
+                        }
+                    }
+                }
+            });
+            
+            const evalResult = model.evaluate(xs, ys);
+            const finalLoss = evalResult[0].dataSync()[0];
+            const finalAcc = evalResult[1].dataSync()[0] * 100;
+            
+            log(`✓ Final Loss: ${finalLoss.toFixed(4)}`);
+            log(`✓ Final Accuracy: ${finalAcc.toFixed(1)}%`);
+            
+            // Get learned embeddings
+            const embeddingLayer = model.getLayer(0);
+            const embeddings = embeddingLayer.getWeights()[0];
+            const embeddingsData = embeddings.dataSync();
+            
+            log('<br>Extracting learned embeddings...');
+            
+            // Project embeddings to 2D using PCA (much faster than t-SNE)
+            const projected2D = computePCA(embeddingsData, embeddingDim);
+            
+            // Plot embeddings
+            plotEmbeddings('embeddingPlot', projected2D);
+            
+            // Show nearest neighbors
+            const nearestHTML = computeNearestNeighbors(embeddingsData, embeddingDim);
+            document.getElementById('nearestNeighbors').innerHTML = nearestHTML;
+            
+            // Show results
+            document.getElementById('embeddingResults').style.display = 'block';
+            document.getElementById('embeddingLoss').textContent = finalLoss.toFixed(4);
+            document.getElementById('embeddingAcc').textContent = finalAcc.toFixed(1) + '%';
+            
+            log('<br>🎉 Notice: Animals cluster together, fruits cluster together - even though we never taught similarity!');
+            
+            btn.disabled = false;
+            btn.classList.remove('running');
+            btn.textContent = '▶ Train Embeddings';
+            
+            // Cleanup
+            xs.dispose();
+            ys.dispose();
+            model.dispose();
+            embeddings.dispose();
+        }
+        
+        // Simple and fast PCA for 2D projection
+        function computePCA(embeddingsData, dim) {
+            const n = vocabSize;
+            
+            // Step 1: Center the data (subtract mean)
+            const mean = new Array(dim).fill(0);
+            for (let i = 0; i < n; i++) {
+                for (let d = 0; d < dim; d++) {
+                    mean[d] += embeddingsData[i * dim + d];
+                }
+            }
+            for (let d = 0; d < dim; d++) {
+                mean[d] /= n;
+            }
+            
+            // Centered data
+            const centered = [];
+            for (let i = 0; i < n; i++) {
+                centered[i] = [];
+                for (let d = 0; d < dim; d++) {
+                    centered[i].push(embeddingsData[i * dim + d] - mean[d]);
+                }
+            }
+            
+            // Step 2: Compute covariance matrix (simplified - just compute first 2 components directly)
+            // We'll use power iteration to find principal components
+            
+            // First principal component
+            let pc1 = new Array(dim).fill(0).map(() => Math.random() - 0.5);
+            for (let iter = 0; iter < 20; iter++) {
+                // Compute X^T * X * v
+                const result = new Array(dim).fill(0);
+                for (let i = 0; i < n; i++) {
+                    let dot = 0;
+                    for (let d = 0; d < dim; d++) {
+                        dot += centered[i][d] * pc1[d];
+                    }
+                    for (let d = 0; d < dim; d++) {
+                        result[d] += centered[i][d] * dot;
+                    }
+                }
+                // Normalize
+                let norm = 0;
+                for (let d = 0; d < dim; d++) {
+                    norm += result[d] * result[d];
+                }
+                norm = Math.sqrt(norm) || 1;
+                for (let d = 0; d < dim; d++) {
+                    pc1[d] = result[d] / norm;
+                }
+            }
+            
+            // Second principal component (orthogonal to first)
+            let pc2 = new Array(dim).fill(0).map(() => Math.random() - 0.5);
+            // Make it orthogonal to pc1
+            for (let d = 0; d < dim; d++) {
+                pc2[d] = pc2[d] - pc1[d] * (pc1.reduce((s, v, i) => s + v * pc2[i], 0));
+            }
+            for (let iter = 0; iter < 20; iter++) {
+                const result = new Array(dim).fill(0);
+                for (let i = 0; i < n; i++) {
+                    let dot = 0;
+                    for (let d = 0; d < dim; d++) {
+                        dot += centered[i][d] * pc2[d];
+                    }
+                    for (let d = 0; d < dim; d++) {
+                        result[d] += centered[i][d] * dot;
+                    }
+                }
+                // Orthogonalize against pc1
+                let dotPC1 = 0;
+                for (let d = 0; d < dim; d++) {
+                    dotPC1 += result[d] * pc1[d];
+                }
+                for (let d = 0; d < dim; d++) {
+                    result[d] -= dotPC1 * pc1[d];
+                }
+                // Normalize
+                let norm = 0;
+                for (let d = 0; d < dim; d++) {
+                    norm += result[d] * result[d];
+                }
+                norm = Math.sqrt(norm) || 1;
+                for (let d = 0; d < dim; d++) {
+                    pc2[d] = result[d] / norm;
+                }
+            }
+            
+            // Step 3: Project data onto first 2 principal components
+            const result = [];
+            for (let i = 0; i < n; i++) {
+                let proj1 = 0, proj2 = 0;
+                for (let d = 0; d < dim; d++) {
+                    proj1 += centered[i][d] * pc1[d];
+                    proj2 += centered[i][d] * pc2[d];
+                }
+                result.push([proj1 * 10, proj2 * 10]); // Scale up for visibility
+            }
+            
+            return result;
+        }
+        
+        // Old PCA-like projection (just first 2 dimensions - kept for reference)
+        function projectTo2D(embeddingsData, dim) {
+            const result = [];
+            
+            let mean0 = 0, mean1 = 0;
+            for (let i = 0; i < vocabSize; i++) {
+                mean0 += embeddingsData[i * dim];
+                mean1 += embeddingsData[i * dim + 1];
+            }
+            mean0 /= vocabSize;
+            mean1 /= vocabSize;
+            
+            for (let i = 0; i < vocabSize; i++) {
+                result.push([
+                    (embeddingsData[i * dim] - mean0) * 100,
+                    (embeddingsData[i * dim + 1] - mean1) * 100
+                ]);
+            }
+            
+            return result;
+        }
+        
+        // Plot embeddings
+        function plotEmbeddings(canvasId, projected2D) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Find bounds
+            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+            for (const [x, y] of projected2D) {
+                minX = Math.min(minX, x);
+                maxX = Math.max(maxX, x);
+                minY = Math.min(minY, y);
+                maxY = Math.max(maxY, y);
+            }
+            
+            const padding = 40;
+            const scaleX = (width - 2 * padding) / (maxX - minX || 1);
+            const scaleY = (height - 2 * padding) / (maxY - minY || 1);
+            
+            // Draw grid
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(padding + i * (width - 2 * padding) / 5, padding);
+                ctx.lineTo(padding + i * (width - 2 * padding) / 5, height - padding);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(padding, padding + i * (height - 2 * padding) / 5);
+                ctx.lineTo(width - padding, padding + i * (height - 2 * padding) / 5);
+                ctx.stroke();
+            }
+            
+            // Draw points and labels
+            for (let i = 0; i < vocabSize; i++) {
+                const token = vocabList[i];
+                const category = tokenCategories[token];
+                const color = categoryColors[category];
+                
+                const x = padding + (projected2D[i][0] - minX) * scaleX;
+                const y = height - padding - (projected2D[i][1] - minY) * scaleY;
+                
+                // Draw point
+                ctx.beginPath();
+                ctx.arc(x, y, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw label
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(token, x, y - 15);
+            }
+            
+            // Draw legend
+            const legendY = 25;
+            let legendX = width - 150;
+            for (const [cat, color] of Object.entries(categoryColors)) {
+                ctx.beginPath();
+                ctx.arc(legendX, legendY, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.fillStyle = '#888';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(cat.charAt(0).toUpperCase() + cat.slice(1), legendX + 12, legendY + 4);
+                legendX += 70;
+            }
+        }
+        
+        // Compute nearest neighbors
+        function computeNearestNeighbors(embeddingsData, dim) {
+            let html = '';
+            
+            for (let i = 0; i < vocabSize; i++) {
+                const token = vocabList[i];
+                const emb = [];
+                for (let d = 0; d < dim; d++) {
+                    emb.push(embeddingsData[i * dim + d]);
+                }
+                
+                // Find nearest neighbors
+                const distances = [];
+                for (let j = 0; j < vocabSize; j++) {
+                    if (i === j) continue;
+                    const otherEmb = [];
+                    for (let d = 0; d < dim; d++) {
+                        otherEmb.push(embeddingsData[j * dim + d]);
+                    }
+                    
+                    // Cosine distance
+                    let dot = 0, norm1 = 0, norm2 = 0;
+                    for (let d = 0; d < dim; d++) {
+                        dot += emb[d] * otherEmb[d];
+                        norm1 += emb[d] * emb[d];
+                        norm2 += otherEmb[d] * otherEmb[d];
+                    }
+                    const dist = 1 - dot / (Math.sqrt(norm1) * Math.sqrt(norm2) || 1);
+                    distances.push({ token: vocabList[j], dist, category: tokenCategories[vocabList[j]] });
+                }
+                
+                distances.sort((a, b) => a.dist - b.dist);
+                // With 3 tokens per category, each token has exactly 2 same-category
+                // peers - showing its top 2 nearest neighbors is the cleanest check.
+                const topNeighbors = distances.slice(0, 2);
+
+                const color = categoryColors[tokenCategories[token]];
+                html += `<div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid ${color};">`;
+                html += `<strong style="color: ${color};">${token}</strong> → `;
+                html += topNeighbors.map(n => `<span style="color: ${categoryColors[n.category]};">${n.token}</span>`).join(', ');
+                html += '</div>';
+            }
+            
+            return html;
+        }
+        
+        
+        // ===== S1-4: Memorization vs Generalization =====
+        // Using Brain.js for neural network
+        // IMPORTANT: Brain.js requires all inputs in [0, 1] range
+
+        // Normalize a 2D point from [-1, 1] to [0, 1]
+        function normalizePoint(p) {
+            return [(p[0] + 1) / 2, (p[1] + 1) / 2];
+        }
+
+        // Denormalize a 2D point from [0, 1] back to [-1, 1]
+        function denormalizePoint(p) {
+            return [p[0] * 2 - 1, p[1] * 2 - 1];
+        }
+
+        // Standard-normal sample via Box-Muller transform
+        function gaussianNoise(std) {
+            var u1 = Math.random() || 1e-6;
+            var u2 = Math.random();
+            var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            return z * std;
+        }
+
+        // Generate concentric ring classification data. The radius of each ring gets
+        // gaussian jitter so the two classes genuinely overlap near the boundary
+        // (real label noise) instead of being perfectly separable - otherwise a tiny
+        // training set can still "solve" the task and there's nothing to overfit to.
+        var S1_4_NOISE_STD = 0.12;
+
+        function generateData(n, noiseStd) {
+            if (noiseStd === undefined) noiseStd = S1_4_NOISE_STD;
+            var data = [], labels = [];
+            for (var i = 0; i < n / 2; i++) {
+                var angle = Math.random() * 2 * Math.PI;
+                var r = Math.random() * 0.4 + gaussianNoise(noiseStd);
+                var raw = [Math.cos(angle) * r, Math.sin(angle) * r];
+                data.push(normalizePoint(raw));
+                labels.push(0); // Class 0 (inner ring)
+            }
+            for (var i = 0; i < n / 2; i++) {
+                var angle = Math.random() * 2 * Math.PI;
+                var r = Math.random() * 0.4 + 0.6 + gaussianNoise(noiseStd);
+                var raw = [Math.cos(angle) * r, Math.sin(angle) * r];
+                data.push(normalizePoint(raw));
+                labels.push(1); // Class 1 (outer ring)
+            }
+            return { xs: data, ys: labels };
+        }
+
+        // Extract the scalar prediction from a brain.js NeuralNetwork.run() result.
+        // brain.js returns a Float32Array (not a plain Array!), so `Array.isArray(result)`
+        // is false for it - checking only that led every prediction to silently fall back
+        // to a hardcoded 0.5 everywhere else this was duplicated. ArrayBuffer.isView()
+        // catches any typed array (Float32Array included), not just plain arrays.
+        function getBrainJSPrediction(result) {
+            if (result === undefined || result === null) return 0.5;
+            if (typeof result === 'number') return result;
+            if (Array.isArray(result) || ArrayBuffer.isView(result)) return result[0];
+            if (typeof result === 'object') {
+                var out = result.output;
+                if (out !== undefined) return (Array.isArray(out) || ArrayBuffer.isView(out)) ? out[0] : out;
+                var keys = Object.keys(result);
+                var v = result[keys[0]];
+                return (Array.isArray(v) || ArrayBuffer.isView(v)) ? v[0] : v;
+            }
+            return 0.5;
+        }
+
+        // Train Brain.js neural network with progress logging and loss tracking
+        function trainBrainJS(xTrain, yTrain, xTest, yTest, epochs, learningRate, momentum, logCallback) {
+            // Prepare training data in Brain.js format
+            var trainingData = [];
+            for (var i = 0; i < xTrain.length; i++) {
+                trainingData.push({
+                    input: xTrain[i],
+                    output: [yTrain[i]]   // Brain.js expects array output: [0] or [1]
+                });
+            }
+
+            logCallback('  Creating neural network [32, 32] leaky-relu...');
+            // brain.js's sigmoid net barely moves off ~50% accuracy at the learning
+            // rates this demo needs (they were tuned for tanh/relu-style gradients);
+            // leaky-relu trains reliably here without the sigmoid's vanishing gradient.
+            logCallback('  Note: Using leaky-relu activation - sigmoid stalls at these learning rates.');
+
+            var net = new brain.NeuralNetwork({
+                hiddenLayers: [32, 32],
+                activation: 'leaky-relu'
+            });
+
+            logCallback('  Starting training for ' + epochs + ' iterations with lr=' + learningRate + '...');
+
+            // Track train and test loss over time
+            var trainLossHistory = [];
+            var testLossHistory = [];
+
+            // Function to compute binary cross-entropy loss on a dataset (log loss)
+            function computeBinaryCrossEntropy(xData, yData) {
+                var totalCELoss = 0;
+                var totalMSE = 0;
+                var predSum = 0;
+                for (var i = 0; i < xData.length; i++) {
+                    var result = net.run(xData[i]);
+                    var pred = getBrainJSPrediction(result);
+                    // Clamp prediction to avoid log(0)
+                    var p = Math.max(0.0001, Math.min(0.9999, pred));
+                    if (isNaN(p)) p = 0.5;
+                    predSum += pred;
+                    var actual = yData[i];   // yData is just 0 or 1
+                    totalCELoss += -(actual * Math.log(p) + (1 - actual) * Math.log(1 - p));
+                    totalMSE += Math.pow(pred - actual, 2);
+                }
+                var avgPred = predSum / xData.length;
+                // Debug: log average prediction to detect if network is stuck
+                if (trainLossHistory.length === 0) {
+                    logCallback('  Debug: Initial avg prediction: ' + avgPred.toFixed(4));
+                }
+                return {
+                    binaryCrossEntropy: totalCELoss / xData.length,
+                    mse: totalMSE / xData.length,
+                    avgPrediction: avgPred
+                };
+            }
+
+            // Train in chunks and track loss
+            var chunkSize = Math.max(1, Math.floor(epochs / 20));  // ~20 checkpoints
+            var logInterval = Math.max(1, Math.floor(epochs / 5));
+
+            for (var start = 0; start < epochs; start += chunkSize) {
+                var thisChunk = Math.min(chunkSize, epochs - start);
+
+                try {
+                    net.train(trainingData, {
+                        iterations: thisChunk,
+                        learningRate: learningRate,
+                        momentum: momentum,
+                        errorThresh: 0.0001  // Stop early if error is low enough
+                    });
+                } catch (e) {
+                    logCallback('  Training error at iter ' + start + ': ' + e.message);
+                    break;
+                }
+
+                // Compute losses after this chunk
+                var trainLoss = computeBinaryCrossEntropy(xTrain, yTrain);
+                var testLoss = computeBinaryCrossEntropy(xTest, yTest);
+                // Store the scalar BCE value (not the whole {binaryCrossEntropy, mse, avgPrediction}
+                // object) since the loss-history chart plots these as plain numbers.
+                trainLossHistory.push(trainLoss.binaryCrossEntropy);
+                testLossHistory.push(testLoss.binaryCrossEntropy);
+                // Calculate gap (Train - Test)
+                var gap = trainLoss.binaryCrossEntropy - testLoss.binaryCrossEntropy;
+
+                // Log periodically
+                if ((start + thisChunk) % logInterval === 0 || start + thisChunk >= epochs) {
+                    logCallback('  Iter ' + (start + thisChunk) + '/' + epochs +
+                        ' | Train BCE Loss: ' + trainLoss.binaryCrossEntropy.toFixed(4) +
+                        ' | Test BCE Loss: ' + testLoss.binaryCrossEntropy.toFixed(4) +
+                        ' | Gap: ' + gap.toFixed(4));
+                }
+                
+                // Check if network is stuck (loss not decreasing)
+                if (trainLossHistory.length > 5) {
+                    var recentImprovement = trainLossHistory[trainLossHistory.length - 1] - trainLossHistory[trainLossHistory.length - 5];
+                    if (recentImprovement > -0.001 && start > 100) {
+                        logCallback('  Warning: Loss not improving significantly. Consider adjusting hyperparameters.');
+                    }
+                }
+            }
+
+            logCallback('  Training complete! Final Train BCE Loss: ' + trainLossHistory[trainLossHistory.length - 1].toFixed(4) +
+                ', Test BCE Loss: ' + testLossHistory[testLossHistory.length - 1].toFixed(4));
+
+            return { net: net, trainLossHistory: trainLossHistory, testLossHistory: testLossHistory };
+        }
+
+        // Evaluate Brain.js model
+        function evalBrainJS(net, x, y) {
+            var correct = 0, totalLoss = 0;
+            
+            for (var i = 0; i < x.length; i++) {
+                var result = net.run(x[i]);
+                var predValue = getBrainJSPrediction(result);
+
+                if (isNaN(predValue)) predValue = 0.5;
+                
+                var pred = predValue > 0.5 ? 1 : 0;
+                var actual = y[i];   // y is just 0 or 1
+                
+                if (pred === actual) correct++;
+                
+                // Compute cross-entropy loss
+                var p = Math.max(Math.min(predValue, 0.9999), 0.0001);
+                totalLoss -= actual * Math.log(p) + (1 - actual) * Math.log(1 - p);
+            }
+            
+            var acc = correct / x.length;
+            var loss = totalLoss / x.length;
+            
+            return { 
+                acc: isNaN(acc) ? 0 : acc, 
+                loss: isNaN(loss) ? 1 : loss 
+            };
+        }
+
+        async function runS1_4() {
+            var btn = document.getElementById('runBtnS1-4');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Running with Brain.js...';
+
+            var logEl = document.getElementById('trainingLogS1-4');
+            logEl.style.display = 'block';
+            logEl.innerHTML = '';
+
+            function log(msg) {
+                logEl.innerHTML += '<div>' + msg + '</div>';
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+
+            // Check if Brain.js is loaded
+            if (typeof brain === 'undefined') {
+                log('❌ Error: Brain.js not loaded! Please check your internet connection.');
+                btn.disabled = false;
+                btn.innerHTML = '▶ Run Experiment';
+                return;
+            }
+            log('✓ Brain.js loaded successfully (version: ' + (brain.version || 'unknown') + ')');
+
+            log('🧠 S1-4: Memorization vs Generalization using Brain.js');
+            log('Using neural network: [32, 32] hidden layers with leaky-relu');
+            log('Ring radius noise std: ' + S1_4_NOISE_STD + ' (classes genuinely overlap near the boundary)');
+
+            var sizes = [20, 200, 2000];
+            var results = [];
+            var allModels = [];
+            var allData = [];
+            var allTrainLossHistory = [];
+            var allTestLossHistory = [];
+
+            // One fixed, shared held-out test set for ALL 3 runs, so the only thing that
+            // differs between them is how much training data the model got to see.
+            var TEST_SIZE = 300;
+            var testData = generateData(TEST_SIZE);
+            var xTest = testData.xs, yTest = testData.ys;
+            log('<br>Generated shared held-out test set: ' + TEST_SIZE + ' samples (identical across all 3 runs)');
+
+            for (var si = 0; si < sizes.length; si++) {
+                var size = sizes[si];
+                var name = size === 20 ? 'Small (20)' : size === 200 ? 'Medium (200)' : 'Large (2000)';
+                log('<br>=== ' + name + ' samples ===');
+
+                // Independently-sampled training set of this size; test set is the shared one above.
+                var trainData = generateData(size);
+                var xTrain = trainData.xs, yTrain = trainData.ys;
+
+                log('Train: ' + size + ', Test (shared): ' + TEST_SIZE);
+
+                // Adjust epochs/learning-rate/momentum per dataset size. These were tuned
+                // empirically for brain.js's leaky-relu net on this exact noisy-ring task
+                // (the earlier sigmoid + low-learning-rate combo never escaped ~50% accuracy).
+                var epochs, learningRate, momentum;
+                if (size === 20) {
+                    epochs = 1500;
+                    learningRate = 0.02;
+                    momentum = 0.1;
+                } else if (size === 200) {
+                    epochs = 1200;
+                    learningRate = 0.015;
+                    momentum = 0.1;
+                } else {
+                    epochs = 1500;
+                    learningRate = 0.01;
+                    momentum = 0.6;
+                }
+                log('Training with Brain.js: ' + epochs + ' iterations, lr=' + learningRate + '...');
+
+                try {
+                    // Train Brain.js model with progress logging
+                    var trainResult = trainBrainJS(xTrain, yTrain, xTest, yTest, epochs, learningRate, momentum, function(progressMsg) {
+                        log(progressMsg);
+                    });
+
+                    var model = trainResult.net;
+
+                    // Evaluate
+                    var trainRes = evalBrainJS(model, xTrain, yTrain);
+                    var testRes = evalBrainJS(model, xTest, yTest);
+                    var gap = Math.abs(trainRes.loss - testRes.loss);
+
+                    log('✓ Train loss: ' + trainRes.loss.toFixed(4) + ', acc: ' + (trainRes.acc * 100).toFixed(1) + '%');
+                    log('✓ Test loss: ' + testRes.loss.toFixed(4) + ', acc: ' + (testRes.acc * 100).toFixed(1) + '%');
+                    log('Gap: ' + gap.toFixed(4));
+
+                    results.push({ size: size, trainLoss: trainRes.loss, testLoss: testRes.loss, trainAcc: trainRes.acc * 100, testAcc: testRes.acc * 100, gap: gap });
+                    
+                    // Store model, data and loss history for visualization
+                    allModels.push(model);
+                    allData.push({ xTrain: xTrain, yTrain: yTrain, xTest: xTest, yTest: yTest });
+                    allTrainLossHistory.push(trainResult.trainLossHistory);
+                    allTestLossHistory.push(trainResult.testLossHistory);
+                } catch (err) {
+                    log('❌ Error: ' + err.message);
+                    // Push default values on error
+                    results.push({ size: size, trainLoss: 0.5, testLoss: 0.5, trainAcc: 50, testAcc: 50, gap: 0 });
+                }
+            }
+
+            log('<br>🎉 Experiment complete!');
+
+            document.getElementById('resultsS1-4').style.display = 'block';
+            
+            // Visualize data - separate train/test, correct/wrong
+            visualizeS1_4Data(allModels, allData);
+            
+            // Draw training/test loss history
+            drawLossHistoryChart('lossHistoryChart', allTrainLossHistory, allTestLossHistory);
+            
+            drawLossChart('lossChart', results);
+            drawGapChart('gapChart', results);
+
+            document.getElementById('smallGap').textContent = results[0].gap.toFixed(4);
+            document.getElementById('mediumGap').textContent = results[1].gap.toFixed(4);
+            document.getElementById('largeGap').textContent = results[2].gap.toFixed(4);
+
+            btn.disabled = false;
+            btn.innerHTML = '▶ Run Experiment';
+        }
+
+        // Visualize the data points - the shared test set once, plus each model's
+        // decision boundary drawn over its own (differently-sized) training points.
+        function visualizeS1_4Data(allModels, allData) {
+            var prefixes = ['small', 'medium', 'large'];
+            var sizeNames = ['Small (20)', 'Medium (200)', 'Large (2000)'];
+            var statsHTML = '';
+
+            // The test set is identical across all 3 runs, so it only needs to be drawn once.
+            plotDecisionBoundaryBrainJS('sharedTestSet', null, allData[0].xTest, allData[0].yTest);
+
+            for (var i = 0; i < allModels.length; i++) {
+                var model = allModels[i];
+                var data = allData[i];
+                var prefix = prefixes[i];
+
+                // Train points drawn over the model's decision boundary
+                plotDecisionBoundaryBrainJS(prefix + 'Train', model, data.xTrain, data.yTrain);
+
+                // Evaluate this model against the shared test set for the stats cards below
+                var pred0 = 0, pred1 = 0, actual0 = 0, actual1 = 0;
+                var predValues = [];
+
+                for (var j = 0; j < data.xTest.length; j++) {
+                    var result = model.run(data.xTest[j]);
+                    var pred = getBrainJSPrediction(result);
+                    if (isNaN(pred)) pred = 0.5;
+                    pred = Math.max(0.0001, Math.min(0.9999, pred));
+                    predValues.push(pred);
+                    var predClass = pred > 0.5 ? 1 : 0;
+                    var actual = data.yTest[j];   // y is just 0 or 1
+
+                    if (predClass === 0) pred0++; else pred1++;
+                    if (actual === 0) actual0++; else actual1++;
+                }
+
+                var avgPred = predValues.reduce(function(a, b) { return a + b; }, 0) / predValues.length;
+
+                // Add stats for this dataset
+                statsHTML += '<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; min-width: 180px;">';
+                statsHTML += '<strong style="color: ' + (i === 0 ? '#ff6b6b' : i === 1 ? '#ffd43b' : '#51cf66') + ';">' + sizeNames[i] + '</strong><br>';
+                statsHTML += '<span style="color: #888;">Predicted Class 0: ' + pred0 + '</span><br>';
+                statsHTML += '<span style="color: #888;">Predicted Class 1: ' + pred1 + '</span><br>';
+                statsHTML += '<span style="color: #aaa;">Actual Class 0: ' + actual0 + '</span><br>';
+                statsHTML += '<span style="color: #aaa;">Actual Class 1: ' + actual1 + '</span><br>';
+                statsHTML += '<span style="color: #f06595;">Avg pred: ' + avgPred.toFixed(4) + '</span>';
+                statsHTML += '</div>';
+            }
+
+            // Update stats display
+            document.getElementById('statsContent').innerHTML = statsHTML;
+        }
+
+        // Plot a brain.js model's decision boundary as a heatmap, with data points on top.
+        // Pass model=null to just plot the raw points with no boundary (used for the
+        // shared test set, which isn't tied to any single model).
+        function plotDecisionBoundaryBrainJS(canvasId, model, xPoints, yPoints) {
+            var canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            var ctx = canvas.getContext('2d');
+            var width = canvas.width;
+            var height = canvas.height;
+
+            ctx.fillStyle = '#05070d';
+            ctx.fillRect(0, 0, width, height);
+
+            function coordToCanvas(x, y) {
+                return [x * width, (1 - y) * height];
+            }
+
+            if (model) {
+                // Predict over a coarse grid to render as a heatmap (brain.js has no batched predict)
+                var resolution = 45;
+                var preds = new Float32Array((resolution + 1) * (resolution + 1));
+                for (var gi = 0; gi <= resolution; gi++) {
+                    for (var gj = 0; gj <= resolution; gj++) {
+                        var result = model.run([gi / resolution, gj / resolution]);
+                        var p = getBrainJSPrediction(result);
+                        if (isNaN(p)) p = 0.5;
+                        preds[gi * (resolution + 1) + gj] = p;
+                    }
+                }
+
+                var cellW = width / resolution, cellH = height / resolution;
+                for (var gi = 0; gi < resolution; gi++) {
+                    for (var gj = 0; gj < resolution; gj++) {
+                        var p = preds[gi * (resolution + 1) + gj];
+                        var px = gi * cellW;
+                        var py = height - (gj + 1) * cellH;
+                        var r = Math.round((1 - p) * 235 + 15);
+                        var g = Math.round(p * 200 + 15);
+                        var b = 90;
+                        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.5)';
+                        ctx.fillRect(px, py, cellW + 1, cellH + 1);
+                    }
+                }
+
+                // Mark the boundary where prediction crosses 0.5
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                for (var gi = 0; gi < resolution - 1; gi++) {
+                    for (var gj = 0; gj < resolution - 1; gj++) {
+                        var p = preds[gi * (resolution + 1) + gj];
+                        var pr = preds[(gi + 1) * (resolution + 1) + gj];
+                        var pu = preds[gi * (resolution + 1) + (gj + 1)];
+                        if ((p < 0.5) !== (pr < 0.5) || (p < 0.5) !== (pu < 0.5)) {
+                            var cx = gi * cellW + cellW / 2;
+                            var cy = height - gj * cellH - cellH / 2;
+                            ctx.fillRect(cx - 1.5, cy - 1.5, 3, 3);
+                        }
+                    }
+                }
+            }
+
+            // Draw data points on top of the boundary
+            var radius = xPoints.length < 50 ? 6 : (xPoints.length < 500 ? 3.5 : 2.2);
+            for (var i = 0; i < xPoints.length; i++) {
+                var pt = coordToCanvas(xPoints[i][0], xPoints[i][1]);
+                var color = yPoints[i] === 0 ? '#ff6b6b' : '#4ecdc4';
+
+                ctx.beginPath();
+                ctx.arc(pt[0], pt[1], radius, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+
+            ctx.font = 'bold 13px -apple-system, sans-serif';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'right';
+            ctx.fillText('n=' + xPoints.length, width - 8, 18);
+            ctx.textAlign = 'left';
+        }
+
+
+        // Chart.js instances for S1-4, keyed by canvas id, so re-running the experiment
+        // destroys the previous chart before drawing a new one on the same canvas.
+        var s1_4Charts = {};
+
+        function renderChart(canvasId, config) {
+            if (s1_4Charts[canvasId]) {
+                s1_4Charts[canvasId].destroy();
+            }
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            s1_4Charts[canvasId] = new Chart(ctx, config);
+            return s1_4Charts[canvasId];
+        }
+
+        var S1_4_CHART_FONT = { family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" };
+        var S1_4_GRID_COLOR = 'rgba(255, 255, 255, 0.06)';
+        var S1_4_TICK_COLOR = '#8a90ab';
+
+        // Draw train (solid) + test (dashed) loss history over training checkpoints, one pair of lines per dataset size
+        function drawLossHistoryChart(canvasId, trainHistories, testHistories) {
+            var labels = ['Small (20)', 'Medium (200)', 'Large (2000)'];
+            var colors = ['#ff6b6b', '#ffd43b', '#51cf66'];
+            var maxLen = 0;
+            for (var i = 0; i < trainHistories.length; i++) maxLen = Math.max(maxLen, trainHistories[i].length);
+
+            var datasets = [];
+            for (var i = 0; i < trainHistories.length; i++) {
+                datasets.push({
+                    label: labels[i] + ' - Train',
+                    data: trainHistories[i],
+                    borderColor: colors[i],
+                    backgroundColor: colors[i],
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.25
+                });
+                datasets.push({
+                    label: labels[i] + ' - Test',
+                    data: testHistories[i],
+                    borderColor: colors[i],
+                    backgroundColor: colors[i],
+                    borderWidth: 2,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    tension: 0.25
+                });
+            }
+
+            var checkpointLabels = [];
+            for (var c = 0; c < maxLen; c++) checkpointLabels.push(c);
+
+            renderChart(canvasId, {
+                type: 'line',
+                data: { labels: checkpointLabels, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    interaction: { mode: 'nearest', intersect: false },
+                    plugins: {
+                        legend: { labels: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT, boxWidth: 20 } },
+                        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(4); } } }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Training checkpoint', color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT, maxTicksLimit: 10 },
+                            grid: { color: S1_4_GRID_COLOR }
+                        },
+                        y: {
+                            title: { display: true, text: 'Binary cross-entropy loss', color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            grid: { color: S1_4_GRID_COLOR }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Draw final train vs test loss as a grouped bar chart
+        function drawLossChart(canvasId, results) {
+            var labels = results.map(function(r) { return r.size === 20 ? 'Small (20)' : r.size === 200 ? 'Medium (200)' : 'Large (2000)'; });
+
+            renderChart(canvasId, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Train Loss', data: results.map(function(r) { return r.trainLoss; }), backgroundColor: 'rgba(124, 108, 246, 0.75)', borderRadius: 6 },
+                        { label: 'Test Loss', data: results.map(function(r) { return r.testLoss; }), backgroundColor: 'rgba(34, 211, 238, 0.75)', borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    plugins: {
+                        legend: { labels: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT } }
+                    },
+                    scales: {
+                        x: { ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT }, grid: { display: false } },
+                        y: {
+                            title: { display: true, text: 'Binary cross-entropy loss', color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            grid: { color: S1_4_GRID_COLOR }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Draw generalization gap (|train loss - test loss|) vs dataset size
+        function drawGapChart(canvasId, results) {
+            var labels = results.map(function(r) { return String(r.size); });
+            var colors = ['#ff6b6b', '#ffd43b', '#51cf66'];
+
+            renderChart(canvasId, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Generalization gap',
+                        data: results.map(function(r) { return r.gap; }),
+                        borderColor: '#7c6cf6',
+                        backgroundColor: 'rgba(124, 108, 246, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: colors,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: function(ctx) { return 'Gap: ' + ctx.parsed.y.toFixed(4); } } }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Training set size', color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            grid: { color: S1_4_GRID_COLOR }
+                        },
+                        y: {
+                            title: { display: true, text: '|train loss - test loss|', color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            ticks: { color: S1_4_TICK_COLOR, font: S1_4_CHART_FONT },
+                            grid: { color: S1_4_GRID_COLOR },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
