@@ -171,9 +171,14 @@ that one cell on **plain SGD** instead, which reproduced a clean 1-step lag on b
       higher MFU as vocab-head matmul size, not raw GPU speed or dtype; the closing section notes
       the identical 1-step norm-before-loss lag on both models (achieved only after per-model SGD
       lr tuning) and the EC2-vs-Colab artifact-recovery reliability gap.
-- [ ] **S3. Push** via subtree split (below), with both `.ipynb`s, both `results_*.json`, and logs.
-- [ ] **S4. Verify the README link in an incognito window**, then tick the form's checkbox honestly.
-- [ ] **S5. Submit** the GitHub README.md link and record it back in this file.
+- [x] **S3. Push** via subtree split — done 2026-09-04, pushed (force, since the standalone repo's
+      `main` had a superseded manual upload from mid-flow) to
+      `https://github.com/vpw/era-v5-s10.git` (`main`). Still open: **push this branch to the
+      TSAI root repo's own remote too** (`origin/s10-training-loop`) — user's own task, to do later.
+- [x] **S4. Verify the README link in an incognito window** — done 2026-09-04, user confirmed:
+      renders clean, no login wall.
+- [ ] **S5. Submit** the GitHub README.md link (`https://github.com/vpw/era-v5-s10/blob/main/README.md`)
+      and record it back in this file.
 
 ## Standing conventions (carried from S6-S9, don't re-decide)
 
