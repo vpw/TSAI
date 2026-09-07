@@ -32,26 +32,27 @@ training run, no pure-arithmetic item like S10's bit-format one.
 
 ## ▶ OPEN DECISIONS — settle with the user before building
 
-- [ ] **D1. Where do the five items run?** Every item needs a real model actually
-      training — item 1 needs PyTorch's Adam on a real weight to hand-check, items 3-4
-      need full loops with warmup/schedule logic over a few hundred steps, item 5 needs
-      three separate short runs at widths 256/512/1,024. No GPU confirmed on this
-      machine (carried from S9/S10: `.venv` was torch cpu-only there). Unlike S10's MFU
-      item, none of these five items *need* a real accelerator's peak FLOP/s — they need
-      a working optimizer and enough steps to see a trend, which a small enough model may
-      get on CPU within reasonable wall-clock time. Options: (a) CPU on this machine at a
-      tiny scale (fastest to start, no provisioning, but check items 3-5's step counts
-      don't take unreasonably long); (b) reuse `era-v5-gpu-run`'s Lane A (existing EC2
-      T4) or Lane B (Colab) if CPU proves too slow, especially for item 5's three-width
-      sweep. Recommend starting on CPU and only escalating if a specific item is too slow.
-- [ ] **D2. What model?** S10 settled on nanoGPT (instructor's own pointer in the
-      transcript) plus its own S9 proxy transformer, run side by side. For S11, item 5's
-      width sweep (256/512/1,024) needs a model whose width is a first-class,
-      trivially-variable hyperparameter — check whether nanoGPT's config exposes
-      `n_embd` cleanly for this, or whether reusing/adapting S9's proxy transformer
-      (`V=10,000, D=256` baseline, 4 layers/heads) is simpler to resize across three
-      widths. Items 1-4 don't have this constraint and can run on whichever model D1/D2
-      settle on.
+- [x] **D1. Where do the five items run? → CPU on this machine** (decided 2026-09-07).
+      Unlike S10's MFU item, none of these five items need a real accelerator's measured
+      peak FLOP/s — they're optimizer/schedule diagnostics, not throughput measurements.
+      Even item 5's widest config (n_embd=1,024, n_layer=4) is only ~50M params
+      (attention+MLP ≈ 12·d² per layer), comfortably CPU-trainable for the few-hundred-
+      step budgets these items need. Escalate to `era-v5-gpu-run` (Lane A EC2 T4 or Lane
+      B Colab) only if a specific run proves too slow in practice — most likely candidate
+      would be item 5's three-width sweep if the LR grid is large.
+- [x] **D2. What model? → S10's nanoGPT** (decided 2026-09-07). The transcript settles
+      this directly (`resources/s11-transcript.md` line 463): *"train the same model
+      twice for 300 steps. Take basically a small model, the model that you have taken
+      last assign[ment]."* That's an explicit pointer to reuse, not pick fresh. S10's
+      nanoGPT (`../../S10/assignment/notebook_src_nanogpt.py`, the `GPTConfig`/`GPT`
+      classes — a from-scratch char-level GPT, not a copy of Karpathy's repo) already
+      exposes `n_embd` as a clean width knob: baseline `GPTConfig(vocab_size=65,
+      n_embd=128, n_layer=4, n_head=4, seq_len=128, batch_size=8)` on tinyshakespeare-char.
+      `n_head=4` divides 256/512/1,024 evenly (head_dim 64/128/256), so item 5's sweep is
+      just varying `n_embd` in `{256, 512, 1024}` with everything else held fixed. Items
+      1-4 use the baseline `n_embd=128` config for continuity with S10's own numbers.
+      S10's proxy transformer is not reused here — the instructor's line names one model,
+      and nanoGPT was the instructor's own explicit pick in S10's transcript too.
 - [ ] **D3. Submission format** — cannot be settled until S11 appears in the Axiom
       Assignments tab with its own submission block. Don't assume S10's GitHub-README
       shape without checking; it's the likely precedent but not confirmed. Re-check
