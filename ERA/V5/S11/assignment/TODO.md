@@ -70,11 +70,21 @@ without a cell behind it" convention (S9 onward).
       `torch.optim.Adam` in float64 (max abs diff **0.0**, exact agreement — plain Adam,
       no weight decay, matches Section 6's formula precisely). Results in
       `results.json["item1"]`, full trace in `logs/run.log`.
-- [ ] **2. Bias correction ablation.** Same setup, bias correction on vs off, first 20
-      steps, plotted. Report the step count after which the two trajectories converge —
-      the lesson's own §6 table implies this should happen quickly since β2=0.999's bias
-      factor `(1-β2^t)` is still the slower-decaying one; expect the answer to be on the
-      order of tens of steps, to be measured rather than assumed.
+- [x] **2. Bias correction ablation** (2026-09-07). Extended item 1's gradient sequence
+      to 20 steps (same first 5, seeded noisy continuation around the same mean) and ran
+      Adam by hand twice, correction on vs off. **Finding — the "tens of steps" guess
+      above was wrong**, and the corrected math shows why: the closed-form step-size
+      ratio is `sqrt(1-β2^t)/(1-β1^t)`, independent of the gradients, and it only enters
+      ±5% of 1 at **t = 2,327** — driven entirely by β2=0.999's slow decay (β1=0.9's
+      factor is already ≈1 within ~50 steps). At step 20 the ratio is still **0.16**
+      (uncorrected steps ~6x larger than corrected), so `w` has drifted to 0.980
+      (corrected) vs 0.881 (uncorrected) — a real, unclosed gap, not a rounding
+      difference. This is a disagreement-is-a-finding result: the difference does *not*
+      stop mattering within the 20 plotted steps, and the honest answer to "how many
+      steps" is ~2,300, on the same O(1/(1-β2))=1,000-step order the lesson names for
+      β2's memory span. Plot: `assets/item2_bias_correction.png` (trajectories +
+      closed-form ratio curve with the crossing point marked). Results in
+      `results.json["item2"]`.
 - [ ] **3. Per-layer update-to-weight ratio through warmup.** Log it from step one (per
       §14's V5 decision), identify the step where warmup stops visibly changing the
       ratio's ceiling. Compare shape against the lesson's own 19.2e-3 → 2.83e-3 figures

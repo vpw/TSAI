@@ -8,10 +8,10 @@ line in this session's transcript — *"take basically a small model, the model 
 have taken last assignment."* CPU throughout (D1); no item this session needs a measured
 hardware peak the way S10's MFU item did.
 
-Built incrementally, one item at a time. Currently: **Item 1 only.**
+Built incrementally, one item at a time. Currently: **Items 1-2.**
 
 1. Reproduce Adam by hand.
-2. (not yet) Disable bias correction, plot first 20 steps both ways.
+2. Disable bias correction, plot first 20 steps both ways.
 3. (not yet) Log the update-to-weight ratio through warmup.
 4. (not yet) Cosine vs WSD, 300 steps, compared at step 200.
 5. (not yet) LR sweep at widths 256/512/1,024.
@@ -121,7 +121,7 @@ print(f"\nmax |hand - torch| over 5 steps = {max_diff_torch:.2e}")
 assert max_diff_torch < 1e-9, "by-hand computation disagrees with torch.optim.Adam"
 
 # %%
-### 1d. Save results
+### 1d. Assemble item 1 results
 RESULTS["item1"] = {
     "w0": W0,
     "eta": ETA,
@@ -136,5 +136,136 @@ RESULTS["item1"] = {
     "max_abs_diff_hand_vs_torch": max_diff_torch,
 }
 
+# %% [markdown]
+"""
+## Item 2 — Disable bias correction, first 20 steps
+
+Extends item 1's setup to 20 steps, running the *same* gradient sequence through Adam
+twice — once with bias correction (as in item 1) and once with it switched off
+(`m_hat = m`, `v_hat = v`) — so the only thing that differs between the two runs is the
+correction itself, not the data.
+
+Section 6 already gives the closed-form relationship between the two: since correction
+divides `m` by `(1 - beta1^t)` and `v` by `(1 - beta2^t)`, the ratio of the two runs'
+step sizes at any step `t` is exactly
+
+    corrected_step / uncorrected_step = sqrt(1 - beta2^t) / (1 - beta1^t)
+
+independent of the actual gradients. That closed form — not just eyeballing two curves
+— is what pins down exactly when the difference "stops mattering," and lets us check
+the two plotted trajectories against an independent calculation.
+"""
+
+# %%
+### 2a. Extend item 1's gradient sequence to 20 steps
+# First 5 steps are identical to item 1 (same numbers); 15 more are a seeded, mildly
+# noisy continuation around the same mean, so the sequence stays realistic (same-ish
+# sign, per Section 9's "correlated gradients" regime) rather than hand-picked.
+import numpy as np
+
+rng = np.random.default_rng(11)
+extra_grads = np.clip(rng.normal(0.5, 0.07, size=15), 0.05, None).tolist()
+GRADS_20 = GRADS + [round(float(g), 4) for g in extra_grads]
+print(f"20-step gradient sequence: {GRADS_20}")
+
+# %%
+### 2b. Adam step with a bias-correction on/off switch
+def adam_by_hand_switch(w0, grads, eta, beta1, beta2, eps, bias_correction):
+    m, v, w = 0.0, 0.0, w0
+    rows = []
+    for t, g in enumerate(grads, start=1):
+        m = beta1 * m + (1 - beta1) * g
+        v = beta2 * v + (1 - beta2) * g ** 2
+        if bias_correction:
+            m_hat, v_hat = m / (1 - beta1 ** t), v / (1 - beta2 ** t)
+        else:
+            m_hat, v_hat = m, v
+        step = -eta * m_hat / (v_hat ** 0.5 + eps)
+        w = w + step
+        rows.append(dict(t=t, g=g, step=step, w=w))
+    return rows
+
+
+rows_corrected = adam_by_hand_switch(W0, GRADS_20, ETA, BETA1, BETA2, EPS, True)
+rows_uncorrected = adam_by_hand_switch(W0, GRADS_20, ETA, BETA1, BETA2, EPS, False)
+
+# sanity: the corrected run's first 5 steps must exactly match item 1's own numbers
+for a, b in zip(rows_corrected[:5], hand_rows):
+    assert abs(a["w"] - b["w"]) < 1e-12, "item 2's corrected run diverged from item 1"
+
+print(f"{'t':>2} {'w corrected':>14} {'w uncorrected':>14} {'|diff|':>10}")
+for rc, ru in zip(rows_corrected, rows_uncorrected):
+    print(f"{rc['t']:>2} {rc['w']:>14.8f} {ru['w']:>14.8f} {abs(rc['w'] - ru['w']):>10.2e}")
+
+# %%
+### 2c. The exact closed-form step-size ratio, corrected/uncorrected
+def correction_ratio(t, beta1, beta2):
+    return ((1 - beta2 ** t) ** 0.5) / (1 - beta1 ** t)
+
+
+ratios_20 = [correction_ratio(t, BETA1, BETA2) for t in range(1, 21)]
+print(f"{'t':>2} {'corrected/uncorrected step ratio':>34}")
+for t, r in zip(range(1, 21), ratios_20):
+    print(f"{t:>2} {r:>34.4f}")
+
+# First step (searching well past the 20-step window) where the ratio is within a
+# tolerance of 1 — i.e. where bias correction stops materially changing the step size.
+TOL = 0.05
+t_converge = next(
+    t for t in range(1, 20_000) if abs(correction_ratio(t, BETA1, BETA2) - 1) <= TOL
+)
+print(f"\nfirst step where |ratio - 1| <= {TOL:.0%}: t = {t_converge} "
+      f"(ratio = {correction_ratio(t_converge, BETA1, BETA2):.4f})")
+
+# %%
+### 2d. Plots
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+ASSETS = pathlib.Path("assets")
+ASSETS.mkdir(exist_ok=True)
+
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+
+ts = [r["t"] for r in rows_corrected]
+axes[0].plot(ts, [r["w"] for r in rows_corrected], marker="o", label="bias-corrected")
+axes[0].plot(ts, [r["w"] for r in rows_uncorrected], marker="s", label="uncorrected")
+axes[0].set_xlabel("step")
+axes[0].set_ylabel("w")
+axes[0].set_title("Weight trajectory, first 20 steps")
+axes[0].legend()
+axes[0].grid(alpha=0.3)
+
+t_long = list(range(1, t_converge + 200))
+r_long = [correction_ratio(t, BETA1, BETA2) for t in t_long]
+axes[1].plot(t_long, r_long)
+axes[1].axhline(1.0, color="gray", linestyle="--", linewidth=1)
+axes[1].axvline(t_converge, color="red", linestyle=":", label=f"t={t_converge}")
+axes[1].set_xlabel("step")
+axes[1].set_ylabel("corrected / uncorrected step ratio")
+axes[1].set_title("Bias-correction ratio (closed form)")
+axes[1].legend()
+axes[1].grid(alpha=0.3)
+
+fig.tight_layout()
+fig.savefig(ASSETS / "item2_bias_correction.png", dpi=130)
+plt.close(fig)
+print(f"saved {ASSETS / 'item2_bias_correction.png'}")
+
+# %%
+### 2e. Assemble item 2 results
+RESULTS["item2"] = {
+    "grads_20": GRADS_20,
+    "rows_corrected": rows_corrected,
+    "rows_uncorrected": rows_uncorrected,
+    "ratio_first_20": ratios_20,
+    "tolerance": TOL,
+    "t_converge_within_tolerance": t_converge,
+    "plot": "assets/item2_bias_correction.png",
+}
+
+# %%
+## Save results (all items so far)
 pathlib.Path("results.json").write_text(json.dumps(RESULTS, indent=2))
 print("wrote results.json")
