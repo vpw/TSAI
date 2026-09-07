@@ -63,10 +63,13 @@ training run, no pure-arithmetic item like S10's bit-format one.
 Not started. Each will need a cell that actually runs, per the standing "no number
 without a cell behind it" convention (S9 onward).
 
-- [ ] **1. Reproduce Adam by hand.** One weight, five gradients (can reuse the lesson's
-      own `0.50, 0.40, 0.60, 0.45, 0.55` at η=0.001 as the worked check, or a fresh set) —
-      compute `m, v, m̂, v̂`, step by hand, then verify against `torch.optim.Adam` to
-      several decimal places.
+- [x] **1. Reproduce Adam by hand** (2026-09-07). Reused the lesson's own worked example
+      (`w0=1.0`, grads `0.50, 0.40, 0.60, 0.45, 0.55`, η=0.001) in `notebook_src.py`.
+      Three-way check: by-hand `m, v, m̂, v̂, step, w` vs the lesson's own printed table
+      (max abs diff **4.6e-7**, consistent with the lesson rounding to 6 decimals) vs
+      `torch.optim.Adam` in float64 (max abs diff **0.0**, exact agreement — plain Adam,
+      no weight decay, matches Section 6's formula precisely). Results in
+      `results.json["item1"]`, full trace in `logs/run.log`.
 - [ ] **2. Bias correction ablation.** Same setup, bias correction on vs off, first 20
       steps, plotted. Report the step count after which the two trajectories converge —
       the lesson's own §6 table implies this should happen quickly since β2=0.999's bias
