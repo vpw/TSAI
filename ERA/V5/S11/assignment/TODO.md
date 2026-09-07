@@ -85,11 +85,29 @@ without a cell behind it" convention (S9 onward).
       β2's memory span. Plot: `assets/item2_bias_correction.png` (trajectories +
       closed-form ratio curve with the crossing point marked). Results in
       `results.json["item2"]`.
-- [ ] **3. Per-layer update-to-weight ratio through warmup.** Log it from step one (per
-      §14's V5 decision), identify the step where warmup stops visibly changing the
-      ratio's ceiling. Compare shape against the lesson's own 19.2e-3 → 2.83e-3 figures
-      (not the same model/scale, so an exact match isn't expected — a similar order-of-
-      magnitude drop is).
+- [x] **3. Per-layer update-to-weight ratio through warmup** (2026-09-07). First item to
+      use the real nanoGPT model (D2: `n_embd=128, n_layer=4, n_head=4`, tinyshakespeare,
+      813K params). Trained two 300-step AdamW runs (peak η=3e-4, warmup=60 steps vs
+      none), logging `||update||/||weight||` per weight-matrix tensor from step 1.
+      **Metric fix during development:** initially tracked all 36 named tensors
+      including LayerNorm biases, which init at exactly 0 — dividing by their ~0 norm
+      produced ratios up to ~1e9 even though training itself was healthy (loss 4.2→2.5,
+      no NaN). Fixed by restricting the ratio to weight matrices only (`dim>=2`, 18
+      tensors) — the same tensors §7 already excludes from decay, for the same reason
+      (norm scales/biases aren't "how large is this weight" in a meaningful sense).
+      **Finding:** no-warmup's ratio peaks immediately at step 1 (1.51e-2) — exactly
+      §9's mechanism, a freshly-initialized model's gradients all pointing the same
+      wrong way — then decays. With-warmup's ratio instead *rises* to its own peak
+      (9.7e-3) right as the ramp completes (~step 59), then both curves converge into
+      the same noisy steady-state band (~4-6e-3) by **step 90**. Warmup doesn't avoid a
+      large step, it relocates it to when gradients have decorrelated somewhat, and
+      caps its size (1.5e-2 → 0.97e-2, a smaller 1.6x reduction than the lesson's own
+      6.8x, plausibly a scale effect — worth noting honestly rather than forcing a
+      match). Per-layer breakdown shows `wte.weight` (the embedding) staying elevated
+      longest, consistent with §5's point about embeddings having uneven per-parameter
+      gradient frequency. Plot: `assets/item3_warmup_ratio.png`. Results in
+      `results.json["item3"]` (full per-layer ratio log included, not just the 5
+      plotted layers).
 - [ ] **4. Cosine vs WSD, 300-step budget, compared at step 200.** Same model, same init,
       same data — the only difference is the schedule. Report both losses at step 200 and
       state which checkpoint you'd actually keep, with reasoning (WSD's structural
