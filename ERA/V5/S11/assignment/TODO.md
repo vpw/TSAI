@@ -108,11 +108,19 @@ without a cell behind it" convention (S9 onward).
       gradient frequency. Plot: `assets/item3_warmup_ratio.png`. Results in
       `results.json["item3"]` (full per-layer ratio log included, not just the 5
       plotted layers).
-- [ ] **4. Cosine vs WSD, 300-step budget, compared at step 200.** Same model, same init,
-      same data — the only difference is the schedule. Report both losses at step 200 and
-      state which checkpoint you'd actually keep, with reasoning (WSD's structural
-      argument for checkpoint-ability vs any measured loss difference at this short a
-      budget).
+- [x] **4. Cosine vs WSD, 300-step budget, compared at step 200** (2026-09-07). Same
+      init and same batch sequence for both (only the schedule differs). Interpreted
+      "stop at 200" per §10's own framing: cosine pre-commits its decay curve to the
+      full 300 steps, so stopping at 200 catches it mid-decay (LR=1.22e-4, vs its floor
+      of 1.5e-5 which it wouldn't reach until step 299); WSD never pre-commits — it
+      holds flat until told to stop, so stopping it at 200 makes steps 180-200 the decay
+      window, landing exactly on the floor (1.68e-5) right at 200. **Result: WSD wins**
+      — mean loss over the last 10 steps 2.597 (WSD) vs 2.617 (cosine), final-step 2.608
+      vs 2.621. The two loss curves track almost identically for the first ~180 steps
+      (same batches, similar LR) and only separate in WSD's steep final decay window —
+      a modest but real gap, matching the structural argument: WSD's decay is aimed at
+      the actual stopping point, cosine's isn't. Plot: `assets/item4_cosine_vs_wsd.png`.
+      Results in `results.json["item4"]`.
 - [ ] **5. Width sweep at 256/512/1,024 + muP-style extrapolation.** Three short LR
       sweeps, one per width, loss-vs-LR curves, mark the minimum of each. Compare the
       three minima's positions against the lesson's own width→η table (§12: 3.0e-3 /

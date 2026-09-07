@@ -8,12 +8,12 @@ line in this session's transcript — *"take basically a small model, the model 
 have taken last assignment."* CPU throughout (D1); no item this session needs a measured
 hardware peak the way S10's MFU item did.
 
-Built incrementally, one item at a time. Currently: **Items 1-3.**
+Built incrementally, one item at a time. Currently: **Items 1-4.**
 
 1. Reproduce Adam by hand.
 2. Disable bias correction, plot first 20 steps both ways.
 3. Log the update-to-weight ratio through warmup.
-4. (not yet) Cosine vs WSD, 300 steps, compared at step 200.
+4. Cosine vs WSD, 300 steps, compared at step 200.
 5. (not yet) LR sweep at widths 256/512/1,024.
 """
 
@@ -560,6 +560,162 @@ RESULTS["item3"] = {
     "loss_log_warmup": run_warmup["loss_log"],
     "loss_log_nowarmup": run_nowarmup["loss_log"],
     "plot": "assets/item3_warmup_ratio.png",
+}
+
+# %% [markdown]
+"""
+## Item 4 — Cosine vs WSD, 300-step budget, stopped at step 200
+
+Same nanoGPT config and warmup length as item 3 (`n_embd=128, n_layer=4, n_head=4`,
+warmup=60 steps). Both schedules are nominally planned for a 300-step run, and both
+runs are stopped early, at step 200 — exactly the scenario Section 10 names as cosine's
+structural weakness and WSD's structural advantage:
+
+* **Cosine** commits to its decay curve across the full 300 steps from the first step.
+  Interrupting it at step 200 catches the learning rate mid-decay, at whatever value the
+  pre-committed curve happens to be passing through — not a value chosen because it's
+  good for stopping *here*.
+* **WSD** never commits to a total length. It holds flat until *we* decide to stop, and
+  only then decays — *"we can save the weights at any point... and decay separately from
+  there."* Stopping a WSD run at step 200 means treating the final ~10% of those 200
+  steps (180-200) as the decay window, so the checkpoint at 200 is a genuinely finished,
+  fully-annealed model at exactly the length we chose — the thing cosine cannot produce
+  without having planned for length 200 from the very start.
+
+Both runs share the same weight init and — matching item 2's principle of isolating one
+variable — the exact same sequence of training batches, so the schedule is the only
+thing that differs.
+"""
+
+# %%
+### 4a. Schedules
+import math
+
+WARMUP4 = 60
+STOP_STEP4 = 200
+PLANNED_TOTAL4 = 300  # cosine's pre-committed horizon
+DECAY_FRAC4 = 0.10    # WSD's own convention: decay over the final ~10%
+MIN_LR_FRAC4 = 0.05   # floor as a fraction of peak, avoids a literal-zero LR
+
+
+def cosine_lr(step, peak_lr, warmup, planned_total, min_lr_frac=MIN_LR_FRAC4):
+    if step < warmup:
+        return peak_lr * (step + 1) / warmup
+    min_lr = peak_lr * min_lr_frac
+    frac = min(1.0, (step - warmup) / max(1, planned_total - warmup))
+    return min_lr + 0.5 * (peak_lr - min_lr) * (1 + math.cos(math.pi * frac))
+
+
+def wsd_lr(step, peak_lr, warmup, stop_step, decay_frac=DECAY_FRAC4, min_lr_frac=MIN_LR_FRAC4):
+    if step < warmup:
+        return peak_lr * (step + 1) / warmup
+    decay_start = stop_step - int(decay_frac * stop_step)
+    if step < decay_start:
+        return peak_lr
+    min_lr = peak_lr * min_lr_frac
+    frac = min(1.0, (step - decay_start) / max(1, stop_step - decay_start))
+    return min_lr + 0.5 * (peak_lr - min_lr) * (1 + math.cos(math.pi * frac))
+
+
+cosine_curve4 = [cosine_lr(t, PEAK_LR, WARMUP4, PLANNED_TOTAL4) for t in range(STOP_STEP4)]
+wsd_curve4 = [wsd_lr(t, PEAK_LR, WARMUP4, STOP_STEP4) for t in range(STOP_STEP4)]
+print(f"LR at step {STOP_STEP4 - 1}: cosine={cosine_curve4[-1]:.2e}  "
+      f"wsd={wsd_curve4[-1]:.2e}  (peak={PEAK_LR:.2e})")
+print(f"cosine's own decay would reach its floor at step {PLANNED_TOTAL4 - 1}, "
+      f"{PLANNED_TOTAL4 - STOP_STEP4} steps past where we stop it")
+
+# %%
+### 4b. Train both, identical init + identical batch sequence
+def train_with_schedule(cfg, stream, seed, lr_fn, steps):
+    model = build_model(cfg, seed)
+    decay_params = [p for n, p in model.named_parameters() if p.dim() >= 2]
+    no_decay_params = [p for n, p in model.named_parameters() if p.dim() < 2]
+    opt = torch.optim.AdamW(
+        [{"params": decay_params, "weight_decay": 0.1},
+         {"params": no_decay_params, "weight_decay": 0.0}],
+        lr=PEAK_LR,
+    )
+    gen = torch.Generator().manual_seed(seed + 1)
+    loss_log, lr_log = [], []
+    for step in range(steps):
+        lr = lr_fn(step)
+        for g in opt.param_groups:
+            g["lr"] = lr
+        batch = get_batch3(cfg, stream, generator=gen)
+        opt.zero_grad(set_to_none=True)
+        logits = model(batch)
+        loss = F.cross_entropy(logits[:, :-1].reshape(-1, cfg.vocab_size), batch[:, 1:].reshape(-1))
+        loss.backward()
+        opt.step()
+        loss_log.append(loss.item())
+        lr_log.append(lr)
+    return model, loss_log, lr_log
+
+
+SEED4 = 7
+_, cos_loss4, cos_lr4 = train_with_schedule(
+    CFG3, STREAM3, SEED4, lambda t: cosine_lr(t, PEAK_LR, WARMUP4, PLANNED_TOTAL4), STOP_STEP4
+)
+_, wsd_loss4, wsd_lr4 = train_with_schedule(
+    CFG3, STREAM3, SEED4, lambda t: wsd_lr(t, PEAK_LR, WARMUP4, STOP_STEP4), STOP_STEP4
+)
+
+final_cos4, final_wsd4 = cos_loss4[-1], wsd_loss4[-1]
+avg_cos4 = sum(cos_loss4[-10:]) / 10
+avg_wsd4 = sum(wsd_loss4[-10:]) / 10
+print(f"loss @ step {STOP_STEP4}:              cosine={final_cos4:.4f}  wsd={final_wsd4:.4f}")
+print(f"loss, mean of last 10 steps:  cosine={avg_cos4:.4f}  wsd={avg_wsd4:.4f}")
+
+verdict4 = "WSD" if avg_wsd4 < avg_cos4 else "cosine"
+print(f"\nverdict: keep the {verdict4} checkpoint "
+      f"(lower mean loss over the last 10 steps: wsd={avg_wsd4:.4f} vs cosine={avg_cos4:.4f})")
+
+# %%
+### 4c. Plots
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+
+axes[0].plot(cos_lr4, label="cosine (planned for 300, stopped at 200)")
+axes[0].plot(wsd_lr4, label="WSD (decays into its own stop at 200)")
+axes[0].axvline(WARMUP4 - 1, color="gray", linestyle="--", linewidth=1)
+axes[0].set_xlabel("step")
+axes[0].set_ylabel("learning rate")
+axes[0].set_title("Schedules")
+axes[0].legend(fontsize=8)
+axes[0].grid(alpha=0.3)
+
+axes[1].plot(cos_loss4, label=f"cosine (final {final_cos4:.3f})", alpha=0.8)
+axes[1].plot(wsd_loss4, label=f"WSD (final {final_wsd4:.3f})", alpha=0.8)
+axes[1].set_xlabel("step")
+axes[1].set_ylabel("loss")
+axes[1].set_title("Loss, same init + same batches")
+axes[1].legend(fontsize=8)
+axes[1].grid(alpha=0.3)
+
+fig.tight_layout()
+fig.savefig(ASSETS / "item4_cosine_vs_wsd.png", dpi=130)
+plt.close(fig)
+print(f"saved {ASSETS / 'item4_cosine_vs_wsd.png'}")
+
+# %%
+### 4d. Assemble item 4 results
+RESULTS["item4"] = {
+    "warmup": WARMUP4,
+    "stop_step": STOP_STEP4,
+    "planned_total_cosine": PLANNED_TOTAL4,
+    "decay_frac_wsd": DECAY_FRAC4,
+    "min_lr_frac": MIN_LR_FRAC4,
+    "peak_lr": PEAK_LR,
+    "seed": SEED4,
+    "cosine_lr_curve": cosine_curve4,
+    "wsd_lr_curve": wsd_curve4,
+    "cosine_loss_curve": cos_loss4,
+    "wsd_loss_curve": wsd_loss4,
+    "final_loss_cosine": final_cos4,
+    "final_loss_wsd": final_wsd4,
+    "mean_last10_loss_cosine": avg_cos4,
+    "mean_last10_loss_wsd": avg_wsd4,
+    "verdict": verdict4,
+    "plot": "assets/item4_cosine_vs_wsd.png",
 }
 
 # %%
