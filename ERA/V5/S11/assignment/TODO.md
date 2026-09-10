@@ -143,14 +143,19 @@ without a cell behind it" convention (S9 onward).
 
 ## Ship
 
-- [ ] **S0. Scaffold notebook(s), tooling, template.** Copy `tools/` from
-      `../../S10/assignment/tools/` (already extended for multi-result-file reads).
-      Decide one combined `notebook_src.py` vs per-item sources based on how D1/D2 land.
-- [ ] **S1. Run everything top to bottom** in a fresh runtime per D1's chosen environment.
-- [ ] **S2. Write the README/write-up** once a submission format is confirmed (D3),
-      answering all five items with numbers traced to cells that ran.
-- [ ] **S3. Push and verify**, format and destination TBD pending D3.
-- [ ] **S4. Submit**, once S11 has a graded entry in the Axiom Assignments tab.
+- [x] **S0. Scaffold notebook(s), tooling, template.** Copied `tools/` (py2nb, run_nb,
+      dump_log) from `../../S10/assignment/tools/`; one combined `notebook_src.py` for
+      all five items (D2 settled the model, no per-item sources needed).
+- [x] **S1. Run everything top to bottom** (2026-09-10) — `S11.ipynb`, 33 cells, CPU,
+      committed with outputs.
+- [x] **S2. Write the README** (2026-09-10) — `tools/build_readme.py` (adapted from
+      S10's for a single `results.json`, no proxy/nanogpt split needed) +
+      `README.tmpl.md` → `README.md`, 149 placeholders, all resolved from the run that
+      actually happened.
+- [ ] **S3. Push and verify** — subtree split to a standalone repo (convention below),
+      confirm publicly accessible in incognito.
+- [ ] **S4. Submit** — paste the standalone repo's README link into the Axiom assignment
+      page (URL in CLAUDE.md).
 
 ## Standing conventions (carried from S6-S10, don't re-decide)
 
