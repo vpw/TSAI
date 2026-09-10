@@ -7867,5 +7867,94 @@
     "mean_last10_loss_wsd": 2.597078037261963,
     "verdict": "WSD",
     "plot": "assets/item4_cosine_vs_wsd.png"
+  },
+  "item5": {
+    "widths": [
+      256,
+      512,
+      1024
+    ],
+    "lr_grid": [
+      1e-05,
+      1.6306894089533095e-05,
+      2.659147948472494e-05,
+      4.336244396414017e-05,
+      7.071067811865475e-05,
+      0.00011530715390799683,
+      0.00018803015465431965,
+      0.00030661878175865194,
+      0.0005
+    ],
+    "steps_per_run": 40,
+    "seed": 42,
+    "config_fixed": {
+      "n_layer": 4,
+      "n_head": 4,
+      "seq_len": 128,
+      "batch_size": 8
+    },
+    "n_params_by_width": {
+      "256": 3199744,
+      "512": 12690944,
+      "1024": 50547712
+    },
+    "mean_last10_by_width_lr": {
+      "256": {
+        "1e-05": 3.5228177547454833,
+        "1.6306894089533095e-05": 3.4410436868667604,
+        "2.659147948472494e-05": 3.36750864982605,
+        "4.336244396414017e-05": 3.2628866910934446,
+        "7.071067811865475e-05": 3.1051728248596193,
+        "0.00011530715390799683": 2.9600043296813965,
+        "0.00018803015465431965": 2.8364797592163087,
+        "0.00030661878175865194": 3.002011704444885,
+        "0.0005": 3.1722792387008667
+      },
+      "512": {
+        "1e-05": 3.289523553848267,
+        "1.6306894089533095e-05": 3.229599666595459,
+        "2.659147948472494e-05": 3.133314919471741,
+        "4.336244396414017e-05": 2.9853366136550905,
+        "7.071067811865475e-05": 2.8871264696121215,
+        "0.00011530715390799683": 2.895014190673828,
+        "0.00018803015465431965": 3.0349092721939086,
+        "0.00030661878175865194": 3.204943609237671,
+        "0.0005": 3.2974292516708372
+      },
+      "1024": {
+        "1e-05": 3.1684314966201783,
+        "1.6306894089533095e-05": 3.070893955230713,
+        "2.659147948472494e-05": 2.9710904598236083,
+        "4.336244396414017e-05": 2.997870445251465,
+        "7.071067811865475e-05": 3.0490815162658693,
+        "0.00011530715390799683": 3.09649863243103,
+        "0.00018803015465431965": 3.168630313873291,
+        "0.00030661878175865194": 3.2606035470962524,
+        "0.0005": 3.3087931632995606
+      }
+    },
+    "best_lr_by_width": {
+      "256": 0.00018803015465431965,
+      "512": 7.071067811865475e-05,
+      "1024": 2.659147948472494e-05
+    },
+    "best_loss_by_width": {
+      "256": 2.8364797592163087,
+      "512": 2.8871264696121215,
+      "1024": 2.9710904598236083
+    },
+    "lesson_eta_table": {
+      "256": 0.003,
+      "512": 0.0015,
+      "1024": 0.00075,
+      "2048": 0.00038,
+      "4096": 0.00019
+    },
+    "fitted_slope_log2": -1.4109640474436842,
+    "predicted_lr_4096_fit": 3.760603093086384e-06,
+    "predicted_lr_4096_halving_heuristic": 6.647869871181235e-06,
+    "lesson_lr_4096": 0.00019,
+    "confidence_note": "Extrapolation, not a fourth measurement. Width=4,096 sits two doublings past our widest measured point (1,024), and the sweep itself used a 9-point LR grid with only 40 steps/run on a tiny char-level model and dataset unrelated to the lesson's own model, so both the grid-argmin resolution and short-run noise carry real uncertainty into the fitted slope. Moderate confidence that the sign and rough magnitude of the trend hold (a several-times-smaller LR at 4,096 than at 1,024); low confidence in matching the lesson's precise 1.9e-4 value, since the exact scale depends on architecture/data details that muP's own reparameterization is designed to make irrelevant \u2014 only under muP itself would a number transfer exactly.",
+    "plot": "assets/item5_width_sweep.png"
   }
 }

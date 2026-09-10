@@ -8,13 +8,13 @@ line in this session's transcript — *"take basically a small model, the model 
 have taken last assignment."* CPU throughout (D1); no item this session needs a measured
 hardware peak the way S10's MFU item did.
 
-Built incrementally, one item at a time. Currently: **Items 1-4.**
+Built incrementally, one item at a time. All five items below.
 
 1. Reproduce Adam by hand.
 2. Disable bias correction, plot first 20 steps both ways.
 3. Log the update-to-weight ratio through warmup.
 4. Cosine vs WSD, 300 steps, compared at step 200.
-5. (not yet) LR sweep at widths 256/512/1,024.
+5. LR sweep at widths 256/512/1,024, extrapolate to 4,096.
 """
 
 # %%
@@ -716,6 +716,197 @@ RESULTS["item4"] = {
     "mean_last10_loss_wsd": avg_wsd4,
     "verdict": verdict4,
     "plot": "assets/item4_cosine_vs_wsd.png",
+}
+
+# %% [markdown]
+"""
+## Item 5 — Width sweep at 256/512/1,024, LR transfer toward 4,096
+
+Same nanoGPT config as items 3-4, varying only `n_embd` in {256, 512, 1024} (D2:
+`n_head=4` divides all three evenly — head_dim 64/128/256, `n_layer=4`, `seq_len=128`,
+`batch_size=8` held fixed). Section 12's own width -> η table (standard parameterization,
+*not* muP) says the best learning rate roughly halves each time width doubles: `256:
+3.0e-3, 512: 1.5e-3, 1024: 7.5e-4, 2048: 3.8e-4, 4096: 1.9e-4`. This item sweeps our own
+LR grid at each width, marks each width's own loss-minimizing LR, checks whether the
+three minima follow the same halving pattern, and extrapolates to width 4,096.
+
+Compute note (D1, CPU-only): width=1,024 alone measured ~4.8s/optimizer-step on this
+machine — the most expensive run this session by far. Budget: 40 steps per (width, LR)
+run (enough to separate a diverging LR from a slow one from a good one — not enough for
+full convergence, since the question is *where* the minimum sits, not a fully trained
+checkpoint at each point). Same init and same batch sequence within one width's sweep,
+so LR is the only thing that varies (same isolate-one-variable principle as items 2 and
+4) — but init necessarily differs *across* widths, since a different `n_embd` is a
+different parameter count.
+
+**Grid re-centering (a finding worth stating up front):** a first pass used a 6-point
+grid spanning `2e-4` to `2e-2` — centered on the lesson's own table, on the assumption
+our setup's optimal LRs would land near 3.0e-3/1.5e-3/7.5e-4. Every width's loss-vs-LR
+curve came back monotonically *decreasing* toward that grid's lower edge — not an
+interior minimum, a boundary artifact. A quick preliminary probe (reduced step count,
+not the graded run) at lower LRs found genuine interior minima for all three widths, but
+roughly an order of magnitude below the lesson's table: ~2e-4 (256), ~6e-5 (512), ~2e-5
+(1,024). This makes sense in hindsight — this toy setup (tiny char-level model,
+`batch_size=8`, `seq_len=128`, plain standard-parameterization init) has no reason to
+share the lesson's own absolute LR scale, only the *qualitative* muP claim (optimal LR
+shrinks as width grows) is testable here. The grid below is re-centered on that finding:
+`1e-5` to `5e-4`, still standard parameterization, still exactly the run graded below.
+"""
+
+# %%
+### 5a. Sweep setup
+WIDTHS5 = [256, 512, 1024]
+LR_GRID5 = np.geomspace(1e-5, 5e-4, 9).tolist()
+STEPS5 = 40
+SEED5 = 42
+LESSON_ETA_TABLE = {256: 3.0e-3, 512: 1.5e-3, 1024: 7.5e-4, 2048: 3.8e-4, 4096: 1.9e-4}
+
+print(f"widths: {WIDTHS5}")
+print("LR grid (" + str(len(LR_GRID5)) + " points): " + ", ".join(f"{lr:.2e}" for lr in LR_GRID5))
+print(f"steps per (width, LR) run: {STEPS5}")
+
+# %%
+### 5b. Run the sweep — same init + same batch sequence per width, LR is the only variable
+def train_at_lr(cfg, stream, seed, lr, steps):
+    model = build_model(cfg, seed)
+    decay_params = [p for n, p in model.named_parameters() if p.dim() >= 2]
+    no_decay_params = [p for n, p in model.named_parameters() if p.dim() < 2]
+    opt = torch.optim.AdamW(
+        [{"params": decay_params, "weight_decay": 0.1},
+         {"params": no_decay_params, "weight_decay": 0.0}],
+        lr=lr,
+    )
+    gen = torch.Generator().manual_seed(seed + 1)
+    loss_log = []
+    for _ in range(steps):
+        batch = get_batch3(cfg, stream, generator=gen)
+        opt.zero_grad(set_to_none=True)
+        logits = model(batch)
+        loss = F.cross_entropy(logits[:, :-1].reshape(-1, cfg.vocab_size), batch[:, 1:].reshape(-1))
+        if not torch.isfinite(loss):
+            loss_log.append(float("nan"))
+            break
+        loss.backward()
+        opt.step()
+        loss_log.append(loss.item())
+    while len(loss_log) < steps:
+        loss_log.append(float("nan"))  # diverged early — pad so every curve is the same length
+    return loss_log
+
+
+sweep5 = {}
+for width in WIDTHS5:
+    cfg5 = GPTConfig(vocab_size=len(chars3), n_embd=width)
+    n_params5 = sum(p.numel() for p in build_model(cfg5, SEED5).parameters())
+    per_lr = {}
+    for lr in LR_GRID5:
+        loss_curve = train_at_lr(cfg5, STREAM3, SEED5, lr, STEPS5)
+        tail = [l for l in loss_curve[-10:] if math.isfinite(l)]
+        mean_last10 = sum(tail) / len(tail) if tail else float("inf")
+        per_lr[lr] = {"loss_curve": loss_curve, "mean_last10": mean_last10}
+        print(f"  n_embd={width:>4}  lr={lr:.2e}  mean_last10={mean_last10:.4f}"
+              + ("  (diverged)" if not tail else ""))
+    sweep5[width] = {"n_params": n_params5, "per_lr": per_lr}
+
+# %%
+### 5c. Best LR per width (grid-argmin), compared against the lesson's own table
+best5 = {}
+for width in WIDTHS5:
+    per_lr = sweep5[width]["per_lr"]
+    best_lr = min(per_lr, key=lambda lr: per_lr[lr]["mean_last10"])
+    best5[width] = {"best_lr": best_lr, "best_loss": per_lr[best_lr]["mean_last10"]}
+    print(f"n_embd={width:>4}  measured best lr={best_lr:.2e} (loss={best5[width]['best_loss']:.4f})"
+          f"   lesson's table: {LESSON_ETA_TABLE[width]:.2e}")
+
+# %%
+### 5d. Fit log(lr) vs log(width) on our own 3 points, extrapolate to width=4,096
+log2_widths5 = [math.log2(w) for w in WIDTHS5]
+log2_lrs5 = [math.log2(best5[w]["best_lr"]) for w in WIDTHS5]
+slope5, intercept5 = np.polyfit(log2_widths5, log2_lrs5, 1)
+predicted_4096_fit = float(2 ** (slope5 * math.log2(4096) + intercept5))
+
+# same halving-per-doubling heuristic read directly off the lesson's own table, applied
+# to our own measured width=1,024 point (two doublings away from 4,096)
+predicted_4096_halving = best5[1024]["best_lr"] / 4
+
+print(f"our fitted slope (log2 lr vs log2 width): {slope5:.3f}  "
+      f"(lesson's table implies -1.0, i.e. exact halving)")
+print(f"fitted extrapolation to width=4,096:      {predicted_4096_fit:.2e}")
+print(f"halving heuristic from our width=1,024:   {predicted_4096_halving:.2e}")
+print(f"lesson's own table at width=4,096:        {LESSON_ETA_TABLE[4096]:.2e}")
+
+CONFIDENCE_NOTE5 = (
+    "Extrapolation, not a fourth measurement. Width=4,096 sits two doublings past our "
+    "widest measured point (1,024), and the sweep itself used a 9-point LR grid with "
+    "only 40 steps/run on a tiny char-level model and dataset unrelated to the lesson's "
+    "own model, so both the grid-argmin resolution and short-run noise carry real "
+    "uncertainty into the fitted slope. Moderate confidence that the sign and rough "
+    "magnitude of the trend hold (a several-times-smaller LR at 4,096 than at 1,024); "
+    "low confidence in matching the lesson's precise 1.9e-4 value, since the exact scale "
+    "depends on architecture/data details that muP's own reparameterization is designed "
+    "to make irrelevant — only under muP itself would a number transfer exactly."
+)
+print("\n" + CONFIDENCE_NOTE5)
+
+# %%
+### 5e. Plots
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+
+colors5 = {256: "tab:blue", 512: "tab:orange", 1024: "tab:green"}
+for width in WIDTHS5:
+    per_lr = sweep5[width]["per_lr"]
+    lrs_sorted = sorted(per_lr)
+    losses = [per_lr[lr]["mean_last10"] for lr in lrs_sorted]
+    axes[0].plot(lrs_sorted, losses, "o-", color=colors5[width], label=f"n_embd={width}")
+    axes[0].scatter([best5[width]["best_lr"]], [best5[width]["best_loss"]],
+                     color=colors5[width], marker="*", s=200, zorder=5, edgecolor="black")
+axes[0].set_xscale("log")
+axes[0].set_xlabel("learning rate")
+axes[0].set_ylabel("loss (mean, last 10 steps)")
+axes[0].set_title("Loss vs LR, per width (star = grid minimum)")
+axes[0].legend(fontsize=8)
+axes[0].grid(alpha=0.3, which="both")
+
+widths_all5 = WIDTHS5 + [2048, 4096]
+lesson_lrs_all5 = [LESSON_ETA_TABLE[w] for w in widths_all5]
+axes[1].plot(widths_all5, lesson_lrs_all5, "s--", color="gray", label="lesson's table (§12)")
+axes[1].plot(WIDTHS5, [best5[w]["best_lr"] for w in WIDTHS5], "o-", color="tab:red", label="measured (this run)")
+axes[1].scatter([4096], [predicted_4096_fit], color="tab:red", marker="*", s=200, zorder=5,
+                 edgecolor="black", label=f"our extrapolation ({predicted_4096_fit:.2e})")
+axes[1].set_xscale("log", base=2)
+axes[1].set_yscale("log")
+axes[1].set_xlabel("width (n_embd)")
+axes[1].set_ylabel("best learning rate")
+axes[1].set_title("LR transfer across width")
+axes[1].legend(fontsize=8)
+axes[1].grid(alpha=0.3, which="both")
+
+fig.tight_layout()
+fig.savefig(ASSETS / "item5_width_sweep.png", dpi=130)
+plt.close(fig)
+print(f"saved {ASSETS / 'item5_width_sweep.png'}")
+
+# %%
+### 5f. Assemble item 5 results
+RESULTS["item5"] = {
+    "widths": WIDTHS5,
+    "lr_grid": LR_GRID5,
+    "steps_per_run": STEPS5,
+    "seed": SEED5,
+    "config_fixed": {"n_layer": 4, "n_head": 4, "seq_len": 128, "batch_size": 8},
+    "n_params_by_width": {w: sweep5[w]["n_params"] for w in WIDTHS5},
+    "mean_last10_by_width_lr": {
+        w: {lr: sweep5[w]["per_lr"][lr]["mean_last10"] for lr in LR_GRID5} for w in WIDTHS5
+    },
+    "best_lr_by_width": {w: best5[w]["best_lr"] for w in WIDTHS5},
+    "best_loss_by_width": {w: best5[w]["best_loss"] for w in WIDTHS5},
+    "lesson_eta_table": LESSON_ETA_TABLE,
+    "fitted_slope_log2": float(slope5),
+    "predicted_lr_4096_fit": predicted_4096_fit,
+    "predicted_lr_4096_halving_heuristic": predicted_4096_halving,
+    "lesson_lr_4096": LESSON_ETA_TABLE[4096],
+    "confidence_note": CONFIDENCE_NOTE5,
+    "plot": "assets/item5_width_sweep.png",
 }
 
 # %%

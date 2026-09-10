@@ -1,10 +1,11 @@
 # S11 TODO — Optimizers and Learning-Rate Schedules
 
-## ▶ STATUS (2026-09-07): scaffolded, not yet started
+## ▶ STATUS (2026-09-10): all five items done, README/repo not yet built
 
-No due date yet — **S11 is not in the Axiom Assignments tab** as of this check. Section
-15 of the lesson (`S11-assignment.md`) is the whole spec: five items, all needing a real
-training run, no pure-arithmetic item like S10's bit-format one.
+**S11 now has an assignment entry in the Axiom Assignments tab** (confirmed 2026-09-10,
+URL in TODO/CLAUDE.md). Submission format: GitHub README.md (public repo), same shape as
+S9/S10. Section 15 of the lesson (`S11-assignment.md`) is the item spec: five items, all
+needing a real training run, no pure-arithmetic item like S10's bit-format one.
 
 - [x] **Session verified** (2026-09-07). The lesson page's own heading reads "Session 11:
       Optimizers and Learning-Rate Schedules" — matches this folder, no drift.
@@ -53,10 +54,9 @@ training run, no pure-arithmetic item like S10's bit-format one.
       1-4 use the baseline `n_embd=128` config for continuity with S10's own numbers.
       S10's proxy transformer is not reused here — the instructor's line names one model,
       and nanoGPT was the instructor's own explicit pick in S10's transcript too.
-- [ ] **D3. Submission format** — cannot be settled until S11 appears in the Axiom
-      Assignments tab with its own submission block. Don't assume S10's GitHub-README
-      shape without checking; it's the likely precedent but not confirmed. Re-check
-      `/assignments` periodically or when told the assignment has been posted.
+- [x] **D3. Submission format → GitHub README.md** (confirmed 2026-09-10). S11 now has
+      its own entry in the Axiom Assignments tab; same shape as S9/S10 — a public repo
+      link, README with all five items and supporting code.
 
 ## Part 1 — the five items
 
@@ -121,12 +121,25 @@ without a cell behind it" convention (S9 onward).
       a modest but real gap, matching the structural argument: WSD's decay is aimed at
       the actual stopping point, cosine's isn't. Plot: `assets/item4_cosine_vs_wsd.png`.
       Results in `results.json["item4"]`.
-- [ ] **5. Width sweep at 256/512/1,024 + muP-style extrapolation.** Three short LR
-      sweeps, one per width, loss-vs-LR curves, mark the minimum of each. Compare the
-      three minima's positions against the lesson's own width→η table (§12: 3.0e-3 /
-      1.5e-3 / 7.5e-4 at these three widths) as a sanity check, then state a value for
-      width 4,096 (lesson's own table says ~1.9e-4) and an honest confidence level given
-      this is an extrapolation past the measured widths, not a fourth data point.
+- [x] **5. Width sweep at 256/512/1,024 + muP-style extrapolation** (2026-09-10). 9-point
+      log-spaced LR grid (`1e-5` to `5e-4`), 40 steps/run, AdamW, same init+batch sequence
+      within a width's own sweep. **First pass failed silently informative:** a 6-point
+      grid centered on the lesson's own table (`2e-4`-`2e-2`) came back monotonically
+      decreasing at every width — a boundary artifact, not a real minimum. A quick
+      reduced-step probe found the actual minima roughly an order of magnitude below the
+      lesson's table; re-centered grid, reran, and got clean bracketed U-shapes for all
+      three widths this time. **Result:** measured best LR 1.88e-4 (256, loss 2.8365),
+      7.07e-5 (512, loss 2.8871), 2.66e-5 (1024, loss 2.9711) — a consistent ~2.66x
+      reduction per width doubling (fitted slope -1.41 in log2-log2 space), steeper than
+      the lesson's own table's exact halving (slope -1) but the same qualitative
+      direction. Absolute LR scale sits ~1-2 orders below the lesson's own table
+      throughout — expected, this toy setup (tiny char-level model/data, standard
+      parameterization) has no reason to share the lesson's absolute scale, only the
+      qualitative muP claim is testable here. **Extrapolation to 4,096:** fitted
+      3.76e-6, halving-heuristic 6.65e-6 (lesson's own table: 1.9e-4) — stated as an
+      extrapolation two doublings past the measured range, moderate confidence in
+      direction/rough magnitude, low confidence in matching any absolute value. Plot:
+      `assets/item5_width_sweep.png`. Results in `results.json["item5"]`.
 
 ## Ship
 

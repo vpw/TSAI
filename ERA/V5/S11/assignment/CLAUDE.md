@@ -52,15 +52,7 @@ decisions (AdamW + decoupled decay + warmup + WSD, four questions left open).
   parameterization. Item 5 sweeps widths 256/512/1024 directly against this table and
   extrapolates to 4096.
 
-**Deliverable shape is not yet fixed.** Unlike S9/S10, **Session 11 has no assignment
-entry in the Axiom `/assignments` tab yet** (checked 2026-09-07 — the tab lists S1
-through S10 only, S10 itself shown "Late"). There is currently no due date, point value,
-or stated submission format for S11. Section 15 of the lesson (`S11-assignment.md`) is
-the entire spec available right now: five items, all requiring real training runs
-(Adam-by-hand cross-check, a bias-correction ablation, per-layer update-ratio logging
-through warmup, a cosine-vs-WSD comparison, and a width sweep at 256/512/1,024). Re-check
-`/assignments` before committing to a submission format — it has varied session to
-session (Netlify widget/site, GitHub README-only, full repo with evidence bundle).
+**Submission format confirmed (2026-09-10):** GitHub README.md (publicly accessible). This follows the S10 pattern of linking a public GitHub repo from the assignments tab. The README must include detailed write-ups for all five items with supporting code. Key directive from the assignment: **"Tune both sides before accepting a comparison. Almost every optimizer claim that failed to replicate was a well tuned method measured against a badly tuned one."**
 
 **The thing this session is actually testing** is a direct continuation of S10's
 instrumentation discipline, aimed specifically at the optimizer: *"Almost every optimizer
@@ -92,9 +84,9 @@ width.
 
 ## Conventions
 
-- **No submission format decided yet** — S11 isn't in the Assignments tab. Don't assume
-  S10's GitHub-README-link shape carries over without checking; it's the most likely
-  precedent but not confirmed.
+- **Submission is GitHub README.md** (confirmed 2026-09-10) — follow S10's pattern: public
+  repo linked from Axiom assignments tab. The README includes write-ups for all five
+  items with supporting code and results.
 - **Every number in the write-up must come from a cell that actually ran.** Carried
   straight from S9/S10. The lesson's own worked numbers (the §6 five-step Adam table, the
   §9 warmup ratios, the §12 width/η table) are *expected values or transfer targets* to

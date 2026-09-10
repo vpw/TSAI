@@ -142,6 +142,66 @@ verdict: keep the WSD checkpoint (lower mean loss over the last 10 steps: wsd=2.
 saved assets/item4_cosine_vs_wsd.png
 
 ==============================================================================
-=== cell 25
+=== cell 26
+==============================================================================
+widths: [256, 512, 1024]
+LR grid (9 points): 1.00e-05, 1.63e-05, 2.66e-05, 4.34e-05, 7.07e-05, 1.15e-04, 1.88e-04, 3.07e-04, 5.00e-04
+steps per (width, LR) run: 40
+
+==============================================================================
+=== cell 27
+==============================================================================
+  n_embd= 256  lr=1.00e-05  mean_last10=3.5228
+  n_embd= 256  lr=1.63e-05  mean_last10=3.4410
+  n_embd= 256  lr=2.66e-05  mean_last10=3.3675
+  n_embd= 256  lr=4.34e-05  mean_last10=3.2629
+  n_embd= 256  lr=7.07e-05  mean_last10=3.1052
+  n_embd= 256  lr=1.15e-04  mean_last10=2.9600
+  n_embd= 256  lr=1.88e-04  mean_last10=2.8365
+  n_embd= 256  lr=3.07e-04  mean_last10=3.0020
+  n_embd= 256  lr=5.00e-04  mean_last10=3.1723
+  n_embd= 512  lr=1.00e-05  mean_last10=3.2895
+  n_embd= 512  lr=1.63e-05  mean_last10=3.2296
+  n_embd= 512  lr=2.66e-05  mean_last10=3.1333
+  n_embd= 512  lr=4.34e-05  mean_last10=2.9853
+  n_embd= 512  lr=7.07e-05  mean_last10=2.8871
+  n_embd= 512  lr=1.15e-04  mean_last10=2.8950
+  n_embd= 512  lr=1.88e-04  mean_last10=3.0349
+  n_embd= 512  lr=3.07e-04  mean_last10=3.2049
+  n_embd= 512  lr=5.00e-04  mean_last10=3.2974
+  n_embd=1024  lr=1.00e-05  mean_last10=3.1684
+  n_embd=1024  lr=1.63e-05  mean_last10=3.0709
+  n_embd=1024  lr=2.66e-05  mean_last10=2.9711
+  n_embd=1024  lr=4.34e-05  mean_last10=2.9979
+  n_embd=1024  lr=7.07e-05  mean_last10=3.0491
+  n_embd=1024  lr=1.15e-04  mean_last10=3.0965
+  n_embd=1024  lr=1.88e-04  mean_last10=3.1686
+  n_embd=1024  lr=3.07e-04  mean_last10=3.2606
+  n_embd=1024  lr=5.00e-04  mean_last10=3.3088
+
+==============================================================================
+=== cell 28
+==============================================================================
+n_embd= 256  measured best lr=1.88e-04 (loss=2.8365)   lesson's table: 3.00e-03
+n_embd= 512  measured best lr=7.07e-05 (loss=2.8871)   lesson's table: 1.50e-03
+n_embd=1024  measured best lr=2.66e-05 (loss=2.9711)   lesson's table: 7.50e-04
+
+==============================================================================
+=== cell 29
+==============================================================================
+our fitted slope (log2 lr vs log2 width): -1.411  (lesson's table implies -1.0, i.e. exact halving)
+fitted extrapolation to width=4,096:      3.76e-06
+halving heuristic from our width=1,024:   6.65e-06
+lesson's own table at width=4,096:        1.90e-04
+
+Extrapolation, not a fourth measurement. Width=4,096 sits two doublings past our widest measured point (1,024), and the sweep itself used a 9-point LR grid with only 40 steps/run on a tiny char-level model and dataset unrelated to the lesson's own model, so both the grid-argmin resolution and short-run noise carry real uncertainty into the fitted slope. Moderate confidence that the sign and rough magnitude of the trend hold (a several-times-smaller LR at 4,096 than at 1,024); low confidence in matching the lesson's precise 1.9e-4 value, since the exact scale depends on architecture/data details that muP's own reparameterization is designed to make irrelevant — only under muP itself would a number transfer exactly.
+
+==============================================================================
+=== cell 30
+==============================================================================
+saved assets/item5_width_sweep.png
+
+==============================================================================
+=== cell 32
 ==============================================================================
 wrote results.json
