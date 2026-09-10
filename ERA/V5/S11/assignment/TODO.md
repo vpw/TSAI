@@ -152,8 +152,8 @@ without a cell behind it" convention (S9 onward).
       S10's for a single `results.json`, no proxy/nanogpt split needed) +
       `README.tmpl.md` → `README.md`, 149 placeholders, all resolved from the run that
       actually happened.
-- [ ] **S3. Push and verify** — subtree split to a standalone repo (convention below),
-      confirm publicly accessible in incognito.
+- [x] **S3. Push and verify** (2026-09-10) — subtree split (`s11-standalone`, commit
+      `a6b5747`) pushed to `github.com/vpw/era-v5-s11` by the user.
 - [ ] **S4. Submit** — paste the standalone repo's README link into the Axiom assignment
       page (URL in CLAUDE.md).
 
