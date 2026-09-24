@@ -1,6 +1,6 @@
 # S12 TODO — Distributed Training I, Data Parallel and ZeRO
 
-## ▶ STATUS (2026-09-19): committed as `a16b9f1`; only the repo push and Axiom submission remain
+## ▶ STATUS (2026-09-24): pushed to `github.com/vpw/era-v5-s12`; only the Axiom submission remains
 
 All four arrangements implemented and verified against the lesson's published numbers.
 **Due Sat 2026-09-19 07:00** (1000 pts, resubmission allowed, single GitHub Link field).
@@ -138,12 +138,19 @@ Notebook runtime ~2.7 minutes on CPU.
       committed here. S11's `.gitignore` excluded it, which contradicted `dump_log.py`'s own
       docstring ("the log is committed so the README's numbers can be checked without
       opening the notebook") and the README's layout table. S12 commits it.
-- [ ] **Create the GitHub repo** — `s12-standalone` subtree split → `github.com/vpw/era-v5-s12`,
-      following the S10/S11 pattern. **Verify in an incognito window** before submitting.
+- [x] **Repo created and pushed** (2026-09-24) — `s12-standalone` subtree split at
+      `7178f83`, pushed by the user to `github.com/vpw/era-v5-s12` as `main`. Remote HEAD
+      matches local exactly. **Public accessibility verified without a browser:**
+      unauthenticated `git ls-remote` over HTTPS succeeds, and both the repo page and
+      `raw.githubusercontent.com/.../main/README.md` return HTTP 200 anonymously — that is
+      the same assertion the submission form's incognito checkbox asks for.
+      **Note for next session:** pushes now work from this machine over SSH (authenticates
+      as `vpw`); only *creating* a repo needs the user, since there is no `gh` CLI or token.
 - [ ] **Push `s12-distributed-zero` to `origin`** (github.com/vpw/TSAI). Note
       `s11-optimizers` was never pushed either (S10's branch was) — worth clearing together.
-- [ ] **Submit the link in Axiom** before **Sat 2026-09-19 07:00**, and tick the
-      accessibility checkbox.
+- [ ] **Submit the link in Axiom** — user said 2026-09-19 they would do this; not yet
+      confirmed done. The due date (Sat 2026-09-19 07:00) has passed, so it lands **Late**;
+      resubmission is allowed and S10 was accepted marked Late.
 
 ## ▶ CARRY-OVER FROM S11
 

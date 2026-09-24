@@ -69,8 +69,8 @@ field, 1000 points, **due Sat 2026-09-19 07:00**, resubmission allowed. The note
 *inside* the repo — the form has a single GitHub Link field and no file upload. Same shape
 as S9/S10/S11.
 
-**Build status (2026-09-17): complete and green; only the repo push and Axiom submission
-remain.** The measured results at the assignment's 32 virtual GPUs, nanoGPT (813,440 params,
+**Build status (2026-09-24): complete, committed and pushed; only the Axiom submission
+remains.** The measured results at the assignment's 32 virtual GPUs, nanoGPT (813,440 params,
 40 steps), all matching the closed form to floating-point exactness:
 
 | arrangement | bytes/weight | communication | 30B @ 32 GPUs |
@@ -138,8 +138,11 @@ reasoning in the student's own framing, not a generated tour.
 - `tools/` — copied from S11 unchanged. **`build_readme.py` needed no modification**: its
   dotted-path lookup into a single `results.json` is exactly this session's shape.
 - `.venv/` — uv-created, torch 2.14.0, CPU. Gitignored.
-- Not yet created: the standalone GitHub repo (`s12-standalone` subtree split →
-  `github.com/vpw/era-v5-s12`, following the S10/S11 pattern).
+- **Shipped to `github.com/vpw/era-v5-s12`** (2026-09-24) — `s12-standalone` subtree split
+  at `7178f83`, pushed as `main`, public and anonymously reachable. Rebuild it after any
+  further change with
+  `git subtree split --prefix=ERA/V5/S12/assignment -b s12-standalone` then
+  `git push git@github.com:vpw/era-v5-s12.git s12-standalone:main`.
 
 ## Conventions
 
@@ -203,9 +206,13 @@ reasoning in the student's own framing, not a generated tour.
   is version-pinned on FSDP/DeepSpeed/Trainer config semantics, which is exactly what §9 and
   §12 describe. Use it rather than recall when the write-up states what a DeepSpeed stage
   flag or an FSDP2 call actually does.
-- **Branch `s12-distributed-zero`**, cut from `s11-optimizers` 2026-09-17. Note that
-  `s11-optimizers` itself was never pushed to `origin` (S10's branch was) — worth clearing
-  alongside S12's push.
+- **Branch `s12-distributed-zero`**, cut from `s11-optimizers` 2026-09-17, head `3549ab5`.
+  **Neither it nor `s11-optimizers` is pushed to `origin` (`github.com/vpw/TSAI`)** — only
+  `s10-training-loop` is, as of 2026-09-24. The standalone repo is a subtree split and does
+  not cover this. **Git access from this machine:** `origin` is an HTTPS remote with no
+  stored credentials, but SSH works and authenticates as `vpw`, so pushes succeed via
+  `git@github.com:vpw/TSAI.git`. Creating a *new* repo still needs the user — no `gh` CLI,
+  no token.
 - Ties back and forward: §1's 16-bytes-per-weight table is Session 11 §8's optimizer-memory
   point restated as the premise of a whole session; §3's global-batch product extends S10's
   gradient accumulation and S11 §11's batch-size discussion; §12's `weight_decay 0.0` is
