@@ -146,8 +146,10 @@ Notebook runtime ~2.7 minutes on CPU.
       the same assertion the submission form's incognito checkbox asks for.
       **Note for next session:** pushes now work from this machine over SSH (authenticates
       as `vpw`); only *creating* a repo needs the user, since there is no `gh` CLI or token.
-- [ ] **Push `s12-distributed-zero` to `origin`** (github.com/vpw/TSAI). Note
-      `s11-optimizers` was never pushed either (S10's branch was) — worth clearing together.
+- [x] **Both session branches pushed to `origin`** (2026-09-24) — `s12-distributed-zero`
+      and `s11-optimizers`, the latter local-only since the previous session. Needed an
+      explicit SSH URL (`git@github.com:vpw/TSAI.git`); `origin` itself is HTTPS with no
+      stored credentials.
 - [ ] **Submit the link in Axiom** — user said 2026-09-19 they would do this; not yet
       confirmed done. The due date (Sat 2026-09-19 07:00) has passed, so it lands **Late**;
       resubmission is allowed and S10 was accepted marked Late.

@@ -206,13 +206,16 @@ reasoning in the student's own framing, not a generated tour.
   is version-pinned on FSDP/DeepSpeed/Trainer config semantics, which is exactly what §9 and
   §12 describe. Use it rather than recall when the write-up states what a DeepSpeed stage
   flag or an FSDP2 call actually does.
-- **Branch `s12-distributed-zero`**, cut from `s11-optimizers` 2026-09-17, head `3549ab5`.
-  **Neither it nor `s11-optimizers` is pushed to `origin` (`github.com/vpw/TSAI`)** — only
-  `s10-training-loop` is, as of 2026-09-24. The standalone repo is a subtree split and does
-  not cover this. **Git access from this machine:** `origin` is an HTTPS remote with no
-  stored credentials, but SSH works and authenticates as `vpw`, so pushes succeed via
-  `git@github.com:vpw/TSAI.git`. Creating a *new* repo still needs the user — no `gh` CLI,
-  no token.
+- **Branch `s12-distributed-zero`**, cut from `s11-optimizers` 2026-09-17. **Pushed to
+  `origin` 2026-09-24**, along with `s11-optimizers`, which had been sitting local-only
+  since the previous session — `github.com/vpw/TSAI` now carries `s10-training-loop`,
+  `s11-optimizers` and `s12-distributed-zero`, all matching local.
+  **Git access from this machine:** `origin` is configured as an HTTPS remote with no
+  stored credentials, so `git push origin` fails outright — but SSH works and authenticates
+  as `vpw`. Push with an explicit SSH URL:
+  `git push git@github.com:vpw/TSAI.git <branch>`. (Repointing `origin` to SSH would make
+  this automatic; not done, since it is the user's config to change.) Creating a *new* repo
+  still needs the user — no `gh` CLI, no token.
 - Ties back and forward: §1's 16-bytes-per-weight table is Session 11 §8's optimizer-memory
   point restated as the premise of a whole session; §3's global-batch product extends S10's
   gradient accumulation and S11 §11's batch-size discussion; §12's `weight_decay 0.0` is
