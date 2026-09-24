@@ -69,8 +69,8 @@ field, 1000 points, **due Sat 2026-09-19 07:00**, resubmission allowed. The note
 *inside* the repo — the form has a single GitHub Link field and no file upload. Same shape
 as S9/S10/S11.
 
-**Build status (2026-09-24): complete, committed and pushed; only the Axiom submission
-remains.** The measured results at the assignment's 32 virtual GPUs, nanoGPT (813,440 params,
+**Build status (2026-09-24): DONE — built, committed, pushed and submitted in Axiom.**
+Nothing is outstanding for this session. The measured results at the assignment's 32 virtual GPUs, nanoGPT (813,440 params,
 40 steps), all matching the closed form to floating-point exactness:
 
 | arrangement | bytes/weight | communication | 30B @ 32 GPUs |
@@ -139,8 +139,12 @@ reasoning in the student's own framing, not a generated tour.
   dotted-path lookup into a single `results.json` is exactly this session's shape.
 - `.venv/` — uv-created, torch 2.14.0, CPU. Gitignored.
 - **Shipped to `github.com/vpw/era-v5-s12`** (2026-09-24) — `s12-standalone` subtree split
-  at `7178f83`, pushed as `main`, public and anonymously reachable. Rebuild it after any
-  further change with
+  at `7178f83`, pushed as `main`, public and anonymously reachable, and **submitted in
+  Axiom**. **Deliberately frozen there** (user's call, 2026-09-24): the session branch has
+  since moved on with bookkeeping commits to `TODO.md`/`CLAUDE.md`, but the graded content —
+  README, notebook, `results.json`, plots — is byte-identical, so the standalone is *not*
+  kept in sync. **Do not re-push it without asking.** If a real content change ever needs
+  shipping, rebuild with
   `git subtree split --prefix=ERA/V5/S12/assignment -b s12-standalone` then
   `git push git@github.com:vpw/era-v5-s12.git s12-standalone:main`.
 
@@ -210,12 +214,10 @@ reasoning in the student's own framing, not a generated tour.
   `origin` 2026-09-24**, along with `s11-optimizers`, which had been sitting local-only
   since the previous session — `github.com/vpw/TSAI` now carries `s10-training-loop`,
   `s11-optimizers` and `s12-distributed-zero`, all matching local.
-  **Git access from this machine:** `origin` is configured as an HTTPS remote with no
-  stored credentials, so `git push origin` fails outright — but SSH works and authenticates
-  as `vpw`. Push with an explicit SSH URL:
-  `git push git@github.com:vpw/TSAI.git <branch>`. (Repointing `origin` to SSH would make
-  this automatic; not done, since it is the user's config to change.) Creating a *new* repo
-  still needs the user — no `gh` CLI, no token.
+  **Git access from this machine:** `origin` was repointed from HTTPS to SSH on
+  2026-09-24 (`git@github.com:vpw/TSAI.git`), so plain `git push origin` and `git fetch`
+  now work — the old HTTPS remote had no stored credentials and failed outright. Creating a
+  *new* repo still needs the user: no `gh` CLI, no token.
 - Ties back and forward: §1's 16-bytes-per-weight table is Session 11 §8's optimizer-memory
   point restated as the premise of a whole session; §3's global-batch product extends S10's
   gradient accumulation and S11 §11's batch-size discussion; §12's `weight_decay 0.0` is

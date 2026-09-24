@@ -1,6 +1,6 @@
 # S12 TODO — Distributed Training I, Data Parallel and ZeRO
 
-## ▶ STATUS (2026-09-24): pushed to `github.com/vpw/era-v5-s12`; only the Axiom submission remains
+## ▶ STATUS (2026-09-24): COMPLETE — built, pushed, submitted. Nothing outstanding.
 
 All four arrangements implemented and verified against the lesson's published numbers.
 **Due Sat 2026-09-19 07:00** (1000 pts, resubmission allowed, single GitHub Link field).
@@ -150,9 +150,13 @@ Notebook runtime ~2.7 minutes on CPU.
       and `s11-optimizers`, the latter local-only since the previous session. Needed an
       explicit SSH URL (`git@github.com:vpw/TSAI.git`); `origin` itself is HTTPS with no
       stored credentials.
-- [ ] **Submit the link in Axiom** — user said 2026-09-19 they would do this; not yet
-      confirmed done. The due date (Sat 2026-09-19 07:00) has passed, so it lands **Late**;
-      resubmission is allowed and S10 was accepted marked Late.
+- [x] **Submitted in Axiom** (confirmed by the user 2026-09-24). Past the Sat 2026-09-19
+      07:00 due date, so it lands Late — same as S10, which was accepted that way.
+- [x] **Standalone repo deliberately left at `7178f83`** (user's call, 2026-09-24). Later
+      commits on the session branch are `TODO.md`/`CLAUDE.md` bookkeeping only; the graded
+      content is byte-identical. Don't re-push `era-v5-s12` without asking.
+- [x] **`origin` repointed to SSH** (2026-09-24) — `git@github.com:vpw/TSAI.git`. Plain
+      `git push origin` and `git fetch` now work; the old HTTPS remote had no credentials.
 
 ## ▶ CARRY-OVER FROM S11
 
