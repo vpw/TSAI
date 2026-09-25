@@ -13,7 +13,10 @@ AWS g4dn.2xlarge. That run wrote [`results.json`](results.json), and every numbe
 README is filled in from it by [`tools/build_readme.py`](tools/build_readme.py). None is typed
 by hand. The complete cell output is in [`logs/nbexec.log`](logs/nbexec.log), and the
 notebook's source is [`notebook_src.py`](notebook_src.py). The whole notebook took
-{{meta.total_runtime_min:.0f}} minutes, about ${{meta.total_cost_usd:.2f}} of GPU time.
+{{meta.total_runtime_min:.0f}} minutes, about ${{meta.total_cost_usd:.2f}} of GPU time. A second
+notebook, [`S13_seeds.ipynb`](S13_seeds.ipynb) ({{seeds.runtime_min:.0f}} min), repeats the
+baseline and the best reversible variant with a new seed. Its results are in `results.json`
+under `seeds`.
 
 ## Results
 
@@ -49,7 +52,11 @@ steps.*
    about a third. Every reversible variant used exactly the same amount.
 2. **Which variant worked.** **Leapfrog** worked best, with val loss
    {{runs.rev_leapfrog.final_val_loss:.4f}} against the baseline's
-   {{runs.baseline.final_val_loss:.4f}}. **Midpoint** also beat the baseline, at
+   {{runs.baseline.final_val_loss:.4f}}. A **second seed** (new initial weights and a new data
+   order) repeated it: {{seeds.seed2.leapfrog.final_val_loss:.4f}} against
+   {{seeds.seed2.baseline.final_val_loss:.4f}}. The gap is more than ten times the
+   seed-to-seed noise; see [two seeds](#leapfrog-beats-the-baseline-and-a-second-seed-confirms-it).
+   **Midpoint** also beat the baseline, in one seed, at
    {{runs.rev_midpoint.final_val_loss:.4f}}. The **symplectic-Euler (Hamiltonian)** variant
    trained normally but finished {{verdict.val_delta.rev_hamiltonian:.3f}} worse than the
    baseline. **midpoint(a) with a = 0.5**, the step size and blend coefficient the lesson
@@ -261,17 +268,38 @@ stable rule that finished behind the baseline. With one run each, that is a corr
 proof. Keeping the residual stream in fp32 is what holds this to a few percent. With an fp16
 stream, the drift would be much larger.
 
-### Leapfrog and midpoint beat the baseline, but read that carefully
+### Leapfrog beats the baseline, and a second seed confirms it
 
 At the same batch, tokens and schedule, leapfrog finished
 {{verdict.val_delta.rev_leapfrog:+.3f}} and midpoint {{verdict.val_delta.rev_midpoint:+.3f}}
-in val loss relative to the baseline. The gap is visible at every evaluation after the first,
-not just the last one. That matches the paper's report that reversible models "exhibit slightly better
-validation loss" (§5.1).
+in val loss relative to the baseline. With one run per arm, a gap of a few hundredths could
+have been seed luck. So [`S13_seeds.ipynb`](S13_seeds.ipynb) reran the baseline and leapfrog
+with a **new seed for both the initial weights and the order of the training data**, shared by
+the two arms. It executes the main notebook's data, model and training-loop cells verbatim from
+`notebook_src.py`, so the code is identical.
 
-But this is **one seed per arm**. Differences of a few hundredths of a nat are within the
-range a second seed could move. The claim this run supports is that **reversibility cost
-nothing in quality**, not that it improves it.
+| | baseline | leapfrog | leapfrog − baseline |
+| --- | ---: | ---: | ---: |
+| seed 1 (init 1234, data order 1337) | {{runs.baseline.final_val_loss:.4f}} | {{runs.rev_leapfrog.final_val_loss:.4f}} | **{{seeds.seed1.delta:+.4f}}** |
+| seed 2 (init 2025, data order 2026) | {{seeds.seed2.baseline.final_val_loss:.4f}} | {{seeds.seed2.leapfrog.final_val_loss:.4f}} | **{{seeds.seed2.delta:+.4f}}** |
+| change from seed 1 to seed 2 | {{seeds.baseline_spread:.4f}} | {{seeds.leapfrog_spread:.4f}} | |
+
+![two seeds](assets/seeds_leapfrog_vs_baseline.png)
+
+Changing the seed moved each arm by less than a hundredth of a nat, while the gap between the
+arms is **{{seeds.mean_delta:+.3f}}** on average. Leapfrog was lower at every evaluation after
+the first, in both seeds. At the first evaluation, {{curves.baseline.evals.tokens.0:,}} tokens
+in, it was slightly *higher*, plausibly because its update `2v − u + h²·f(v)` scales the
+block's contribution by h² = 1/16, so it starts slower. Speed and
+memory repeated too: {{seeds.seed2.baseline.tokens_per_s:,.0f}} vs
+{{seeds.seed2.leapfrog.tokens_per_s:,.0f}} tok/s, and {{seeds.seed2.baseline.peak_alloc_gib:.2f}}
+vs {{seeds.seed2.leapfrog.peak_alloc_gib:.2f}} GiB.
+
+This matches the paper's report that reversible models "exhibit slightly better validation
+loss" (§5.1). Two seeds make the gap hard to dismiss as noise. They do not say *why* it exists,
+and it is a statement about this model, data and budget, not about scale.
+Midpoint's smaller gap ({{verdict.val_delta.rev_midpoint:+.3f}}) was not re-seeded. It is
+larger than the seed-to-seed spread measured here, but it rests on one run.
 
 ### Rebuilding cost more than the paper's 30–50%
 
@@ -353,6 +381,9 @@ pip install torch tokenizers numpy matplotlib nbformat nbclient ipykernel
 python tools/py2nb.py notebook_src.py S13.ipynb     # notebook_src.py is the source of truth
 python tools/run_nb.py S13.ipynb                    # ~2.3 h on a T4; fetches its own data
 python tools/dump_log.py S13.ipynb logs/nbexec.log
+python tools/py2nb.py notebook_seeds_src.py S13_seeds.ipynb
+python tools/run_nb.py S13_seeds.ipynb              # ~40 min; must run after S13.ipynb (it extends results.json)
+python tools/dump_log.py S13_seeds.ipynb logs/nbexec_seeds.log
 python tools/build_readme.py                        # README.tmpl.md + results.json → README.md
 ```
 
@@ -363,9 +394,10 @@ CPU the memory gate is skipped.
 | --- | --- |
 | [`S13.ipynb`](S13.ipynb) | the executed notebook, with its T4 outputs |
 | [`notebook_src.py`](notebook_src.py) | its source (`# %%` cells) |
+| [`S13_seeds.ipynb`](S13_seeds.ipynb) / [`notebook_seeds_src.py`](notebook_seeds_src.py) | the second-seed check, baseline and leapfrog |
 | [`results.json`](results.json) | every measured value, written by the notebook's last cell |
-| [`logs/nbexec.log`](logs/nbexec.log) | all cell output as plain text |
-| [`logs/progress.txt`](logs/progress.txt) | timestamped evaluation lines, written live during the run |
+| [`logs/nbexec.log`](logs/nbexec.log), [`logs/nbexec_seeds.log`](logs/nbexec_seeds.log) | all cell output as plain text |
+| [`logs/progress.txt`](logs/progress.txt), [`logs/progress_seeds.txt`](logs/progress_seeds.txt) | timestamped evaluation lines, written live during the runs |
 | [`assets/`](assets/) | plots and the trained tokenizer |
 | [`tools/`](tools/) | the build pipeline |
 

@@ -1,6 +1,11 @@
 # S13 TODO — Reversibility (Distributed Training II)
 
-## ▶ STATUS (2026-09-25): run complete, README built. Shipping needs the user to create the repo.
+## ▶ STATUS (2026-09-25): run complete, second seed done, README built, shipping to vpw/era-v5-s13.
+
+**Second seed** (user asked, `S13_seeds.ipynb`, 39.3 min): with init 2025 and data order 2026,
+baseline 1.8332 vs leapfrog 1.7603, Δ −0.073. Seed 1 gave Δ −0.063. Seed-to-seed change per
+arm was 0.004–0.006. Leapfrog is lower at every evaluation after the first, in both seeds.
+Confirmed.
 
 Full T4 run, 136.5 min, ≈$1.88. Batch 72 for Runs 1–2 (standard max 88), 256 for Run 3
 (reversible max 288, 3.27×):
