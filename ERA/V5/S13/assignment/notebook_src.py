@@ -545,13 +545,23 @@ if DEVICE == "cuda":
     Ls = sorted(DEPTH)
     slope_std = np.polyfit(Ls, [DEPTH[L]["standard"] for L in Ls], 1)[0]
     slope_rev = np.polyfit(Ls, [DEPTH[L]["midpoint"] for L in Ls], 1)[0]
+    per_layer_state = sum(p.numel() for p in Block(CFG["d"], CFG["heads"]).parameters()) * 16 / 2**20
+    act_per_layer = (slope_std - slope_rev) * 2**30                     # bytes of stored activations
+    bytes_per_tok_hidden = act_per_layer / (B_DEPTH * SEQ * CFG["d"])
     print(f"\nmemory per extra layer: standard {slope_std*1024:.1f} MiB, reversible {slope_rev*1024:.1f} MiB "
           f"(batch {B_DEPTH} × {SEQ} tokens)")
-    # per layer the reversible stack adds only its weights+grads+Adam state (~12.6 MB at 16 B/param)
-    assert SMOKE or slope_rev < 0.1 * slope_std   # the smoke model is too narrow for this to hold
+    print(f"one layer's weights + grads + Adam state at 16 B/param: {per_layer_state:.1f} MiB — the part "
+          f"reversibility cannot remove")
+    print(f"stored activations per layer = the difference, {act_per_layer/2**20:.1f} MiB "
+          f"= {bytes_per_tok_hidden:.1f} bytes per token per hidden unit (lesson §1, after Korthikanti et al.: ~34)")
+    # The reversible stack's per-layer growth must be model state, not activations:
+    assert SMOKE or slope_rev * 1024 < 1.5 * per_layer_state
+    assert SMOKE or 20 < bytes_per_tok_hidden < 60
     RESULTS["depth"] = {"batch": B_DEPTH, "peak_gib": {str(L): v for L, v in DEPTH.items()},
                         "mib_per_layer_standard": slope_std * 1024, "mib_per_layer_reversible": slope_rev * 1024,
-                        "at_48": DEPTH[48]}
+                        "mib_per_layer_state": per_layer_state, "act_mib_per_layer": act_per_layer / 2**20,
+                        "bytes_per_token_hidden": bytes_per_tok_hidden,
+                        "at_4": DEPTH[4], "at_24": DEPTH[24], "at_48": DEPTH[48]}
 
     fig, ax = plt.subplots(figsize=(6.5, 4))
     ax.plot(Ls, [DEPTH[L]["standard"] for L in Ls], "o-", label="standard (activations stored)")

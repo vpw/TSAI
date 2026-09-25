@@ -84,8 +84,14 @@ targets:
   lines. It ends at *"Meeting ended after 01:53:48"*. Fetched with `curl .../export?format=txt`
   on the link-shared Google Doc (id `1-4dU02rjBmaRgiRRiNHiASKkfgoHNOsfDilyEiCG8qY`), the same
   route S10–S12 used. The assignment discussion starts around character offset 79,700.
-- Not yet created: `notebook_src*.py`, the notebooks, `tools/` (to copy from S12 unchanged),
-  `.gitignore`, `requirements.txt`, `README.tmpl.md`, `results.json`, `logs/`, `assets/`.
+- `notebook_src.py` → `S13.ipynb` (executed on the T4, 2026-09-25, 136.5 min) → `results.json`
+  → `README.tmpl.md` + `tools/build_readme.py` → `README.md` (166 values filled). Also
+  `logs/nbexec.log` (dump_log) and `logs/progress.txt` (live eval lines from the run).
+  `assets/` has five plots and `tokenizer.json`. `data/` is the runtime cache (gitignored).
+- **Status: run complete, README built (2026-09-25).** Leapfrog won (1.766 vs baseline
+  1.829). midpoint(a) at a=0.5 failed, as predicted, with gradient cosine 0.009 after
+  training. Max batch was 3.27× (logits-bound, 40 MiB/seq vs 1 MiB of boundary states) and
+  brought no throughput gain on the T4. See TODO.md for the table.
 
 ## Conventions
 

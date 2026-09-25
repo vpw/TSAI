@@ -1,6 +1,22 @@
 # S13 TODO — Reversibility (Distributed Training II)
 
-## ▶ STATUS (2026-09-25): notebook built and gated; full run executing on the EC2 T4.
+## ▶ STATUS (2026-09-25): run complete, README built. Shipping needs the user to create the repo.
+
+Full T4 run, 136.5 min, ≈$1.88. Batch 72 for Runs 1–2 (standard max 88), 256 for Run 3
+(reversible max 288, 3.27×):
+
+| run | val loss | tok/s | peak GiB |
+| --- | ---: | ---: | ---: |
+| baseline | 1.8289 | 58,938 | 11.34 |
+| midpoint | 1.7985 | 36,511 | 3.72 |
+| leapfrog (winner) | 1.7664 | 34,411 | 3.72 |
+| hamiltonian ("Euler") | 1.8898 | 37,497 | 3.72 |
+| midpoint(a), a=0.5 | 4.4308 (failed, as predicted) | 33,972 | 3.72 |
+| leapfrog @ batch 256 | 2.7011 (382 steps) | 34,992 | 12.57 |
+
+The first full launch died at Gate 3 on an over-tight bound I had set myself (reversible slope
+< 10% of standard; measured 10.9%). It was replaced by an assertion against the actual
+per-layer model state (12.1 MiB), and the run relaunched.
 
 **Due Sat 2026-09-26 07:00** (1000 pts, resubmission allowed, one GitHub README link field).
 
@@ -63,11 +79,11 @@
       `no_grad` and saves only the two boundary states. The backward walks down the stack,
       rebuilds p_{ℓ−1} by the inverse rule, reruns f with grad, and accumulates. Handle the
       first step (p₋₁ = p₀) for the two-step rules.
-- [ ] **Correctness gates**, as notebook asserts, run on CPU/GPU before any long run:
-  - [ ] Gradient check: for each variant, the reversible backward's grads equal plain
+- [x] **Correctness gates**, as notebook asserts, run on CPU/GPU before any long run:
+  - [x] Gradient check: for each variant, the reversible backward's grads equal plain
         autograd through the same architecture (fp32, tight tolerance).
-  - [ ] Reconstruction error per layer: rebuilt vs forward states, fp32 vs fp16-autocast.
-  - [ ] Memory vs depth (a few steps at L = 4…48): baseline linear, reversible flat. This
+  - [x] Reconstruction error per layer: rebuilt vs forward states, fp32 vs fp16-autocast.
+  - [x] Memory vs depth (a few steps at L = 4…48): baseline linear, reversible flat. This
         reproduces the paper's Fig. 3 shape.
 - [x] Prototype checks (2026-09-25, CPU, fp64/fp32, d=64, L=24): the reversible backward
       matches autograd to 1e-16 (midpoint, hamiltonian), 4e-15 (leapfrog). **midpoint(a) at
@@ -78,22 +94,22 @@
       at 2.05 GiB. The first max-batch search OOM'd because one step doesn't allocate Adam
       state. The search now runs 2 steps, and the notebook sets `expandable_segments`.
 - [x] Smoke-tested end to end on CPU and on the T4 (`S13_SMOKE=1`).
-- [ ] Max-batch search (OOM caught, cache emptied, binary search) for baseline and reversible.
+- [x] Max-batch search (OOM caught, cache emptied, binary search) for baseline and reversible.
       Compare the ratio with the paper's ~10×.
 
 ## ▶ RUNS (50M tokens each unless D5 says otherwise)
 
-- [ ] R1. Baseline at fixed batch B (the largest power-of-two-ish batch that fits the baseline).
-- [ ] R2. Reversible variants at the same B: midpoint, midpoint(a), "Euler" (Hamiltonian).
+- [x] R1. Baseline at fixed batch B (the largest power-of-two-ish batch that fits the baseline).
+- [x] R2. Reversible variants at the same B: midpoint, midpoint(a), "Euler" (Hamiltonian).
       Choose the winner from the loss trajectory and stability.
-- [ ] R3. Winner at max batch B_max. Scale the LR from the baseline's (state the rule, with a
+- [x] R3. Winner at max batch B_max. Scale the LR from the baseline's (state the rule, with a
       quick probe if needed, per S11's "tune both sides").
-- [ ] For every run: final train/val loss, steady-state tokens/s, `max_memory_allocated` and
+- [x] For every run: final train/val loss, steady-state tokens/s, `max_memory_allocated` and
       `max_memory_reserved`, wall-clock, and $ cost at the instance's hourly rate.
 
 ## ▶ WRITE-UP AND SHIP
 
-- [ ] README via `README.tmpl.md` → `build_readme.py`: the results table, loss curves, memory
+- [x] README via `README.tmpl.md` → `build_readme.py`: the results table, loss curves, memory
       vs depth, the variant verdict with reasoning, the confound in the max-batch loss, and how
       the ~10× and 30–50% claims held up.
 - [ ] Commit the notebooks, `results.json`, `logs/nbexec.log`, `assets/*.png`.
