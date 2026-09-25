@@ -1,6 +1,6 @@
 # S13 TODO — Reversibility (Distributed Training II)
 
-## ▶ STATUS (2026-09-25): run complete, second seed done, README built, shipping to vpw/era-v5-s13.
+## ▶ STATUS (2026-09-25): COMPLETE — shipped to `github.com/vpw/era-v5-s13` (`3905100`) and submitted in Axiom. Standalone frozen.
 
 **Second seed** (user asked, `S13_seeds.ipynb`, 39.3 min): with init 2025 and data order 2026,
 baseline 1.8332 vs leapfrog 1.7603, Δ −0.073. Seed 1 gave Δ −0.063. Seed-to-seed change per
@@ -117,6 +117,6 @@ per-layer model state (12.1 MiB), and the run relaunched.
 - [x] README via `README.tmpl.md` → `build_readme.py`: the results table, loss curves, memory
       vs depth, the variant verdict with reasoning, the confound in the max-batch loss, and how
       the ~10× and 30–50% claims held up.
-- [ ] Commit the notebooks, `results.json`, `logs/nbexec.log`, `assets/*.png`.
-- [ ] The user creates `github.com/vpw/era-v5-s13`. Subtree split and push, verify
+- [x] Commit the notebooks, `results.json`, `logs/nbexec.log`, `assets/*.png`.
+- [x] The user creates `github.com/vpw/era-v5-s13`. Subtree split and push, verify
       anonymously, submit in Axiom before 2026-09-26 07:00.

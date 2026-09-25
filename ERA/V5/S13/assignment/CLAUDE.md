@@ -88,7 +88,9 @@ targets:
   → `README.tmpl.md` + `tools/build_readme.py` → `README.md` (166 values filled). Also
   `logs/nbexec.log` (dump_log) and `logs/progress.txt` (live eval lines from the run).
   `assets/` has five plots and `tokenizer.json`. `data/` is the runtime cache (gitignored).
-- **Status: run complete, README built (2026-09-25).** Leapfrog won (1.766 vs baseline
+- **Status: DONE, submitted in Axiom 2026-09-25.** Shipped to `github.com/vpw/era-v5-s13`
+  (subtree split `3905100`), which is **frozen**: don't re-push without asking. A second seed
+  (`S13_seeds.ipynb`) confirmed leapfrog < baseline (Δ −0.063 / −0.073). Earlier status: Leapfrog won (1.766 vs baseline
   1.829). midpoint(a) at a=0.5 failed, as predicted, with gradient cosine 0.009 after
   training. Max batch was 3.27× (logits-bound, 40 MiB/seq vs 1 MiB of boundary states) and
   brought no throughput gain on the T4. See TODO.md for the table.
