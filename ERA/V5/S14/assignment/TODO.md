@@ -1,6 +1,6 @@
 # S14 TODO — Mixture-of-Experts (dense → MoE)
 
-## ▶ STATUS (2026-09-29): run complete on the T4 (58.8 min, ≈$0.81, box stopped and verified); README built. Remaining: ship.
+## ▶ STATUS (2026-09-30): COMPLETE — shipped to `github.com/vpw/era-v5-s14` (`80dfcd8`) and submitted in Axiom. Standalone frozen.
 
 | phase B run (+50M tokens) | val start → end | vs control | tok/s | peak |
 | --- | --- | ---: | ---: | ---: |
@@ -112,5 +112,5 @@ costs the win.
   - [x] the dimension bookkeeping (total/active params);
   - [x] what did and did not work.
 - [x] Commit the notebook, `results.json`, `logs/` (training logs are mandatory), and `assets/`.
-- [x] The user created `github.com/vpw/era-v5-s14`. Subtree split `94e9e56`, then `9ca005c` with the r=0 follow-up, pushed and verified anonymously (2026-09-29). Submit in Axiom (user),
+- [x] The user created `github.com/vpw/era-v5-s14`. Subtree split `94e9e56`, then `9ca005c` with the r=0 follow-up, pushed and verified anonymously (2026-09-29). Submitted in Axiom 2026-09-30,
       and submit in Axiom before 2026-10-03 07:00.

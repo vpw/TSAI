@@ -75,8 +75,9 @@ the substance:
   standing convention.
 - `tools/`: copied unchanged from S13 (`py2nb`, `run_nb`, `build_readme`, `dump_log`).
   `requirements.txt` is copied from S13.
-- Not yet created: `notebook_src.py`, the `.ipynb`, `results.json`, `README.tmpl.md`,
-  `README.md`, `logs/`, `assets/`.
+- **Status: DONE, submitted in Axiom 2026-09-30.** Shipped to `github.com/vpw/era-v5-s14`
+  (subtree split `80dfcd8`), which is **frozen**: don't re-push without asking. Results are in
+  `README.md` and TODO.md.
 
 ## Conventions
 
